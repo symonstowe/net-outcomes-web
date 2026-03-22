@@ -1,0 +1,837 @@
+const DATA_URL = 'data/site_data.json';
+
+const state = {
+  payload: null,
+  xgSummaryByTeam: new Map(),
+  xgShotsCache: new Map(),
+  skaterPosById: new Map(),
+};
+
+function esc(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function signed(value, digits = 3) {
+  const n = Number(value || 0);
+  if (!Number.isFinite(n)) return (0).toFixed(digits);
+  const s = n.toFixed(digits);
+  return n > 0 ? `+${s}` : s;
+}
+
+function classForSigned(value) {
+  const n = Number(value || 0);
+  if (!Number.isFinite(n) || n === 0) return '';
+  return n > 0 ? 'pos' : 'neg';
+}
+
+function pct(value, digits = 2) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return '-';
+  return `${(n * 100).toFixed(digits)}%`;
+}
+
+function setupSectionNavigation() {
+  const buttons = Array.from(document.querySelectorAll('.sf-section-btn'));
+  const panels = Array.from(document.querySelectorAll('.sf-section-panel'));
+  if (!buttons.length || !panels.length) return;
+
+  const activate = (targetId) => {
+    buttons.forEach((btn) => {
+      const active = btn.dataset.sectionTarget === targetId;
+      btn.classList.toggle('is-active', active);
+    });
+    panels.forEach((panel) => panel.classList.toggle('is-active', panel.id === targetId));
+  };
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => activate(btn.dataset.sectionTarget));
+  });
+}
+
+function renderRankings(rows) {
+  const tbody = document.querySelector('#rankingsTable tbody');
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td>${row.rank}</td>
+      <td>${esc(row.player_name)}</td>
+      <td>${esc(row.team)}</td>
+      <td>${esc(row.position)}</td>
+      <td class="${classForSigned(row.total_offence_defence)}">${signed(row.total_offence_defence)}</td>
+      <td class="${classForSigned(row.total_offence)}">${signed(row.total_offence)}</td>
+      <td class="${classForSigned(row.total_defence)}">${signed(row.total_defence)}</td>
+      <td class="${classForSigned(row.xgar)}">${signed(row.xgar)}</td>
+      <td class="${classForSigned(row.xgar_per_60)}">${signed(row.xgar_per_60)}</td>
+      <td class="${classForSigned(row.on_ice_xg_diff_no_en_per60)}">${signed(row.on_ice_xg_diff_no_en_per60)}</td>
+      <td class="${classForSigned(row.on_ice_5v5_xg_diff_no_en_per60)}">${signed(row.on_ice_5v5_xg_diff_no_en_per60)}</td>
+      <td>${row.season_gp}</td>
+      <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderGoalies(rows) {
+  const tbody = document.querySelector('#goalieTable tbody');
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td>${row.rank}</td>
+      <td>${esc(row.goalie_name)}</td>
+      <td>${esc(row.team)}</td>
+      <td>${row.starts}</td>
+      <td>${row.sa}</td>
+      <td>${Number(row.toi_min || 0).toFixed(1)}</td>
+      <td class="${classForSigned(row.hld_gsax_per60_5v5)}">${signed(row.hld_gsax_per60_5v5)}</td>
+      <td>${pct(row.sv_pct, 2)}</td>
+      <td>${pct(row.xsv_pct, 2)}</td>
+      <td class="${classForSigned(row.sv_above_exp_pct)}">${pct(row.sv_above_exp_pct, 2)}</td>
+      <td class="${classForSigned(row.gsax_current)}">${signed(row.gsax_current)}</td>
+      <td class="${classForSigned(row.gsax_current_per60)}">${signed(row.gsax_current_per60)}</td>
+      <td class="${classForSigned(row.pk_sv_above_exp_pct)}">${pct(row.pk_sv_above_exp_pct, 2)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderUnderrated(rows) {
+  const tbody = document.querySelector('#underratedTable tbody');
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td>${row.rank}</td>
+      <td>${esc(row.player_name)}</td>
+      <td>${esc(row.team)}</td>
+      <td>${esc(row.position)}</td>
+      <td>${row.season_gp}</td>
+      <td>${Number(row.toi_per_gp || 0).toFixed(2)}</td>
+      <td class="${classForSigned(row.total_offence_defence)}">${signed(row.total_offence_defence)}</td>
+      <td>${Number(row.talent_norm || 0).toFixed(3)}</td>
+      <td>${Number(row.toi_norm || 0).toFixed(3)}</td>
+      <td class="${classForSigned(row.qoc)}">${signed(row.qoc)}</td>
+      <td class="${classForSigned(row.qot)}">${signed(row.qot)}</td>
+      <td class="${classForSigned(row.underplayed_score)}">${signed(row.underplayed_score)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderScoringAnomalies(payload) {
+  const ppRows = Array.isArray(payload?.powerplay_heavy) ? payload.powerplay_heavy : [];
+  const enRows = Array.isArray(payload?.empty_net_heavy) ? payload.empty_net_heavy : [];
+  const basisEl = document.getElementById('scoringAnomaliesBasis');
+  if (basisEl) {
+    basisEl.textContent = String(payload?.basis || '');
+  }
+
+  const ppTbody = document.querySelector('#powerplayAnomaliesTable tbody');
+  if (ppTbody) {
+    ppTbody.innerHTML = ppRows.length ? ppRows.map((row) => `
+      <tr>
+        <td>${row.rank}</td>
+        <td>${esc(row.player_name)}</td>
+        <td>${esc(row.team)}</td>
+        <td>${esc(row.position)}</td>
+        <td>${row.season_gp}</td>
+        <td>${row.total_points}</td>
+        <td>${row.powerplay_points}</td>
+        <td>${row.points_5v5}</td>
+        <td>${row.other_points}</td>
+        <td>${pct(row.powerplay_share, 1)}</td>
+      </tr>
+    `).join('') : '<tr><td colspan="10">No qualifying players.</td></tr>';
+  }
+
+  const enTbody = document.querySelector('#emptyNetAnomaliesTable tbody');
+  if (enTbody) {
+    enTbody.innerHTML = enRows.length ? enRows.map((row) => `
+      <tr>
+        <td>${row.rank}</td>
+        <td>${esc(row.player_name)}</td>
+        <td>${esc(row.team)}</td>
+        <td>${esc(row.position)}</td>
+        <td>${row.season_gp}</td>
+        <td>${row.total_points}</td>
+        <td>${row.empty_net_points}</td>
+        <td>${row.non_en_points}</td>
+        <td>${pct(row.empty_net_share, 1)}</td>
+      </tr>
+    `).join('') : '<tr><td colspan="9">No qualifying players.</td></tr>';
+  }
+}
+
+function renderRankingBasis(payload) {
+  const skaterEl = document.getElementById('skaterRankBasis');
+  const goalieEl = document.getElementById('goalieRankBasis');
+  const underratedEl = document.getElementById('underratedRankBasis');
+  if (skaterEl) {
+    skaterEl.textContent = String(
+      payload?.skater_rank_basis || 'Ranked by TOI/GP-reliability-shrunk Total (OFF+DEF), then shrunk OFF, shrunk DEF, and TOI. On-Ice Net xGAR columns are current-season modeled EV+PP+PK impact using 5v5/PP/PK TOI only.'
+    );
+  }
+  if (goalieEl) {
+    goalieEl.textContent = String(
+      payload?.goalie_rank_basis || 'Ranked by Shot Danger Adjusted GSAx 5v5, then GSAX/60 and SVAAE. Includes goalies with >=1 start or >=20 modeled SA.'
+    );
+  }
+  if (underratedEl) {
+    underratedEl.textContent = String(
+      payload?.underrated_rank_basis
+        || 'High talent range rank vs low TOI range rank (min-max by position bucket), adjusted by QoC/QoT and reliability.'
+    );
+  }
+}
+
+function unitSortValue(label) {
+  const match = String(label || '').match(/(\d+)/);
+  return match ? Number(match[1]) : 999;
+}
+
+function normalizeSlotPos(value) {
+  const pos = String(value || '').trim().toUpperCase();
+  if (pos === 'LW') return 'L';
+  if (pos === 'RW') return 'R';
+  if (pos === 'C') return 'C';
+  if (pos === 'LD') return 'LD';
+  if (pos === 'RD') return 'RD';
+  if (pos === 'L' || pos === 'R' || pos === 'D' || pos === 'F') return pos;
+  return '';
+}
+
+function slotLabelsForUnit(unitType, players) {
+  const fromPlayerData = (players || []).map((player) => {
+    const direct = normalizeSlotPos(player?.position || '');
+    if (direct) return direct;
+    const pid = Number(player?.player_id || 0);
+    if (Number.isFinite(pid) && state.skaterPosById.has(pid)) {
+      return normalizeSlotPos(state.skaterPosById.get(pid));
+    }
+    return '';
+  });
+
+  if (unitType === 'lines') {
+    return ['L', 'C', 'R'];
+  }
+  if (unitType === 'pairs') {
+    if (fromPlayerData.some((v) => !!v)) {
+      return fromPlayerData.map((v) => v || 'D');
+    }
+    return ['D', 'D'];
+  }
+  if (unitType === 'pp' || unitType === 'pk') {
+    if (fromPlayerData.some((v) => !!v)) {
+      return fromPlayerData.map((v, idx) => v || `P${idx + 1}`);
+    }
+  }
+  return Array.from({ length: Math.max(1, (players || []).length) }, (_, idx) => `P${idx + 1}`);
+}
+
+function renderPlayerSlotGrid(unit, unitType) {
+  const players = Array.isArray(unit?.players) ? unit.players : [];
+  const slotLabels = slotLabelsForUnit(unitType, players);
+  const slotCount = Math.max(slotLabels.length, players.length);
+  const gridStyle = `style="grid-template-columns: repeat(${slotCount}, minmax(0, 1fr));"`;
+
+  const headerCells = Array.from({ length: slotCount }, (_, idx) => {
+    const label = slotLabels[idx] || `P${idx + 1}`;
+    return `<div class="sf-unit-mini-cell sf-unit-mini-head-cell">${esc(label)}</div>`;
+  }).join('');
+
+  const playerCells = Array.from({ length: slotCount }, (_, idx) => {
+    const name = players[idx]?.name ? esc(players[idx].name) : '-';
+    return `<div class="sf-unit-mini-cell sf-unit-mini-player-cell">${name}</div>`;
+  }).join('');
+
+  return `
+    <div class="sf-unit-mini-table">
+      <div class="sf-unit-mini-row sf-unit-mini-head-row" ${gridStyle}>${headerCells}</div>
+      <div class="sf-unit-mini-row sf-unit-mini-player-row" ${gridStyle}>${playerCells}</div>
+    </div>
+  `;
+}
+
+function renderUnitRows(units, unitType) {
+  const sorted = (units || []).slice().sort((a, b) => {
+    const aLabel = String(a?.label || `Unit ${a?.unit || ''}`).trim() || 'Unit';
+    const bLabel = String(b?.label || `Unit ${b?.unit || ''}`).trim() || 'Unit';
+    const orderDiff = unitSortValue(aLabel) - unitSortValue(bLabel);
+    if (orderDiff !== 0) return orderDiff;
+    return aLabel.localeCompare(bLabel);
+  });
+
+  if (!sorted.length) {
+    return '<div class="sf-unit-empty">No unit data available.</div>';
+  }
+
+  return sorted.map((unit) => {
+    const label = String(unit?.label || `Unit ${unit?.unit || ''}`).trim() || 'Unit';
+    const score = Number(unit?.score || 0);
+    return `
+      <div class="sf-unit-row">
+        <div class="sf-unit-row-head">
+          <div class="sf-unit-label">${esc(label)}</div>
+          <div class="sf-unit-score ${classForSigned(score)}">${signed(score)}</div>
+        </div>
+        ${renderPlayerSlotGrid(unit || {}, unitType)}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderTeamCard(team) {
+  const deltaClass = classForSigned(team.delta);
+  const moves = (team.moves || []).map((move) => `<li>${esc(move)}</li>`).join('');
+  const topSkaters = (team.top_skaters || []).map((row) => `
+      <li>${esc(row.player_name)} <span class="${classForSigned(row.xgar)}">${signed(row.xgar)}</span></li>
+    `).join('');
+
+  const current = team.units?.current || {};
+  const suggested = team.units?.suggested || {};
+
+  return `
+    <article class="sf-team-card" data-team="${esc(team.team)}">
+      <header class="sf-team-header">
+        <h3>${esc(team.team)}</h3>
+      </header>
+      <div class="sf-score-compare">
+        <span class="sf-score-chip">Current ${signed(team.current_score)}</span>
+        <span class="sf-score-chip">Suggested ${signed(team.suggested_score)}</span>
+        <span class="sf-score-chip ${deltaClass}">Delta ${signed(team.delta)}</span>
+      </div>
+
+      <div class="sf-unit-grid">
+        <section class="sf-unit-column sf-unit-column-current">
+          <h4>Current Units</h4>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Forward Lines</h5>
+            ${renderUnitRows(current.lines, 'lines')}
+          </div>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Defense Pairs</h5>
+            ${renderUnitRows(current.pairs, 'pairs')}
+          </div>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Power Play</h5>
+            ${renderUnitRows(current.pp, 'pp')}
+          </div>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Penalty Kill</h5>
+            ${renderUnitRows(current.pk, 'pk')}
+          </div>
+        </section>
+        <section class="sf-unit-column sf-unit-column-suggested">
+          <h4>Suggested Units</h4>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Forward Lines</h5>
+            ${renderUnitRows(suggested.lines, 'lines')}
+          </div>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Defense Pairs</h5>
+            ${renderUnitRows(suggested.pairs, 'pairs')}
+          </div>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Power Play</h5>
+            ${renderUnitRows(suggested.pp, 'pp')}
+          </div>
+          <div class="sf-unit-group">
+            <h5 class="sf-unit-group-title">Penalty Kill</h5>
+            ${renderUnitRows(suggested.pk, 'pk')}
+          </div>
+        </section>
+      </div>
+
+      <div class="sf-team-bottom">
+        <div>
+          <h5>Suggested Movement</h5>
+          <ul>${moves || '<li>No major movement suggested.</li>'}</ul>
+        </div>
+        <div>
+          <h5>Top Team Skaters (xGAR)</h5>
+          <ul>${topSkaters || '<li>No skater data.</li>'}</ul>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function applyRankingsFilter(allRows, query) {
+  if (!query) return allRows;
+  const q = query.toLowerCase();
+  return allRows.filter((row) => (
+    String(row.player_name || '').toLowerCase().includes(q) ||
+    String(row.team || '').toLowerCase().includes(q)
+  ));
+}
+
+function applyGoalieFilter(allRows, query) {
+  if (!query) return allRows;
+  const q = query.toLowerCase();
+  return allRows.filter((row) => (
+    String(row.goalie_name || '').toLowerCase().includes(q) ||
+    String(row.team || '').toLowerCase().includes(q)
+  ));
+}
+
+function applyTeamFilter(allRows, query) {
+  if (!query) return allRows;
+  const q = query.toLowerCase();
+  return allRows.filter((row) => String(row.team || '').toLowerCase().includes(q));
+}
+
+function applyUnderratedFilter(allRows, query) {
+  if (!query) return allRows;
+  const q = query.toLowerCase();
+  return allRows.filter((row) => (
+    String(row.player_name || '').toLowerCase().includes(q) ||
+    String(row.team || '').toLowerCase().includes(q)
+  ));
+}
+
+function toggleSuggestedLineup(el) {
+  const card = el?.closest ? el.closest('.lineup-card') : null;
+  if (!card) return;
+  card.classList.toggle('show-suggested', !!el.checked);
+}
+
+function rinkBaseMarkup() {
+  return `
+    <rect x="-100" y="-42.5" width="200" height="85" rx="20" ry="20" fill="#ffffff" stroke="#222" stroke-width="1.2"></rect>
+    <line x1="0" y1="-42.5" x2="0" y2="42.5" stroke="#d14b4b" stroke-width="0.8" stroke-opacity="0.8"></line>
+    <line x1="-25" y1="-42.5" x2="-25" y2="42.5" stroke="#2f63bd" stroke-width="0.8" stroke-opacity="0.85"></line>
+    <line x1="25" y1="-42.5" x2="25" y2="42.5" stroke="#2f63bd" stroke-width="0.8" stroke-opacity="0.85"></line>
+    <line x1="-89" y1="-37" x2="-89" y2="37" stroke="#d14b4b" stroke-width="0.55" stroke-opacity="0.8"></line>
+    <line x1="89" y1="-37" x2="89" y2="37" stroke="#d14b4b" stroke-width="0.55" stroke-opacity="0.8"></line>
+    <circle cx="0" cy="0" r="14.5" fill="none" stroke="#d14b4b" stroke-width="0.55" stroke-opacity="0.75"></circle>
+  `;
+}
+
+function shotCircleMarkup(shot, isGoal) {
+  const x = Number(shot.x || 0);
+  const y = Number(shot.y || 0);
+  const cx = Math.max(-100, Math.min(100, x));
+  const cy = Math.max(-42.5, Math.min(42.5, -y));
+  const xg = Number(shot.xG || 0);
+  const r = Math.max(0.8, Math.min(2.6, 0.8 + (xg * 7.5)));
+
+  if (isGoal) {
+    return `<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${(r + 0.35).toFixed(2)}" fill="#0b8f4d" fill-opacity="0.88" stroke="#ffffff" stroke-width="0.28"></circle>`;
+  }
+  return `<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${r.toFixed(2)}" fill="#ffb30f" fill-opacity="0.58" stroke="#ffffff" stroke-width="0.16"></circle>`;
+}
+
+async function loadXgTeamShots(teamCode) {
+  if (state.xgShotsCache.has(teamCode)) {
+    return state.xgShotsCache.get(teamCode);
+  }
+
+  const teamInfo = state.xgSummaryByTeam.get(teamCode);
+  if (!teamInfo || !teamInfo.shots_file) {
+    return [];
+  }
+
+  const response = await fetch(`data/${teamInfo.shots_file}`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load xG shot file for ${teamCode}: ${response.status}`);
+  }
+
+  const payload = await response.json();
+  const shots = Array.isArray(payload?.shots) ? payload.shots : [];
+  state.xgShotsCache.set(teamCode, shots);
+  return shots;
+}
+
+function updateXgStats(filteredShots, selectedTeamInfo, minXg, threshold) {
+  const usingFullStats = Number(minXg) < Number(threshold);
+  const noteEl = document.getElementById('xgDataNote');
+
+  let totalShots = 0;
+  let expectedGoals = 0;
+  let actualGoals = 0;
+
+  if (usingFullStats) {
+    totalShots = Number(selectedTeamInfo?.total_shots || 0);
+    expectedGoals = Number(selectedTeamInfo?.total_xg || 0);
+    actualGoals = Number(selectedTeamInfo?.total_goals || 0);
+    noteEl.textContent = `Shots below xG ${Number(threshold).toFixed(3)} are downsampled. Stats shown are full-team totals.`;
+  } else {
+    totalShots = filteredShots.length;
+    expectedGoals = filteredShots.reduce((sum, row) => sum + Number(row.xG || 0), 0);
+    actualGoals = filteredShots.reduce((sum, row) => sum + (row.goal ? 1 : 0), 0);
+    noteEl.textContent = '';
+  }
+
+  const diffPct = expectedGoals > 0 ? ((actualGoals - expectedGoals) / expectedGoals) * 100 : 0;
+
+  document.getElementById('xgTotalShots').textContent = totalShots.toLocaleString();
+  document.getElementById('xgExpectedGoals').textContent = expectedGoals.toFixed(2);
+  document.getElementById('xgActualGoals').textContent = actualGoals.toLocaleString();
+
+  const diffEl = document.getElementById('xgDiff');
+  diffEl.textContent = `${diffPct >= 0 ? '+' : ''}${diffPct.toFixed(1)}%`;
+  diffEl.classList.remove('pos', 'neg');
+  if (diffPct > 0) {
+    diffEl.classList.add('pos');
+  } else if (diffPct < 0) {
+    diffEl.classList.add('neg');
+  }
+}
+
+async function refreshXgPanel() {
+  const select = document.getElementById('xgTeamSelect');
+  const slider = document.getElementById('xgMinProb');
+  const sliderValue = document.getElementById('xgMinProbValue');
+  const showGoals = document.getElementById('xgShowGoals').checked;
+  const svg = document.getElementById('xgRink');
+
+  const team = select.value;
+  const minXg = Number(slider.value || 0);
+  sliderValue.textContent = minXg.toFixed(3);
+
+  const summary = state.payload?.team_xg_summary || {};
+  const threshold = Number(summary.low_xg_threshold || 0.015);
+  const selectedTeamInfo = state.xgSummaryByTeam.get(team);
+
+  let shots = [];
+  try {
+    shots = await loadXgTeamShots(team);
+  } catch (error) {
+    svg.innerHTML = `${rinkBaseMarkup()}<text x="0" y="0" text-anchor="middle" font-size="4.5" fill="#b13a30">${esc(error.message)}</text>`;
+    document.getElementById('xgDataNote').textContent = 'Failed to load team shots.';
+    return;
+  }
+
+  const filtered = shots.filter((row) => Number(row.xG || 0) >= minXg);
+
+  const expectedCircles = filtered.map((shot) => shotCircleMarkup(shot, false)).join('');
+  const goalCircles = showGoals
+    ? filtered.filter((row) => !!row.goal).map((shot) => shotCircleMarkup(shot, true)).join('')
+    : '';
+
+  svg.innerHTML = `${rinkBaseMarkup()}${expectedCircles}${goalCircles}`;
+  updateXgStats(filtered, selectedTeamInfo, minXg, threshold);
+}
+
+function initializeXgPanel() {
+  const summary = state.payload?.team_xg_summary || {};
+  const teams = Array.isArray(summary.teams) ? summary.teams : [];
+
+  teams.forEach((row) => {
+    if (row && row.team) {
+      state.xgSummaryByTeam.set(String(row.team), row);
+    }
+  });
+
+  const select = document.getElementById('xgTeamSelect');
+  select.innerHTML = '';
+
+  const sortedTeams = Array.from(state.xgSummaryByTeam.keys()).sort();
+  sortedTeams.forEach((teamCode) => {
+    const opt = document.createElement('option');
+    opt.value = teamCode;
+    opt.textContent = teamCode;
+    select.appendChild(opt);
+  });
+
+  if (!sortedTeams.length) {
+    document.getElementById('xgRink').innerHTML = `${rinkBaseMarkup()}<text x="0" y="0" text-anchor="middle" font-size="4.5" fill="#555">No xG team data available</text>`;
+    return;
+  }
+
+  const defaultTeam = sortedTeams.includes('OTT') ? 'OTT' : sortedTeams[0];
+  select.value = defaultTeam;
+
+  document.getElementById('xgMinProb').addEventListener('input', () => {
+    refreshXgPanel().catch(console.error);
+  });
+  document.getElementById('xgShowGoals').addEventListener('change', () => {
+    refreshXgPanel().catch(console.error);
+  });
+  document.getElementById('xgTeamSelect').addEventListener('change', () => {
+    refreshXgPanel().catch(console.error);
+  });
+
+  refreshXgPanel().catch(console.error);
+}
+
+function seasonLabel(code) {
+  const s = String(code || '').trim();
+  if (/^\d{8}$/.test(s)) {
+    return `${s.slice(0, 4)}-${s.slice(4)}`;
+  }
+  return s || '-';
+}
+
+function metricText(value, digits = 3) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return '-';
+  return n.toFixed(digits);
+}
+
+function renderStage1AucChart(modelReport) {
+  const root = document.getElementById('stage1AucChart');
+  if (!root) return;
+  root.innerHTML = '';
+
+  const stage1 = modelReport?.stage1_5v5 || {};
+  const rows = [
+    { label: 'Blocked', value: Number(stage1.auc_blocked) },
+    { label: 'Missed', value: Number(stage1.auc_missed) },
+    { label: 'On Net', value: Number(stage1.auc_on_net) },
+  ].filter((row) => Number.isFinite(row.value));
+
+  if (!rows.length || typeof d3 === 'undefined') {
+    root.innerHTML = '<div class="sf-error">Stage 1 chart unavailable.</div>';
+    return;
+  }
+
+  const width = root.clientWidth > 0 ? root.clientWidth : 520;
+  const height = 250;
+  const margin = { top: 18, right: 18, bottom: 34, left: 40 };
+  const innerW = width - margin.left - margin.right;
+  const innerH = height - margin.top - margin.bottom;
+
+  const svg = d3.select(root)
+    .append('svg')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  const x = d3.scaleBand().domain(rows.map((r) => r.label)).range([0, innerW]).padding(0.32);
+  const y = d3.scaleLinear().domain([0.5, 1.0]).range([innerH, 0]);
+
+  g.append('g')
+    .attr('transform', `translate(0,${innerH})`)
+    .call(d3.axisBottom(x).tickSizeOuter(0))
+    .selectAll('text')
+    .style('font-size', '11px');
+
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.2f')))
+    .selectAll('text')
+    .style('font-size', '11px');
+
+  g.selectAll('rect.sf-bar')
+    .data(rows)
+    .enter()
+    .append('rect')
+    .attr('x', (d) => x(d.label))
+    .attr('y', (d) => y(d.value))
+    .attr('width', x.bandwidth())
+    .attr('height', (d) => innerH - y(d.value))
+    .attr('fill', '#06799f');
+
+  g.selectAll('text.sf-bar-label')
+    .data(rows)
+    .enter()
+    .append('text')
+    .attr('x', (d) => (x(d.label) || 0) + x.bandwidth() / 2)
+    .attr('y', (d) => y(d.value) - 6)
+    .attr('text-anchor', 'middle')
+    .style('font-size', '11px')
+    .style('font-family', 'LatoWebSemibold, LatoWeb, sans-serif')
+    .text((d) => d.value.toFixed(3));
+}
+
+function renderCombinedCalibrationChart(modelReport) {
+  const root = document.getElementById('combinedCalibrationChart');
+  if (!root) return;
+  root.innerHTML = '';
+
+  const combined = modelReport?.combined_5v5 || {};
+  const curveBase = Array.isArray(combined.calibration_curve_base) ? combined.calibration_curve_base : [];
+  const curveCal = Array.isArray(combined.calibration_curve_calibrated) ? combined.calibration_curve_calibrated : [];
+
+  if ((!curveBase.length && !curveCal.length) || typeof d3 === 'undefined') {
+    root.innerHTML = '<div class="sf-error">Combined calibration curve unavailable.</div>';
+    return;
+  }
+
+  const width = root.clientWidth > 0 ? root.clientWidth : 520;
+  const height = 250;
+  const margin = { top: 20, right: 24, bottom: 34, left: 40 };
+  const innerW = width - margin.left - margin.right;
+  const innerH = height - margin.top - margin.bottom;
+
+  const svg = d3.select(root)
+    .append('svg')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  const x = d3.scaleLinear().domain([0, 1]).range([0, innerW]);
+  const y = d3.scaleLinear().domain([0, 1]).range([innerH, 0]);
+
+  g.append('g')
+    .attr('transform', `translate(0,${innerH})`)
+    .call(d3.axisBottom(x).ticks(6).tickFormat(d3.format('.1f')))
+    .selectAll('text')
+    .style('font-size', '11px');
+
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(6).tickFormat(d3.format('.1f')))
+    .selectAll('text')
+    .style('font-size', '11px');
+
+  g.append('line')
+    .attr('x1', x(0))
+    .attr('y1', y(0))
+    .attr('x2', x(1))
+    .attr('y2', y(1))
+    .attr('stroke', '#9cb8c4')
+    .attr('stroke-width', 1.2)
+    .attr('stroke-dasharray', '4,4');
+
+  const line = d3.line()
+    .x((d) => x(Number(d.pred_mean || 0)))
+    .y((d) => y(Number(d.actual_mean || 0)));
+
+  if (curveBase.length) {
+    g.append('path')
+      .datum(curveBase)
+      .attr('fill', 'none')
+      .attr('stroke', '#ff8300')
+      .attr('stroke-width', 2.2)
+      .attr('d', line);
+  }
+  if (curveCal.length) {
+    g.append('path')
+      .datum(curveCal)
+      .attr('fill', 'none')
+      .attr('stroke', '#06799f')
+      .attr('stroke-width', 2.2)
+      .attr('d', line);
+  }
+
+  const legend = g.append('g').attr('transform', `translate(${Math.max(0, innerW - 160)}, 6)`);
+  legend.append('line').attr('x1', 0).attr('x2', 18).attr('y1', 0).attr('y2', 0).attr('stroke', '#ff8300').attr('stroke-width', 2.2);
+  legend.append('text').attr('x', 24).attr('y', 3).style('font-size', '11px').text('Base');
+  legend.append('line').attr('x1', 68).attr('x2', 86).attr('y1', 0).attr('y2', 0).attr('stroke', '#06799f').attr('stroke-width', 2.2);
+  legend.append('text').attr('x', 92).attr('y', 3).style('font-size', '11px').text('Calibrated');
+}
+
+function renderModelPerformance(modelReport, payload) {
+  const report = modelReport || {};
+  const trainingSeasons = Array.isArray(report.training_seasons) ? report.training_seasons : [];
+  const stage2 = report.stage2_5v5 || {};
+  const combined = report.combined_5v5 || {};
+
+  document.getElementById('modelTrainingSeasons').textContent = trainingSeasons.length
+    ? trainingSeasons.map(seasonLabel).join(', ')
+    : '-';
+  document.getElementById('modelTestSeason').textContent = seasonLabel(report.test_season || '');
+  document.getElementById('modelTrainedAt').textContent = `Trained: ${String(stage2.trained_at || report.generated_at_utc || '-')}`;
+  document.getElementById('modelStage2Auc').textContent = metricText(stage2.auc, 3);
+  document.getElementById('modelCombinedAuc').textContent = metricText(combined.auc_calibrated, 3);
+  document.getElementById('modelStage2Brier').textContent = metricText(stage2.brier, 4);
+  document.getElementById('modelCombinedBrier').textContent = metricText(combined.brier_calibrated, 4);
+
+  renderStage1AucChart(report);
+  renderCombinedCalibrationChart(report);
+
+  const updatedLabel = String(payload.last_updated_utc || payload.generated_at || '');
+  document.getElementById('lastUpdatedBanner').textContent = `Last updated: ${updatedLabel}`;
+}
+
+async function main() {
+  const response = await fetch(DATA_URL, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${DATA_URL}: ${response.status}`);
+  }
+  const payload = await response.json();
+  state.payload = payload;
+
+  const allRankings = payload.rankings || [];
+  const allGoalies = payload.goalie_rankings || [];
+  const allUnderrated = payload.underrated_rankings || [];
+  const scoringAnomalies = payload.scoring_anomalies || {};
+  const allTeams = payload.teams || [];
+  state.skaterPosById = new Map(
+    allRankings
+      .map((row) => [Number(row.player_id || 0), String(row.position || '')])
+      .filter((entry) => Number.isFinite(entry[0]) && entry[0] > 0)
+  );
+  const legacyLineupCardsHtml = String(payload.legacy_lineup_cards_html || '').trim();
+  const usingLegacyLineupCards = (
+    legacyLineupCardsHtml.length > 0 &&
+    (
+      payload?.use_legacy_lineup_cards === true ||
+      !Array.isArray(allTeams) ||
+      allTeams.length === 0
+    )
+  );
+  const modelReport = payload.model_performance_5v5 || {};
+
+  renderRankingBasis(payload);
+  document.getElementById('generatedAt').textContent = String(payload.generated_at || '');
+  document.getElementById('skaterCount').textContent = String(allRankings.length);
+  document.getElementById('goalieCount').textContent = String(allGoalies.length);
+  document.getElementById('teamCount').textContent = String(
+    usingLegacyLineupCards
+      ? (legacyLineupCardsHtml.match(/class="lineup-card"/g) || []).length
+      : allTeams.length
+  );
+
+  const teamGrid = document.getElementById('teamGrid');
+  const renderTeams = (rows) => {
+    if (usingLegacyLineupCards) {
+      teamGrid.innerHTML = legacyLineupCardsHtml;
+      return;
+    }
+    teamGrid.innerHTML = rows.map(renderTeamCard).join('');
+  };
+
+  renderRankings(allRankings);
+  renderGoalies(allGoalies);
+  renderUnderrated(allUnderrated);
+  renderScoringAnomalies(scoringAnomalies);
+  renderTeams(allTeams);
+
+  const playerSearch = document.getElementById('playerSearch');
+  playerSearch.addEventListener('input', () => {
+    const rows = applyRankingsFilter(allRankings, playerSearch.value || '');
+    renderRankings(rows);
+  });
+
+  const goalieSearch = document.getElementById('goalieSearch');
+  goalieSearch.addEventListener('input', () => {
+    const rows = applyGoalieFilter(allGoalies, goalieSearch.value || '');
+    renderGoalies(rows);
+  });
+
+  const underratedSearch = document.getElementById('underratedSearch');
+  underratedSearch.addEventListener('input', () => {
+    const rows = applyUnderratedFilter(allUnderrated, underratedSearch.value || '');
+    renderUnderrated(rows);
+  });
+
+  const teamSearch = document.getElementById('teamSearch');
+  teamSearch.addEventListener('input', () => {
+    if (usingLegacyLineupCards) {
+      const q = String(teamSearch.value || '').toLowerCase();
+      teamGrid.querySelectorAll('.lineup-card').forEach((card) => {
+        const team = String(card.dataset?.team || '').toLowerCase();
+        const text = String(card.textContent || '').toLowerCase();
+        const show = !q || team.includes(q) || text.includes(q);
+        card.style.display = show ? '' : 'none';
+      });
+    } else {
+      const rows = applyTeamFilter(allTeams, teamSearch.value || '');
+      renderTeams(rows);
+    }
+  });
+
+  setupSectionNavigation();
+  initializeXgPanel();
+  renderModelPerformance(modelReport, payload);
+}
+
+main().catch((error) => {
+  console.error(error);
+  const xgRink = document.getElementById('xgRink');
+  if (xgRink) {
+    xgRink.innerHTML = `${rinkBaseMarkup()}<text x="0" y="0" text-anchor="middle" font-size="4.5" fill="#b13a30">${esc(error.message)}</text>`;
+  }
+  const teamGrid = document.getElementById('teamGrid');
+  if (teamGrid) {
+    teamGrid.innerHTML = `<div class="sf-error">Failed to load site data: ${esc(error.message)}</div>`;
+  }
+});

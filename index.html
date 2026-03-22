@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Statistical Fantasies - NHL team xG visualizer, skater rankings, goalie rankings, and line analysis." />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <link rel="icon" href="imgs/logo-light.svg" />
+  <link rel="stylesheet" href="latofonts.css" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Statistical Fantasies | NHL Analysis</title>
+</head>
+<body class="lato sf-background">
+  <div id="container" class="sf-container">
+    <header class="sf-header">
+      <div class="brand_name">
+        <img class="name_pic" src="imgs/logo-light.svg" alt="Statistical Fantasies logo" />
+        <h1 class="name">Statistical Fantasies</h1>
+      </div>
+      <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
+      <div class="sf-stats">
+        <div class="sf-stat"><span class="sf-stat-label">Generated</span><span id="generatedAt" class="sf-stat-value">...</span></div>
+        <div class="sf-stat"><span class="sf-stat-label">Skaters</span><span id="skaterCount" class="sf-stat-value">0</span></div>
+        <div class="sf-stat"><span class="sf-stat-label">Goalies</span><span id="goalieCount" class="sf-stat-value">0</span></div>
+        <div class="sf-stat"><span class="sf-stat-label">Teams</span><span id="teamCount" class="sf-stat-value">0</span></div>
+      </div>
+      <div class="sf-last-updated" id="lastUpdatedBanner">Last updated: ...</div>
+
+      <nav class="sf-section-nav" id="sectionNav">
+        <button class="sf-section-btn is-active" data-section-target="xgPanel">1. Team xG Visualizer</button>
+        <button class="sf-section-btn" data-section-target="rankingsPanel">2. Skater Rankings</button>
+        <button class="sf-section-btn" data-section-target="goaliePanel">3. Goalie Rankings</button>
+        <button class="sf-section-btn" data-section-target="underratedPanel">4. Most Underrated</button>
+        <button class="sf-section-btn" data-section-target="anomaliesPanel">5. Scoring Anomalies</button>
+        <button class="sf-section-btn" data-section-target="teamPanel">6. Line Analysis</button>
+        <button class="sf-section-btn" data-section-target="modelPanel">7. Model Performance</button>
+      </nav>
+      <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
+    </header>
+
+    <main class="sf-main">
+      <section class="sf-panel sf-section-panel is-active" id="xgPanel">
+        <div class="sf-panel-header">
+          <h2>Team xG Visualizer</h2>
+        </div>
+
+        <div class="sf-xg-controls">
+          <label class="sf-xg-control">Team
+            <select id="xgTeamSelect"></select>
+          </label>
+          <label class="sf-xg-control">Min xG
+            <div class="sf-slider-row">
+              <input id="xgMinProb" type="range" min="0" max="0.50" step="0.005" value="0.015" />
+              <span id="xgMinProbValue">0.015</span>
+            </div>
+          </label>
+          <label class="sf-xg-control sf-toggle-row">
+            <input id="xgShowGoals" type="checkbox" checked />
+            <span>Show goals overlay</span>
+          </label>
+        </div>
+
+        <div class="sf-xg-stats">
+          <div class="sf-stat"><span class="sf-stat-label">Shots</span><span id="xgTotalShots" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Expected Goals</span><span id="xgExpectedGoals" class="sf-stat-value">0.0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Actual Goals</span><span id="xgActualGoals" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Diff</span><span id="xgDiff" class="sf-stat-value">0.0%</span></div>
+        </div>
+        <p id="xgDataNote" class="sf-xg-note"></p>
+
+        <div class="sf-rink-wrap">
+          <svg id="xgRink" viewBox="-100 -42.5 200 85" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="sf-rink-legend">
+          <span><i class="sf-legend-dot expected"></i> Expected shot</span>
+          <span><i class="sf-legend-dot actual"></i> Goal</span>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="rankingsPanel">
+        <div class="sf-panel-header">
+          <h2>Skater Rankings</h2>
+          <div id="skaterRankBasis" class="sf-rank-basis"></div>
+          <input id="playerSearch" type="search" placeholder="Search player or team" />
+        </div>
+        <div class="sf-table-wrap">
+          <table id="rankingsTable" class="sf-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Team</th>
+                <th>Pos</th>
+                <th>Total (Off+Def)</th>
+                <th>OFF Total</th>
+                <th>DEF Total</th>
+                <th>On-Ice Net xGAR</th>
+                <th>On-Ice Net xGAR/60</th>
+                <th>On-Ice xG Diff/60 (No EN)</th>
+                <th>On-Ice 5v5 xG Diff/60 (No EN)</th>
+                <th>GP</th>
+                <th>TOI</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="goaliePanel">
+        <div class="sf-panel-header">
+          <h2>Goalie Rankings</h2>
+          <div id="goalieRankBasis" class="sf-rank-basis"></div>
+          <input id="goalieSearch" type="search" placeholder="Search goalie or team" />
+        </div>
+        <div class="sf-table-wrap">
+          <table id="goalieTable" class="sf-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Goalie</th>
+                <th>Team</th>
+                <th>Starts</th>
+                <th>SA</th>
+                <th>TOI</th>
+                <th>Shot Danger Adjusted GSAx 5v5</th>
+                <th>SV%</th>
+                <th>xSV%</th>
+                <th>SVAAE</th>
+                <th>GSAX</th>
+                <th>GSAX/60</th>
+                <th>PK SVAAE</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="underratedPanel">
+        <div class="sf-panel-header">
+          <h2>Most Underrated Players</h2>
+          <div id="underratedRankBasis" class="sf-rank-basis"></div>
+          <input id="underratedSearch" type="search" placeholder="Search player or team" />
+        </div>
+        <div class="sf-table-wrap">
+          <table id="underratedTable" class="sf-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Team</th>
+                <th>Pos</th>
+                <th>GP</th>
+                <th>TOI/GP</th>
+                <th>Total (Off+Def)</th>
+                <th>Talent Norm</th>
+                <th>TOI Norm</th>
+                <th>QoC</th>
+                <th>QoT</th>
+                <th>Underplayed Score</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="anomaliesPanel">
+        <div class="sf-panel-header">
+          <h2>Scoring Anomalies</h2>
+          <div id="scoringAnomaliesBasis" class="sf-rank-basis"></div>
+        </div>
+        <div class="sf-anomaly-grid">
+          <section class="sf-anomaly-card">
+            <h3>Power-Play Heavy Point Profiles</h3>
+            <div class="sf-table-wrap">
+              <table id="powerplayAnomaliesTable" class="sf-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Pos</th>
+                    <th>GP</th>
+                    <th>Total Pts</th>
+                    <th>PP Pts</th>
+                    <th>5v5 Pts</th>
+                    <th>Other Pts</th>
+                    <th>PP Share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+          <section class="sf-anomaly-card">
+            <h3>Empty-Net Heavy Point Profiles</h3>
+            <div class="sf-table-wrap">
+              <table id="emptyNetAnomaliesTable" class="sf-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Pos</th>
+                    <th>GP</th>
+                    <th>Total Pts</th>
+                    <th>EN Pts</th>
+                    <th>Non-EN Pts</th>
+                    <th>EN Share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="teamPanel">
+        <div class="sf-panel-header">
+          <h2>Line Analysis</h2>
+          <input id="teamSearch" type="search" placeholder="Search team" />
+        </div>
+        <div id="teamGrid" class="sf-team-grid"></div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="modelPanel">
+        <div class="sf-panel-header">
+          <h2>5v5 Model Performance</h2>
+          <div id="modelTrainedAt" class="sf-model-trained">Trained: ...</div>
+        </div>
+        <div class="sf-model-meta">
+          <div class="sf-stat"><span class="sf-stat-label">Training Seasons</span><span id="modelTrainingSeasons" class="sf-stat-value">-</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Test Season</span><span id="modelTestSeason" class="sf-stat-value">-</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Stage 2 AUC</span><span id="modelStage2Auc" class="sf-stat-value">-</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Combined AUC</span><span id="modelCombinedAuc" class="sf-stat-value">-</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Stage 2 Brier</span><span id="modelStage2Brier" class="sf-stat-value">-</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Combined Brier</span><span id="modelCombinedBrier" class="sf-stat-value">-</span></div>
+        </div>
+        <div class="sf-model-grid">
+          <div class="sf-model-chart-card">
+            <h3>Stage 1 5v5 Class AUC</h3>
+            <div id="stage1AucChart" class="sf-model-chart"></div>
+          </div>
+          <div class="sf-model-chart-card">
+            <h3>Combined 5v5 Calibration Curve</h3>
+            <div id="combinedCalibrationChart" class="sf-model-chart"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="sf-footer">
+      <p>Private-model output rendered as static site. Source data generated from this private repository.</p>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
