@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://netoutcomes.ca/sitemap.xml

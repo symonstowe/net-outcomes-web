@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Statistical Fantasies - NHL team xG visualizer, skater rankings, goalie rankings, and line analysis." />
+  <meta name="description" content="NetOutcomes.ca delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
+  <link rel="canonical" href="https://netoutcomes.ca/" />
   <link rel="icon" href="imgs/logo-light.svg" />
   <link rel="stylesheet" href="latofonts.css" />
   <link rel="stylesheet" href="style.css" />
-  <title>Statistical Fantasies | NHL Analysis</title>
+  <title>NetOutcomes.ca | NHL Player Rankings, Line Analysis, and Team xG</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"NetOutcomes.ca","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"NetOutcomes.ca","description":"NetOutcomes.ca delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
 </head>
 <body class="lato sf-background">
   <div id="container" class="sf-container">
     <header class="sf-header">
       <div class="brand_name">
-        <img class="name_pic" src="imgs/logo-light.svg" alt="Statistical Fantasies logo" />
-        <h1 class="name">Statistical Fantasies</h1>
+        <img class="name_pic" src="imgs/logo-light.svg" alt="NetOutcomes.ca logo" />
+        <h1 class="name">NetOutcomes.ca</h1>
       </div>
       <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
       <div class="sf-stats">
@@ -81,7 +83,10 @@
         <div class="sf-panel-header">
           <h2>Skater Rankings</h2>
           <div id="skaterRankBasis" class="sf-rank-basis"></div>
-          <input id="playerSearch" type="search" placeholder="Search player or team" />
+          <div class="sf-search-group">
+            <input id="playerSearch" type="search" placeholder="Search player" />
+            <input id="rankingsTeamSearch" type="search" placeholder="Filter team" />
+          </div>
         </div>
         <div class="sf-table-wrap">
           <table id="rankingsTable" class="sf-table">
@@ -123,7 +128,7 @@
                 <th>Starts</th>
                 <th>SA</th>
                 <th>TOI</th>
-                <th>Shot Danger Adjusted GSAx 5v5</th>
+                <th>Shot Danger Adjusted GSAx 5v5/60</th>
                 <th>SV%</th>
                 <th>xSV%</th>
                 <th>SVAAE</th>
@@ -141,7 +146,10 @@
         <div class="sf-panel-header">
           <h2>Most Underrated Players</h2>
           <div id="underratedRankBasis" class="sf-rank-basis"></div>
-          <input id="underratedSearch" type="search" placeholder="Search player or team" />
+          <div class="sf-search-group">
+            <input id="underratedSearch" type="search" placeholder="Search player" />
+            <input id="underratedTeamSearch" type="search" placeholder="Filter team" />
+          </div>
         </div>
         <div class="sf-table-wrap">
           <table id="underratedTable" class="sf-table">
@@ -221,8 +229,17 @@
       <section class="sf-panel sf-section-panel" id="teamPanel">
         <div class="sf-panel-header">
           <h2>Line Analysis</h2>
-          <input id="teamSearch" type="search" placeholder="Search team" />
+          <div class="sf-team-filter-group">
+            <input id="teamSearch" type="search" placeholder="Search team" />
+            <select id="compareTeamA">
+              <option value="">Compare team A</option>
+            </select>
+            <select id="compareTeamB">
+              <option value="">Compare team B</option>
+            </select>
+          </div>
         </div>
+        <div id="teamCompareNote" class="sf-team-compare-note">Search teams normally or select up to two teams to compare side by side.</div>
         <div id="teamGrid" class="sf-team-grid"></div>
       </section>
 
@@ -252,9 +269,6 @@
       </section>
     </main>
 
-    <footer class="sf-footer">
-      <p>Private-model output rendered as static site. Source data generated from this private repository.</p>
-    </footer>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="app.js" defer></script>

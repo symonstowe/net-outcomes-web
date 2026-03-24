@@ -170,7 +170,7 @@ function renderRankingBasis(payload) {
   }
   if (goalieEl) {
     goalieEl.textContent = String(
-      payload?.goalie_rank_basis || 'Ranked by Shot Danger Adjusted GSAx 5v5, then GSAX/60 and SVAAE. Includes goalies with >=1 start or >=20 modeled SA.'
+      payload?.goalie_rank_basis || 'Ranked by Shot Danger Adjusted GSAx 5v5/60, then GSAX/60 and SVAAE. Includes goalies with >=1 start or >=20 modeled SA.'
     );
   }
   if (underratedEl) {
@@ -184,6 +184,29 @@ function renderRankingBasis(payload) {
 function unitSortValue(label) {
   const match = String(label || '').match(/(\d+)/);
   return match ? Number(match[1]) : 999;
+}
+
+function unitCompositeLabel(unitType) {
+  if (unitType === 'pp') return 'PP Fit';
+  if (unitType === 'pk') return 'PK Fit';
+  return 'Fit';
+}
+
+function unitBasisNote(unitType) {
+  if (unitType === 'lines' || unitType === 'pairs') {
+    return 'Fit = weighted two-way composite (55% Off Sum, 45% Def Sum). Off Sum and Def Sum are raw player-component sums, so they do not add up to Fit.';
+  }
+  if (unitType === 'pp') {
+    return 'PP Fit = special-teams deployment score built around PP RAPM, offensive talent, EV impact, and finishing. Off Sum and Def Sum are raw skater totals, so they do not add up to PP Fit.';
+  }
+  if (unitType === 'pk') {
+    return 'PK Fit = penalty-kill deployment score driven mostly by PK RAPM and defensive talent. Off Sum and Def Sum are raw skater totals, so they do not add up to PK Fit.';
+  }
+  return 'Fit is a weighted composite. Off Sum and Def Sum are raw component sums, so they do not add up directly.';
+}
+
+function unitColumnSummaryNote() {
+  return 'Fit is a weighted unit score. Off Sum and Def Sum are raw player totals and do not add directly. PP Fit still blends PP RAPM, offensive talent, EV impact, and finishing; PK Fit is driven mostly by PK RAPM and defensive talent.';
 }
 
 function normalizeSlotPos(value) {
@@ -225,7 +248,44 @@ function slotLabelsForUnit(unitType, players) {
   return Array.from({ length: Math.max(1, (players || []).length) }, (_, idx) => `P${idx + 1}`);
 }
 
+function renderPlayerCell(player) {
+  if (!player || !player.name) {
+    return '<div class="sf-unit-mini-cell sf-unit-mini-player-cell">-</div>';
+  }
+  const moveClass = String(player.movement_class || '').trim();
+  const moveArrow = String(player.movement_arrow || '').trim();
+  const moveNote = String(player.movement_note || '').trim();
+  const titleAttr = moveNote ? ` title="${esc(moveNote)}"` : '';
+  const arrowMarkup = moveArrow ? `<span class="sf-player-arrow">${esc(moveArrow)}</span>` : '';
+  return `<div class="sf-unit-mini-cell sf-unit-mini-player-cell ${esc(moveClass)}"${titleAttr}>${arrowMarkup}<span>${esc(player.name)}</span></div>`;
+}
+
+function renderDisplayRows(displayRows) {
+  return (displayRows || []).map((row) => {
+    const labels = Array.isArray(row?.slot_labels) ? row.slot_labels : [];
+    const players = Array.isArray(row?.players) ? row.players : [];
+    const slotCount = Math.max(labels.length, players.length, 1);
+    const gridStyle = `style="grid-template-columns: repeat(${slotCount}, minmax(0, 1fr));"`;
+    const headerCells = Array.from({ length: slotCount }, (_, idx) => {
+      const label = labels[idx] || `P${idx + 1}`;
+      return `<div class="sf-unit-mini-cell sf-unit-mini-head-cell">${esc(label)}</div>`;
+    }).join('');
+    const playerCells = Array.from({ length: slotCount }, (_, idx) => renderPlayerCell(players[idx])).join('');
+    return `
+      <div class="sf-unit-mini-row-group">
+        <div class="sf-unit-mini-row sf-unit-mini-head-row" ${gridStyle}>${headerCells}</div>
+        <div class="sf-unit-mini-row sf-unit-mini-player-row" ${gridStyle}>${playerCells}</div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderPlayerSlotGrid(unit, unitType) {
+  const displayRows = Array.isArray(unit?.display_rows) ? unit.display_rows : [];
+  if (displayRows.length) {
+    return `<div class="sf-unit-mini-table">${renderDisplayRows(displayRows)}</div>`;
+  }
+
   const players = Array.isArray(unit?.players) ? unit.players : [];
   const slotLabels = slotLabelsForUnit(unitType, players);
   const slotCount = Math.max(slotLabels.length, players.length);
@@ -236,10 +296,7 @@ function renderPlayerSlotGrid(unit, unitType) {
     return `<div class="sf-unit-mini-cell sf-unit-mini-head-cell">${esc(label)}</div>`;
   }).join('');
 
-  const playerCells = Array.from({ length: slotCount }, (_, idx) => {
-    const name = players[idx]?.name ? esc(players[idx].name) : '-';
-    return `<div class="sf-unit-mini-cell sf-unit-mini-player-cell">${name}</div>`;
-  }).join('');
+  const playerCells = Array.from({ length: slotCount }, (_, idx) => renderPlayerCell(players[idx])).join('');
 
   return `
     <div class="sf-unit-mini-table">
@@ -265,11 +322,19 @@ function renderUnitRows(units, unitType) {
   return sorted.map((unit) => {
     const label = String(unit?.label || `Unit ${unit?.unit || ''}`).trim() || 'Unit';
     const score = Number(unit?.score || 0);
+    const offScore = Number(unit?.off_score || 0);
+    const defScore = Number(unit?.def_score || 0);
+    const compositeLabel = unitCompositeLabel(unitType);
+    const basisNote = unitBasisNote(unitType);
     return `
       <div class="sf-unit-row">
         <div class="sf-unit-row-head">
           <div class="sf-unit-label">${esc(label)}</div>
-          <div class="sf-unit-score ${classForSigned(score)}">${signed(score)}</div>
+          <div class="sf-unit-scoreline">
+            <div class="sf-unit-score ${classForSigned(score)}" title="${esc(basisNote)}">${esc(compositeLabel)} ${signed(score)}</div>
+            <div class="sf-unit-score ${classForSigned(offScore)}" title="Sum of the players' offensive component scores in this unit.">Off Sum ${signed(offScore)}</div>
+            <div class="sf-unit-score ${classForSigned(defScore)}" title="Sum of the players' defensive component scores in this unit.">Def Sum ${signed(defScore)}</div>
+          </div>
         </div>
         ${renderPlayerSlotGrid(unit || {}, unitType)}
       </div>
@@ -279,11 +344,6 @@ function renderUnitRows(units, unitType) {
 
 function renderTeamCard(team) {
   const deltaClass = classForSigned(team.delta);
-  const moves = (team.moves || []).map((move) => `<li>${esc(move)}</li>`).join('');
-  const topSkaters = (team.top_skaters || []).map((row) => `
-      <li>${esc(row.player_name)} <span class="${classForSigned(row.xgar)}">${signed(row.xgar)}</span></li>
-    `).join('');
-
   const current = team.units?.current || {};
   const suggested = team.units?.suggested || {};
 
@@ -301,6 +361,7 @@ function renderTeamCard(team) {
       <div class="sf-unit-grid">
         <section class="sf-unit-column sf-unit-column-current">
           <h4>Current Units</h4>
+          <div class="sf-unit-basis">${esc(unitColumnSummaryNote())}</div>
           <div class="sf-unit-group">
             <h5 class="sf-unit-group-title">Forward Lines</h5>
             ${renderUnitRows(current.lines, 'lines')}
@@ -320,6 +381,7 @@ function renderTeamCard(team) {
         </section>
         <section class="sf-unit-column sf-unit-column-suggested">
           <h4>Suggested Units</h4>
+          <div class="sf-unit-basis">${esc(unitColumnSummaryNote())}</div>
           <div class="sf-unit-group">
             <h5 class="sf-unit-group-title">Forward Lines</h5>
             ${renderUnitRows(suggested.lines, 'lines')}
@@ -338,28 +400,18 @@ function renderTeamCard(team) {
           </div>
         </section>
       </div>
-
-      <div class="sf-team-bottom">
-        <div>
-          <h5>Suggested Movement</h5>
-          <ul>${moves || '<li>No major movement suggested.</li>'}</ul>
-        </div>
-        <div>
-          <h5>Top Team Skaters (xGAR)</h5>
-          <ul>${topSkaters || '<li>No skater data.</li>'}</ul>
-        </div>
-      </div>
     </article>
   `;
 }
 
-function applyRankingsFilter(allRows, query) {
-  if (!query) return allRows;
-  const q = query.toLowerCase();
-  return allRows.filter((row) => (
-    String(row.player_name || '').toLowerCase().includes(q) ||
-    String(row.team || '').toLowerCase().includes(q)
-  ));
+function applyRankingsFilter(allRows, playerQuery, teamQuery) {
+  const playerQ = String(playerQuery || '').toLowerCase().trim();
+  const teamQ = String(teamQuery || '').toLowerCase().trim();
+  return allRows.filter((row) => {
+    const playerMatch = !playerQ || String(row.player_name || '').toLowerCase().includes(playerQ);
+    const teamMatch = !teamQ || String(row.team || '').toLowerCase().includes(teamQ);
+    return playerMatch && teamMatch;
+  });
 }
 
 function applyGoalieFilter(allRows, query) {
@@ -377,13 +429,66 @@ function applyTeamFilter(allRows, query) {
   return allRows.filter((row) => String(row.team || '').toLowerCase().includes(q));
 }
 
-function applyUnderratedFilter(allRows, query) {
-  if (!query) return allRows;
-  const q = query.toLowerCase();
-  return allRows.filter((row) => (
-    String(row.player_name || '').toLowerCase().includes(q) ||
-    String(row.team || '').toLowerCase().includes(q)
-  ));
+function applyTeamCompareFilter(allRows, selectedTeams) {
+  if (!Array.isArray(selectedTeams) || !selectedTeams.length) return allRows;
+  const order = new Map(selectedTeams.map((team, index) => [String(team), index]));
+  return allRows
+    .filter((row) => order.has(String(row.team || '')))
+    .sort((a, b) => (order.get(String(a.team || '')) || 0) - (order.get(String(b.team || '')) || 0));
+}
+
+function uniqueSortedTeamNames(rows) {
+  return Array.from(
+    new Set(
+      (rows || [])
+        .map((row) => String(row?.team || '').trim())
+        .filter((team) => !!team)
+    )
+  ).sort((a, b) => a.localeCompare(b));
+}
+
+function populateTeamCompareSelect(selectEl, teamNames, placeholder, selectedValue) {
+  if (!selectEl) return;
+  const currentValue = String(selectedValue || '').trim();
+  const options = [`<option value="">${esc(placeholder)}</option>`].concat(
+    (teamNames || []).map((team) => {
+      const selectedAttr = team === currentValue ? ' selected' : '';
+      return `<option value="${esc(team)}"${selectedAttr}>${esc(team)}</option>`;
+    })
+  );
+  selectEl.innerHTML = options.join('');
+}
+
+function selectedComparisonTeams(selectA, selectB) {
+  return Array.from(
+    new Set(
+      [selectA?.value, selectB?.value]
+        .map((value) => String(value || '').trim())
+        .filter((value) => !!value)
+    )
+  );
+}
+
+function updateTeamCompareNote(selectedTeams) {
+  const noteEl = document.getElementById('teamCompareNote');
+  if (!noteEl) return;
+  if (selectedTeams.length >= 2) {
+    noteEl.textContent = `Comparing ${selectedTeams[0]} and ${selectedTeams[1]}.`;
+  } else if (selectedTeams.length === 1) {
+    noteEl.textContent = `Focused on ${selectedTeams[0]}. Select another team to compare side by side.`;
+  } else {
+    noteEl.textContent = 'Search teams normally or select up to two teams to compare side by side.';
+  }
+}
+
+function applyUnderratedFilter(allRows, playerQuery, teamQuery) {
+  const playerQ = String(playerQuery || '').toLowerCase().trim();
+  const teamQ = String(teamQuery || '').toLowerCase().trim();
+  return allRows.filter((row) => {
+    const playerMatch = !playerQ || String(row.player_name || '').toLowerCase().includes(playerQ);
+    const teamMatch = !teamQ || String(row.team || '').toLowerCase().includes(teamQ);
+    return playerMatch && teamMatch;
+  });
 }
 
 function toggleSuggestedLineup(el) {
@@ -786,10 +891,17 @@ async function main() {
   renderTeams(allTeams);
 
   const playerSearch = document.getElementById('playerSearch');
-  playerSearch.addEventListener('input', () => {
-    const rows = applyRankingsFilter(allRankings, playerSearch.value || '');
+  const rankingsTeamSearch = document.getElementById('rankingsTeamSearch');
+  const refreshRankings = () => {
+    const rows = applyRankingsFilter(
+      allRankings,
+      playerSearch?.value || '',
+      rankingsTeamSearch?.value || ''
+    );
     renderRankings(rows);
-  });
+  };
+  playerSearch.addEventListener('input', refreshRankings);
+  rankingsTeamSearch.addEventListener('input', refreshRankings);
 
   const goalieSearch = document.getElementById('goalieSearch');
   goalieSearch.addEventListener('input', () => {
@@ -798,26 +910,52 @@ async function main() {
   });
 
   const underratedSearch = document.getElementById('underratedSearch');
-  underratedSearch.addEventListener('input', () => {
-    const rows = applyUnderratedFilter(allUnderrated, underratedSearch.value || '');
+  const underratedTeamSearch = document.getElementById('underratedTeamSearch');
+  const refreshUnderrated = () => {
+    const rows = applyUnderratedFilter(
+      allUnderrated,
+      underratedSearch?.value || '',
+      underratedTeamSearch?.value || ''
+    );
     renderUnderrated(rows);
-  });
+  };
+  underratedSearch.addEventListener('input', refreshUnderrated);
+  underratedTeamSearch.addEventListener('input', refreshUnderrated);
 
   const teamSearch = document.getElementById('teamSearch');
-  teamSearch.addEventListener('input', () => {
+  const compareTeamA = document.getElementById('compareTeamA');
+  const compareTeamB = document.getElementById('compareTeamB');
+  const availableTeamNames = usingLegacyLineupCards
+    ? uniqueSortedTeamNames(Array.from(teamGrid.querySelectorAll('.lineup-card')).map((card) => ({ team: card.dataset?.team || '' })))
+    : uniqueSortedTeamNames(allTeams);
+
+  populateTeamCompareSelect(compareTeamA, availableTeamNames, 'Compare team A', compareTeamA?.value || '');
+  populateTeamCompareSelect(compareTeamB, availableTeamNames, 'Compare team B', compareTeamB?.value || '');
+
+  const refreshTeamPanel = () => {
+    const selectedTeams = selectedComparisonTeams(compareTeamA, compareTeamB);
+    updateTeamCompareNote(selectedTeams);
     if (usingLegacyLineupCards) {
-      const q = String(teamSearch.value || '').toLowerCase();
+      const q = String(teamSearch.value || '').toLowerCase().trim();
       teamGrid.querySelectorAll('.lineup-card').forEach((card) => {
         const team = String(card.dataset?.team || '').toLowerCase();
         const text = String(card.textContent || '').toLowerCase();
-        const show = !q || team.includes(q) || text.includes(q);
+        const show = selectedTeams.length
+          ? selectedTeams.includes(String(card.dataset?.team || '').trim())
+          : (!q || team.includes(q) || text.includes(q));
         card.style.display = show ? '' : 'none';
       });
     } else {
-      const rows = applyTeamFilter(allTeams, teamSearch.value || '');
+      const rows = selectedTeams.length
+        ? applyTeamCompareFilter(allTeams, selectedTeams)
+        : applyTeamFilter(allTeams, teamSearch.value || '');
       renderTeams(rows);
     }
-  });
+  };
+  teamSearch.addEventListener('input', refreshTeamPanel);
+  compareTeamA.addEventListener('change', refreshTeamPanel);
+  compareTeamB.addEventListener('change', refreshTeamPanel);
+  refreshTeamPanel();
 
   setupSectionNavigation();
   initializeXgPanel();
