@@ -5,6 +5,8 @@ const state = {
   xgSummaryByTeam: new Map(),
   xgShotsCache: new Map(),
   skaterPosById: new Map(),
+  rankingsSort: { key: 'total_talent', direction: 'desc' },
+  teamRankingsSort: { key: 'total_team_score', direction: 'desc' },
 };
 
 function esc(value) {
@@ -17,14 +19,16 @@ function esc(value) {
 }
 
 function signed(value, digits = 3) {
-  const n = Number(value || 0);
-  if (!Number.isFinite(n)) return (0).toFixed(digits);
+  if (value === null || value === undefined || value === '') return '-';
+  const n = Number(value);
+  if (!Number.isFinite(n)) return '-';
   const s = n.toFixed(digits);
   return n > 0 ? `+${s}` : s;
 }
 
 function classForSigned(value) {
-  const n = Number(value || 0);
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
   if (!Number.isFinite(n) || n === 0) return '';
   return n > 0 ? 'pos' : 'neg';
 }
@@ -33,6 +37,58 @@ function pct(value, digits = 2) {
   const n = Number(value);
   if (!Number.isFinite(n)) return '-';
   return `${(n * 100).toFixed(digits)}%`;
+}
+
+function updateSortableHeaders(tableId, sortState) {
+  const headers = Array.from(document.querySelectorAll(`#${tableId} th.sf-sortable`));
+  headers.forEach((header) => {
+    const sortKey = String(header.dataset.sortKey || '');
+    const active = sortKey === String(sortState?.key || '');
+    header.classList.toggle('is-active', active);
+    header.dataset.sortDir = active ? String(sortState?.direction || 'desc') : '';
+    header.setAttribute('aria-sort', active
+      ? (sortState?.direction === 'asc' ? 'ascending' : 'descending')
+      : 'none');
+    const arrow = header.querySelector('.sf-sort-arrow');
+    if (arrow) {
+      arrow.textContent = active
+        ? (sortState?.direction === 'asc' ? '↑' : '↓')
+        : '';
+    }
+  });
+}
+
+function bindSortableHeaders(tableId, stateKey, refreshFn) {
+  const headers = Array.from(document.querySelectorAll(`#${tableId} th.sf-sortable`));
+  headers.forEach((header) => {
+    if (header.dataset.sortBound === 'true') return;
+    header.dataset.sortBound = 'true';
+    header.tabIndex = 0;
+    header.setAttribute('role', 'button');
+    const triggerSort = () => {
+      const sortKey = String(header.dataset.sortKey || '').trim();
+      if (!sortKey) return;
+      const defaultDirection = String(header.dataset.sortDefault || 'desc');
+      const current = state[stateKey] || {};
+      const isSameKey = String(current.key || '') === sortKey;
+      state[stateKey] = {
+        key: sortKey,
+        direction: isSameKey
+          ? (current.direction === 'desc' ? 'asc' : 'desc')
+          : defaultDirection,
+      };
+      updateSortableHeaders(tableId, state[stateKey]);
+      refreshFn();
+    };
+    header.addEventListener('click', triggerSort);
+    header.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        triggerSort();
+      }
+    });
+  });
+  updateSortableHeaders(tableId, state[stateKey] || {});
 }
 
 function setupSectionNavigation() {
@@ -61,13 +117,18 @@ function renderRankings(rows) {
       <td>${esc(row.player_name)}</td>
       <td>${esc(row.team)}</td>
       <td>${esc(row.position)}</td>
-      <td class="${classForSigned(row.total_offence_defence)}">${signed(row.total_offence_defence)}</td>
-      <td class="${classForSigned(row.total_offence)}">${signed(row.total_offence)}</td>
-      <td class="${classForSigned(row.total_defence)}">${signed(row.total_defence)}</td>
-      <td class="${classForSigned(row.xgar)}">${signed(row.xgar)}</td>
-      <td class="${classForSigned(row.xgar_per_60)}">${signed(row.xgar_per_60)}</td>
-      <td class="${classForSigned(row.on_ice_xg_diff_no_en_per60)}">${signed(row.on_ice_xg_diff_no_en_per60)}</td>
-      <td class="${classForSigned(row.on_ice_5v5_xg_diff_no_en_per60)}">${signed(row.on_ice_5v5_xg_diff_no_en_per60)}</td>
+      <td class="${classForSigned(row.total_talent)}">${signed(row.total_talent)}</td>
+      <td class="${classForSigned(row.offence_score)}">${signed(row.offence_score)}</td>
+      <td class="${classForSigned(row.finishing)}">${signed(row.finishing)}</td>
+      <td class="${classForSigned(row.playmaking)}">${signed(row.playmaking)}</td>
+      <td class="${classForSigned(row.chance_creation)}">${signed(row.chance_creation)}</td>
+      <td class="${classForSigned(row.defence_score)}">${signed(row.defence_score)}</td>
+      <td class="${classForSigned(row.rush_defence)}">${signed(row.rush_defence)}</td>
+      <td class="${classForSigned(row.chance_suppression)}">${signed(row.chance_suppression)}</td>
+      <td class="${classForSigned(row.special_teams)}">${signed(row.special_teams)}</td>
+      <td class="${classForSigned(row.ev_xgar_per_60)}">${signed(row.ev_xgar_per_60)}</td>
+      <td class="${classForSigned(row.pp_xgar_per_60)}">${signed(row.pp_xgar_per_60)}</td>
+      <td class="${classForSigned(row.pk_xgar_per_60)}">${signed(row.pk_xgar_per_60)}</td>
       <td>${row.season_gp}</td>
       <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
     </tr>
@@ -95,6 +156,26 @@ function renderGoalies(rows) {
   `).join('');
 }
 
+function renderTeamRankings(rows) {
+  const tbody = document.querySelector('#teamRankingsTable tbody');
+  if (!tbody) return;
+  tbody.innerHTML = rows.map((row, idx) => `
+    <tr>
+      <td>${idx + 1}</td>
+      <td>${esc(row.team)}</td>
+      <td>${row.games_played}</td>
+      <td class="${classForSigned(row.total_team_score)}">${signed(row.total_team_score)}</td>
+      <td class="${classForSigned(row.shooting_talent)}">${signed(row.shooting_talent)}</td>
+      <td class="${classForSigned(row.playmaking_talent)}">${signed(row.playmaking_talent)}</td>
+      <td class="${classForSigned(row.goaltending_talent)}">${signed(row.goaltending_talent)}</td>
+      <td class="${classForSigned(row.chance_generation)}">${signed(row.chance_generation)}</td>
+      <td class="${classForSigned(row.chance_suppression)}">${signed(row.chance_suppression)}</td>
+      <td>${Number(row.high_danger_chances || 0).toFixed(2)}</td>
+      <td class="${classForSigned(row.special_teams)}">${signed(row.special_teams)}</td>
+    </tr>
+  `).join('');
+}
+
 function renderUnderrated(rows) {
   const tbody = document.querySelector('#underratedTable tbody');
   tbody.innerHTML = rows.map((row) => `
@@ -118,6 +199,7 @@ function renderUnderrated(rows) {
 function renderScoringAnomalies(payload) {
   const ppRows = Array.isArray(payload?.powerplay_heavy) ? payload.powerplay_heavy : [];
   const enRows = Array.isArray(payload?.empty_net_heavy) ? payload.empty_net_heavy : [];
+  const lowFiveVFiveRows = Array.isArray(payload?.lowest_5v5_goal_share) ? payload.lowest_5v5_goal_share : [];
   const basisEl = document.getElementById('scoringAnomaliesBasis');
   if (basisEl) {
     basisEl.textContent = String(payload?.basis || '');
@@ -157,20 +239,43 @@ function renderScoringAnomalies(payload) {
       </tr>
     `).join('') : '<tr><td colspan="9">No qualifying players.</td></tr>';
   }
+
+  const fiveVFiveTbody = document.querySelector('#fiveVFiveGoalShareTable tbody');
+  if (fiveVFiveTbody) {
+    fiveVFiveTbody.innerHTML = lowFiveVFiveRows.length ? lowFiveVFiveRows.map((row) => `
+      <tr>
+        <td>${row.rank}</td>
+        <td>${esc(row.player_name)}</td>
+        <td>${esc(row.team)}</td>
+        <td>${esc(row.position)}</td>
+        <td>${row.season_gp}</td>
+        <td>${row.total_goals}</td>
+        <td>${row.goals_5v5}</td>
+        <td>${row.other_state_goals}</td>
+        <td>${pct(row.fivevfive_share, 1)}</td>
+      </tr>
+    `).join('') : '<tr><td colspan="9">No qualifying players.</td></tr>';
+  }
 }
 
 function renderRankingBasis(payload) {
   const skaterEl = document.getElementById('skaterRankBasis');
   const goalieEl = document.getElementById('goalieRankBasis');
+  const teamEl = document.getElementById('teamRankBasis');
   const underratedEl = document.getElementById('underratedRankBasis');
   if (skaterEl) {
     skaterEl.textContent = String(
-      payload?.skater_rank_basis || 'Ranked by TOI/GP-reliability-shrunk Total (OFF+DEF), then shrunk OFF, shrunk DEF, and TOI. On-Ice Net xGAR columns are current-season modeled EV+PP+PK impact using 5v5/PP/PK TOI only.'
+      payload?.skater_rank_basis || 'Default rank is reliability- and uncertainty-shrunk Total. Finishing is a 5v5 HLD shooter-talent rate over EV TOI, Playmaking is the league-centered 5v5 HLD on-ice rush-for rate over EV TOI, Rush Def is a certainty-shrunk 5v5 defensive rush proxy, Chance Gen and Chance Supp are volume-based 5v5 components, QoC/QoT are standardized into context components instead of using raw tiny values, and 5v5/PP/PK xGAR/60 sorts are also shrunken by state-specific sample.'
     );
   }
   if (goalieEl) {
     goalieEl.textContent = String(
       payload?.goalie_rank_basis || 'Ranked by Shot Danger Adjusted GSAx 5v5/60, then GSAX/60 and SVAAE. Includes goalies with >=1 start or >=20 modeled SA.'
+    );
+  }
+  if (teamEl) {
+    teamEl.textContent = String(
+      payload?.team_rank_basis || 'Total Team Score blends z-scored shooting talent, playmaking talent, goaltending talent, chance generation, chance suppression, high-danger chances, and special teams. Shooting talent is shot-weighted HLD shooter talent, playmaking talent is shot-weighted HLD rush/context talent, goaltending talent is TOI-weighted HLD 5v5 GSAx/60, chance generation is non-empty-net xGF/game relative to league average, chance suppression is league-average xGA/game minus team xGA/game, and high-danger chances count non-empty-net shots with xG >= 0.20 per game.'
     );
   }
   if (underratedEl) {
@@ -197,16 +302,16 @@ function unitBasisNote(unitType) {
     return 'Fit = weighted two-way composite (55% Off Sum, 45% Def Sum). Off Sum and Def Sum are raw player-component sums, so they do not add up to Fit.';
   }
   if (unitType === 'pp') {
-    return 'PP Fit = special-teams deployment score built around PP RAPM, offensive talent, EV impact, and finishing. Off Sum and Def Sum are raw skater totals, so they do not add up to PP Fit.';
+    return 'PP Fit = special-teams deployment score built around PP RAPM, offensive talent, EV impact, finishing, and drawn-penalty value. Off Sum and Def Sum are raw skater totals, so they do not add up to PP Fit.';
   }
   if (unitType === 'pk') {
-    return 'PK Fit = penalty-kill deployment score driven mostly by PK RAPM and defensive talent. Off Sum and Def Sum are raw skater totals, so they do not add up to PK Fit.';
+    return 'PK Fit = penalty-kill deployment score driven mostly by PK RAPM, defensive talent, real PK usage, and penalty avoidance. Off Sum and Def Sum are raw skater totals, so they do not add up to PK Fit.';
   }
   return 'Fit is a weighted composite. Off Sum and Def Sum are raw component sums, so they do not add up directly.';
 }
 
 function unitColumnSummaryNote() {
-  return 'Fit is a weighted unit score. Off Sum and Def Sum are raw player totals and do not add directly. PP Fit still blends PP RAPM, offensive talent, EV impact, and finishing; PK Fit is driven mostly by PK RAPM and defensive talent.';
+  return 'Fit is a weighted unit score. Off Sum and Def Sum are raw player totals and do not add directly. PP Fit still blends PP RAPM, offensive talent, EV impact, finishing, and drawn-penalty value; PK Fit is driven mostly by PK RAPM, defensive talent, real PK usage, and penalty avoidance.';
 }
 
 function normalizeSlotPos(value) {
@@ -411,6 +516,97 @@ function applyRankingsFilter(allRows, playerQuery, teamQuery) {
     const playerMatch = !playerQ || String(row.player_name || '').toLowerCase().includes(playerQ);
     const teamMatch = !teamQ || String(row.team || '').toLowerCase().includes(teamQ);
     return playerMatch && teamMatch;
+  });
+}
+
+function sortRankingsRows(rows, sortState) {
+  const key = String(sortState?.key || 'total_talent');
+  const direction = String(sortState?.direction || 'desc');
+  const dirMult = direction === 'asc' ? 1 : -1;
+  const missingNumber = (value) => value === null || value === undefined || value === '' || !Number.isFinite(Number(value));
+  const fieldMap = {
+    player_name: { field: 'player_name', type: 'string' },
+    team: { field: 'team', type: 'string' },
+    position: { field: 'position', type: 'string' },
+    total_talent: { field: 'total_talent', type: 'number' },
+    offence_score: { field: 'offence_score', type: 'number' },
+    finishing: { field: 'finishing', type: 'number' },
+    playmaking: { field: 'playmaking', type: 'number' },
+    chance_creation: { field: 'chance_creation', type: 'number' },
+    rush_defence: { field: 'rush_defence', type: 'number' },
+    chance_suppression: { field: 'chance_suppression', type: 'number' },
+    defence_score: { field: 'defence_score', type: 'number' },
+    special_teams: { field: 'special_teams', type: 'number' },
+    ev_xgar_per_60: { field: 'sort_ev_xgar_per_60', type: 'number' },
+    pp_xgar_per_60: { field: 'sort_pp_xgar_per_60', type: 'number' },
+    pk_xgar_per_60: { field: 'sort_pk_xgar_per_60', type: 'number' },
+    season_gp: { field: 'season_gp', type: 'number' },
+    season_toi_min: { field: 'season_toi_min', type: 'number' },
+  };
+  const spec = fieldMap[key] || fieldMap.total_talent;
+  return [...(rows || [])].sort((a, b) => {
+    let primary = 0;
+    if (spec.type === 'string') {
+      primary = String(a?.[spec.field] || '').localeCompare(String(b?.[spec.field] || ''));
+      if (primary !== 0) return dirMult * primary;
+    } else {
+      const aMissing = missingNumber(a?.[spec.field]);
+      const bMissing = missingNumber(b?.[spec.field]);
+      if (aMissing !== bMissing) {
+        return aMissing ? 1 : -1;
+      }
+      if (aMissing && bMissing) {
+        primary = 0;
+      } else {
+        primary = Number(a?.[spec.field]) - Number(b?.[spec.field]);
+      }
+      if (Math.abs(primary) > 1e-12) return dirMult * primary;
+    }
+    const aTotal = missingNumber(a?.total_talent) ? Number.NEGATIVE_INFINITY : Number(a?.total_talent);
+    const bTotal = missingNumber(b?.total_talent) ? Number.NEGATIVE_INFINITY : Number(b?.total_talent);
+    const totalTie = bTotal - aTotal;
+    if (Math.abs(totalTie) > 1e-12) return totalTie;
+    const toiTie = Number(b?.season_toi_min || 0) - Number(a?.season_toi_min || 0);
+    if (Math.abs(toiTie) > 1e-12) return toiTie;
+    return String(a?.player_name || '').localeCompare(String(b?.player_name || ''));
+  });
+}
+
+function applyTeamRankingsFilter(allRows, query) {
+  const q = String(query || '').toLowerCase().trim();
+  if (!q) return allRows;
+  return (allRows || []).filter((row) => String(row.team || '').toLowerCase().includes(q));
+}
+
+function sortTeamRankingsRows(rows, sortState) {
+  const key = String(sortState?.key || 'total_team_score');
+  const direction = String(sortState?.direction || 'desc');
+  const dirMult = direction === 'asc' ? 1 : -1;
+  const fieldMap = {
+    team: { field: 'team', type: 'string' },
+    games_played: { field: 'games_played', type: 'number' },
+    total_team_score: { field: 'total_team_score', type: 'number' },
+    shooting_talent: { field: 'shooting_talent', type: 'number' },
+    playmaking_talent: { field: 'playmaking_talent', type: 'number' },
+    goaltending_talent: { field: 'goaltending_talent', type: 'number' },
+    chance_generation: { field: 'chance_generation', type: 'number' },
+    chance_suppression: { field: 'chance_suppression', type: 'number' },
+    high_danger_chances: { field: 'high_danger_chances', type: 'number' },
+    special_teams: { field: 'special_teams', type: 'number' },
+  };
+  const spec = fieldMap[key] || fieldMap.total_team_score;
+  return [...(rows || [])].sort((a, b) => {
+    let primary = 0;
+    if (spec.type === 'string') {
+      primary = String(a?.[spec.field] || '').localeCompare(String(b?.[spec.field] || ''));
+      if (primary !== 0) return dirMult * primary;
+    } else {
+      primary = Number(a?.[spec.field] || 0) - Number(b?.[spec.field] || 0);
+      if (Math.abs(primary) > 1e-12) return dirMult * primary;
+    }
+    const totalTie = Number(b?.total_team_score || 0) - Number(a?.total_team_score || 0);
+    if (Math.abs(totalTie) > 1e-12) return totalTie;
+    return String(a?.team || '').localeCompare(String(b?.team || ''));
   });
 }
 
@@ -846,6 +1042,7 @@ async function main() {
 
   const allRankings = payload.rankings || [];
   const allGoalies = payload.goalie_rankings || [];
+  const allTeamRankings = payload.team_rankings || [];
   const allUnderrated = payload.underrated_rankings || [];
   const scoringAnomalies = payload.scoring_anomalies || {};
   const allTeams = payload.teams || [];
@@ -863,7 +1060,6 @@ async function main() {
       allTeams.length === 0
     )
   );
-  const modelReport = payload.model_performance_5v5 || {};
 
   renderRankingBasis(payload);
   document.getElementById('generatedAt').textContent = String(payload.generated_at || '');
@@ -874,6 +1070,7 @@ async function main() {
       ? (legacyLineupCardsHtml.match(/class="lineup-card"/g) || []).length
       : allTeams.length
   );
+  document.getElementById('lastUpdatedBanner').textContent = `Last updated: ${String(payload.last_updated_utc || payload.generated_at || '')}`;
 
   const teamGrid = document.getElementById('teamGrid');
   const renderTeams = (rows) => {
@@ -884,8 +1081,9 @@ async function main() {
     teamGrid.innerHTML = rows.map(renderTeamCard).join('');
   };
 
-  renderRankings(allRankings);
+  renderRankings(sortRankingsRows(allRankings, state.rankingsSort));
   renderGoalies(allGoalies);
+  renderTeamRankings(sortTeamRankingsRows(allTeamRankings, state.teamRankingsSort));
   renderUnderrated(allUnderrated);
   renderScoringAnomalies(scoringAnomalies);
   renderTeams(allTeams);
@@ -893,15 +1091,28 @@ async function main() {
   const playerSearch = document.getElementById('playerSearch');
   const rankingsTeamSearch = document.getElementById('rankingsTeamSearch');
   const refreshRankings = () => {
-    const rows = applyRankingsFilter(
+    const filtered = applyRankingsFilter(
       allRankings,
       playerSearch?.value || '',
       rankingsTeamSearch?.value || ''
     );
+    const rows = sortRankingsRows(filtered, state.rankingsSort);
     renderRankings(rows);
+    updateSortableHeaders('rankingsTable', state.rankingsSort);
   };
   playerSearch.addEventListener('input', refreshRankings);
   rankingsTeamSearch.addEventListener('input', refreshRankings);
+  bindSortableHeaders('rankingsTable', 'rankingsSort', refreshRankings);
+
+  const teamRankingsSearch = document.getElementById('teamRankingsSearch');
+  const refreshTeamRankings = () => {
+    const filtered = applyTeamRankingsFilter(allTeamRankings, teamRankingsSearch?.value || '');
+    const rows = sortTeamRankingsRows(filtered, state.teamRankingsSort);
+    renderTeamRankings(rows);
+    updateSortableHeaders('teamRankingsTable', state.teamRankingsSort);
+  };
+  teamRankingsSearch.addEventListener('input', refreshTeamRankings);
+  bindSortableHeaders('teamRankingsTable', 'teamRankingsSort', refreshTeamRankings);
 
   const goalieSearch = document.getElementById('goalieSearch');
   goalieSearch.addEventListener('input', () => {
@@ -959,7 +1170,6 @@ async function main() {
 
   setupSectionNavigation();
   initializeXgPanel();
-  renderModelPerformance(modelReport, payload);
 }
 
 main().catch((error) => {

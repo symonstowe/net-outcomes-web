@@ -111,7 +111,7 @@ body.lato {
   margin-top: 14px;
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .sf-global-analysis-note {
@@ -124,12 +124,17 @@ body.lato {
 .sf-section-btn {
   border: 1px solid var(--sf-border);
   border-radius: 10px;
-  padding: 9px 12px;
+  padding: 8px 10px;
   background: var(--sf-white);
   color: #415247;
-  text-align: left;
+  text-align: center;
   font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 
@@ -193,6 +198,22 @@ body.lato {
 .sf-search-group input {
   min-width: 0;
   width: 100%;
+}
+
+.sf-search-group select {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--sf-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: "LatoWeb", sans-serif;
+  color: var(--sf-dark);
+  background: var(--sf-white);
+}
+
+.sf-search-group--team-rankings {
+  grid-template-columns: minmax(220px, 1fr);
+  flex: 0 1 260px;
 }
 
 .sf-team-filter-group {
@@ -410,6 +431,48 @@ body.lato {
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.sf-table th.sf-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sf-table th.sf-sortable,
+.sf-table th.sf-sortable .sf-sort-head,
+.sf-table th.sf-sortable .sf-sort-arrow {
+  cursor: pointer;
+}
+
+.sf-table th.sf-sortable:focus-visible {
+  outline: 2px solid rgba(6, 121, 159, 0.35);
+  outline-offset: -2px;
+}
+
+.sf-sort-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sf-sort-arrow {
+  display: inline-block;
+  min-width: 0.9em;
+  color: #9db0b7;
+  font-size: 0.86em;
+  line-height: 1;
+}
+
+.sf-table th.sf-sortable:hover {
+  color: #284f5d;
+}
+
+.sf-table th.sf-sortable.is-active {
+  color: #284f5d;
+}
+
+.sf-table th.sf-sortable.is-active .sf-sort-arrow {
+  color: #06799f;
 }
 
 .sf-table tbody tr:hover {
