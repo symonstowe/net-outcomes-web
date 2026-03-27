@@ -113,7 +113,7 @@ function renderRankings(rows) {
   const tbody = document.querySelector('#rankingsTable tbody');
   tbody.innerHTML = rows.map((row) => `
     <tr>
-      <td>${row.rank}</td>
+      <td>${row.display_rank ?? row.rank}</td>
       <td>${esc(row.player_name)}</td>
       <td>${esc(row.team)}</td>
       <td>${esc(row.position)}</td>
@@ -170,7 +170,8 @@ function renderTeamRankings(rows) {
       <td class="${classForSigned(row.goaltending_talent)}">${signed(row.goaltending_talent)}</td>
       <td class="${classForSigned(row.chance_generation)}">${signed(row.chance_generation)}</td>
       <td class="${classForSigned(row.chance_suppression)}">${signed(row.chance_suppression)}</td>
-      <td>${Number(row.high_danger_chances || 0).toFixed(2)}</td>
+      <td>${Number(row.high_danger_for || 0).toFixed(2)}</td>
+      <td>${Number(row.high_danger_against || 0).toFixed(2)}</td>
       <td class="${classForSigned(row.special_teams)}">${signed(row.special_teams)}</td>
     </tr>
   `).join('');
@@ -265,17 +266,17 @@ function renderRankingBasis(payload) {
   const underratedEl = document.getElementById('underratedRankBasis');
   if (skaterEl) {
     skaterEl.textContent = String(
-      payload?.skater_rank_basis || 'Default rank is reliability- and uncertainty-shrunk Total. Finishing is a 5v5 HLD shooter-talent rate over EV TOI, Playmaking is the league-centered 5v5 HLD on-ice rush-for rate over EV TOI, Rush Def is a certainty-shrunk 5v5 defensive rush proxy, Chance Gen and Chance Supp are volume-based 5v5 components, QoC/QoT are standardized into context components instead of using raw tiny values, and 5v5/PP/PK xGAR/60 sorts are also shrunken by state-specific sample.'
+      payload?.skater_rank_basis || 'Default rank is reliability- and uncertainty-shrunk Total. Finishing is a 5v5 HLD shooter-talent rate over EV TOI, Playmaking is a strongly certainty-shrunk standardized 5v5 HLD on-ice rush-for score with a minimum sample gate, Rush Def is a strongly certainty-shrunk 5v5 defensive rush proxy with a minimum sample gate, Chance Gen and Chance Supp are volume-based 5v5 components, QoC/QoT are standardized into context components instead of using raw tiny values, and 5v5/PP/PK xGAR/60 sorts are also shrunken by state-specific sample.'
     );
   }
   if (goalieEl) {
     goalieEl.textContent = String(
-      payload?.goalie_rank_basis || 'Ranked by Shot Danger Adjusted GSAx 5v5/60, then GSAX/60 and SVAAE. Includes goalies with >=1 start or >=20 modeled SA.'
+      payload?.goalie_rank_basis || 'Ranked by Shot Danger Adjusted GSAx 5v5/60, then GSAX/60 and SVAAE. Includes goalies with starts >= min(10, ceil(10% of an 82-game season)).'
     );
   }
   if (teamEl) {
     teamEl.textContent = String(
-      payload?.team_rank_basis || 'Total Team Score blends z-scored shooting talent, playmaking talent, goaltending talent, chance generation, chance suppression, high-danger chances, and special teams. Shooting talent is shot-weighted HLD shooter talent, playmaking talent is shot-weighted HLD rush/context talent, goaltending talent is TOI-weighted HLD 5v5 GSAx/60, chance generation is non-empty-net xGF/game relative to league average, chance suppression is league-average xGA/game minus team xGA/game, and high-danger chances count non-empty-net shots with xG >= 0.20 per game.'
+      payload?.team_rank_basis || 'Total Team Score blends z-scored shooting talent, playmaking talent, goaltending talent, chance generation, chance suppression, high-danger for, high-danger against, and special teams. Shooting talent is shot-weighted HLD shooter talent, playmaking talent is shot-weighted HLD rush/context talent, goaltending talent is TOI-weighted HLD 5v5 GSAx/60, chance generation is non-empty-net xGF/game relative to league average, chance suppression is league-average xGA/game minus team xGA/game, high-danger for counts non-empty-net shots with xG >= 0.20 per game, and high-danger against is the per-game rate of those chances allowed.'
     );
   }
   if (underratedEl) {
@@ -519,6 +520,13 @@ function applyRankingsFilter(allRows, playerQuery, teamQuery) {
   });
 }
 
+function rankSortedRows(rows) {
+  return (rows || []).map((row, idx) => ({
+    ...row,
+    display_rank: idx + 1,
+  }));
+}
+
 function sortRankingsRows(rows, sortState) {
   const key = String(sortState?.key || 'total_talent');
   const direction = String(sortState?.direction || 'desc');
@@ -591,7 +599,8 @@ function sortTeamRankingsRows(rows, sortState) {
     goaltending_talent: { field: 'goaltending_talent', type: 'number' },
     chance_generation: { field: 'chance_generation', type: 'number' },
     chance_suppression: { field: 'chance_suppression', type: 'number' },
-    high_danger_chances: { field: 'high_danger_chances', type: 'number' },
+    high_danger_for: { field: 'high_danger_for', type: 'number' },
+    high_danger_against: { field: 'high_danger_against', type: 'number' },
     special_teams: { field: 'special_teams', type: 'number' },
   };
   const spec = fieldMap[key] || fieldMap.total_team_score;
@@ -1081,7 +1090,7 @@ async function main() {
     teamGrid.innerHTML = rows.map(renderTeamCard).join('');
   };
 
-  renderRankings(sortRankingsRows(allRankings, state.rankingsSort));
+  renderRankings(rankSortedRows(sortRankingsRows(allRankings, state.rankingsSort)));
   renderGoalies(allGoalies);
   renderTeamRankings(sortTeamRankingsRows(allTeamRankings, state.teamRankingsSort));
   renderUnderrated(allUnderrated);
@@ -1091,13 +1100,13 @@ async function main() {
   const playerSearch = document.getElementById('playerSearch');
   const rankingsTeamSearch = document.getElementById('rankingsTeamSearch');
   const refreshRankings = () => {
+    const rankedRows = rankSortedRows(sortRankingsRows(allRankings, state.rankingsSort));
     const filtered = applyRankingsFilter(
-      allRankings,
+      rankedRows,
       playerSearch?.value || '',
       rankingsTeamSearch?.value || ''
     );
-    const rows = sortRankingsRows(filtered, state.rankingsSort);
-    renderRankings(rows);
+    renderRankings(filtered);
     updateSortableHeaders('rankingsTable', state.rankingsSort);
   };
   playerSearch.addEventListener('input', refreshRankings);

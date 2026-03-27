@@ -154,10 +154,13 @@ body.lato {
   background: var(--sf-white);
   padding: 14px;
   box-shadow: 0 2px 8px rgba(6, 121, 159, 0.08);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .sf-section-panel {
   display: none;
+  min-width: 0;
 }
 
 .sf-section-panel.is-active {
@@ -409,10 +412,14 @@ body.lato {
 
 .sf-table-wrap {
   overflow-x: auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .sf-table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: 0.92rem;
 }
