@@ -71,11 +71,12 @@
         <p id="xgDataNote" class="sf-xg-note"></p>
 
         <div class="sf-rink-wrap">
-          <svg id="xgRink" viewBox="-100 -42.5 200 85" preserveAspectRatio="xMidYMid meet"></svg>
+          <svg id="xgRink" viewBox="-103 -45.5 206 91" preserveAspectRatio="xMidYMid meet"></svg>
         </div>
         <div class="sf-rink-legend">
-          <span><i class="sf-legend-dot expected"></i> Expected shot</span>
-          <span><i class="sf-legend-dot actual"></i> Goal</span>
+          <span><i class="sf-legend-dot expected" id="xgLegendShot"></i> Team shot</span>
+          <span><i class="sf-legend-dot actual" id="xgLegendGoal"></i> Goal</span>
+          <span class="sf-rink-legend-note">Dot size ∝ xG</span>
         </div>
       </section>
 
@@ -101,13 +102,14 @@
                 <th class="sf-sortable" data-sort-key="finishing" data-sort-default="desc"><span class="sf-sort-head">Finishing<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="playmaking" data-sort-default="desc"><span class="sf-sort-head">Playmaking<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="chance_creation" data-sort-default="desc"><span class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="leverage_xg_diff" data-sort-default="desc"><span class="sf-sort-head">Leverage xG Diff<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="defence_score" data-sort-default="desc"><span class="sf-sort-head">Defence<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="ev_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">5v5 xGAR/60<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="pp_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">PP xGAR/60<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="pk_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">PK xGAR/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pp_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">PP xGF/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pk_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">PK xGA/60<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="season_gp" data-sort-default="desc"><span class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="season_toi_min" data-sort-default="desc"><span class="sf-sort-head">TOI<span class="sf-sort-arrow"></span></span></th>
               </tr>
@@ -168,6 +170,8 @@
                 <th class="sf-sortable" data-sort-key="goaltending_talent" data-sort-default="desc"><span class="sf-sort-head">Goaltending<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="chance_generation" data-sort-default="desc"><span class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="leverage_xg_net" data-sort-default="desc"><span class="sf-sort-head">Leverage xG<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="high_danger_for" data-sort-default="desc"><span class="sf-sort-head">HD For<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="high_danger_against" data-sort-default="asc"><span class="sf-sort-head">HD Ag<span class="sf-sort-arrow"></span></span></th>
                 <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
@@ -253,6 +257,27 @@
                     <th>EN Pts</th>
                     <th>Non-EN Pts</th>
                     <th>EN Share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+          <section class="sf-anomaly-card">
+            <h3>Highest Percent of Points in 1-Goal Games</h3>
+            <div class="sf-table-wrap">
+              <table id="oneGoalGamePointsTable" class="sf-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Pos</th>
+                    <th>GP</th>
+                    <th>Total Pts</th>
+                    <th>1-Goal Pts</th>
+                    <th>Other Pts</th>
+                    <th>1-Goal Share</th>
                   </tr>
                 </thead>
                 <tbody></tbody>

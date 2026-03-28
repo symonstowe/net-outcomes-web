@@ -114,7 +114,7 @@ function renderRankings(rows) {
   tbody.innerHTML = rows.map((row) => `
     <tr>
       <td>${row.display_rank ?? row.rank}</td>
-      <td>${esc(row.player_name)}</td>
+      <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}</td>
       <td>${esc(row.team)}</td>
       <td>${esc(row.position)}</td>
       <td class="${classForSigned(row.total_talent)}">${signed(row.total_talent)}</td>
@@ -122,6 +122,7 @@ function renderRankings(rows) {
       <td class="${classForSigned(row.finishing)}">${signed(row.finishing)}</td>
       <td class="${classForSigned(row.playmaking)}">${signed(row.playmaking)}</td>
       <td class="${classForSigned(row.chance_creation)}">${signed(row.chance_creation)}</td>
+      <td class="${classForSigned(row.leverage_xg_diff)}">${signed(row.leverage_xg_diff)}</td>
       <td class="${classForSigned(row.defence_score)}">${signed(row.defence_score)}</td>
       <td class="${classForSigned(row.rush_defence)}">${signed(row.rush_defence)}</td>
       <td class="${classForSigned(row.chance_suppression)}">${signed(row.chance_suppression)}</td>
@@ -170,6 +171,8 @@ function renderTeamRankings(rows) {
       <td class="${classForSigned(row.goaltending_talent)}">${signed(row.goaltending_talent)}</td>
       <td class="${classForSigned(row.chance_generation)}">${signed(row.chance_generation)}</td>
       <td class="${classForSigned(row.chance_suppression)}">${signed(row.chance_suppression)}</td>
+      <td class="${classForSigned(row.leverage_xg_net)}">${signed(row.leverage_xg_net)}</td>
+      <td class="${classForSigned(row.rush_defence)}">${signed(row.rush_defence)}</td>
       <td>${Number(row.high_danger_for || 0).toFixed(2)}</td>
       <td>${Number(row.high_danger_against || 0).toFixed(2)}</td>
       <td class="${classForSigned(row.special_teams)}">${signed(row.special_teams)}</td>
@@ -200,6 +203,7 @@ function renderUnderrated(rows) {
 function renderScoringAnomalies(payload) {
   const ppRows = Array.isArray(payload?.powerplay_heavy) ? payload.powerplay_heavy : [];
   const enRows = Array.isArray(payload?.empty_net_heavy) ? payload.empty_net_heavy : [];
+  const oneGoalRows = Array.isArray(payload?.one_goal_game_points_share) ? payload.one_goal_game_points_share : [];
   const lowFiveVFiveRows = Array.isArray(payload?.lowest_5v5_goal_share) ? payload.lowest_5v5_goal_share : [];
   const basisEl = document.getElementById('scoringAnomaliesBasis');
   if (basisEl) {
@@ -241,6 +245,23 @@ function renderScoringAnomalies(payload) {
     `).join('') : '<tr><td colspan="9">No qualifying players.</td></tr>';
   }
 
+  const oneGoalTbody = document.querySelector('#oneGoalGamePointsTable tbody');
+  if (oneGoalTbody) {
+    oneGoalTbody.innerHTML = oneGoalRows.length ? oneGoalRows.map((row) => `
+      <tr>
+        <td>${row.rank}</td>
+        <td>${esc(row.player_name)}</td>
+        <td>${esc(row.team)}</td>
+        <td>${esc(row.position)}</td>
+        <td>${row.season_gp}</td>
+        <td>${row.total_points}</td>
+        <td>${row.one_goal_game_points}</td>
+        <td>${row.other_game_points}</td>
+        <td>${pct(row.one_goal_game_share, 1)}</td>
+      </tr>
+    `).join('') : '<tr><td colspan="9">No qualifying players.</td></tr>';
+  }
+
   const fiveVFiveTbody = document.querySelector('#fiveVFiveGoalShareTable tbody');
   if (fiveVFiveTbody) {
     fiveVFiveTbody.innerHTML = lowFiveVFiveRows.length ? lowFiveVFiveRows.map((row) => `
@@ -266,7 +287,7 @@ function renderRankingBasis(payload) {
   const underratedEl = document.getElementById('underratedRankBasis');
   if (skaterEl) {
     skaterEl.textContent = String(
-      payload?.skater_rank_basis || 'Default rank is reliability- and uncertainty-shrunk Total. Finishing is a 5v5 HLD shooter-talent rate over EV TOI, Playmaking is a strongly certainty-shrunk standardized 5v5 HLD on-ice rush-for score with a minimum sample gate, Rush Def is a strongly certainty-shrunk 5v5 defensive rush proxy with a minimum sample gate, Chance Gen and Chance Supp are volume-based 5v5 components, QoC/QoT are standardized into context components instead of using raw tiny values, and 5v5/PP/PK xGAR/60 sorts are also shrunken by state-specific sample.'
+      payload?.skater_rank_basis || 'Default rank is reliability- and uncertainty-shrunk Total. Finishing is a 5v5 HLD shooter-talent rate over EV TOI, Playmaking is a strongly certainty-shrunk standardized 5v5 HLD on-ice rush-for score with a minimum sample gate, Leverage xG Diff is a strongly certainty-shrunk 5v5 on-ice non-empty-net leverage-weighted xG differential per 60, Rush Def is a strongly certainty-shrunk 5v5 defensive rush proxy with a minimum sample gate, Chance Gen and Chance Supp are volume-based 5v5 components, QoC/QoT are standardized into context components instead of using raw tiny values, and 5v5 xGAR/60, PP xGF/60, and PK xGA/60 sorts are also shrunken by state-specific sample.'
     );
   }
   if (goalieEl) {
@@ -276,7 +297,7 @@ function renderRankingBasis(payload) {
   }
   if (teamEl) {
     teamEl.textContent = String(
-      payload?.team_rank_basis || 'Total Team Score blends z-scored shooting talent, playmaking talent, goaltending talent, chance generation, chance suppression, high-danger for, high-danger against, and special teams. Shooting talent is shot-weighted HLD shooter talent, playmaking talent is shot-weighted HLD rush/context talent, goaltending talent is TOI-weighted HLD 5v5 GSAx/60, chance generation is non-empty-net xGF/game relative to league average, chance suppression is league-average xGA/game minus team xGA/game, high-danger for counts non-empty-net shots with xG >= 0.20 per game, and high-danger against is the per-game rate of those chances allowed.'
+      payload?.team_rank_basis || 'Total Team Score blends z-scored shooting talent, playmaking talent, goaltending talent, chance generation, chance suppression, rush defence, high-danger for, high-danger against, and special teams. Shooting talent is shot-weighted HLD shooter talent, playmaking talent is shot-weighted HLD rush/context talent, goaltending talent is TOI-weighted HLD 5v5 GSAx/60, chance generation is non-empty-net xGF/game relative to league average, chance suppression is league-average xGA/game minus team xGA/game, rush defence is EV-TOI-weighted 5v5 defensive rush proxy, leverage xG net is non-empty-net xG weighted by approximate pre-shot goal leverage (WP swing if the shot becomes a goal), high-danger for counts non-empty-net shots with xG >= 0.20 per game, and high-danger against is the per-game rate of those chances allowed.'
     );
   }
   if (underratedEl) {
@@ -541,6 +562,7 @@ function sortRankingsRows(rows, sortState) {
     finishing: { field: 'finishing', type: 'number' },
     playmaking: { field: 'playmaking', type: 'number' },
     chance_creation: { field: 'chance_creation', type: 'number' },
+    leverage_xg_diff: { field: 'leverage_xg_diff', type: 'number' },
     rush_defence: { field: 'rush_defence', type: 'number' },
     chance_suppression: { field: 'chance_suppression', type: 'number' },
     defence_score: { field: 'defence_score', type: 'number' },
@@ -599,6 +621,8 @@ function sortTeamRankingsRows(rows, sortState) {
     goaltending_talent: { field: 'goaltending_talent', type: 'number' },
     chance_generation: { field: 'chance_generation', type: 'number' },
     chance_suppression: { field: 'chance_suppression', type: 'number' },
+    leverage_xg_net: { field: 'leverage_xg_net', type: 'number' },
+    rush_defence: { field: 'rush_defence', type: 'number' },
     high_danger_for: { field: 'high_danger_for', type: 'number' },
     high_danger_against: { field: 'high_danger_against', type: 'number' },
     special_teams: { field: 'special_teams', type: 'number' },
@@ -704,28 +728,125 @@ function toggleSuggestedLineup(el) {
 
 function rinkBaseMarkup() {
   return `
-    <rect x="-100" y="-42.5" width="200" height="85" rx="20" ry="20" fill="#ffffff" stroke="#222" stroke-width="1.2"></rect>
-    <line x1="0" y1="-42.5" x2="0" y2="42.5" stroke="#d14b4b" stroke-width="0.8" stroke-opacity="0.8"></line>
-    <line x1="-25" y1="-42.5" x2="-25" y2="42.5" stroke="#2f63bd" stroke-width="0.8" stroke-opacity="0.85"></line>
-    <line x1="25" y1="-42.5" x2="25" y2="42.5" stroke="#2f63bd" stroke-width="0.8" stroke-opacity="0.85"></line>
-    <line x1="-89" y1="-37" x2="-89" y2="37" stroke="#d14b4b" stroke-width="0.55" stroke-opacity="0.8"></line>
-    <line x1="89" y1="-37" x2="89" y2="37" stroke="#d14b4b" stroke-width="0.55" stroke-opacity="0.8"></line>
-    <circle cx="0" cy="0" r="14.5" fill="none" stroke="#d14b4b" stroke-width="0.55" stroke-opacity="0.75"></circle>
+  <rect x="-100" y="-42.5" width="200" height="85" rx="28" ry="28" fill="#ffffff" stroke="#111111" stroke-width="0.599"></rect>
+  <line x1="-89.000" y1="11.000" x2="-100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="-89.000" y1="-11.000" x2="-100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="89.000" y1="11.000" x2="100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="89.000" y1="-11.000" x2="100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="0.000" y1="-42.500" x2="0.000" y2="42.500" stroke="#C60C30" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="-25.000" y1="-42.500" x2="-25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="25.000" y1="-42.500" x2="25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="-89.000" y1="-37.000" x2="-89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="89.000" y1="-37.000" x2="89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <circle cx="0.000" cy="0.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.599" stroke-opacity="0.700"></circle>
+  <circle cx="0.000" cy="0.000" r="0.500" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="-69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <line x1="-71.000" y1="24.000" x2="-73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="24.000" x2="-71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="20.000" x2="-73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="20.000" x2="-71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="24.000" x2="-65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="24.000" x2="-67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="20.000" x2="-65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="20.000" x2="-67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="36.866" x2="-71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="7.134" x2="-71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="36.866" x2="-67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="7.134" x2="-67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-20.000" x2="-73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-20.000" x2="-71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-24.000" x2="-73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-24.000" x2="-71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-20.000" x2="-65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-20.000" x2="-67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-24.000" x2="-65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-24.000" x2="-67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-36.866" x2="-71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-7.134" x2="-71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-36.866" x2="-67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-7.134" x2="-67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="24.000" x2="65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="24.000" x2="67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="20.000" x2="65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="20.000" x2="67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="24.000" x2="73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="24.000" x2="71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="20.000" x2="73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="20.000" x2="71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="36.866" x2="67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="7.134" x2="67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="36.866" x2="71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="7.134" x2="71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-20.000" x2="65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-20.000" x2="67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-24.000" x2="65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-24.000" x2="67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-20.000" x2="73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-20.000" x2="71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-24.000" x2="73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-24.000" x2="71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-36.866" x2="67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-7.134" x2="67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-36.866" x2="71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-7.134" x2="71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <path d="M -89.000 -4.000 L -89.000 4.000 L -84.500 4.000 A 6.000 6.000 0 0 0 -84.500 -4.000 L -89.000 -4.000 Z" fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
+  <path d="M 89.000 -4.000 L 89.000 4.000 L 84.500 4.000 A 6.000 6.000 0 0 1 84.500 -4.000 L 89.000 -4.000 Z" fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
+  <path d="M -89.000 -3.000 C -89.900 -3.670, -92.330 -3.600, -92.330 -2.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <line x1="-92.330" y1="-2.000" x2="-92.330" y2="2.000" stroke="#111111" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <path d="M -92.330 2.000 C -92.330 3.600, -89.900 3.670, -89.000 3.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <path d="M 89.000 -3.000 C 89.900 -3.670, 92.330 -3.600, 92.330 -2.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <line x1="92.330" y1="-2.000" x2="92.330" y2="2.000" stroke="#111111" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <path d="M 92.330 2.000 C 92.330 3.600, 89.900 3.670, 89.000 3.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
   `;
 }
 
-function shotCircleMarkup(shot, isGoal) {
+function xgVisualizerColors(teamInfo) {
+  const primary = String(teamInfo?.primary_color || '#06799f').trim() || '#06799f';
+  const secondary = String(teamInfo?.secondary_color || '#ff8300').trim() || '#ff8300';
+  return { primary, secondary };
+}
+
+function xgShotRadius(xg) {
+  const value = Number(xg || 0);
+  return Math.min(3.6, Math.max(1.0, 1.0 + (Math.sqrt(Math.max(value, 0)) * 2.0)));
+}
+
+function updateXgLegend(teamInfo) {
+  const colors = xgVisualizerColors(teamInfo);
+  const shotDot = document.getElementById('xgLegendShot');
+  const goalDot = document.getElementById('xgLegendGoal');
+  if (shotDot) {
+    shotDot.style.background = colors.primary;
+  }
+  if (goalDot) {
+    goalDot.style.background = colors.secondary;
+  }
+}
+
+function shotCircleMarkup(shot, isGoal, teamInfo) {
   const x = Number(shot.x || 0);
   const y = Number(shot.y || 0);
   const cx = Math.max(-100, Math.min(100, x));
   const cy = Math.max(-42.5, Math.min(42.5, -y));
-  const xg = Number(shot.xG || 0);
-  const r = Math.max(0.8, Math.min(2.6, 0.8 + (xg * 7.5)));
+  const r = xgShotRadius(shot.xG);
+  const colors = xgVisualizerColors(teamInfo);
+  const strokeWidth = 0.12;
 
   if (isGoal) {
-    return `<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${(r + 0.35).toFixed(2)}" fill="#0b8f4d" fill-opacity="0.88" stroke="#ffffff" stroke-width="0.28"></circle>`;
+    return `<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${r.toFixed(2)}" fill="${esc(colors.secondary)}" fill-opacity="0.88" stroke="#ffffff" stroke-width="${strokeWidth.toFixed(2)}"></circle>`;
   }
-  return `<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${r.toFixed(2)}" fill="#ffb30f" fill-opacity="0.58" stroke="#ffffff" stroke-width="0.16"></circle>`;
+  return `<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${r.toFixed(2)}" fill="${esc(colors.primary)}" fill-opacity="0.58" stroke="#ffffff" stroke-width="${strokeWidth.toFixed(2)}"></circle>`;
 }
 
 async function loadXgTeamShots(teamCode) {
@@ -799,6 +920,7 @@ async function refreshXgPanel() {
   const summary = state.payload?.team_xg_summary || {};
   const threshold = Number(summary.low_xg_threshold || 0.015);
   const selectedTeamInfo = state.xgSummaryByTeam.get(team);
+  updateXgLegend(selectedTeamInfo);
 
   let shots = [];
   try {
@@ -811,9 +933,9 @@ async function refreshXgPanel() {
 
   const filtered = shots.filter((row) => Number(row.xG || 0) >= minXg);
 
-  const expectedCircles = filtered.map((shot) => shotCircleMarkup(shot, false)).join('');
+  const expectedCircles = filtered.map((shot) => shotCircleMarkup(shot, false, selectedTeamInfo)).join('');
   const goalCircles = showGoals
-    ? filtered.filter((row) => !!row.goal).map((shot) => shotCircleMarkup(shot, true)).join('')
+    ? filtered.filter((row) => !!row.goal).map((shot) => shotCircleMarkup(shot, true, selectedTeamInfo)).join('')
     : '';
 
   svg.innerHTML = `${rinkBaseMarkup()}${expectedCircles}${goalCircles}`;

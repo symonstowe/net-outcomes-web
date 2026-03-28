@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Detailed player scorecards are being rolled out gradually. This demo page explains what can currently be requested from Net Outcomes." />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <link rel="canonical" href="https://netoutcomes.ca/player-analysis-unavailable.html" />
+  <link rel="icon" href="imgs/logo-light.svg" />
+  <link rel="stylesheet" href="latofonts.css" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Player Data Not Yet Available | Net Outcomes</title>
+  <style>
+    a {
+      color: var(--sf-blue);
+      text-decoration: underline;
+      text-underline-offset: 0.12em;
+    }
+    a:hover {
+      color: #284f5d;
+    }
+    .sf-request-wrap {
+      display: grid;
+      gap: 18px;
+    }
+    .sf-request-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+    .sf-page-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--sf-border);
+      border-radius: 10px;
+      background: var(--sf-white);
+      color: #415247;
+      text-align: center;
+      font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .sf-page-btn:hover {
+      border-color: var(--sf-blue);
+      background: #edf7fb;
+      color: var(--sf-dark);
+    }
+    .sf-request-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .sf-request-card {
+      border: 1px solid var(--sf-border);
+      border-radius: 10px;
+      background: var(--sf-white);
+      padding: 16px 18px;
+    }
+    .sf-request-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+      color: var(--sf-dark);
+    }
+    .sf-request-card p {
+      margin: 0;
+      line-height: 1.55;
+    }
+    .sf-request-lead {
+      margin: 0;
+      line-height: 1.65;
+      font-size: 1.02rem;
+    }
+    .sf-request-name {
+      color: var(--sf-blue);
+      font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+    }
+    .sf-request-mail {
+      font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+    }
+    .sf-example-frame {
+      width: 100%;
+      min-height: 820px;
+      border: 1px solid var(--sf-border);
+      border-radius: 10px;
+      background: var(--sf-white);
+    }
+    .sf-example-link {
+      font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+    }
+    @media (max-width: 1080px) {
+      .sf-request-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 720px) {
+      .sf-request-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="lato sf-background">
+  <div id="container" class="sf-container">
+    <header class="sf-header">
+      <div class="brand_name">
+        <a href="/" aria-label="Back to Net Outcomes home">
+          <img class="name_pic" src="imgs/logo-light.svg" alt="Net Outcomes logo" />
+        </a>
+        <h1 class="name">Net Outcomes</h1>
+      </div>
+      <p class="sf-subtitle">Exploratory NHL research demo</p>
+    </header>
+    <main class="sf-main">
+      <section class="sf-panel sf-section-panel is-active">
+        <div class="sf-panel-header">
+          <h2>Detailed Player Page Not Yet Available</h2>
+        </div>
+        <div class="sf-request-wrap">
+          <div class="sf-request-actions">
+            <a class="sf-page-btn" href="/">&#8592; Back to Home</a>
+            <a class="sf-page-btn" href="/example_scorecard.pdf">Open Example Scorecard</a>
+          </div>
+          <p class="sf-request-lead">
+            <span class="sf-request-name" id="requestedPlayerName">This player</span> does not have a full public scorecard online yet. This is a demo website for exploratory stats research, and only a limited set of player pages is currently available on the public site. Player pages have only been generated for the top 30 players by overall ranking to conserve bandwidth.
+          </p>
+          <p class="sf-request-lead">
+            To request analysis for specific players, specific situations, or additional in-game breakdowns, send a note to
+            <a class="sf-request-mail" id="requestMailLink" href="mailto:requests@netoutcomes.ca">requests@netoutcomes.ca</a>.
+          </p>
+        </div>
+      </section>
+      <section class="sf-panel sf-section-panel is-active">
+        <div class="sf-panel-header">
+          <h2>What Net Outcomes Can Analyze</h2>
+        </div>
+        <div class="sf-request-grid">
+          <article class="sf-request-card"><h3>Season Player Reports</h3><p>Single-player breakdowns can package offensive talent, defensive talent, finishing, playmaking, rush defence, chance suppression, usage context, percentile rankings, and static 5v5 shot maps into one shareable scorecard.</p></article><article class="sf-request-card"><h3>Lineup and Unit Construction</h3><p>We can build even-strength lines, defence pairs, power-play units, and penalty-kill groups with role-aware deployment logic, projected workload balancing, and side-specific fit where the roster supports it.</p></article><article class="sf-request-card"><h3>Game Scorecards</h3><p>Pregame or postgame scorecards can combine shot maps, matchup notes, player usage, expected goals flow, line-level results, and the most important drivers from the game into a compact PDF that is easy to review.</p></article><article class="sf-request-card"><h3>Special Teams Diagnostics</h3><p>Power play and penalty kill reports can split offensive creation, finishing, defensive suppression, PK exposure, penalty impact, goalie influence, and unit usage so it is clear what is driving results.</p></article><article class="sf-request-card"><h3>Situation and Matchup Splits</h3><p>We can isolate 5v5, 5v4, 4v5, late-game, score-state, recent-form, QoC, QoT, and opponent-style effects to show where a player or team is thriving, surviving, or being miscast.</p></article><article class="sf-request-card"><h3>Custom Research Requests</h3><p>Specific players, pairs, lines, opponents, roster decisions, trade targets, deployment questions, and in-game breakdowns can all be turned into focused reports when there is a clear hockey question to answer.</p></article>
+        </div>
+      </section>
+      <section class="sf-panel sf-section-panel is-active">
+        <div class="sf-panel-header">
+          <h2>Example Game Scorecard</h2>
+        </div>
+        <p class="sf-request-lead">
+          A sample PDF game report is available below. You can also open it directly here:
+          <a class="sf-example-link" href="/example_scorecard.pdf">example_scorecard.pdf</a>
+        </p>
+        <object class="sf-example-frame" data="/example_scorecard.pdf" type="application/pdf">
+          <p class="sf-request-lead">
+            Your browser could not display the PDF inline. Use this link instead:
+            <a class="sf-example-link" href="/example_scorecard.pdf">Download the example scorecard</a>.
+          </p>
+        </object>
+      </section>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const player = params.get('player');
+      const team = params.get('team');
+      const playerLabel = player ? (team ? `${player} (${team})` : player) : 'This player';
+      const heading = document.getElementById('requestedPlayerName');
+      if (heading) heading.textContent = playerLabel;
+      const mail = document.getElementById('requestMailLink');
+      if (mail) {
+        const subjectBits = ['Net Outcomes request'];
+        if (player) subjectBits.push(player);
+        if (team) subjectBits.push(team);
+        mail.href = `mailto:requests@netoutcomes.ca?subject=${encodeURIComponent(subjectBits.join(' | '))}`;
+      }
+    })();
+  </script>
+</body>
+</html>

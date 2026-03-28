@@ -335,7 +335,7 @@ body.lato {
 .sf-anomaly-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .sf-anomaly-card {
@@ -381,7 +381,7 @@ body.lato {
   width: 100%;
   height: auto;
   display: block;
-  aspect-ratio: 200 / 85;
+  aspect-ratio: 206 / 91;
 }
 
 .sf-rink-legend {
@@ -484,6 +484,17 @@ body.lato {
 
 .sf-table tbody tr:hover {
   background: #f8fcfd;
+}
+
+.sf-player-link {
+  color: var(--sf-dark);
+  text-decoration: none;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+}
+
+.sf-player-link:hover {
+  color: var(--sf-blue);
+  text-decoration: underline;
 }
 
 .pos {
@@ -911,6 +922,10 @@ body.lato {
 
 @media (max-width: 980px) {
   .sf-team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-anomaly-grid {
     grid-template-columns: 1fr;
   }
 
