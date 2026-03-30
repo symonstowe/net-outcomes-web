@@ -146,7 +146,7 @@ function renderGoalies(rows) {
       <td>${row.starts}</td>
       <td>${row.sa}</td>
       <td>${Number(row.toi_min || 0).toFixed(1)}</td>
-      <td class="${classForSigned(row.hld_gsax_per60_5v5)}">${signed(row.hld_gsax_per60_5v5)}</td>
+      <td class="${classForSigned(row.shot_quality_gsax_per60_5v5)}">${signed(row.shot_quality_gsax_per60_5v5)}</td>
       <td>${pct(row.sv_pct, 2)}</td>
       <td>${pct(row.xsv_pct, 2)}</td>
       <td class="${classForSigned(row.sv_above_exp_pct)}">${pct(row.sv_above_exp_pct, 2)}</td>
@@ -287,23 +287,23 @@ function renderRankingBasis(payload) {
   const underratedEl = document.getElementById('underratedRankBasis');
   if (skaterEl) {
     skaterEl.textContent = String(
-      payload?.skater_rank_basis || 'Default rank is reliability- and uncertainty-shrunk Total. Finishing is a 5v5 HLD shooter-talent rate over EV TOI, Playmaking is a strongly certainty-shrunk standardized 5v5 HLD on-ice rush-for score with a minimum sample gate, Leverage xG Diff is a strongly certainty-shrunk 5v5 on-ice non-empty-net leverage-weighted xG differential per 60, Rush Def is a strongly certainty-shrunk 5v5 defensive rush proxy with a minimum sample gate, Chance Gen and Chance Supp are volume-based 5v5 components, QoC/QoT are standardized into context components instead of using raw tiny values, and 5v5 xGAR/60, PP xGF/60, and PK xGA/60 sorts are also shrunken by state-specific sample.'
+      payload?.skater_rank_basis || 'On-ice and personal statistics are combined into puck-carrying and away-from-the-puck based statistics. Metrics are heavily weighted toward the current season, but use the last 3 seasons to assign certainty. Fits and models are trained solely on data available through the public NHL API. All analysis on this page excludes empty-net goals unless otherwise specified. Metrics are also shrunk based on certainty and stability, so it may take several games for a player to be appropriately ranked.'
     );
   }
   if (goalieEl) {
     goalieEl.textContent = String(
-      payload?.goalie_rank_basis || 'Ranked by Shot Danger Adjusted GSAx 5v5/60, then GSAX/60 and SVAAE. Includes goalies with starts >= min(10, ceil(10% of an 82-game season)).'
+      payload?.goalie_rank_basis || 'Shot-stopping and save-based statistics are combined into goalie rankings. Metrics are heavily weighted toward the current season, but use the last 3 seasons to assign certainty. Fits and models are trained solely on data available through the public NHL API. All analysis on this page excludes empty-net goals unless otherwise specified. Metrics are also shrunk based on certainty and stability, so it may take several games for a goalie to be appropriately ranked. Goalies need at least min(10, ceil(10% of an 82-game season)) starts to qualify.'
     );
   }
   if (teamEl) {
     teamEl.textContent = String(
-      payload?.team_rank_basis || 'Total Team Score blends z-scored shooting talent, playmaking talent, goaltending talent, chance generation, chance suppression, rush defence, high-danger for, high-danger against, and special teams. Shooting talent is shot-weighted HLD shooter talent, playmaking talent is shot-weighted HLD rush/context talent, goaltending talent is TOI-weighted HLD 5v5 GSAx/60, chance generation is non-empty-net xGF/game relative to league average, chance suppression is league-average xGA/game minus team xGA/game, rush defence is EV-TOI-weighted 5v5 defensive rush proxy, leverage xG net is non-empty-net xG weighted by approximate pre-shot goal leverage (WP swing if the shot becomes a goal), high-danger for counts non-empty-net shots with xG >= 0.20 per game, and high-danger against is the per-game rate of those chances allowed.'
+      payload?.team_rank_basis || 'On-ice team statistics are combined into attacking, defending, and special teams based statistics. Metrics are heavily weighted toward the current season, but use the last 3 seasons to assign certainty. Fits and models are trained solely on data available through the public NHL API. All analysis on this page excludes empty-net goals unless otherwise specified. Metrics are also shrunk based on certainty and stability, so it may take several games for a team to be appropriately ranked.'
     );
   }
   if (underratedEl) {
     underratedEl.textContent = String(
       payload?.underrated_rank_basis
-        || 'High talent range rank vs low TOI range rank (min-max by position bucket), adjusted by QoC/QoT and reliability.'
+        || 'Talent, role, and context statistics are combined into an underplayed score. Metrics are heavily weighted toward the current season, but use the last 3 seasons to assign certainty. Fits and models are trained solely on data available through the public NHL API. All analysis on this page excludes empty-net goals unless otherwise specified. Metrics are also shrunk based on certainty and stability, so it may take several games for a player to be appropriately ranked.'
     );
   }
 }
