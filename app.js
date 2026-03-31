@@ -10,6 +10,35 @@ const VALID_SECTION_IDS = [
   'teamPanel',
   'xgPanel',
 ];
+const SECTION_SLUG_BY_ID = {
+  rankingsPanel: 'skaters',
+  goaliePanel: 'goalies',
+  teamRankingsPanel: 'team-rankings',
+  underratedPanel: 'underrated',
+  anomaliesPanel: 'scoring-anomalies',
+  teamPanel: 'line-analysis',
+  xgPanel: 'team-xg',
+};
+const SKATER_SORT_KEYS = [
+  'player_name',
+  'team',
+  'position',
+  'total_talent',
+  'offence_score',
+  'finishing',
+  'playmaking',
+  'chance_creation',
+  'leverage_xg_diff',
+  'rush_defence',
+  'chance_suppression',
+  'defence_score',
+  'special_teams',
+  'ev_xgar_per_60',
+  'pp_xgar_per_60',
+  'pk_xgar_per_60',
+  'season_gp',
+  'season_toi_min',
+];
 
 const state = {
   payload: null,
@@ -107,11 +136,18 @@ function bindSortableHeaders(tableId, stateKey, refreshFn) {
 
 function sanitizeSectionTarget(value) {
   const target = String(value || '').trim();
-  return VALID_SECTION_IDS.includes(target) ? target : '';
+  if (VALID_SECTION_IDS.includes(target)) return target;
+  const mapped = Object.entries(SECTION_SLUG_BY_ID).find(([, slug]) => slug === target);
+  return mapped ? mapped[0] : '';
 }
 
 function normalizeTextValue(value) {
   return String(value || '').trim();
+}
+
+function sectionSlugFromTarget(value) {
+  const target = sanitizeSectionTarget(value) || DEFAULT_SECTION_ID;
+  return SECTION_SLUG_BY_ID[target] || SECTION_SLUG_BY_ID[DEFAULT_SECTION_ID];
 }
 
 function parseBooleanParam(value, fallback = false) {
@@ -131,6 +167,16 @@ function clampNumber(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
+function sanitizeSkaterSortKey(value) {
+  const sortKey = String(value || '').trim();
+  return SKATER_SORT_KEYS.includes(sortKey) ? sortKey : '';
+}
+
+function sanitizeSortDirection(value, fallback = 'desc') {
+  const direction = String(value || '').trim().toLowerCase();
+  return direction === 'asc' || direction === 'desc' ? direction : fallback;
+}
+
 function readShareStateFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const hashSection = sanitizeSectionTarget(window.location.hash.replace(/^#/, ''));
@@ -148,6 +194,8 @@ function readShareStateFromUrl() {
     xgTeam: normalizeTextValue(params.get('xgTeam')),
     xgMin: normalizeTextValue(params.get('xgMin')),
     xgGoals: params.get('xgGoals'),
+    skaterSort: sanitizeSkaterSortKey(params.get('sort')),
+    skaterDir: sanitizeSortDirection(params.get('dir'), 'desc'),
   };
 }
 
@@ -178,8 +226,14 @@ function syncUrlState() {
   if (activeSection === 'rankingsPanel') {
     const player = normalizeTextValue(document.getElementById('playerSearch')?.value);
     const skaterTeam = normalizeTextValue(document.getElementById('rankingsTeamSearch')?.value);
+    const skaterSort = sanitizeSkaterSortKey(state.rankingsSort?.key);
+    const skaterDir = sanitizeSortDirection(state.rankingsSort?.direction, 'desc');
     if (player) params.set('player', player);
     if (skaterTeam) params.set('skaterTeam', skaterTeam);
+    if (skaterSort && (skaterSort !== 'total_talent' || skaterDir !== 'desc')) {
+      params.set('sort', skaterSort);
+      params.set('dir', skaterDir);
+    }
   } else if (activeSection === 'goaliePanel') {
     const goalie = normalizeTextValue(document.getElementById('goalieSearch')?.value);
     if (goalie) params.set('goalie', goalie);
@@ -210,7 +264,7 @@ function syncUrlState() {
   }
 
   const query = params.toString();
-  const hash = activeSection !== DEFAULT_SECTION_ID ? `#${activeSection}` : '';
+  const hash = activeSection !== DEFAULT_SECTION_ID ? `#${sectionSlugFromTarget(activeSection)}` : '';
   const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${hash}`;
   const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (nextUrl !== currentUrl) {
@@ -1331,6 +1385,12 @@ async function main() {
   state.payload = payload;
   state.suppressUrlSync = true;
   state.initialUrlState = readShareStateFromUrl();
+  if (state.initialUrlState.skaterSort) {
+    state.rankingsSort = {
+      key: state.initialUrlState.skaterSort,
+      direction: state.initialUrlState.skaterDir || 'desc',
+    };
+  }
 
   const allRankings = payload.rankings || [];
   const allGoalies = payload.goalie_rankings || [];
