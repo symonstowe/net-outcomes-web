@@ -1,4 +1,15 @@
 const DATA_URL = 'data/site_data.json';
+const DEFAULT_SECTION_ID = 'rankingsPanel';
+const DEFAULT_XG_MIN_PROB = 0.015;
+const VALID_SECTION_IDS = [
+  'rankingsPanel',
+  'goaliePanel',
+  'teamRankingsPanel',
+  'underratedPanel',
+  'anomaliesPanel',
+  'teamPanel',
+  'xgPanel',
+];
 
 const state = {
   payload: null,
@@ -7,6 +18,9 @@ const state = {
   skaterPosById: new Map(),
   rankingsSort: { key: 'total_talent', direction: 'desc' },
   teamRankingsSort: { key: 'total_team_score', direction: 'desc' },
+  activeSection: DEFAULT_SECTION_ID,
+  initialUrlState: null,
+  suppressUrlSync: false,
 };
 
 function esc(value) {
@@ -91,22 +105,149 @@ function bindSortableHeaders(tableId, stateKey, refreshFn) {
   updateSortableHeaders(tableId, state[stateKey] || {});
 }
 
-function setupSectionNavigation() {
+function sanitizeSectionTarget(value) {
+  const target = String(value || '').trim();
+  return VALID_SECTION_IDS.includes(target) ? target : '';
+}
+
+function normalizeTextValue(value) {
+  return String(value || '').trim();
+}
+
+function parseBooleanParam(value, fallback = false) {
+  if (value === null || value === undefined || value === '') return fallback;
+  const normalized = String(value).trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+  if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+  return fallback;
+}
+
+function parseNumberParam(value, fallback = null) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function clampNumber(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function readShareStateFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const hashSection = sanitizeSectionTarget(window.location.hash.replace(/^#/, ''));
+  return {
+    section: hashSection || sanitizeSectionTarget(params.get('section')) || DEFAULT_SECTION_ID,
+    player: normalizeTextValue(params.get('player')),
+    skaterTeam: normalizeTextValue(params.get('skaterTeam')),
+    goalie: normalizeTextValue(params.get('goalie')),
+    teamRank: normalizeTextValue(params.get('teamRank')),
+    underrated: normalizeTextValue(params.get('underrated')),
+    underratedTeam: normalizeTextValue(params.get('underratedTeam')),
+    lineTeam: normalizeTextValue(params.get('lineTeam')),
+    compareA: normalizeTextValue(params.get('compareA')),
+    compareB: normalizeTextValue(params.get('compareB')),
+    xgTeam: normalizeTextValue(params.get('xgTeam')),
+    xgMin: normalizeTextValue(params.get('xgMin')),
+    xgGoals: params.get('xgGoals'),
+  };
+}
+
+function setControlValue(control, value) {
+  if (!control || value === null || value === undefined) return;
+  control.value = String(value);
+}
+
+function setSelectValueIfPresent(control, value) {
+  if (!control) return;
+  const normalized = normalizeTextValue(value);
+  if (!normalized) {
+    control.value = '';
+    return;
+  }
+  const hasMatch = Array.from(control.options || []).some((opt) => String(opt.value || '') === normalized);
+  if (hasMatch) {
+    control.value = normalized;
+  }
+}
+
+function syncUrlState() {
+  if (state.suppressUrlSync) return;
+
+  const params = new URLSearchParams();
+  const activeSection = sanitizeSectionTarget(state.activeSection) || DEFAULT_SECTION_ID;
+
+  if (activeSection === 'rankingsPanel') {
+    const player = normalizeTextValue(document.getElementById('playerSearch')?.value);
+    const skaterTeam = normalizeTextValue(document.getElementById('rankingsTeamSearch')?.value);
+    if (player) params.set('player', player);
+    if (skaterTeam) params.set('skaterTeam', skaterTeam);
+  } else if (activeSection === 'goaliePanel') {
+    const goalie = normalizeTextValue(document.getElementById('goalieSearch')?.value);
+    if (goalie) params.set('goalie', goalie);
+  } else if (activeSection === 'teamRankingsPanel') {
+    const teamRank = normalizeTextValue(document.getElementById('teamRankingsSearch')?.value);
+    if (teamRank) params.set('teamRank', teamRank);
+  } else if (activeSection === 'underratedPanel') {
+    const underrated = normalizeTextValue(document.getElementById('underratedSearch')?.value);
+    const underratedTeam = normalizeTextValue(document.getElementById('underratedTeamSearch')?.value);
+    if (underrated) params.set('underrated', underrated);
+    if (underratedTeam) params.set('underratedTeam', underratedTeam);
+  } else if (activeSection === 'teamPanel') {
+    const lineTeam = normalizeTextValue(document.getElementById('teamSearch')?.value);
+    const compareA = normalizeTextValue(document.getElementById('compareTeamA')?.value);
+    const compareB = normalizeTextValue(document.getElementById('compareTeamB')?.value);
+    if (compareA) params.set('compareA', compareA);
+    if (compareB && compareB !== compareA) params.set('compareB', compareB);
+    if (!compareA && !compareB && lineTeam) params.set('lineTeam', lineTeam);
+  } else if (activeSection === 'xgPanel') {
+    const xgTeam = normalizeTextValue(document.getElementById('xgTeamSelect')?.value);
+    const xgMin = parseNumberParam(document.getElementById('xgMinProb')?.value, null);
+    const showGoals = document.getElementById('xgShowGoals')?.checked;
+    if (xgTeam) params.set('xgTeam', xgTeam);
+    if (xgMin !== null && Math.abs(xgMin - DEFAULT_XG_MIN_PROB) > 1e-9) {
+      params.set('xgMin', xgMin.toFixed(3));
+    }
+    if (showGoals === false) params.set('xgGoals', '0');
+  }
+
+  const query = params.toString();
+  const hash = activeSection !== DEFAULT_SECTION_ID ? `#${activeSection}` : '';
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${hash}`;
+  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (nextUrl !== currentUrl) {
+    window.history.replaceState(null, '', nextUrl);
+  }
+}
+
+function setupSectionNavigation(initialTarget) {
   const buttons = Array.from(document.querySelectorAll('.sf-section-btn'));
   const panels = Array.from(document.querySelectorAll('.sf-section-panel'));
   if (!buttons.length || !panels.length) return;
 
-  const activate = (targetId) => {
+  const activate = (targetId, options = {}) => {
+    const nextTarget = sanitizeSectionTarget(targetId) || DEFAULT_SECTION_ID;
+    state.activeSection = nextTarget;
     buttons.forEach((btn) => {
-      const active = btn.dataset.sectionTarget === targetId;
+      const active = btn.dataset.sectionTarget === nextTarget;
       btn.classList.toggle('is-active', active);
     });
-    panels.forEach((panel) => panel.classList.toggle('is-active', panel.id === targetId));
+    panels.forEach((panel) => panel.classList.toggle('is-active', panel.id === nextTarget));
+    if (options.syncUrl !== false) {
+      syncUrlState();
+    }
   };
 
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => activate(btn.dataset.sectionTarget));
   });
+
+  window.addEventListener('hashchange', () => {
+    const requested = sanitizeSectionTarget(window.location.hash.replace(/^#/, '')) || DEFAULT_SECTION_ID;
+    if (requested !== state.activeSection) {
+      activate(requested, { syncUrl: false });
+    }
+  });
+
+  activate(initialTarget, { syncUrl: false });
 }
 
 function renderRankings(rows) {
@@ -940,6 +1081,7 @@ async function refreshXgPanel() {
 
   svg.innerHTML = `${rinkBaseMarkup()}${expectedCircles}${goalCircles}`;
   updateXgStats(filtered, selectedTeamInfo, minXg, threshold);
+  syncUrlState();
 }
 
 function initializeXgPanel() {
@@ -968,8 +1110,25 @@ function initializeXgPanel() {
     return;
   }
 
-  const defaultTeam = sortedTeams.includes('OTT') ? 'OTT' : sortedTeams[0];
+  const initialShareState = state.initialUrlState || {};
+  const requestedTeam = normalizeTextValue(initialShareState.xgTeam);
+  const defaultTeam = sortedTeams.includes(requestedTeam)
+    ? requestedTeam
+    : (sortedTeams.includes('OTT') ? 'OTT' : sortedTeams[0]);
   select.value = defaultTeam;
+
+  const xgSlider = document.getElementById('xgMinProb');
+  const requestedMin = parseNumberParam(initialShareState.xgMin, null);
+  if (xgSlider && requestedMin !== null) {
+    const minAllowed = Number(xgSlider.min || 0);
+    const maxAllowed = Number(xgSlider.max || 0.5);
+    xgSlider.value = clampNumber(requestedMin, minAllowed, maxAllowed).toFixed(3);
+  }
+
+  const xgShowGoals = document.getElementById('xgShowGoals');
+  if (xgShowGoals && initialShareState.xgGoals !== null) {
+    xgShowGoals.checked = parseBooleanParam(initialShareState.xgGoals, true);
+  }
 
   document.getElementById('xgMinProb').addEventListener('input', () => {
     refreshXgPanel().catch(console.error);
@@ -1170,6 +1329,8 @@ async function main() {
   }
   const payload = await response.json();
   state.payload = payload;
+  state.suppressUrlSync = true;
+  state.initialUrlState = readShareStateFromUrl();
 
   const allRankings = payload.rankings || [];
   const allGoalies = payload.goalie_rankings || [];
@@ -1221,6 +1382,8 @@ async function main() {
 
   const playerSearch = document.getElementById('playerSearch');
   const rankingsTeamSearch = document.getElementById('rankingsTeamSearch');
+  setControlValue(playerSearch, state.initialUrlState.player);
+  setControlValue(rankingsTeamSearch, state.initialUrlState.skaterTeam);
   const refreshRankings = () => {
     const rankedRows = rankSortedRows(sortRankingsRows(allRankings, state.rankingsSort));
     const filtered = applyRankingsFilter(
@@ -1230,29 +1393,37 @@ async function main() {
     );
     renderRankings(filtered);
     updateSortableHeaders('rankingsTable', state.rankingsSort);
+    syncUrlState();
   };
   playerSearch.addEventListener('input', refreshRankings);
   rankingsTeamSearch.addEventListener('input', refreshRankings);
   bindSortableHeaders('rankingsTable', 'rankingsSort', refreshRankings);
 
   const teamRankingsSearch = document.getElementById('teamRankingsSearch');
+  setControlValue(teamRankingsSearch, state.initialUrlState.teamRank);
   const refreshTeamRankings = () => {
     const filtered = applyTeamRankingsFilter(allTeamRankings, teamRankingsSearch?.value || '');
     const rows = sortTeamRankingsRows(filtered, state.teamRankingsSort);
     renderTeamRankings(rows);
     updateSortableHeaders('teamRankingsTable', state.teamRankingsSort);
+    syncUrlState();
   };
   teamRankingsSearch.addEventListener('input', refreshTeamRankings);
   bindSortableHeaders('teamRankingsTable', 'teamRankingsSort', refreshTeamRankings);
 
   const goalieSearch = document.getElementById('goalieSearch');
-  goalieSearch.addEventListener('input', () => {
+  setControlValue(goalieSearch, state.initialUrlState.goalie);
+  const refreshGoalies = () => {
     const rows = applyGoalieFilter(allGoalies, goalieSearch.value || '');
     renderGoalies(rows);
-  });
+    syncUrlState();
+  };
+  goalieSearch.addEventListener('input', refreshGoalies);
 
   const underratedSearch = document.getElementById('underratedSearch');
   const underratedTeamSearch = document.getElementById('underratedTeamSearch');
+  setControlValue(underratedSearch, state.initialUrlState.underrated);
+  setControlValue(underratedTeamSearch, state.initialUrlState.underratedTeam);
   const refreshUnderrated = () => {
     const rows = applyUnderratedFilter(
       allUnderrated,
@@ -1260,6 +1431,7 @@ async function main() {
       underratedTeamSearch?.value || ''
     );
     renderUnderrated(rows);
+    syncUrlState();
   };
   underratedSearch.addEventListener('input', refreshUnderrated);
   underratedTeamSearch.addEventListener('input', refreshUnderrated);
@@ -1267,12 +1439,15 @@ async function main() {
   const teamSearch = document.getElementById('teamSearch');
   const compareTeamA = document.getElementById('compareTeamA');
   const compareTeamB = document.getElementById('compareTeamB');
+  setControlValue(teamSearch, state.initialUrlState.lineTeam);
   const availableTeamNames = usingLegacyLineupCards
     ? uniqueSortedTeamNames(Array.from(teamGrid.querySelectorAll('.lineup-card')).map((card) => ({ team: card.dataset?.team || '' })))
     : uniqueSortedTeamNames(allTeams);
 
-  populateTeamCompareSelect(compareTeamA, availableTeamNames, 'Compare team A', compareTeamA?.value || '');
-  populateTeamCompareSelect(compareTeamB, availableTeamNames, 'Compare team B', compareTeamB?.value || '');
+  populateTeamCompareSelect(compareTeamA, availableTeamNames, 'Compare team A', state.initialUrlState.compareA || '');
+  populateTeamCompareSelect(compareTeamB, availableTeamNames, 'Compare team B', state.initialUrlState.compareB || '');
+  setSelectValueIfPresent(compareTeamA, state.initialUrlState.compareA);
+  setSelectValueIfPresent(compareTeamB, state.initialUrlState.compareB);
 
   const refreshTeamPanel = () => {
     const selectedTeams = selectedComparisonTeams(compareTeamA, compareTeamB);
@@ -1293,14 +1468,21 @@ async function main() {
         : applyTeamFilter(allTeams, teamSearch.value || '');
       renderTeams(rows);
     }
+    syncUrlState();
   };
   teamSearch.addEventListener('input', refreshTeamPanel);
   compareTeamA.addEventListener('change', refreshTeamPanel);
   compareTeamB.addEventListener('change', refreshTeamPanel);
+  refreshRankings();
+  refreshTeamRankings();
+  refreshGoalies();
+  refreshUnderrated();
   refreshTeamPanel();
 
-  setupSectionNavigation();
+  setupSectionNavigation(state.initialUrlState.section);
+  state.suppressUrlSync = false;
   initializeXgPanel();
+  syncUrlState();
 }
 
 main().catch((error) => {
