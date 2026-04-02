@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Skater, goalie, team, and underrated rankings." />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <link rel="canonical" href="https://netoutcomes.ca/rankings.html" />
+  <link rel="icon" href="imgs/logo-light.svg" />
+  <link rel="stylesheet" href="latofonts.css" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Net Outcomes | NHL Rankings</title>
+  <script
+    type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
+</head>
+
+<body class="lato sf-background">
+  <div id="container" class="sf-container">
+    <header class="sf-header sf-header--page">
+      <div class="sf-header-top">
+        <a class="brand_name brand_name--link" href="/" aria-label="Net Outcomes home">
+          <img class="name_pic" src="imgs/logo-light.svg" alt="Net Outcomes logo" />
+          <div class="name">Net Outcomes</div>
+        </a>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link is-active"
+            href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a
+            class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
+      </div>
+      <h1 class="sf-page-title">Rankings</h1>
+      <p class="sf-page-lede">Skater, goalie, team, and underrated views.</p>
+      <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
+    </header>
+    <main class="sf-main">
+
+      <nav class="sf-section-nav sf-section-nav--page" id="sectionNav">
+        <button class="sf-section-btn is-active" data-section-target="rankingsPanel">Skaters</button>
+        <button class="sf-section-btn" data-section-target="goaliePanel">Goalies</button>
+        <button class="sf-section-btn" data-section-target="teamRankingsPanel">Teams</button>
+        <button class="sf-section-btn" data-section-target="underratedPanel">Underrated</button>
+        <button class="sf-section-btn" data-section-target="anomaliesPanel">Anomalies</button>
+      </nav>
+
+      <section class="sf-panel sf-section-panel is-active" id="rankingsPanel">
+        <div class="sf-panel-header sf-panel-header--skaters">
+          <div class="sf-panel-header-copy sf-panel-header-copy--stack">
+            <h2>Skater Rankings</h2>
+            <div id="skaterRankBasis" class="sf-rank-basis"></div>
+            <div class="sf-skater-filter-toolbar">
+              <div class="sf-filter-inline sf-filter-inline--positions" id="skaterPositionFilters">
+                <span class="sf-filter-inline-label">Filter positions:</span>
+                <label class="sf-filter-check"><input type="checkbox" name="rankingsPos" value="L" />L</label>
+                <label class="sf-filter-check"><input type="checkbox" name="rankingsPos" value="C" />C</label>
+                <label class="sf-filter-check"><input type="checkbox" name="rankingsPos" value="R" />R</label>
+                <label class="sf-filter-check"><input type="checkbox" name="rankingsPos" value="LD" />LD</label>
+                <label class="sf-filter-check"><input type="checkbox" name="rankingsPos" value="RD" />RD</label>
+              </div>
+              <div class="sf-search-group sf-search-group--skaters">
+                <input id="playerSearch" type="search" placeholder="Search player" />
+                <input id="rankingsTeamSearch" type="search" placeholder="Filter team" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sf-table-wrap">
+          <table id="rankingsTable" class="sf-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="sf-sortable" data-sort-key="player_name" data-sort-default="asc"><span
+                    class="sf-sort-head">Player<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
+                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="position" data-sort-default="asc"><span
+                    class="sf-sort-head">Pos<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="total_talent" data-sort-default="desc"><span
+                    class="sf-sort-head">Total<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="offence_score" data-sort-default="desc"><span
+                    class="sf-sort-head">Offence<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="finishing" data-sort-default="desc"><span
+                    class="sf-sort-head">Finishing<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="playmaking" data-sort-default="desc"><span
+                    class="sf-sort-head">Playmaking<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_creation" data-sort-default="desc"><span
+                    class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="leverage_xg_diff" data-sort-default="desc"><span
+                    class="sf-sort-head">Leverage xG Diff<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="defence_score" data-sort-default="desc"><span
+                    class="sf-sort-head">Defence<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span
+                    class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span
+                    class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span
+                    class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="ev_xgar_per_60" data-sort-default="desc"><span
+                    class="sf-sort-head">5v5 xGAR/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pp_xgar_per_60" data-sort-default="desc"><span
+                    class="sf-sort-head">PP xGF/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pk_xgar_per_60" data-sort-default="desc"><span
+                    class="sf-sort-head">PK xGA/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="season_gp" data-sort-default="desc"><span
+                    class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="season_toi_min" data-sort-default="desc"><span
+                    class="sf-sort-head">TOI<span class="sf-sort-arrow"></span></span></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="goaliePanel">
+        <div class="sf-panel-header">
+          <div class="sf-panel-header-copy sf-panel-header-copy--stack">
+            <h2>Goalie Rankings</h2>
+            <div id="goalieRankBasis" class="sf-rank-basis"></div>
+          </div>
+          <div class="sf-panel-header-controls">
+            <div class="sf-search-group">
+              <input id="goalieSearch" type="search" placeholder="Search goalie" />
+              <input id="goalieTeamSearch" type="search" placeholder="Filter team" />
+            </div>
+          </div>
+        </div>
+        <div class="sf-table-wrap">
+          <table id="goalieTable" class="sf-table">
+            <thead>
+              <tr>
+                <th class="sf-sortable" data-sort-key="rank" data-sort-default="asc"><span class="sf-sort-head">#<span
+                      class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="goalie_name" data-sort-default="asc"><span
+                    class="sf-sort-head">Goalie<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
+                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="starts" data-sort-default="desc"><span
+                    class="sf-sort-head">Starts<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="sa" data-sort-default="desc"><span class="sf-sort-head">SA<span
+                      class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="toi_min" data-sort-default="desc"><span
+                    class="sf-sort-head">TOI<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="shot_quality_gsax_per60_5v5" data-sort-default="desc"><span
+                    class="sf-sort-head">Shot Danger Adjusted GSAx 5v5/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="sv_pct" data-sort-default="desc"><span
+                    class="sf-sort-head">SV%<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="xsv_pct" data-sort-default="desc"><span
+                    class="sf-sort-head">xSV%<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="sv_above_exp_pct" data-sort-default="desc"><span
+                    class="sf-sort-head">SVAAE<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="gsax_current" data-sort-default="desc"><span
+                    class="sf-sort-head">GSAX<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="gsax_current_per60" data-sort-default="desc"><span
+                    class="sf-sort-head">GSAX/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pk_sv_above_exp_pct" data-sort-default="desc"><span
+                    class="sf-sort-head">PK SVAAE<span class="sf-sort-arrow"></span></span></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="teamRankingsPanel">
+        <div class="sf-panel-header">
+          <div class="sf-panel-header-copy sf-panel-header-copy--stack">
+            <h2>Team Rankings</h2>
+            <div id="teamRankBasis" class="sf-rank-basis"></div>
+          </div>
+          <div class="sf-panel-header-controls">
+            <div class="sf-search-group sf-search-group--single sf-search-group--team-rankings">
+              <input id="teamRankingsSearch" type="search" placeholder="Search team" />
+            </div>
+          </div>
+        </div>
+        <div class="sf-table-wrap">
+          <table id="teamRankingsTable" class="sf-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
+                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="games_played" data-sort-default="desc"><span
+                    class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="total_team_score" data-sort-default="desc"><span
+                    class="sf-sort-head">Total<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="shooting_talent" data-sort-default="desc"><span
+                    class="sf-sort-head">Shooting<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="playmaking_talent" data-sort-default="desc"><span
+                    class="sf-sort-head">Playmaking<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="goaltending_talent" data-sort-default="desc"><span
+                    class="sf-sort-head">Goaltending<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_generation" data-sort-default="desc"><span
+                    class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span
+                    class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="offensive_depth" data-sort-default="desc"><span
+                    class="sf-sort-head">Off Depth<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="defensive_depth" data-sort-default="desc"><span
+                    class="sf-sort-head">Def Depth<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="physicality_depth" data-sort-default="desc"><span
+                    class="sf-sort-head">Hits Depth<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="oz_non_offsetting_penalties_pg" data-sort-default="asc"><span
+                    class="sf-sort-head">OZ Pens/G<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="leverage_xg_net" data-sort-default="desc"><span
+                    class="sf-sort-head">Leverage xG<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span
+                    class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="high_danger_for" data-sort-default="desc"><span
+                    class="sf-sort-head">HD For<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="high_danger_against" data-sort-default="asc"><span
+                    class="sf-sort-head">HD Ag<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span
+                    class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="underratedPanel">
+        <div class="sf-panel-header sf-panel-header--skaters">
+          <div class="sf-panel-header-copy sf-panel-header-copy--stack">
+            <h2>Most Underrated Players</h2>
+            <div id="underratedRankBasis" class="sf-rank-basis"></div>
+            <div class="sf-skater-filter-toolbar">
+              <div class="sf-filter-inline sf-filter-inline--positions" id="underratedPositionFilters">
+                <span class="sf-filter-inline-label">Filter positions:</span>
+                <label class="sf-filter-check"><input type="checkbox" name="underratedPos" value="L" />L</label>
+                <label class="sf-filter-check"><input type="checkbox" name="underratedPos" value="C" />C</label>
+                <label class="sf-filter-check"><input type="checkbox" name="underratedPos" value="R" />R</label>
+                <label class="sf-filter-check"><input type="checkbox" name="underratedPos" value="LD" />LD</label>
+                <label class="sf-filter-check"><input type="checkbox" name="underratedPos" value="RD" />RD</label>
+              </div>
+              <div class="sf-search-group sf-search-group--skaters">
+                <input id="underratedSearch" type="search" placeholder="Search player" />
+                <input id="underratedTeamSearch" type="search" placeholder="Filter team" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sf-table-wrap">
+          <table id="underratedTable" class="sf-table">
+            <thead>
+              <tr>
+                <th class="sf-sortable" data-sort-key="rank" data-sort-default="asc"><span class="sf-sort-head">#<span
+                      class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="player_name" data-sort-default="asc"><span
+                    class="sf-sort-head">Player<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
+                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="position" data-sort-default="asc"><span
+                    class="sf-sort-head">Pos<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="season_gp" data-sort-default="desc"><span
+                    class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="toi_per_gp" data-sort-default="desc"><span
+                    class="sf-sort-head">TOI/GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="total_offence_defence" data-sort-default="desc"><span
+                    class="sf-sort-head">Total (Off+Def)<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="talent_norm" data-sort-default="desc"><span
+                    class="sf-sort-head">Talent Norm<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="toi_norm" data-sort-default="desc"><span class="sf-sort-head">TOI
+                    Norm<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="qoc" data-sort-default="desc"><span class="sf-sort-head">QoC<span
+                      class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="qot" data-sort-default="desc"><span class="sf-sort-head">QoT<span
+                      class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="underplayed_score" data-sort-default="desc"><span
+                    class="sf-sort-head">Underplayed Score<span class="sf-sort-arrow"></span></span></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="anomaliesPanel">
+        <div class="sf-panel-header">
+          <h2>Scoring Anomalies</h2>
+          <div id="scoringAnomaliesBasis" class="sf-rank-basis"></div>
+        </div>
+        <div class="sf-anomaly-grid">
+          <section class="sf-anomaly-card">
+            <h3>Power-Play Heavy Point Profiles</h3>
+            <div class="sf-table-wrap">
+              <table id="powerplayAnomaliesTable" class="sf-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Pos</th>
+                    <th>GP</th>
+                    <th>Total Pts</th>
+                    <th>PP Pts</th>
+                    <th>5v5 Pts</th>
+                    <th>Other Pts</th>
+                    <th>PP Share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+          <section class="sf-anomaly-card">
+            <h3>Empty-Net Heavy Point Profiles</h3>
+            <div class="sf-table-wrap">
+              <table id="emptyNetAnomaliesTable" class="sf-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Pos</th>
+                    <th>GP</th>
+                    <th>Total Pts</th>
+                    <th>EN Pts</th>
+                    <th>Non-EN Pts</th>
+                    <th>EN Share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+          <section class="sf-anomaly-card">
+            <h3>Highest Percent of Points in 1-Goal Games</h3>
+            <div class="sf-table-wrap">
+              <table id="oneGoalGamePointsTable" class="sf-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Pos</th>
+                    <th>GP</th>
+                    <th>Total Pts</th>
+                    <th>1-Goal Pts</th>
+                    <th>Other Pts</th>
+                    <th>1-Goal Share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+          <section class="sf-anomaly-card">
+            <h3>Lowest Percent of Goals at 5v5</h3>
+            <div class="sf-table-wrap">
+              <table id="fiveVFiveGoalShareTable" class="sf-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>Pos</th>
+                    <th>GP</th>
+                    <th>Total Goals</th>
+                    <th>5v5 Goals</th>
+                    <th>Other-State Goals</th>
+                    <th>5v5 Share</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script src="js/common.js" defer></script>
+  <script src="js/rankings.js" defer></script>
+</body>
+
+</html>
