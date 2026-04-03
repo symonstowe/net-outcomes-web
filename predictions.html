@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en-CA">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,10 +10,8 @@
   <link rel="stylesheet" href="latofonts.css" />
   <link rel="stylesheet" href="style.css" />
   <title>Net Outcomes | NHL Predictions</title>
-  <script
-    type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
 </head>
-
 <body class="lato sf-background">
   <div id="container" class="sf-container">
     <header class="sf-header sf-header--page">
@@ -23,31 +20,25 @@
           <img class="name_pic" src="imgs/logo-light.svg" alt="Net Outcomes logo" />
           <div class="name">Net Outcomes</div>
         </a>
-        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link"
-            href="/rankings.html">Rankings</a><a class="sf-page-nav-link is-active"
-            href="/predictions.html">Predictions</a><a class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link" href="/rankings.html">Rankings</a><a class="sf-page-nav-link is-active" href="/predictions.html">Predictions</a><a class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
       </div>
+      <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
       <h1 class="sf-page-title">Predictions</h1>
-      <p class="sf-page-lede">WARNING: the predictive model is constantly evolving, updated only sporadically and is in
-        a very experimental stage. It is not recommended to make any decisions based on the content of this page.</p>
+      <p class="sf-page-lede">Each site build now carries forward a slate of the next 48 hours, so the pregame view is separate from the longer rankings tables.</p>
       <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
     </header>
     <main class="sf-main">
-
+      
       <section class="sf-panel">
         <div class="sf-panel-header">
           <h2>Upcoming 48 Hours</h2>
           <div id="predictionsBasis" class="sf-rank-basis"></div>
         </div>
         <div class="sf-stats">
-          <div class="sf-stat"><span class="sf-stat-label">Window</span><span id="predictionsWindowValue"
-              class="sf-stat-value">...</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Games</span><span id="predictionsGameCount"
-              class="sf-stat-value">0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Calibration Games</span><span
-              id="predictionsCalibrationGames" class="sf-stat-value">0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Train Logloss</span><span id="predictionsCalibrationLogloss"
-              class="sf-stat-value">0.0000</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Window</span><span id="predictionsWindowValue" class="sf-stat-value">...</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Games</span><span id="predictionsGameCount" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Calibration Games</span><span id="predictionsCalibrationGames" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Train Logloss</span><span id="predictionsCalibrationLogloss" class="sf-stat-value">0.0000</span></div>
         </div>
         <p id="predictionsLocalTimeNote" class="sf-local-time-note">Times are shown in your local timezone.</p>
         <div id="predictionsCards" class="sf-prediction-card-grid"></div>
@@ -78,11 +69,10 @@
           </table>
         </div>
       </section>
-
+    
     </main>
   </div>
   <script src="js/common.js" defer></script>
   <script src="js/predictions.js" defer></script>
 </body>
-
 </html>

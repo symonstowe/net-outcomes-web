@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-CA">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description"
-    content="Net Outcomes hosts line analysis, team xG visuals, and deeper NHL research experiments." />
+  <meta name="description" content="Net Outcomes hosts line analysis, team xG visuals, and deeper NHL research experiments." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="https://netoutcomes.ca/analysis.html" />
   <link rel="icon" href="imgs/logo-light.svg" />
   <link rel="stylesheet" href="latofonts.css" />
   <link rel="stylesheet" href="style.css" />
   <title>Net Outcomes | NHL Analysis</title>
-  <script
-    type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
 </head>
-
 <body class="lato sf-background">
   <div id="container" class="sf-container">
     <header class="sf-header sf-header--page">
@@ -24,16 +20,15 @@
           <img class="name_pic" src="imgs/logo-light.svg" alt="Net Outcomes logo" />
           <div class="name">Net Outcomes</div>
         </a>
-        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link"
-            href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a
-            class="sf-page-nav-link is-active" href="/analysis.html">Analysis</a></nav>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link is-active" href="/analysis.html">Analysis</a></nav>
       </div>
+      <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
       <h1 class="sf-page-title">Analysis</h1>
-      <p class="sf-page-lede">Some analysis tools that don't fit well in the other pages:</p>
+      <p class="sf-page-lede">The tools that need more space live here: lineup fit cards, the xG shot map, and a starting structure for deeper documented experiments.</p>
       <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
     </header>
     <main class="sf-main">
-
+      
       <nav class="sf-section-nav sf-section-nav--page" id="analysisSectionNav">
         <button class="sf-section-btn is-active" data-section-target="overviewPanel">Overview</button>
         <button class="sf-section-btn" data-section-target="teamPanel">Line Analysis</button>
@@ -47,18 +42,15 @@
         <div class="sf-analysis-grid">
           <article class="sf-analysis-card">
             <h3>Line Deployment Lab</h3>
-            <p>Compare current and suggested forward lines, defence pairs, power-play groups, and penalty-kill groups
-              without stacking those cards on top of the main rankings tables.</p>
+            <p>Compare current and suggested forward lines, defence pairs, power-play groups, and penalty-kill groups without stacking those cards on top of the main rankings tables.</p>
           </article>
           <article class="sf-analysis-card">
             <h3>Team xG Visualizer</h3>
-            <p>Inspect shot locations, expected goals, and goal overlays team by team with a threshold slider so heavier
-              datasets stay usable.</p>
+            <p>Inspect shot locations, expected goals, and goal overlays team by team with a threshold slider so heavier datasets stay usable.</p>
           </article>
           <article class="sf-analysis-card">
             <h3>Experiment Notes</h3>
-            <p>This section is where deeper experiments can accumulate over time, starting with lineup fit views and the
-              xG explorer already in the build.</p>
+            <p>This section is where deeper experiments can accumulate over time, starting with lineup fit views and the xG explorer already in the build.</p>
           </article>
         </div>
       </section>
@@ -76,8 +68,7 @@
             </select>
           </div>
         </div>
-        <div id="teamCompareNote" class="sf-team-compare-note">Search teams normally or select up to two teams to
-          compare side by side.</div>
+        <div id="teamCompareNote" class="sf-team-compare-note">Search teams normally or select up to two teams to compare side by side.</div>
         <div id="teamGrid" class="sf-team-grid"></div>
       </section>
 
@@ -101,180 +92,93 @@
           </label>
         </div>
         <div class="sf-xg-stats">
-          <div class="sf-stat"><span class="sf-stat-label">Shots</span><span id="xgTotalShots"
-              class="sf-stat-value">0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Expected Goals</span><span id="xgExpectedGoals"
-              class="sf-stat-value">0.0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Actual Goals</span><span id="xgActualGoals"
-              class="sf-stat-value">0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Diff</span><span id="xgDiff"
-              class="sf-stat-value">0.0%</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Shots</span><span id="xgTotalShots" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Expected Goals</span><span id="xgExpectedGoals" class="sf-stat-value">0.0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Actual Goals</span><span id="xgActualGoals" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Diff</span><span id="xgDiff" class="sf-stat-value">0.0%</span></div>
         </div>
         <p id="xgDataNote" class="sf-xg-note"></p>
         <div class="sf-rink-wrap">
-          <svg id="xgRink" viewBox="-103 -45.5 206 91" preserveAspectRatio="xMidYMid meet">
-            <rect x="-100" y="-42.5" width="200" height="85" rx="28" ry="28" fill="#ffffff" stroke="#111111"
-              stroke-width="0.599"></rect>
-            <line x1="-89.000" y1="11.000" x2="-100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.500"></line>
-            <line x1="-89.000" y1="-11.000" x2="-100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.500"></line>
-            <line x1="89.000" y1="11.000" x2="100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.500"></line>
-            <line x1="89.000" y1="-11.000" x2="100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.500"></line>
-            <line x1="0.000" y1="-42.500" x2="0.000" y2="42.500" stroke="#C60C30" stroke-width="0.998"
-              stroke-opacity="0.700"></line>
-            <line x1="-25.000" y1="-42.500" x2="-25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998"
-              stroke-opacity="0.700"></line>
-            <line x1="25.000" y1="-42.500" x2="25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998"
-              stroke-opacity="0.700"></line>
-            <line x1="-89.000" y1="-37.000" x2="-89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="89.000" y1="-37.000" x2="89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <circle cx="0.000" cy="0.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30"
-              stroke-width="0.599" stroke-opacity="0.700"></circle>
-            <circle cx="0.000" cy="0.000" r="0.500" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="-69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="-69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="-22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="-22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff"
-              stroke-width="0.200" stroke-opacity="1.000"></circle>
-            <circle cx="-69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30"
-              stroke-width="0.399" stroke-opacity="0.700"></circle>
-            <circle cx="-69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30"
-              stroke-width="0.399" stroke-opacity="0.700"></circle>
-            <circle cx="69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30"
-              stroke-width="0.399" stroke-opacity="0.700"></circle>
-            <circle cx="69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30"
-              stroke-width="0.399" stroke-opacity="0.700"></circle>
-            <line x1="-71.000" y1="24.000" x2="-73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="24.000" x2="-71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="20.000" x2="-73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="20.000" x2="-71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="24.000" x2="-65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="24.000" x2="-67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="20.000" x2="-65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="20.000" x2="-67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="36.866" x2="-71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="7.134" x2="-71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="36.866" x2="-67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="7.134" x2="-67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="-20.000" x2="-73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="-20.000" x2="-71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="-24.000" x2="-73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="-24.000" x2="-71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="-20.000" x2="-65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="-20.000" x2="-67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="-24.000" x2="-65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="-24.000" x2="-67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="-36.866" x2="-71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-71.000" y1="-7.134" x2="-71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="-36.866" x2="-67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="-67.000" y1="-7.134" x2="-67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="24.000" x2="65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="24.000" x2="67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="20.000" x2="65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="20.000" x2="67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="24.000" x2="73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="24.000" x2="71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="20.000" x2="73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="20.000" x2="71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="36.866" x2="67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="7.134" x2="67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="36.866" x2="71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="7.134" x2="71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="-20.000" x2="65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="-20.000" x2="67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="-24.000" x2="65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="-24.000" x2="67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="-20.000" x2="73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="-20.000" x2="71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="-24.000" x2="73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="-24.000" x2="71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="-36.866" x2="67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="67.000" y1="-7.134" x2="67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="-36.866" x2="71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <line x1="71.000" y1="-7.134" x2="71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399"
-              stroke-opacity="0.700"></line>
-            <path
-              d="M -89.000 -4.000 L -89.000 4.000 L -84.500 4.000 A 6.000 6.000 0 0 0 -84.500 -4.000 L -89.000 -4.000 Z"
-              fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
-            <path d="M 89.000 -4.000 L 89.000 4.000 L 84.500 4.000 A 6.000 6.000 0 0 1 84.500 -4.000 L 89.000 -4.000 Z"
-              fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
-            <path d="M -89.000 -3.000 C -89.900 -3.670, -92.330 -3.600, -92.330 -2.000" fill="none" stroke="#111111"
-              stroke-width="0.399" stroke-opacity="0.5"></path>
-            <line x1="-92.330" y1="-2.000" x2="-92.330" y2="2.000" stroke="#111111" stroke-width="0.399"
-              stroke-opacity="0.500"></line>
-            <path d="M -92.330 2.000 C -92.330 3.600, -89.900 3.670, -89.000 3.000" fill="none" stroke="#111111"
-              stroke-width="0.399" stroke-opacity="0.5"></path>
-            <path d="M 89.000 -3.000 C 89.900 -3.670, 92.330 -3.600, 92.330 -2.000" fill="none" stroke="#111111"
-              stroke-width="0.399" stroke-opacity="0.5"></path>
-            <line x1="92.330" y1="-2.000" x2="92.330" y2="2.000" stroke="#111111" stroke-width="0.399"
-              stroke-opacity="0.500"></line>
-            <path d="M 92.330 2.000 C 92.330 3.600, 89.900 3.670, 89.000 3.000" fill="none" stroke="#111111"
-              stroke-width="0.399" stroke-opacity="0.5"></path>
-          </svg>
+          <svg id="xgRink" viewBox="-103 -45.5 206 91" preserveAspectRatio="xMidYMid meet"><rect x="-100" y="-42.5" width="200" height="85" rx="28" ry="28" fill="#ffffff" stroke="#111111" stroke-width="0.599"></rect>
+  <line x1="-89.000" y1="11.000" x2="-100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="-89.000" y1="-11.000" x2="-100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="89.000" y1="11.000" x2="100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="89.000" y1="-11.000" x2="100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="0.000" y1="-42.500" x2="0.000" y2="42.500" stroke="#C60C30" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="-25.000" y1="-42.500" x2="-25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="25.000" y1="-42.500" x2="25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="-89.000" y1="-37.000" x2="-89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="89.000" y1="-37.000" x2="89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <circle cx="0.000" cy="0.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.599" stroke-opacity="0.700"></circle>
+  <circle cx="0.000" cy="0.000" r="0.500" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="-69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <line x1="-71.000" y1="24.000" x2="-73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="24.000" x2="-71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="20.000" x2="-73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="20.000" x2="-71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="24.000" x2="-65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="24.000" x2="-67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="20.000" x2="-65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="20.000" x2="-67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="36.866" x2="-71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="7.134" x2="-71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="36.866" x2="-67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="7.134" x2="-67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-20.000" x2="-73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-20.000" x2="-71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-24.000" x2="-73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-24.000" x2="-71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-20.000" x2="-65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-20.000" x2="-67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-24.000" x2="-65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-24.000" x2="-67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-36.866" x2="-71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-7.134" x2="-71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-36.866" x2="-67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-7.134" x2="-67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="24.000" x2="65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="24.000" x2="67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="20.000" x2="65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="20.000" x2="67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="24.000" x2="73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="24.000" x2="71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="20.000" x2="73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="20.000" x2="71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="36.866" x2="67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="7.134" x2="67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="36.866" x2="71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="7.134" x2="71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-20.000" x2="65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-20.000" x2="67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-24.000" x2="65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-24.000" x2="67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-20.000" x2="73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-20.000" x2="71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-24.000" x2="73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-24.000" x2="71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-36.866" x2="67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-7.134" x2="67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-36.866" x2="71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-7.134" x2="71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <path d="M -89.000 -4.000 L -89.000 4.000 L -84.500 4.000 A 6.000 6.000 0 0 0 -84.500 -4.000 L -89.000 -4.000 Z" fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
+  <path d="M 89.000 -4.000 L 89.000 4.000 L 84.500 4.000 A 6.000 6.000 0 0 1 84.500 -4.000 L 89.000 -4.000 Z" fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
+  <path d="M -89.000 -3.000 C -89.900 -3.670, -92.330 -3.600, -92.330 -2.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <line x1="-92.330" y1="-2.000" x2="-92.330" y2="2.000" stroke="#111111" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <path d="M -92.330 2.000 C -92.330 3.600, -89.900 3.670, -89.000 3.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <path d="M 89.000 -3.000 C 89.900 -3.670, 92.330 -3.600, 92.330 -2.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <line x1="92.330" y1="-2.000" x2="92.330" y2="2.000" stroke="#111111" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <path d="M 92.330 2.000 C 92.330 3.600, 89.900 3.670, 89.000 3.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path></svg>
         </div>
         <div class="sf-rink-legend">
           <span><i class="sf-legend-dot expected" id="xgLegendShot"></i> Team shot</span>
@@ -282,11 +186,10 @@
           <span class="sf-rink-legend-note">Dot size ∝ xG</span>
         </div>
       </section>
-
+    
     </main>
   </div>
   <script src="js/common.js" defer></script>
   <script src="js/analysis.js" defer></script>
 </body>
-
 </html>

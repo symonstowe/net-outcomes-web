@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-CA">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description"
-    content="Net Outcomes highlights today's NHL games, prediction drivers, and recent 10-game movement across skaters, teams, and goalies." />
+  <meta name="description" content="Net Outcomes highlights today's NHL games, prediction drivers, and recent 10-game movement across skaters, teams, and goalies." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="https://netoutcomes.ca/" />
   <link rel="icon" href="imgs/logo-light.svg" />
   <link rel="stylesheet" href="latofonts.css" />
   <link rel="stylesheet" href="style.css" />
   <title>Net Outcomes | NHL Rankings, Predictions, and Analysis</title>
-  <script
-    type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
 </head>
-
 <body class="lato sf-background">
   <div id="container" class="sf-container">
     <header class="sf-header sf-header--page">
@@ -24,33 +20,27 @@
           <img class="name_pic" src="imgs/logo-light.svg" alt="Net Outcomes logo" />
           <div class="name">Net Outcomes</div>
         </a>
-        <nav class="sf-page-nav"><a class="sf-page-nav-link is-active" href="/">Home</a><a class="sf-page-nav-link"
-            href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a
-            class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link is-active" href="/">Home</a><a class="sf-page-nav-link" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
       </div>
-      <h1 class="sf-page-title">Daily Snapshot and Trends</h1>
+      <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
+      <h1 class="sf-page-title">Today's NHL Games and Recent Movers</h1>
+      <p class="sf-page-lede">A front page for what is changing now: today's games, the biggest model drivers, and the strongest 10-game swings in form, ice time, and goalie usage.</p>
       <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
     </header>
     <main class="sf-main">
-
+      
       <section class="sf-panel">
         <div class="sf-panel-header">
           <h2>Today's Games</h2>
           <div id="homePredictionWindow" class="sf-rank-basis"></div>
         </div>
         <div class="sf-stats">
-          <div class="sf-stat"><span class="sf-stat-label">Generated</span><span id="homeGeneratedAt"
-              class="sf-stat-value">...</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Last Updated</span><span id="homeLastUpdated"
-              class="sf-stat-value">...</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Skaters</span><span id="homeSkaterCount"
-              class="sf-stat-value">0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Goalies</span><span id="homeGoalieCount"
-              class="sf-stat-value">0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Today</span><span id="homeTodayGameCount"
-              class="sf-stat-value">0</span></div>
-          <div class="sf-stat"><span class="sf-stat-label">Next 48h Games</span><span id="homePredictionCount"
-              class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Generated</span><span id="homeGeneratedAt" class="sf-stat-value">...</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Last Updated</span><span id="homeLastUpdated" class="sf-stat-value">...</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Skaters</span><span id="homeSkaterCount" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Goalies</span><span id="homeGoalieCount" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Today</span><span id="homeTodayGameCount" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Next 48h Games</span><span id="homePredictionCount" class="sf-stat-value">0</span></div>
         </div>
         <p id="homeRecentBasis" class="sf-rank-basis"></p>
         <div id="homeTodayGames" class="sf-prediction-card-grid sf-prediction-card-grid--home"></div>
@@ -88,11 +78,10 @@
           <div id="homeGoalieStarts" class="sf-highlight-list"></div>
         </section>
       </div>
-
+    
     </main>
   </div>
   <script src="js/common.js" defer></script>
   <script src="js/home.js" defer></script>
 </body>
-
 </html>

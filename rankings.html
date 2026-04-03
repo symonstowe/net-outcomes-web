@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-CA">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Skater, goalie, team, and underrated rankings." />
+  <meta name="description" content="Net Outcomes publishes NHL skater, goalie, team, and underrated rankings with sortable tables and team profile metrics." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="https://netoutcomes.ca/rankings.html" />
   <link rel="icon" href="imgs/logo-light.svg" />
   <link rel="stylesheet" href="latofonts.css" />
   <link rel="stylesheet" href="style.css" />
   <title>Net Outcomes | NHL Rankings</title>
-  <script
-    type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}}]}</script>
 </head>
-
 <body class="lato sf-background">
   <div id="container" class="sf-container">
     <header class="sf-header sf-header--page">
@@ -23,16 +20,15 @@
           <img class="name_pic" src="imgs/logo-light.svg" alt="Net Outcomes logo" />
           <div class="name">Net Outcomes</div>
         </a>
-        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link is-active"
-            href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a
-            class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link is-active" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
       </div>
+      <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
       <h1 class="sf-page-title">Rankings</h1>
-      <p class="sf-page-lede">Skater, goalie, team, and underrated views.</p>
+      <p class="sf-page-lede">The core tables stay together here, with filters on the skater, goalie, team, and underrated views so the page is easier to work through.</p>
       <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
     </header>
     <main class="sf-main">
-
+      
       <nav class="sf-section-nav sf-section-nav--page" id="sectionNav">
         <button class="sf-section-btn is-active" data-section-target="rankingsPanel">Skaters</button>
         <button class="sf-section-btn" data-section-target="goaliePanel">Goalies</button>
@@ -67,42 +63,24 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th class="sf-sortable" data-sort-key="player_name" data-sort-default="asc"><span
-                    class="sf-sort-head">Player<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
-                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="position" data-sort-default="asc"><span
-                    class="sf-sort-head">Pos<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="total_talent" data-sort-default="desc"><span
-                    class="sf-sort-head">Total<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="offence_score" data-sort-default="desc"><span
-                    class="sf-sort-head">Offence<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="finishing" data-sort-default="desc"><span
-                    class="sf-sort-head">Finishing<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="playmaking" data-sort-default="desc"><span
-                    class="sf-sort-head">Playmaking<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="chance_creation" data-sort-default="desc"><span
-                    class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="leverage_xg_diff" data-sort-default="desc"><span
-                    class="sf-sort-head">Leverage xG Diff<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="defence_score" data-sort-default="desc"><span
-                    class="sf-sort-head">Defence<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span
-                    class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span
-                    class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span
-                    class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="ev_xgar_per_60" data-sort-default="desc"><span
-                    class="sf-sort-head">5v5 xGAR/60<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="pp_xgar_per_60" data-sort-default="desc"><span
-                    class="sf-sort-head">PP xGF/60<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="pk_xgar_per_60" data-sort-default="desc"><span
-                    class="sf-sort-head">PK xGA/60<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="season_gp" data-sort-default="desc"><span
-                    class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="season_toi_min" data-sort-default="desc"><span
-                    class="sf-sort-head">TOI<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="player_name" data-sort-default="asc"><span class="sf-sort-head">Player<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="position" data-sort-default="asc"><span class="sf-sort-head">Pos<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="total_talent" data-sort-default="desc"><span class="sf-sort-head">Total<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="offence_score" data-sort-default="desc"><span class="sf-sort-head">Offence<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="finishing" data-sort-default="desc"><span class="sf-sort-head">Finishing<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="playmaking" data-sort-default="desc"><span class="sf-sort-head">Playmaking<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_creation" data-sort-default="desc"><span class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="leverage_xg_diff" data-sort-default="desc"><span class="sf-sort-head">Leverage xG Diff<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="defence_score" data-sort-default="desc"><span class="sf-sort-head">Defence<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="ev_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">5v5 xGAR/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pp_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">PP xGF/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pk_xgar_per_60" data-sort-default="desc"><span class="sf-sort-head">PK xGA/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="season_gp" data-sort-default="desc"><span class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="season_toi_min" data-sort-default="desc"><span class="sf-sort-head">TOI<span class="sf-sort-arrow"></span></span></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -127,32 +105,19 @@
           <table id="goalieTable" class="sf-table">
             <thead>
               <tr>
-                <th class="sf-sortable" data-sort-key="rank" data-sort-default="asc"><span class="sf-sort-head">#<span
-                      class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="goalie_name" data-sort-default="asc"><span
-                    class="sf-sort-head">Goalie<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
-                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="starts" data-sort-default="desc"><span
-                    class="sf-sort-head">Starts<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="sa" data-sort-default="desc"><span class="sf-sort-head">SA<span
-                      class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="toi_min" data-sort-default="desc"><span
-                    class="sf-sort-head">TOI<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="shot_quality_gsax_per60_5v5" data-sort-default="desc"><span
-                    class="sf-sort-head">Shot Danger Adjusted GSAx 5v5/60<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="sv_pct" data-sort-default="desc"><span
-                    class="sf-sort-head">SV%<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="xsv_pct" data-sort-default="desc"><span
-                    class="sf-sort-head">xSV%<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="sv_above_exp_pct" data-sort-default="desc"><span
-                    class="sf-sort-head">SVAAE<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="gsax_current" data-sort-default="desc"><span
-                    class="sf-sort-head">GSAX<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="gsax_current_per60" data-sort-default="desc"><span
-                    class="sf-sort-head">GSAX/60<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="pk_sv_above_exp_pct" data-sort-default="desc"><span
-                    class="sf-sort-head">PK SVAAE<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="rank" data-sort-default="asc"><span class="sf-sort-head">#<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="goalie_name" data-sort-default="asc"><span class="sf-sort-head">Goalie<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="starts" data-sort-default="desc"><span class="sf-sort-head">Starts<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="sa" data-sort-default="desc"><span class="sf-sort-head">SA<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="toi_min" data-sort-default="desc"><span class="sf-sort-head">TOI<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="shot_quality_gsax_per60_5v5" data-sort-default="desc"><span class="sf-sort-head">Shot Danger Adjusted GSAx 5v5/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="sv_pct" data-sort-default="desc"><span class="sf-sort-head">SV%<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="xsv_pct" data-sort-default="desc"><span class="sf-sort-head">xSV%<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="sv_above_exp_pct" data-sort-default="desc"><span class="sf-sort-head">SVAAE<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="gsax_current" data-sort-default="desc"><span class="sf-sort-head">GSAX<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="gsax_current_per60" data-sort-default="desc"><span class="sf-sort-head">GSAX/60<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="pk_sv_above_exp_pct" data-sort-default="desc"><span class="sf-sort-head">PK SVAAE<span class="sf-sort-arrow"></span></span></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -177,40 +142,23 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
-                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="games_played" data-sort-default="desc"><span
-                    class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="total_team_score" data-sort-default="desc"><span
-                    class="sf-sort-head">Total<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="shooting_talent" data-sort-default="desc"><span
-                    class="sf-sort-head">Shooting<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="playmaking_talent" data-sort-default="desc"><span
-                    class="sf-sort-head">Playmaking<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="goaltending_talent" data-sort-default="desc"><span
-                    class="sf-sort-head">Goaltending<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="chance_generation" data-sort-default="desc"><span
-                    class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span
-                    class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="offensive_depth" data-sort-default="desc"><span
-                    class="sf-sort-head">Off Depth<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="defensive_depth" data-sort-default="desc"><span
-                    class="sf-sort-head">Def Depth<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="physicality_depth" data-sort-default="desc"><span
-                    class="sf-sort-head">Hits Depth<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="oz_non_offsetting_penalties_pg" data-sort-default="asc"><span
-                    class="sf-sort-head">OZ Pens/G<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="leverage_xg_net" data-sort-default="desc"><span
-                    class="sf-sort-head">Leverage xG<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span
-                    class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="high_danger_for" data-sort-default="desc"><span
-                    class="sf-sort-head">HD For<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="high_danger_against" data-sort-default="asc"><span
-                    class="sf-sort-head">HD Ag<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span
-                    class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="games_played" data-sort-default="desc"><span class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="total_team_score" data-sort-default="desc"><span class="sf-sort-head">Total<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="shooting_talent" data-sort-default="desc"><span class="sf-sort-head">Shooting<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="playmaking_talent" data-sort-default="desc"><span class="sf-sort-head">Playmaking<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="goaltending_talent" data-sort-default="desc"><span class="sf-sort-head">Goaltending<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_generation" data-sort-default="desc"><span class="sf-sort-head">Chance Gen<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="chance_suppression" data-sort-default="desc"><span class="sf-sort-head">Chance Supp<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="offensive_depth" data-sort-default="desc"><span class="sf-sort-head">Off Depth<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="defensive_depth" data-sort-default="desc"><span class="sf-sort-head">Def Depth<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="physicality_depth" data-sort-default="desc"><span class="sf-sort-head">Hits Depth<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="oz_non_offsetting_penalties_pg" data-sort-default="asc"><span class="sf-sort-head">OZ Pens/G<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="leverage_xg_net" data-sort-default="desc"><span class="sf-sort-head">Leverage xG<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="rush_defence" data-sort-default="desc"><span class="sf-sort-head">Rush Def<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="high_danger_for" data-sort-default="desc"><span class="sf-sort-head">HD For<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="high_danger_against" data-sort-default="asc"><span class="sf-sort-head">HD Ag<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="special_teams" data-sort-default="desc"><span class="sf-sort-head">Special Teams<span class="sf-sort-arrow"></span></span></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -243,30 +191,18 @@
           <table id="underratedTable" class="sf-table">
             <thead>
               <tr>
-                <th class="sf-sortable" data-sort-key="rank" data-sort-default="asc"><span class="sf-sort-head">#<span
-                      class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="player_name" data-sort-default="asc"><span
-                    class="sf-sort-head">Player<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span
-                    class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="position" data-sort-default="asc"><span
-                    class="sf-sort-head">Pos<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="season_gp" data-sort-default="desc"><span
-                    class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="toi_per_gp" data-sort-default="desc"><span
-                    class="sf-sort-head">TOI/GP<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="total_offence_defence" data-sort-default="desc"><span
-                    class="sf-sort-head">Total (Off+Def)<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="talent_norm" data-sort-default="desc"><span
-                    class="sf-sort-head">Talent Norm<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="toi_norm" data-sort-default="desc"><span class="sf-sort-head">TOI
-                    Norm<span class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="qoc" data-sort-default="desc"><span class="sf-sort-head">QoC<span
-                      class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="qot" data-sort-default="desc"><span class="sf-sort-head">QoT<span
-                      class="sf-sort-arrow"></span></span></th>
-                <th class="sf-sortable" data-sort-key="underplayed_score" data-sort-default="desc"><span
-                    class="sf-sort-head">Underplayed Score<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="rank" data-sort-default="asc"><span class="sf-sort-head">#<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="player_name" data-sort-default="asc"><span class="sf-sort-head">Player<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="team" data-sort-default="asc"><span class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="position" data-sort-default="asc"><span class="sf-sort-head">Pos<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="season_gp" data-sort-default="desc"><span class="sf-sort-head">GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="toi_per_gp" data-sort-default="desc"><span class="sf-sort-head">TOI/GP<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="total_offence_defence" data-sort-default="desc"><span class="sf-sort-head">Total (Off+Def)<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="talent_norm" data-sort-default="desc"><span class="sf-sort-head">Talent Norm<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="toi_norm" data-sort-default="desc"><span class="sf-sort-head">TOI Norm<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="qoc" data-sort-default="desc"><span class="sf-sort-head">QoC<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="qot" data-sort-default="desc"><span class="sf-sort-head">QoT<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-sortable" data-sort-key="underplayed_score" data-sort-default="desc"><span class="sf-sort-head">Underplayed Score<span class="sf-sort-arrow"></span></span></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -367,11 +303,10 @@
           </section>
         </div>
       </section>
-
+    
     </main>
   </div>
   <script src="js/common.js" defer></script>
   <script src="js/rankings.js" defer></script>
 </body>
-
 </html>
