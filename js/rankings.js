@@ -498,6 +498,13 @@
     return (rows || []).map((row, idx) => ({ ...row, display_rank: idx + 1 }));
   }
 
+  function filterRowsByPositions(rows, selectedPositionValues, getPositionValue) {
+    const selected = Array.isArray(selectedPositionValues) ? selectedPositionValues : [];
+    if (!selected.length) return [...(rows || [])];
+    const getter = typeof getPositionValue === 'function' ? getPositionValue : ((row) => row?.position);
+    return (rows || []).filter((row) => positionMatches(selected, getter(row)));
+  }
+
   function sortRankings(rows) {
     const key = String(state.rankingsSort?.key || 'total_talent');
     const direction = String(state.rankingsSort?.direction || 'desc');
@@ -634,15 +641,16 @@
   }
 
   function refreshRankings() {
-    const sorted = rankSortedRows(sortRankings(state.rankings));
+    const positions = selectedPositions('rankingsPos');
+    const positionScoped = rankSortedRows(
+      filterRowsByPositions(sortRankings(state.rankings), positions, (row) => row.position),
+    );
     const playerQuery = normalizeText(document.getElementById('playerSearch')?.value);
     const teamQuery = normalizeText(document.getElementById('rankingsTeamSearch')?.value);
-    const positions = selectedPositions('rankingsPos');
-    const filtered = sorted.filter((row) => {
+    const filtered = positionScoped.filter((row) => {
       const playerMatch = !playerQuery || normalizeText(row.player_name).includes(playerQuery);
       const teamMatch = !teamQuery || normalizeText(row.team).includes(teamQuery);
-      const positionMatch = positionMatches(positions, row.position);
-      return playerMatch && teamMatch && positionMatch;
+      return playerMatch && teamMatch;
     });
     renderRankings(filtered);
     syncUrlState();
@@ -670,15 +678,16 @@
   }
 
   function refreshUnderrated() {
-    const sorted = rankSortedRows(sortUnderrated(state.underrated));
+    const positions = selectedPositions('underratedPos');
+    const positionScoped = rankSortedRows(
+      filterRowsByPositions(sortUnderrated(state.underrated), positions, (row) => row.position),
+    );
     const playerQuery = normalizeText(document.getElementById('underratedSearch')?.value);
     const teamQuery = normalizeText(document.getElementById('underratedTeamSearch')?.value);
-    const positions = selectedPositions('underratedPos');
-    const filtered = sorted.filter((row) => {
+    const filtered = positionScoped.filter((row) => {
       const playerMatch = !playerQuery || normalizeText(row.player_name).includes(playerQuery);
       const teamMatch = !teamQuery || normalizeText(row.team).includes(teamQuery);
-      const positionMatch = positionMatches(positions, row.position);
-      return playerMatch && teamMatch && positionMatch;
+      return playerMatch && teamMatch;
     });
     renderUnderrated(filtered);
     syncUrlState();
