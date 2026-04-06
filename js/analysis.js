@@ -8,13 +8,54 @@
   } = window.NetOutcomesCommon;
 
   const DEFAULT_SECTION_ID = 'overviewPanel';
-  const VALID_SECTION_IDS = ['overviewPanel', 'teamPanel', 'xgPanel'];
+  const VALID_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'xgPanel'];
   const SECTION_SLUG_BY_ID = {
     overviewPanel: 'overview',
     teamPanel: 'line-analysis',
+    penaltyPanel: 'penalties',
     xgPanel: 'team-xg',
   };
   const DEFAULT_XG_MIN_PROB = 0.015;
+  const PENALTY_COLORS = {
+    primary: '#0f6b84',
+    secondary: '#d07a22',
+    tertiary: '#4f6b5d',
+    positive: '#0b8f4d',
+    negative: '#b04f2e',
+  };
+  const PENALTY_TYPE_METRICS = {
+    goal_end_goals_per_two_minutes: 'Historical goals per strict 2:00 PP',
+  };
+  const PENALTY_END_RATE_KEYS = {
+    goal_end: {
+      chance: 'goal_end_two_minute_scoring_chance',
+      rate: 'goal_end_goals_per_minute',
+      minutes: 'goal_end_minutes',
+      goals: 'goal_end_goals',
+      label: 'Goal-End',
+    },
+    box_exit_plus5: {
+      chance: 'box_exit_plus5_two_minute_scoring_chance',
+      rate: 'box_exit_plus5_goals_per_minute',
+      minutes: 'box_exit_plus5_minutes',
+      goals: 'box_exit_plus5_goals',
+      label: 'Box Exit + 5s',
+    },
+    possession_end: {
+      chance: 'possession_end_two_minute_scoring_chance',
+      rate: 'possession_end_goals_per_minute',
+      minutes: 'possession_end_minutes',
+      goals: 'possession_end_goals',
+      label: 'First PK Possession',
+    },
+    change_end: {
+      chance: 'change_end_two_minute_scoring_chance',
+      rate: 'change_end_goals_per_minute',
+      minutes: 'change_end_minutes',
+      goals: 'change_end_goals',
+      label: 'First PK Change',
+    },
+  };
 
   const state = {
     teams: [],
@@ -556,6 +597,540 @@
     refreshXgPanel().catch(console.error);
   }
 
+  function formatPct(value, digits = 1) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return 'n/a';
+    return `${(num * 100).toFixed(digits)}%`;
+  }
+
+  function formatFixed(value, digits = 2) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return 'n/a';
+    return num.toFixed(digits);
+  }
+
+  function formatSignedFixed(value, digits = 2) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return 'n/a';
+    return `${num >= 0 ? '+' : ''}${num.toFixed(digits)}`;
+  }
+
+  function paddedDomain(values, fallbackMin, fallbackMax) {
+    const nums = (values || []).map((value) => Number(value)).filter((value) => Number.isFinite(value));
+    if (!nums.length) return [fallbackMin, fallbackMax];
+    let min = Math.min(...nums);
+    let max = Math.max(...nums);
+    if (Math.abs(max - min) < 1e-9) {
+      const pad = Math.max(Math.abs(max) * 0.15, 0.25);
+      min -= pad;
+      max += pad;
+    } else {
+      const pad = Math.max((max - min) * 0.12, 0.08);
+      min -= pad;
+      max += pad;
+    }
+    if (!Number.isFinite(min) || !Number.isFinite(max) || min === max) {
+      return [fallbackMin, fallbackMax];
+    }
+    return [min, max];
+  }
+
+  function axisTickValues(domain, tickCount = 5) {
+    const [min, max] = domain;
+    if (!Number.isFinite(min) || !Number.isFinite(max)) return [0];
+    if (tickCount <= 1 || Math.abs(max - min) < 1e-9) return [min];
+    return Array.from({ length: tickCount }, (_, idx) => min + ((max - min) * idx) / (tickCount - 1));
+  }
+
+  function renderPenaltyTypeImpactChart(analysis, metricKey) {
+    const svg = document.getElementById('penaltyTypeImpactChart');
+    if (!svg) return;
+    const rows = Array.isArray(analysis?.type_impact?.rows) ? analysis.type_impact.rows : [];
+    if (!rows.length) {
+      svg.innerHTML = '<text x="380" y="180" text-anchor="middle" font-size="16" fill="#6a7a70">Penalty-type impact data is not available in this build.</text>';
+      return;
+    }
+
+    const width = 920;
+    const rowHeight = 44;
+    const chartRows = rows
+      .slice()
+      .sort((a, b) => (
+        Number(b?.[metricKey] || 0) - Number(a?.[metricKey] || 0)
+      ) || (
+          Number(b?.pp_minutes || 0) - Number(a?.pp_minutes || 0)
+        ))
+      .slice(0, 16);
+    const maxLabelChars = chartRows.reduce((max, row) => Math.max(max, String(row?.penalty_type || '').length), 12);
+    const leftPad = Math.max(220, Math.min(340, 48 + (maxLabelChars * 7.2)));
+    const height = Math.max(420, 122 + (chartRows.length * rowHeight));
+    const padding = { top: 56, right: 108, bottom: 54, left: leftPad };
+    const innerWidth = width - padding.left - padding.right;
+    const maxValue = Math.max(0.12, ...chartRows.map((row) => Number(row?.[metricKey] || 0)));
+    const xAt = (value) => padding.left + (innerWidth * Number(value || 0)) / maxValue;
+    const ticks = axisTickValues([0, maxValue], 6);
+    const grid = ticks.map((tick) => {
+      const x = xAt(tick);
+      return `<line x1="${x.toFixed(2)}" y1="${padding.top}" x2="${x.toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#e4edf1" stroke-width="1" />`;
+    }).join('');
+    const tickLabels = ticks.map((tick) => {
+      const x = xAt(tick);
+      return `<text x="${x.toFixed(2)}" y="${(height - padding.bottom + 20).toFixed(2)}" text-anchor="middle" font-size="11" fill="#5a6f77">${esc(formatFixed(tick, 2))}</text>`;
+    }).join('');
+    const legendX = width - padding.right - 196;
+    const legendY = 18;
+    const legend = `
+      <g>
+        <rect x="${legendX}" y="${legendY}" width="18" height="8" fill="${PENALTY_COLORS.primary}" />
+        <text x="${legendX + 24}" y="${legendY + 7}" font-size="11" fill="#51656e">1-man PP minutes</text>
+        <rect x="${legendX}" y="${legendY + 16}" width="18" height="8" fill="${PENALTY_COLORS.secondary}" />
+        <text x="${legendX + 24}" y="${legendY + 23}" font-size="11" fill="#51656e">2-man PP minutes</text>
+      </g>
+    `;
+
+    const bars = chartRows.map((row, idx) => {
+      const y = padding.top + (idx * rowHeight);
+      const value = Number(row?.[metricKey] || 0);
+      const barWidth = Math.max(0, xAt(value) - padding.left);
+      const oneManMinutes = Math.max(0, Number(row?.one_man_pp_minutes || 0));
+      const twoManMinutes = Math.max(0, Number(row?.two_man_pp_minutes || 0));
+      const totalMinutes = Math.max(0.0001, Number(row?.pp_minutes || 0));
+      const twoManWidth = barWidth * Math.max(0, Math.min(1, twoManMinutes / totalMinutes));
+      const oneManWidth = Math.max(0, barWidth - twoManWidth);
+      const tooltip = `${row.penalty_type}: ${formatFixed(value, 2)} historical goals per strict 2:00 of PP time | ${formatFixed(row.goal_end_goals_per_minute, 3)} goals/min on the strict PP | ${row.count} non-offsetting PP penalties | ${formatFixed(row.pp_minutes, 1)} strict PP minutes | 1-man ${formatFixed(oneManMinutes, 1)} min | 2-man ${formatFixed(twoManMinutes, 1)} min`;
+      const baselineY = y + 10;
+      const meta = `${formatFixed(row.pp_minutes, 1)} PP min • 1-man ${formatFixed(oneManMinutes, 1)} • 2-man ${formatFixed(twoManMinutes, 1)}`;
+      return `
+        <line x1="${padding.left}" y1="${(baselineY + 24).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(baselineY + 24).toFixed(2)}" stroke="#eff4f6" stroke-width="1" />
+        <text x="${(padding.left - 16).toFixed(2)}" y="${(baselineY + 2).toFixed(2)}" text-anchor="end" font-size="12" fill="#22353c" font-family="LatoWebSemibold, LatoWeb, sans-serif">${esc(row.penalty_type || '')}</text>
+        <text x="${(padding.left - 16).toFixed(2)}" y="${(baselineY + 18).toFixed(2)}" text-anchor="end" font-size="10.5" fill="#677981">${esc(meta)}</text>
+        <rect x="${padding.left}" y="${(baselineY - 8).toFixed(2)}" width="${barWidth.toFixed(2)}" height="14" fill="#edf3f6" stroke="none">
+          <title>${esc(tooltip)}</title>
+        </rect>
+        <rect x="${padding.left}" y="${(baselineY - 8).toFixed(2)}" width="${oneManWidth.toFixed(2)}" height="14" fill="${PENALTY_COLORS.primary}">
+          <title>${esc(tooltip)}</title>
+        </rect>
+        <rect x="${(padding.left + oneManWidth).toFixed(2)}" y="${(baselineY - 8).toFixed(2)}" width="${twoManWidth.toFixed(2)}" height="14" fill="${PENALTY_COLORS.secondary}">
+          <title>${esc(tooltip)}</title>
+        </rect>
+        <text x="${(width - padding.right + 12).toFixed(2)}" y="${(baselineY + 2).toFixed(2)}" font-size="12" fill="#22353c" font-family="LatoWebSemibold, LatoWeb, sans-serif">${esc(formatFixed(value, 2))}</text>
+        <text x="${(width - padding.right + 12).toFixed(2)}" y="${(baselineY + 18).toFixed(2)}" font-size="10.5" fill="#677981">${Number(row.count || 0).toLocaleString()} pens</text>
+      `;
+    }).join('');
+
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.innerHTML = `
+      ${legend}
+      ${grid}
+      <line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#7f9198" stroke-width="1" />
+      <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#7f9198" stroke-width="1" />
+      ${bars}
+      ${tickLabels}
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 12).toFixed(2)}" text-anchor="middle" font-size="11" fill="#5a6f77">Historical goals per strict 2:00 of power-play time</text>
+    `;
+  }
+
+  function renderPenaltyTypeImpactLegend() {
+    const legendEl = document.getElementById('penaltyTypeImpactLegend');
+    if (!legendEl) return;
+    legendEl.innerHTML = '';
+  }
+
+  function ensureAnalysisBlurb(gridEl, blurbId, text) {
+    if (!gridEl) return;
+    let blurbEl = document.getElementById(blurbId);
+    if (!blurbEl) {
+      blurbEl = document.createElement('div');
+      blurbEl.id = blurbId;
+      blurbEl.className = 'sf-analysis-copy';
+      gridEl.parentNode?.insertBefore(blurbEl, gridEl);
+    }
+    blurbEl.innerHTML = `<p>${esc(text)}</p>`;
+  }
+
+  function renderPenaltyAdvantageChanceGrid(analysis) {
+    const gridEl = document.getElementById('penaltyAdvantageChanceGrid');
+    if (!gridEl) return;
+    ensureAnalysisBlurb(gridEl, 'penaltyAdvantageChanceBlurb', 'Given a 2 minute continuous stretch of time with an advantage, what is the chance the team with the advantage scores? The following scores are an average of all the possible definitions of the end of a penalty:');
+    const rows = Array.isArray(analysis?.advantage_scoring?.rows) ? analysis.advantage_scoring.rows : [];
+    if (!rows.length) {
+      gridEl.innerHTML = '<div class="sf-empty-state">No advantage-size scoring summary is available in this build.</div>';
+      return;
+    }
+    const defaultKey = 'box_exit_plus5';
+    const defaultMetric = PENALTY_END_RATE_KEYS[defaultKey];
+    const maxChance = Math.max(0.0001, ...rows.map((row) => Number(row?.[defaultMetric.chance] || 0)));
+    gridEl.innerHTML = rows.map((row) => `
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">${esc(row.label || '')}</div>
+        <div class="sf-analysis-impact-value">${esc(formatPct(row?.[PENALTY_END_RATE_KEYS[defaultKey].chance], 1))}</div>
+        <div class="sf-analysis-impact-subvalue">Chance of at least 1 goal in a hypothetical 2:00 at the observed scoring rate</div>
+        <div class="sf-analysis-impact-meter"><span class="sf-analysis-impact-meter-fill" style="width:${(100 * Number(row?.[defaultMetric.chance] || 0) / maxChance).toFixed(1)}%; background:${PENALTY_COLORS.primary};"></span></div>
+        <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">Exact segments</span><strong class="sf-analysis-impact-statvalue">${Number(row.opportunities || 0).toLocaleString()}</strong></div>
+        <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">Exact advantage minutes</span><strong class="sf-analysis-impact-statvalue">${esc(formatFixed(row.pp_minutes, 1))}</strong></div>
+        <div class="sf-analysis-impact-note">${esc(row.state_examples || '')}</div>
+        <div class="sf-analysis-impact-note"><strong>Box Exit + 5s rate:</strong> ${esc(formatFixed(row?.[PENALTY_END_RATE_KEYS[defaultKey].rate], 3))} goals/min</div>
+        ${Object.values(PENALTY_END_RATE_KEYS).map((metric) => (
+      `<div class="sf-analysis-impact-note"><strong>${esc(metric.label)}:</strong> ${esc(formatPct(row?.[metric.chance], 1))} over 2:00 • ${esc(formatFixed(row?.[metric.rate], 3))} goals/min • ${Number(row?.[metric.goals] || 0).toLocaleString()} goals in ${esc(formatFixed(row?.[metric.minutes], 1))} min</div>`
+    )).join('')}
+      </article>
+    `).join('');
+  }
+
+  function renderPenaltyStateShotGrid(analysis) {
+    const gridEl = document.getElementById('penaltyStateShotGrid');
+    if (!gridEl) return;
+    ensureAnalysisBlurb(gridEl, 'penaltyStateShotBlurb', 'Using only the precise time for each game state over the course of 2 minutes, what is the chance of a team scoring?');
+    const rows = Array.isArray(analysis?.state_shot_context?.rows) ? analysis.state_shot_context.rows : [];
+    if (!rows.length) {
+      gridEl.innerHTML = '<div class="sf-empty-state">No shot-state scoring context is available in this build.</div>';
+      return;
+    }
+    const maxChance = Math.max(0.0001, ...rows.map((row) => Number(row?.two_minute_scoring_chance || 0)));
+    gridEl.innerHTML = rows.map((row) => `
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">${esc(row.state || '')}</div>
+        <div class="sf-analysis-impact-value">${esc(formatPct(row.two_minute_scoring_chance, 1))}</div>
+        <div class="sf-analysis-impact-subvalue">Scoring chance over 2:00 at this game-state scoring rate</div>
+        <div class="sf-analysis-impact-meter"><span class="sf-analysis-impact-meter-fill" style="width:${(100 * Number(row?.two_minute_scoring_chance || 0) / maxChance).toFixed(1)}%; background:${PENALTY_COLORS.primary};"></span></div>
+        <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">Goals</span><strong class="sf-analysis-impact-statvalue">${Number(row.goals || 0).toLocaleString()}</strong></div>
+        <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">State minutes</span><strong class="sf-analysis-impact-statvalue">${esc(formatFixed(row.minutes, 1))}</strong></div>
+        <div class="sf-analysis-impact-note"><strong>Rate:</strong> ${esc(formatFixed(row.goals_per_minute, 3))} goals/min</div>
+      </article>
+    `).join('');
+  }
+
+  function renderPenaltyPlayerScatterChart(analysis, group, options = {}) {
+    const svg = document.getElementById('penaltyPlayerScatterChart');
+    if (!svg) return;
+    const rows = Array.isArray(analysis?.player_scatter?.rows) ? analysis.player_scatter.rows : [];
+    const playerQuery = normalizeText(options.playerQuery || '');
+    const teamQuery = normalizeText(options.teamQuery || '');
+    const filtered = rows.filter((row) => {
+      if (group === 'ALL') return true;
+      return String(row?.position_group || '') === group;
+    });
+    if (!filtered.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">No player penalty rows match the current filter.</text>';
+      return;
+    }
+
+    const width = 760;
+    const height = 420;
+    const padding = { top: 26, right: 28, bottom: 56, left: 62 };
+    const domainMax = Math.max(
+      0.2,
+      ...filtered.map((row) => Math.max(Number(row?.taken_per60 || 0), Number(row?.drawn_per60 || 0))),
+    ) * 1.08;
+    const xAt = (value) => padding.left + ((width - padding.left - padding.right) * Number(value || 0)) / domainMax;
+    const yAt = (value) => (height - padding.bottom) - ((height - padding.top - padding.bottom) * Number(value || 0)) / domainMax;
+    const ticks = axisTickValues([0, domainMax], 5);
+
+    const grid = ticks.map((tick) => {
+      const x = xAt(tick);
+      const y = yAt(tick);
+      return `
+        <line x1="${padding.left}" y1="${y.toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${y.toFixed(2)}" stroke="#dce8ed" stroke-width="1" />
+        <line x1="${x.toFixed(2)}" y1="${padding.top}" x2="${x.toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#dce8ed" stroke-width="1" />
+        <text x="${x.toFixed(2)}" y="${(height - padding.bottom + 18).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">${esc(formatFixed(tick, 2))}</text>
+        <text x="${(padding.left - 8).toFixed(2)}" y="${(y + 4).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">${esc(formatFixed(tick, 2))}</text>
+      `;
+    }).join('');
+
+    const diagonal = `<line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${padding.top}" stroke="#8fa1a9" stroke-width="1.4" stroke-dasharray="6 5" />`;
+    const matchesLabelSearch = (row) => {
+      const playerMatch = playerQuery && normalizeText(row?.player_name || '').includes(playerQuery);
+      const teamMatch = teamQuery && normalizeText(row?.team || '').includes(teamQuery);
+      return Boolean(playerMatch || teamMatch);
+    };
+    const points = filtered.map((row) => {
+      const x = xAt(row.taken_per60);
+      const y = yAt(row.drawn_per60);
+      const isLabeled = matchesLabelSearch(row);
+      const color = Number(row.net_per60 || 0) >= 0 ? PENALTY_COLORS.positive : PENALTY_COLORS.negative;
+      const radius = isLabeled ? 5.4 : 3.2;
+      const tooltip = `${row.player_name} (${row.team} ${row.position}) | Taken ${formatFixed(row.taken_per60, 2)}/60 | Drawn ${formatFixed(row.drawn_per60, 2)}/60 | Net ${formatSignedFixed(row.net_per60, 2)} | TOI ${formatFixed(row.toi_min, 0)} min`;
+      return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${radius}" fill="${color}" fill-opacity="${isLabeled ? 0.95 : 0.72}" stroke="${isLabeled ? '#1c2b25' : 'none'}" stroke-width="1.2"><title>${esc(tooltip)}</title></circle>`;
+    }).join('');
+
+    const labels = filtered
+      .filter((row) => matchesLabelSearch(row))
+      .sort((a, b) => {
+        const teamCmp = String(a?.team || '').localeCompare(String(b?.team || ''));
+        if (teamCmp !== 0) return teamCmp;
+        return String(a?.player_name || '').localeCompare(String(b?.player_name || ''));
+      })
+      .map((row, idx) => {
+        const x = xAt(row.taken_per60);
+        const y = yAt(row.drawn_per60);
+        const direction = idx % 2 === 0 ? 1 : -1;
+        const dx = direction > 0 ? 8 : -8;
+        const dy = ((idx % 3) - 1) * 12 - 8;
+        const anchor = direction > 0 ? 'start' : 'end';
+        return `<text x="${(x + dx).toFixed(2)}" y="${(y + dy).toFixed(2)}" text-anchor="${anchor}" font-size="11" fill="#29453b">${esc(row.player_name)}</text>`;
+      }).join('');
+
+    svg.innerHTML = `
+      <rect x="0" y="0" width="${width}" height="${height}" rx="16" ry="16" fill="#fbfeff" stroke="#dbe7ed" />
+      ${grid}
+      ${diagonal}
+      <line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      ${points}
+      ${labels}
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Penalties taken per 60 minutes</text>
+      <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Penalties drawn per 60 minutes</text>
+      <text x="${(width - padding.right - 6).toFixed(2)}" y="${(padding.top + 12).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Above the dashed line = net positive</text>
+    `;
+  }
+
+  function renderPenaltyTeamChart(analysis) {
+    const svg = document.getElementById('penaltyTeamChart');
+    if (!svg) return;
+    const rows = Array.isArray(analysis?.team_differential?.rows) ? analysis.team_differential.rows.slice(0, 32) : [];
+    if (!rows.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">Team penalty differential data is not available in this build.</text>';
+      return;
+    }
+
+    const width = 920;
+    const rowHeight = 30;
+    const rowGap = 6;
+    const barRows = rows.slice().sort((a, b) => Number(b.minute_differential_per_game || 0) - Number(a.minute_differential_per_game || 0));
+    const height = 116 + (barRows.length * (rowHeight + rowGap));
+    const padding = { top: 58, right: 112, bottom: 46, left: 192 };
+    const maxAbs = Math.max(0.2, ...barRows.map((row) => Math.abs(Number(row.minute_differential_per_game || 0)))) * 1.08;
+    const centerX = width / 2;
+    const scale = (width - padding.left - padding.right) / (maxAbs * 2);
+    const ticks = axisTickValues([-maxAbs, maxAbs], 7);
+    const grid = ticks.map((tick) => {
+      const x = centerX + (tick * scale);
+      return `<line x1="${x.toFixed(2)}" y1="${padding.top}" x2="${x.toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#e4edf1" stroke-width="1" />`;
+    }).join('');
+    const tickLabels = ticks.map((tick) => {
+      const x = centerX + (tick * scale);
+      return `<text x="${x.toFixed(2)}" y="${(height - padding.bottom + 20).toFixed(2)}" text-anchor="middle" font-size="11" fill="#5a6f77">${esc(formatFixed(tick, 2))}</text>`;
+    }).join('');
+    const legendX = width - padding.right - 180;
+    const legend = `
+      <g>
+        <rect x="${legendX}" y="18" width="18" height="8" fill="${PENALTY_COLORS.positive}" />
+        <text x="${legendX + 24}" y="25" font-size="11" fill="#51656e">More awarded PP time earned</text>
+        <rect x="${legendX}" y="34" width="18" height="8" fill="${PENALTY_COLORS.negative}" />
+        <text x="${legendX + 24}" y="41" font-size="11" fill="#51656e">More awarded PP time surrendered</text>
+      </g>
+    `;
+
+    const bars = barRows.map((row, idx) => {
+      const y = padding.top + (idx * (rowHeight + rowGap));
+      const value = Number(row.minute_differential_per_game || 0);
+      const widthPx = Math.abs(value) * scale;
+      const x = value >= 0 ? centerX : centerX - widthPx;
+      const color = value >= 0 ? PENALTY_COLORS.positive : PENALTY_COLORS.negative;
+      const ppPerGame = Number(row.power_play_minutes_per_game || 0);
+      const pkPerGame = Number(row.short_handed_minutes_per_game || 0);
+      const meta = `PP ${formatFixed(ppPerGame, 2)}m/G • PK ${formatFixed(pkPerGame, 2)}m/G`;
+      return `
+        <line x1="${padding.left}" y1="${(y + 20).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(y + 20).toFixed(2)}" stroke="#eff4f6" stroke-width="1" />
+        <text x="${(padding.left - 16).toFixed(2)}" y="${(y + 2).toFixed(2)}" text-anchor="end" font-size="12" fill="#22353c" font-family="LatoWebSemibold, LatoWeb, sans-serif">${esc(row.team || '')}</text>
+        <text x="${(padding.left - 16).toFixed(2)}" y="${(y + 16).toFixed(2)}" text-anchor="end" font-size="9.7" fill="#677981">${esc(meta)}</text>
+        <rect x="${x.toFixed(2)}" y="${(y - 7).toFixed(2)}" width="${widthPx.toFixed(2)}" height="14" fill="${color}">
+          <title>${esc(`${row.team}: ${formatSignedFixed(value, 2)} awarded PP minutes per game | awarded PP ${formatFixed(row.power_play_minutes_per_game, 2)} | awarded PK-against ${formatFixed(row.short_handed_minutes_per_game, 2)}`)}</title>
+        </rect>
+        <text x="${(width - padding.right + 12).toFixed(2)}" y="${(y + 2).toFixed(2)}" font-size="12" fill="#22353c" font-family="LatoWebSemibold, LatoWeb, sans-serif">${esc(formatSignedFixed(value, 2))}</text>
+        <text x="${(width - padding.right + 12).toFixed(2)}" y="${(y + 16).toFixed(2)}" font-size="10.2" fill="#677981">${Number(row.games_played || 0).toLocaleString()} GP</text>
+      `;
+    }).join('');
+
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.innerHTML = `
+      ${legend}
+      ${grid}
+      <line x1="${centerX.toFixed(2)}" y1="${padding.top}" x2="${centerX.toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#7f9198" stroke-width="1.1" />
+      ${bars}
+      ${tickLabels}
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#5a6f77">Awarded power-play minutes earned minus surrendered per game</text>
+    `;
+  }
+
+  function renderPenaltyOfficialsTable(analysis) {
+    const tableWrap = document.getElementById('penaltyOfficialsTable');
+    const copyEl = document.getElementById('penaltyOfficialsCopy');
+    if (!tableWrap || !copyEl) return;
+    const officials = analysis?.officials || {};
+    const rows = Array.isArray(officials?.rows) ? officials.rows : [];
+    const note = String(officials?.note || '').trim();
+    copyEl.innerHTML = `<p>${esc(note || 'Officials are summarized at the game level because the public NHL feed does not identify which referee made each individual call.')}</p>`;
+    if (!rows.length) {
+      tableWrap.innerHTML = '<div class="sf-empty-state">No official-level penalty summary is available.</div>';
+      return;
+    }
+    tableWrap.innerHTML = `
+      <table class="sf-table">
+        <thead>
+          <tr>
+            <th>Referee</th>
+            <th>Games</th>
+            <th>All Pens/G</th>
+            <th>All Minors/G</th>
+            <th>Non-Off Minors/G</th>
+            <th>Fight Pens/G</th>
+            <th>Away - Home Pens/G</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => `
+            <tr>
+              <td>${esc(row.name || row.official_id || '')}</td>
+              <td>${Number(row.games_worked || 0).toLocaleString()}</td>
+              <td>${esc(formatFixed(row.penalties_per_game, 2))}</td>
+              <td>${esc(formatFixed(row.minor_penalties_per_game, 2))}</td>
+              <td>${esc(formatFixed(row.non_offsetting_minor_penalties_per_game, 2))}</td>
+              <td>${esc(formatFixed(row.fighting_penalties_per_game, 2))}</td>
+              <td class="${Number(row.away_minus_home_penalties_per_game || 0) >= 0 ? 'pos' : 'neg'}">${esc(formatSignedFixed(row.away_minus_home_penalties_per_game, 2))}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function renderPenaltySection() {
+    const introEl = document.getElementById('penaltyIntro');
+    const cardsEl = document.getElementById('penaltyImpactCards');
+    const notesEl = document.getElementById('penaltyNotes');
+    const metricSelect = document.getElementById('penaltyTypeMetricSelect');
+    const groupSelect = document.getElementById('penaltyPlayerGroupSelect');
+    const playerSearchInput = document.getElementById('penaltyPlayerSearch');
+    const teamSearchInput = document.getElementById('penaltyPlayerTeamSearch');
+    const analysis = state.analysisPayload?.penalty_analysis || {};
+    const summary = analysis?.summary || {};
+    const impactCards = Array.isArray(analysis?.impact_cards) ? analysis.impact_cards : [];
+    const notes = Array.isArray(analysis?.notes) ? analysis.notes : [];
+
+    if (!impactCards.length) {
+      const errorMessage = String(analysis?.error_message || '').trim();
+      if (introEl) introEl.innerHTML = `<p>${esc(errorMessage || 'Penalty analysis is not available in this build yet.')}</p>`;
+      if (cardsEl) cardsEl.innerHTML = '<div class="sf-empty-state">No penalty-analysis payload is available.</div>';
+      if (notesEl) notesEl.innerHTML = '';
+      renderPenaltyAdvantageChanceGrid(analysis);
+      renderPenaltyStateShotGrid(analysis);
+      renderPenaltyTypeImpactChart(analysis, 'goal_end_goals_per_two_minutes');
+      renderPenaltyTypeImpactLegend();
+      renderPenaltyPlayerScatterChart(analysis, 'F', {
+        playerQuery: String(playerSearchInput?.value || ''),
+        teamQuery: String(teamSearchInput?.value || ''),
+      });
+      renderPenaltyTeamChart(analysis);
+      renderPenaltyOfficialsTable(analysis);
+      return;
+    }
+
+    const games = Number(summary?.games || 0);
+    const advantagePenalties = Number(summary?.advantage_penalties || 0);
+    const goalEndCard = impactCards.find((card) => String(card?.key || '') === 'goal_end') || {};
+    const changeEndCard = impactCards.find((card) => String(card?.key || '') === 'change_end') || {};
+    const goalEndGoals = Number(goalEndCard?.goals ?? summary?.official_pp_goals ?? 0);
+    const goalEndGoalShare = Number(goalEndCard?.share ?? summary?.official_pp_goal_share ?? 0);
+    const goalEndMinutes = Number(goalEndCard?.minutes || 0);
+    const goalEndTimeShare = Number(goalEndCard?.time_share || 0);
+    const changeEndGoals = Number(changeEndCard?.goals || 0);
+    const changeEndGoalShare = Number(changeEndCard?.share || 0);
+    const changeEndTimeShare = Number(changeEndCard?.time_share || 0);
+    const averageTeamPpTimeShare = goalEndTimeShare / 2;
+    const averageTeamPkTimeShare = goalEndTimeShare / 2;
+
+    if (introEl) {
+      introEl.innerHTML = `
+        <p>In the <strong>${games.toLocaleString()} games in the current season</strong> there have been <strong>${advantagePenalties.toLocaleString()} penalties</strong> that created a man-advantage opportunity, leading to <strong>${goalEndGoals.toLocaleString()} goals</strong>. In total there have been <strong>${esc(formatFixed(goalEndMinutes, 1))} minutes</strong> on the power play corresponding to <strong>${esc(formatPct(goalEndTimeShare, 1))}</strong> of total game time in the season. This means that <strong>${esc(formatPct(goalEndGoalShare, 1))}</strong> of all the goals in the season come from <strong>${esc(formatPct(goalEndTimeShare, 1))}</strong> of the game time.</p>
+        <p>For individual teams this corresponds to an average of <strong>${esc(formatPct(goalEndGoalShare, 1))}</strong> of goals for in <strong>${esc(formatPct(averageTeamPpTimeShare, 1))}</strong> of game time on the power play and <strong>${esc(formatPct(goalEndGoalShare, 1))}</strong> of goals against in <strong>${esc(formatPct(averageTeamPkTimeShare, 1))}</strong> of game time on the penalty kill.</p>
+        <p>When you look deeper into the penalty to consider when the actual advantage of the power play might end these numbers can be slightly different. For example, if we consider the advantage to continue until both of the defencemen on the ice for the penalty kill have the opportunity to change, we get <strong>${changeEndGoals.toLocaleString()} goals</strong>, or <strong>${esc(formatPct(changeEndGoalShare, 1))}</strong> of all goals, from <strong>${esc(formatPct(changeEndTimeShare, 1))}</strong> of the total game time.</p>
+        <p>Overall roughly 1/5 of all goals this season are happening due to power-play advantages.</p>
+      `;
+    }
+
+    if (cardsEl) {
+      cardsEl.innerHTML = `
+        ${impactCards.map((card) => `
+        <article class="sf-analysis-impact-card">
+          <div class="sf-analysis-impact-label">${esc(card.label || '')}</div>
+          <div class="sf-analysis-impact-value">${esc(formatPct(card.share, 1))}</div>
+          <div class="sf-analysis-impact-subvalue">${Number(card.goals || 0).toLocaleString()} of ${Number(card.total_goals || 0).toLocaleString()} goals</div>
+          <div class="sf-analysis-impact-note"><strong>Time covered:</strong> ${esc(formatFixed(card.minutes, 1))} min • ${esc(formatPct(card.time_share, 1))} of total game time</div>
+          ${card.leverage_share == null || Number(card.total_leverage || 0) <= 0
+          ? '<div class="sf-analysis-impact-note"><strong>Leverage-weighted share:</strong> unavailable in this database build</div>'
+          : `<div class="sf-analysis-impact-note"><strong>Leverage-weighted share:</strong> ${esc(formatPct(card.leverage_share, 1))}</div>
+               <div class="sf-analysis-impact-note"><strong>Counted leverage:</strong> ${esc(formatFixed(card.leverage, 3))} of ${esc(formatFixed(card.total_leverage, 3))} total${Number(card.goals || 0) > 0 && card.avg_leverage_per_goal != null ? ` • avg ${esc(formatFixed(card.avg_leverage_per_goal, 3))} per goal` : ''}</div>`
+        }
+          <div class="sf-analysis-impact-note">${esc(card.description || '')}</div>
+        </article>
+      `).join('')}
+      `;
+    }
+
+    if (metricSelect && !metricSelect.dataset.bound) {
+      metricSelect.innerHTML = Object.entries(PENALTY_TYPE_METRICS).map(([value, label]) => (
+        `<option value="${esc(value)}">${esc(label)}</option>`
+      )).join('');
+      metricSelect.addEventListener('change', () => {
+        renderPenaltyTypeImpactChart(analysis, 'goal_end_goals_per_two_minutes');
+      });
+      metricSelect.dataset.bound = '1';
+    }
+    if (metricSelect) {
+      metricSelect.value = 'goal_end_goals_per_two_minutes';
+    }
+
+    if (groupSelect && !groupSelect.dataset.bound) {
+      groupSelect.addEventListener('change', () => {
+        renderPenaltyPlayerScatterChart(analysis, String(groupSelect.value || 'F'), {
+          playerQuery: String(playerSearchInput?.value || ''),
+          teamQuery: String(teamSearchInput?.value || ''),
+        });
+      });
+      groupSelect.dataset.bound = '1';
+    }
+    if (groupSelect) {
+      groupSelect.value = String(analysis?.player_scatter?.default_group || 'F');
+    }
+
+    const rerenderPenaltyScatter = () => {
+      renderPenaltyPlayerScatterChart(
+        analysis,
+        String(groupSelect?.value || analysis?.player_scatter?.default_group || 'F'),
+        {
+          playerQuery: String(playerSearchInput?.value || ''),
+          teamQuery: String(teamSearchInput?.value || ''),
+        },
+      );
+    };
+
+    if (playerSearchInput && !playerSearchInput.dataset.bound) {
+      playerSearchInput.addEventListener('input', rerenderPenaltyScatter);
+      playerSearchInput.dataset.bound = '1';
+    }
+
+    if (teamSearchInput && !teamSearchInput.dataset.bound) {
+      teamSearchInput.addEventListener('input', rerenderPenaltyScatter);
+      teamSearchInput.dataset.bound = '1';
+    }
+
+    if (notesEl) {
+      notesEl.innerHTML = notes.map((note) => `<li>${esc(note)}</li>`).join('');
+    }
+
+    renderPenaltyAdvantageChanceGrid(analysis);
+    renderPenaltyStateShotGrid(analysis);
+    renderPenaltyTypeImpactChart(
+      analysis,
+      'goal_end_goals_per_two_minutes',
+    );
+    renderPenaltyTypeImpactLegend();
+    rerenderPenaltyScatter();
+    renderPenaltyTeamChart(analysis);
+    renderPenaltyOfficialsTable(analysis);
+  }
+
   async function init() {
     const payload = await fetchJson('data/analysis.json');
     state.suppressUrlSync = true;
@@ -581,6 +1156,7 @@
       document.getElementById('compareTeamB')?.addEventListener('change', refreshTeamCards);
     }
 
+    renderPenaltySection();
     initializeXgPanel();
     setupSectionNavigation(state.initialUrlState.section);
     state.suppressUrlSync = false;
@@ -594,6 +1170,8 @@
       if (teamGrid) teamGrid.innerHTML = `<div class="sf-empty-state">${esc(error.message)}</div>`;
       const svg = document.getElementById('xgRink');
       if (svg) svg.innerHTML = `${state.baseRinkMarkup}<text x="0" y="0" text-anchor="middle" font-size="4.5" fill="#b13a30">${esc(error.message)}</text>`;
+      const penaltySvg = document.getElementById('penaltyTypeImpactChart');
+      if (penaltySvg) penaltySvg.innerHTML = `<text x="380" y="180" text-anchor="middle" font-size="16" fill="#b13a30">${esc(error.message)}</text>`;
     });
   });
 })();

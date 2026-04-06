@@ -20,11 +20,11 @@
           <img class="name_pic" src="imgs/logo-light.svg" alt="Net Outcomes logo" />
           <div class="name">Net Outcomes</div>
         </a>
-        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link is-active" href="/analysis.html">Analysis</a></nav>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link" href="/prediction-review.html">Review</a><a class="sf-page-nav-link is-active" href="/analysis.html">Analysis</a></nav>
       </div>
       <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
       <h1 class="sf-page-title">Analysis</h1>
-      <p class="sf-page-lede">The tools that need more space live here: lineup fit cards, the xG shot map, and a starting structure for deeper documented experiments.</p>
+      <p class="sf-page-lede">Larger analysis work: lineup suggestions, penalty analysis, 5v5 xG shot map, and experiments.</p>
       <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
     </header>
     <main class="sf-main">
@@ -32,6 +32,7 @@
       <nav class="sf-section-nav sf-section-nav--page" id="analysisSectionNav">
         <button class="sf-section-btn is-active" data-section-target="overviewPanel">Overview</button>
         <button class="sf-section-btn" data-section-target="teamPanel">Line Analysis</button>
+        <button class="sf-section-btn" data-section-target="penaltyPanel">Penalties</button>
         <button class="sf-section-btn" data-section-target="xgPanel">Team xG</button>
       </nav>
 
@@ -47,6 +48,10 @@
           <article class="sf-analysis-card">
             <h3>Team xG Visualizer</h3>
             <p>Inspect shot locations, expected goals, and goal overlays team by team with a threshold slider so heavier datasets stay usable.</p>
+          </article>
+          <article class="sf-analysis-card">
+            <h3>Penalty Impact Lab</h3>
+            <p>Measure how often penalties turn into goals, compare four different definitions of when the power play really ends, and look at taken-vs-drawn profiles by player role.</p>
           </article>
           <article class="sf-analysis-card">
             <h3>Experiment Notes</h3>
@@ -70,6 +75,76 @@
         </div>
         <div id="teamCompareNote" class="sf-team-compare-note">Search teams normally or select up to two teams to compare side by side.</div>
         <div id="teamGrid" class="sf-team-grid"></div>
+      </section>
+
+      <section class="sf-panel sf-section-panel" id="penaltyPanel">
+        <div class="sf-panel-header">
+          <h2>Penalty Analysis</h2>
+        </div>
+        <div id="penaltyIntro" class="sf-analysis-copy"></div>
+        <div id="penaltyImpactCards" class="sf-analysis-stat-grid"></div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Advantage Size Scoring Chance</h3>
+          </div>
+          <div id="penaltyAdvantageChanceGrid" class="sf-analysis-stat-grid"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>State Scoring Rate Context</h3>
+          </div>
+          <div id="penaltyStateShotGrid" class="sf-analysis-stat-grid"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Penalty Type Impact (Non-Offsetting Only)</h3>
+            <label class="sf-analysis-inline-control">Metric
+              <select id="penaltyTypeMetricSelect"></select>
+            </label>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="penaltyTypeImpactChart" viewBox="0 0 760 360" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+          <div id="penaltyTypeImpactLegend" class="sf-analysis-legend"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Taken vs Drawn (Non-Offsetting Only)</h3>
+            <div class="sf-analysis-subhead-tools">
+              <label class="sf-analysis-inline-control">Group
+                <select id="penaltyPlayerGroupSelect">
+                  <option value="F">Forwards</option>
+                  <option value="D">Defense</option>
+                  <option value="ALL">All Skaters</option>
+                </select>
+              </label>
+              <label class="sf-analysis-inline-control">Label player
+                <input id="penaltyPlayerSearch" type="search" placeholder="Search player" />
+              </label>
+              <label class="sf-analysis-inline-control">Label team
+                <input id="penaltyPlayerTeamSearch" type="search" placeholder="Search team" />
+              </label>
+            </div>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="penaltyPlayerScatterChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Team Penalty Differential (Non-Offsetting Only)</h3>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="penaltyTeamChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Officials</h3>
+          </div>
+          <div id="penaltyOfficialsCopy" class="sf-analysis-copy"></div>
+          <div id="penaltyOfficialsTable" class="sf-table-wrap"></div>
+        </div>
       </section>
 
       <section class="sf-panel sf-section-panel" id="xgPanel">
