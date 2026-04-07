@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-06 22:27 UTC",
-  "last_updated_utc": "2026-04-06 22:27 UTC",
+  "generated_at": "2026-04-07 11:09 UTC",
+  "last_updated_utc": "2026-04-07 11:09 UTC",
   "season_label": "2025-2026",
   "skater_rank_basis": "On-ice and personal statistics are combined into puck-carrying and away-from-the-puck based statistics. Metrics are heavily weighted toward the current season, but use the last 3 seasons to assign certainty. Fits and models are trained solely on data available through the public NHL API. All analysis on this page excludes empty-net goals unless otherwise specified. Metrics are also shrunk based on certainty and stability, so it may take several games for a player to be appropriately ranked.",
   "goalie_rank_basis": "Shot-stopping and save-based statistics are combined into goalie rankings. Metrics are heavily weighted toward the current season, but use the last 3 seasons to assign certainty. Fits and models are trained solely on data available through the public NHL API. All analysis on this page excludes empty-net goals unless otherwise specified. Metrics are also shrunk based on certainty and stability, so it may take several games for a goalie to be appropriately ranked. Goalies need at least min(10, ceil(10% of an 82-game season)) starts to qualify.",

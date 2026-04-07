@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-06 22:27 UTC",
-  "last_updated_utc": "2026-04-06 22:27 UTC",
+  "generated_at": "2026-04-07 11:09 UTC",
+  "last_updated_utc": "2026-04-07 11:09 UTC",
   "season_label": "2025-2026",
   "use_legacy_lineup_cards": false,
   "legacy_lineup_cards_html": "",
@@ -50023,42 +50023,132 @@
           "minutes": 201.3,
           "goals": 81,
           "goals_per_minute": 0.4023,
-          "two_minute_scoring_chance": 0.5527
+          "two_minute_scoring_chance": 0.5527,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": true,
+          "is_penalty_disadvantage_context": false
         },
         {
           "state": "5v4",
           "minutes": 11003.8,
           "goals": 1340,
           "goals_per_minute": 0.1218,
-          "two_minute_scoring_chance": 0.2162
+          "two_minute_scoring_chance": 0.2162,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": true,
+          "is_penalty_disadvantage_context": false
         },
         {
           "state": "4v3",
           "minutes": 144.5,
           "goals": 26,
           "goals_per_minute": 0.1799,
-          "two_minute_scoring_chance": 0.3022
+          "two_minute_scoring_chance": 0.3022,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": true,
+          "is_penalty_disadvantage_context": false
+        },
+        {
+          "state": "3v3",
+          "minutes": 927.5,
+          "goals": 90,
+          "goals_per_minute": 0.097,
+          "two_minute_scoring_chance": 0.1764,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": false,
+          "is_penalty_disadvantage_context": false
+        },
+        {
+          "state": "4v4",
+          "minutes": 1898.9,
+          "goals": 73,
+          "goals_per_minute": 0.0384,
+          "two_minute_scoring_chance": 0.074,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": false,
+          "is_penalty_disadvantage_context": false
         },
         {
           "state": "5v5",
           "minutes": 116367.0,
-          "goals": 4905,
+          "goals": 4912,
           "goals_per_minute": 0.0422,
-          "two_minute_scoring_chance": 0.0808
+          "two_minute_scoring_chance": 0.081,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": false,
+          "is_penalty_disadvantage_context": false
+        },
+        {
+          "state": "4v5",
+          "minutes": 11003.8,
+          "goals": 159,
+          "goals_per_minute": 0.0144,
+          "two_minute_scoring_chance": 0.0285,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": false,
+          "is_penalty_disadvantage_context": true
+        },
+        {
+          "state": "4v6",
+          "minutes": 137.1,
+          "goals": 26,
+          "goals_per_minute": 0.1896,
+          "two_minute_scoring_chance": 0.3156,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": false,
+          "is_penalty_disadvantage_context": true
+        },
+        {
+          "state": "5v6",
+          "minutes": 1638.0,
+          "goals": 433,
+          "goals_per_minute": 0.2643,
+          "two_minute_scoring_chance": 0.4106,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": false,
+          "is_penalty_disadvantage_context": true
         },
         {
           "state": "6v4",
           "minutes": 137.1,
           "goals": 22,
           "goals_per_minute": 0.1605,
-          "two_minute_scoring_chance": 0.2745
+          "two_minute_scoring_chance": 0.2745,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": true,
+          "is_penalty_disadvantage_context": false
         },
         {
           "state": "6v5",
           "minutes": 1638.0,
           "goals": 169,
           "goals_per_minute": 0.1032,
-          "two_minute_scoring_chance": 0.1865
+          "two_minute_scoring_chance": 0.1865,
+          "attempts": null,
+          "is_penalty_shot": false,
+          "is_penalty_advantage_context": true,
+          "is_penalty_disadvantage_context": false
+        },
+        {
+          "state": "Penalty Shot",
+          "minutes": 0.0,
+          "goals": 6,
+          "goals_per_minute": null,
+          "two_minute_scoring_chance": 0.1935,
+          "attempts": 31,
+          "is_penalty_shot": true,
+          "is_penalty_advantage_context": true,
+          "is_penalty_disadvantage_context": false
         }
       ]
     },

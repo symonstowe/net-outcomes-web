@@ -56,6 +56,11 @@
       label: 'First PK Change',
     },
   };
+  const PENALTY_STATE_SORT_LABELS = {
+    chance: 'Scoring Chance',
+    minutes: 'Game Time',
+    goals: 'Total Goals',
+  };
 
   const state = {
     teams: [],
@@ -759,13 +764,12 @@
     }
     const defaultKey = 'box_exit_plus5';
     const defaultMetric = PENALTY_END_RATE_KEYS[defaultKey];
-    const maxChance = Math.max(0.0001, ...rows.map((row) => Number(row?.[defaultMetric.chance] || 0)));
     gridEl.innerHTML = rows.map((row) => `
       <article class="sf-analysis-impact-card">
         <div class="sf-analysis-impact-label">${esc(row.label || '')}</div>
         <div class="sf-analysis-impact-value">${esc(formatPct(row?.[PENALTY_END_RATE_KEYS[defaultKey].chance], 1))}</div>
         <div class="sf-analysis-impact-subvalue">Chance of at least 1 goal in a hypothetical 2:00 at the observed scoring rate</div>
-        <div class="sf-analysis-impact-meter"><span class="sf-analysis-impact-meter-fill" style="width:${(100 * Number(row?.[defaultMetric.chance] || 0) / maxChance).toFixed(1)}%; background:${PENALTY_COLORS.primary};"></span></div>
+        <div class="sf-analysis-impact-meter"><span class="sf-analysis-impact-meter-fill" style="width:${Math.max(0, Math.min(100, 100 * Number(row?.[defaultMetric.chance] || 0))).toFixed(1)}%; background:${PENALTY_COLORS.primary};"></span></div>
         <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">Exact segments</span><strong class="sf-analysis-impact-statvalue">${Number(row.opportunities || 0).toLocaleString()}</strong></div>
         <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">Exact advantage minutes</span><strong class="sf-analysis-impact-statvalue">${esc(formatFixed(row.pp_minutes, 1))}</strong></div>
         <div class="sf-analysis-impact-note">${esc(row.state_examples || '')}</div>
@@ -777,27 +781,56 @@
     `).join('');
   }
 
-  function renderPenaltyStateShotGrid(analysis) {
+  function renderPenaltyStateShotGrid(analysis, sortBy = 'chance') {
     const gridEl = document.getElementById('penaltyStateShotGrid');
     if (!gridEl) return;
-    ensureAnalysisBlurb(gridEl, 'penaltyStateShotBlurb', 'Using only the precise time for each game state over the course of 2 minutes, what is the chance of a team scoring?');
+    ensureAnalysisBlurb(gridEl, 'penaltyStateShotBlurb', 'Using only the precise time for each game state over the course of 2 minutes, what is the chance of a team scoring? This includes the short-handed contrast states, 3v3, 4v4, and penalty shots when they occur; pulled-goalie states include empty-net goals.');
     const rows = Array.isArray(analysis?.state_shot_context?.rows) ? analysis.state_shot_context.rows : [];
     if (!rows.length) {
       gridEl.innerHTML = '<div class="sf-empty-state">No shot-state scoring context is available in this build.</div>';
       return;
     }
-    const maxChance = Math.max(0.0001, ...rows.map((row) => Number(row?.two_minute_scoring_chance || 0)));
-    gridEl.innerHTML = rows.map((row) => `
-      <article class="sf-analysis-impact-card">
+    const stateSort = PENALTY_STATE_SORT_LABELS[String(sortBy || 'chance')] ? String(sortBy) : 'chance';
+    const sortedRows = [...rows].sort((a, b) => {
+      const scoreA = stateSort === 'minutes'
+        ? Number(a?.minutes || 0)
+        : stateSort === 'goals'
+          ? Number(a?.goals || 0)
+          : Number(a?.two_minute_scoring_chance || 0);
+      const scoreB = stateSort === 'minutes'
+        ? Number(b?.minutes || 0)
+        : stateSort === 'goals'
+          ? Number(b?.goals || 0)
+          : Number(b?.two_minute_scoring_chance || 0);
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return String(a?.state || '').localeCompare(String(b?.state || ''));
+    });
+    gridEl.innerHTML = sortedRows.map((row) => {
+      const isPenaltyShot = Boolean(row?.is_penalty_shot);
+      const isAdvantageState = Boolean(row?.is_penalty_advantage_context);
+      const isDisadvantageState = Boolean(row?.is_penalty_disadvantage_context);
+      const displayChance = Number(row?.two_minute_scoring_chance || 0);
+      const meterColor = isDisadvantageState ? PENALTY_COLORS.negative : PENALTY_COLORS.primary;
+      const cardClasses = ['sf-analysis-impact-card'];
+      if (isAdvantageState) cardClasses.push('sf-analysis-impact-card--penalty-emphasis');
+      const statLineTwo = isPenaltyShot
+        ? `<div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">Attempts</span><strong class="sf-analysis-impact-statvalue">${Number(row.attempts || 0).toLocaleString()}</strong></div>`
+        : `<div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">State minutes</span><strong class="sf-analysis-impact-statvalue">${esc(formatFixed(row.minutes, 1))}</strong></div>`;
+      const noteLine = isPenaltyShot
+        ? `<div class="sf-analysis-impact-note"><strong>Conversion:</strong> ${esc(formatPct(displayChance, 1))} on penalty-shot attempts</div>`
+        : `<div class="sf-analysis-impact-note"><strong>Rate:</strong> ${esc(formatFixed(row.goals_per_minute, 3))} goals/min</div>`;
+      return `
+      <article class="${cardClasses.join(' ')}">
         <div class="sf-analysis-impact-label">${esc(row.state || '')}</div>
-        <div class="sf-analysis-impact-value">${esc(formatPct(row.two_minute_scoring_chance, 1))}</div>
-        <div class="sf-analysis-impact-subvalue">Scoring chance over 2:00 at this game-state scoring rate</div>
-        <div class="sf-analysis-impact-meter"><span class="sf-analysis-impact-meter-fill" style="width:${(100 * Number(row?.two_minute_scoring_chance || 0) / maxChance).toFixed(1)}%; background:${PENALTY_COLORS.primary};"></span></div>
+        <div class="sf-analysis-impact-value">${esc(formatPct(displayChance, 1))}</div>
+        <div class="sf-analysis-impact-subvalue">${isPenaltyShot ? 'Scoring chance on a penalty-shot attempt' : 'Scoring chance over 2:00 at this game-state scoring rate'}</div>
+        <div class="sf-analysis-impact-meter"><span class="sf-analysis-impact-meter-fill" style="width:${Math.max(0, Math.min(100, 100 * displayChance)).toFixed(1)}%; background:${meterColor};"></span></div>
         <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">Goals</span><strong class="sf-analysis-impact-statvalue">${Number(row.goals || 0).toLocaleString()}</strong></div>
-        <div class="sf-analysis-impact-statline"><span class="sf-analysis-impact-statlabel">State minutes</span><strong class="sf-analysis-impact-statvalue">${esc(formatFixed(row.minutes, 1))}</strong></div>
-        <div class="sf-analysis-impact-note"><strong>Rate:</strong> ${esc(formatFixed(row.goals_per_minute, 3))} goals/min</div>
+        ${statLineTwo}
+        ${noteLine}
       </article>
-    `).join('');
+    `;
+    }).join('');
   }
 
   function renderPenaltyPlayerScatterChart(analysis, group, options = {}) {
@@ -1000,6 +1033,7 @@
     const cardsEl = document.getElementById('penaltyImpactCards');
     const notesEl = document.getElementById('penaltyNotes');
     const metricSelect = document.getElementById('penaltyTypeMetricSelect');
+    const stateSortSelect = document.getElementById('penaltyStateSortSelect');
     const groupSelect = document.getElementById('penaltyPlayerGroupSelect');
     const playerSearchInput = document.getElementById('penaltyPlayerSearch');
     const teamSearchInput = document.getElementById('penaltyPlayerTeamSearch');
@@ -1014,7 +1048,7 @@
       if (cardsEl) cardsEl.innerHTML = '<div class="sf-empty-state">No penalty-analysis payload is available.</div>';
       if (notesEl) notesEl.innerHTML = '';
       renderPenaltyAdvantageChanceGrid(analysis);
-      renderPenaltyStateShotGrid(analysis);
+      renderPenaltyStateShotGrid(analysis, String(stateSortSelect?.value || 'chance'));
       renderPenaltyTypeImpactChart(analysis, 'goal_end_goals_per_two_minutes');
       renderPenaltyTypeImpactLegend();
       renderPenaltyPlayerScatterChart(analysis, 'F', {
@@ -1045,7 +1079,7 @@
         <p>In the <strong>${games.toLocaleString()} games in the current season</strong> there have been <strong>${advantagePenalties.toLocaleString()} penalties</strong> that created a man-advantage opportunity, leading to <strong>${goalEndGoals.toLocaleString()} goals</strong>. In total there have been <strong>${esc(formatFixed(goalEndMinutes, 1))} minutes</strong> on the power play corresponding to <strong>${esc(formatPct(goalEndTimeShare, 1))}</strong> of total game time in the season. This means that <strong>${esc(formatPct(goalEndGoalShare, 1))}</strong> of all the goals in the season come from <strong>${esc(formatPct(goalEndTimeShare, 1))}</strong> of the game time.</p>
         <p>For individual teams this corresponds to an average of <strong>${esc(formatPct(goalEndGoalShare, 1))}</strong> of goals for in <strong>${esc(formatPct(averageTeamPpTimeShare, 1))}</strong> of game time on the power play and <strong>${esc(formatPct(goalEndGoalShare, 1))}</strong> of goals against in <strong>${esc(formatPct(averageTeamPkTimeShare, 1))}</strong> of game time on the penalty kill.</p>
         <p>When you look deeper into the penalty to consider when the actual advantage of the power play might end these numbers can be slightly different. For example, if we consider the advantage to continue until both of the defencemen on the ice for the penalty kill have the opportunity to change, we get <strong>${changeEndGoals.toLocaleString()} goals</strong>, or <strong>${esc(formatPct(changeEndGoalShare, 1))}</strong> of all goals, from <strong>${esc(formatPct(changeEndTimeShare, 1))}</strong> of the total game time.</p>
-        <p>Overall roughly 1/5 of all goals this season are happening due to power-play advantages.</p>
+        <p>Overall roughly 1/5 of all goals this season are happening due to power-play advantages. The state context cards below break that scoring out across 5v3, 5v4, 4v3, 4v4, 3v3, 5v5, 4v5, 4v6, 5v6, 6v4, 6v5, and penalty shots when they occur.</p>
       `;
     }
 
@@ -1094,6 +1128,16 @@
       groupSelect.value = String(analysis?.player_scatter?.default_group || 'F');
     }
 
+    if (stateSortSelect && !stateSortSelect.dataset.bound) {
+      stateSortSelect.addEventListener('change', () => {
+        renderPenaltyStateShotGrid(analysis, String(stateSortSelect.value || 'chance'));
+      });
+      stateSortSelect.dataset.bound = '1';
+    }
+    if (stateSortSelect) {
+      stateSortSelect.value = 'chance';
+    }
+
     const rerenderPenaltyScatter = () => {
       renderPenaltyPlayerScatterChart(
         analysis,
@@ -1120,7 +1164,7 @@
     }
 
     renderPenaltyAdvantageChanceGrid(analysis);
-    renderPenaltyStateShotGrid(analysis);
+    renderPenaltyStateShotGrid(analysis, String(stateSortSelect?.value || 'chance'));
     renderPenaltyTypeImpactChart(
       analysis,
       'goal_end_goals_per_two_minutes',
