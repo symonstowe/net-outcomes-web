@@ -65,12 +65,21 @@
 
     if (basisEl) basisEl.textContent = String(review?.basis || '');
 
+    const snapshotLabel = review?.snapshot_date
+      ? formatLocalDate(review.snapshot_date)
+      : 'Yesterday';
+    const publishedText = review?.published_at_utc
+      ? `Published ${formatLocalDateTime(review.published_at_utc)}. `
+      : '';
+
     if (
       !review
       || review.status === 'missing_snapshot'
       || review.status === 'empty_snapshot'
-      || review.status === 'pending_results'
-      || Number(review.games_reviewed || 0) <= 0
+      || (
+        Number(review.games_reviewed || 0) <= 0
+        && Number(review.games_in_snapshot || 0) <= 0
+      )
     ) {
       statsEl.innerHTML = '<div class="sf-empty-state">No saved snapshot is available for yesterday yet.</div>';
       if (statusEl) {
@@ -87,10 +96,31 @@
       return;
     }
 
+    if (review.status === 'pending_results' || Number(review.games_reviewed || 0) <= 0) {
+      statsEl.innerHTML = `
+        <div class="sf-stat"><span class="sf-stat-label">Snapshot Day</span><span class="sf-stat-value">${esc(snapshotLabel)}</span></div>
+        <div class="sf-stat"><span class="sf-stat-label">Games Graded</span><span class="sf-stat-value">${Number(review.games_reviewed || 0)} / ${Number(review.games_in_snapshot || 0)}</span></div>
+        <div class="sf-stat"><span class="sf-stat-label">Pending</span><span class="sf-stat-value">${Number(review.games_pending || 0)}</span></div>
+      `;
+      if (statusEl) {
+        statusEl.textContent = review?.error_message
+          || `${publishedText}${Number(review.games_pending || 0)} game(s) from the saved snapshot are still waiting for final scores in the local results database.`;
+      }
+      renderReviewRows(
+        '#predictionReviewBiggestMissesTable',
+        [],
+        'Waiting for final scores for the saved snapshot games.',
+      );
+      renderReviewRows(
+        '#predictionReviewOverconfidentTable',
+        [],
+        'Overconfident misses will appear once results are available.',
+      );
+      renderCalibrationRows([]);
+      return;
+    }
+
     const summary = review.summary || {};
-    const snapshotLabel = review.snapshot_date
-      ? formatLocalDate(review.snapshot_date)
-      : 'Yesterday';
     statsEl.innerHTML = `
       <div class="sf-stat"><span class="sf-stat-label">Snapshot Day</span><span class="sf-stat-value">${esc(snapshotLabel)}</span></div>
       <div class="sf-stat"><span class="sf-stat-label">Games Graded</span><span class="sf-stat-value">${Number(review.games_reviewed || 0)} / ${Number(review.games_in_snapshot || 0)}</span></div>
@@ -100,9 +130,6 @@
       <div class="sf-stat"><span class="sf-stat-label">Mean Abs Error</span><span class="sf-stat-value">${formatShare(summary.mean_abs_prob_error, 1)}</span></div>
     `;
     if (statusEl) {
-      const publishedText = review.published_at_utc
-        ? `Published ${formatLocalDateTime(review.published_at_utc)}. `
-        : '';
       const pendingText = Number(review.games_pending || 0) > 0
         ? `${Number(review.games_pending || 0)} game(s) are still pending final scores.`
         : 'All games in the saved snapshot have final scores.';

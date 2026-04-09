@@ -224,6 +224,13 @@
     );
   }
 
+  function persistRankingsReturnUrl() {
+    try {
+      const url = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      window.sessionStorage.setItem('netOutcomes:lastRankingsUrl', url);
+    } catch (error) {}
+  }
+
   function syncUrlState() {
     if (state.suppressUrlSync) return;
 
@@ -285,6 +292,7 @@
     if (nextUrl !== currentUrl) {
       window.history.replaceState(null, '', nextUrl);
     }
+    persistRankingsReturnUrl();
   }
 
   function setupSectionNavigation(initialTarget) {

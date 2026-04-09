@@ -5,11 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Detailed player scorecards are being rolled out gradually. This demo page explains what can currently be requested from Net Outcomes." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Player Data Not Yet Available | Net Outcomes" />
+  <meta property="og:description" content="Detailed player scorecards are being rolled out gradually. This demo page explains what can currently be requested from Net Outcomes." />
+  <meta property="og:url" content="https://netoutcomes.ca/player-analysis-unavailable.html" />
+  <meta property="og:site_name" content="Net Outcomes" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Player Data Not Yet Available | Net Outcomes" />
+  <meta name="twitter:description" content="Detailed player scorecards are being rolled out gradually. This demo page explains what can currently be requested from Net Outcomes." />
   <link rel="canonical" href="https://netoutcomes.ca/player-analysis-unavailable.html" />
   <link rel="icon" href="imgs/logo-light.svg" />
   <link rel="stylesheet" href="latofonts.css" />
   <link rel="stylesheet" href="style.css" />
   <title>Player Data Not Yet Available | Net Outcomes</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/logo-light.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"WebPage","@id":"https://netoutcomes.ca/player-analysis-unavailable.html#webpage","url":"https://netoutcomes.ca/player-analysis-unavailable.html","name":"Player Data Not Yet Available | Net Outcomes","description":"Detailed player scorecards are being rolled out gradually. This demo page explains what can currently be requested from Net Outcomes.","inLanguage":"en-CA","isPartOf":{"@id":"https://netoutcomes.ca/#website"},"publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"BreadcrumbList","@id":"https://netoutcomes.ca/player-analysis-unavailable.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://netoutcomes.ca/"},{"@type":"ListItem","position":2,"name":"Player Data Not Yet Available","item":"https://netoutcomes.ca/player-analysis-unavailable.html"}]}]}</script>
   <style>
     a {
       color: var(--sf-blue);
@@ -124,7 +134,7 @@
         </div>
         <div class="sf-request-wrap">
           <div class="sf-request-actions">
-            <a class="sf-page-btn" href="/">&#8592; Back to Home</a>
+            <a class="sf-page-btn" id="playerUnavailableBackLink" href="/rankings.html" aria-label="Back to Home">&#8592; Back to Rankings</a>
             <a class="sf-page-btn" href="/example_scorecard.pdf">Open Example Scorecard</a>
           </div>
           <p class="sf-request-lead">
@@ -163,12 +173,43 @@
   </div>
   <script>
     (() => {
-      const params = new URLSearchParams(window.location.search);
+      const searchParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams((window.location.hash || '').replace(/^#/, ''));
+      const params = searchParams.toString() ? searchParams : hashParams;
       const player = params.get('player');
       const team = params.get('team');
       const playerLabel = player ? (team ? `${player} (${team})` : player) : 'This player';
       const heading = document.getElementById('requestedPlayerName');
       if (heading) heading.textContent = playerLabel;
+      const normalizeCandidate = (value) => {
+        const text = String(value || '').trim();
+        if (!text) return '';
+        try {
+          const url = new URL(text, window.location.origin);
+          if (url.origin !== window.location.origin || url.pathname !== '/rankings.html') {
+            return '';
+          }
+          return `${url.pathname}${url.search}${url.hash}`;
+        } catch (error) {
+          return '';
+        }
+      };
+      const backLink = document.getElementById('playerUnavailableBackLink');
+      if (backLink) {
+        const target = (
+          normalizeCandidate(params.get('return_to'))
+          || normalizeCandidate(document.referrer)
+          || (() => {
+            try {
+              return normalizeCandidate(window.sessionStorage.getItem('netOutcomes:lastRankingsUrl'));
+            } catch (error) {
+              return '';
+            }
+          })()
+          || '/rankings.html'
+        );
+        backLink.href = target;
+      }
       const mail = document.getElementById('requestMailLink');
       if (mail) {
         const subjectBits = ['Net Outcomes request'];
