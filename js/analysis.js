@@ -8,11 +8,12 @@
   } = window.NetOutcomesCommon;
 
   const DEFAULT_SECTION_ID = 'overviewPanel';
-  const VALID_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'xgPanel'];
+  const VALID_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'xgPanel'];
   const SECTION_SLUG_BY_ID = {
     overviewPanel: 'overview',
     teamPanel: 'line-analysis',
     penaltyPanel: 'penalties',
+    powerplayPanel: 'pp-development',
     xgPanel: 'team-xg',
   };
   const DEFAULT_XG_MIN_PROB = 0.015;
@@ -61,6 +62,14 @@
     minutes: 'Game Time',
     goals: 'Total Goals',
   };
+  const POWERPLAY_COLORS = {
+    top: '#0f6b84',
+    qualified: '#9bb7c4',
+    accent: '#d07a22',
+    positive: '#0b8f4d',
+    negative: '#b04f2e',
+    line: '#1f5f8b',
+  };
 
   const state = {
     teams: [],
@@ -96,6 +105,18 @@
   function parseNumberParam(value, fallback = null) {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  function readInlineAnalysisPayload() {
+    const el = document.getElementById('analysisPagePayload');
+    const raw = String(el?.textContent || '').trim();
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch (error) {
+      console.error('Failed to parse inline analysis payload', error);
+      return null;
+    }
   }
 
   function clampNumber(value, min, max) {
@@ -1028,6 +1049,443 @@
     `;
   }
 
+  function formatMetric(value, digits = 3) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return 'n/a';
+    return num.toFixed(digits);
+  }
+
+  function formatSignedMetric(value, digits = 3) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return 'n/a';
+    return `${num >= 0 ? '+' : ''}${num.toFixed(digits)}`;
+  }
+
+  function renderPowerplaySummaryCards(analysis) {
+    const introEl = document.getElementById('ppDevIntro');
+    const cardsEl = document.getElementById('ppDevSummaryCards');
+    if (!introEl || !cardsEl) return;
+    const summary = analysis?.summary || {};
+    const topPlayers = Array.isArray(analysis?.top_players) ? analysis.top_players : [];
+    if (!topPlayers.length) {
+      const errorMessage = String(analysis?.error_message || '').trim();
+      introEl.innerHTML = `<p>${esc(errorMessage || 'Power-play development data is not available in this build yet.')}</p>`;
+      cardsEl.innerHTML = '<div class="sf-empty-state">No power-play development payload is available.</div>';
+      return;
+    }
+
+    const qualifiedPlayers = Number(summary.qualified_players || 0);
+    const threshold = Number(summary.current_pp_minute_threshold || 0);
+    const topN = Number(summary.top_n || topPlayers.length || 0);
+    const strongestTrait = String(summary.strongest_trait_label || '').trim();
+    const strongestTraitCorr = Number(summary.strongest_trait_correlation);
+    const currentVsCareerCorr = Number(summary.current_vs_career_minutes_correlation);
+    const careerRateVsMinutesCorr = Number(summary.career_rate_vs_career_minutes_correlation);
+    const currentSeasonLabel = String(summary.current_season_label || '').trim();
+    const careerStart = String(summary.career_start_season_label || '').trim();
+    const careerEnd = String(summary.career_end_season_label || '').trim();
+
+    introEl.innerHTML = `
+      <p>The current leaderboard takes the top ${topN.toLocaleString()} skaters in <strong>${esc(currentSeasonLabel || 'the current season')}</strong> by power-play points per 60 minutes, but only after filtering to a real PP-opportunity pool of <strong>${qualifiedPlayers.toLocaleString()}</strong> skaters with at least <strong>${esc(formatFixed(threshold, 1))}</strong> current-season PP minutes.</p>
+      <p>This lets us compare true power-play finishers against their 5v5 profile, then trace those same players back through their careers to see how much of PP excellence looks like transferable skill versus a role that grows only after coaches keep feeding minutes. Career coverage in this local database currently runs from <strong>${esc(careerStart || 'the earliest loaded season')}</strong> through <strong>${esc(careerEnd || 'the latest loaded season')}</strong>.</p>
+    `;
+    cardsEl.innerHTML = `
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">Current PP Ceiling</div>
+        <div class="sf-analysis-impact-value">${esc(formatFixed(summary.top20_avg_current_pp_points_per60, 2))}</div>
+        <div class="sf-analysis-impact-subvalue">Average PP points / 60 for the top ${topN.toLocaleString()} current-season PP scorers</div>
+        <div class="sf-analysis-impact-note">Qualified-pool average: ${esc(formatFixed(summary.qualified_avg_current_pp_points_per60, 2))} P/60</div>
+      </article>
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">Opportunity Filter</div>
+        <div class="sf-analysis-impact-value">${qualifiedPlayers.toLocaleString()}</div>
+        <div class="sf-analysis-impact-subvalue">Qualified current-season skaters after applying the PP-minute floor</div>
+        <div class="sf-analysis-impact-note">Threshold used this run: ${esc(formatFixed(threshold, 1))} PP minutes</div>
+      </article>
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">Strongest 5v5 Link</div>
+        <div class="sf-analysis-impact-value">${esc(formatSignedMetric(strongestTraitCorr, 3))}</div>
+        <div class="sf-analysis-impact-subvalue">${esc(strongestTrait || 'No stable 5v5 trait correlation')}</div>
+        <div class="sf-analysis-impact-note">Correlation against current PP points / 60 in the qualified pool</div>
+      </article>
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">Minutes vs Skill</div>
+        <div class="sf-analysis-impact-value">${esc(formatSignedMetric(currentVsCareerCorr, 3))}</div>
+        <div class="sf-analysis-impact-subvalue">Correlation between career PP minutes and current PP points / 60</div>
+        <div class="sf-analysis-impact-note">Career PP rate vs career minutes: ${esc(formatSignedMetric(careerRateVsMinutesCorr, 3))}</div>
+      </article>
+    `;
+  }
+
+  function renderPowerplayTopPlayersTable(analysis) {
+    const tableWrap = document.getElementById('ppDevTopPlayersTable');
+    if (!tableWrap) return;
+    const rows = Array.isArray(analysis?.top_players) ? analysis.top_players : [];
+    if (!rows.length) {
+      tableWrap.innerHTML = '<div class="sf-empty-state">No current power-play leaderboard is available.</div>';
+      return;
+    }
+    tableWrap.innerHTML = `
+      <table class="sf-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Pos</th>
+            <th>PP P/60</th>
+            <th>PP Pts</th>
+            <th>PP Min</th>
+            <th>5v5 P/60</th>
+            <th>Offence</th>
+            <th>Playmaking</th>
+            <th>Chance Gen</th>
+            <th>Finishing</th>
+            <th>5v5 xG Diff/60</th>
+            <th>Career PP P/60</th>
+            <th>Career PP Min</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => `
+            <tr>
+              <td>${Number(row.rank || 0).toLocaleString()}</td>
+              <td>${esc(row.player_name || '')}</td>
+              <td>${esc(row.team || '')}</td>
+              <td>${esc(row.position || '')}</td>
+              <td>${esc(formatMetric(row.current_pp_points_per60, 2))}</td>
+              <td>${Number(row.current_pp_points || 0).toLocaleString()}</td>
+              <td>${esc(formatFixed(row.current_pp_minutes, 1))}</td>
+              <td>${esc(formatMetric(row.current_5v5_points_per60, 2))}</td>
+              <td class="${classForSigned(row.offence_score)}">${esc(formatSignedMetric(row.offence_score, 3))}</td>
+              <td class="${classForSigned(row.playmaking)}">${esc(formatSignedMetric(row.playmaking, 3))}</td>
+              <td class="${classForSigned(row.chance_creation)}">${esc(formatSignedMetric(row.chance_creation, 3))}</td>
+              <td class="${classForSigned(row.finishing)}">${esc(formatSignedMetric(row.finishing, 3))}</td>
+              <td class="${classForSigned(row.on_ice_5v5_xg_diff_no_en_per60)}">${esc(formatSignedMetric(row.on_ice_5v5_xg_diff_no_en_per60, 3))}</td>
+              <td>${esc(formatMetric(row.career_pp_points_per60, 2))}</td>
+              <td>${esc(formatFixed(row.career_pp_minutes, 1))}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function renderPowerplayTraitCorrelationGrid(analysis) {
+    const gridEl = document.getElementById('ppDevTraitCorrelationGrid');
+    if (!gridEl) return;
+    const rows = Array.isArray(analysis?.trait_correlations) ? analysis.trait_correlations : [];
+    if (!rows.length) {
+      gridEl.innerHTML = '<div class="sf-empty-state">No stable 5v5-trait correlations were available for this build.</div>';
+      return;
+    }
+    gridEl.innerHTML = rows.map((row) => `
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">${esc(row.label || '')}</div>
+        <div class="sf-analysis-impact-value">${esc(formatSignedMetric(row.correlation, 3))}</div>
+        <div class="sf-analysis-impact-subvalue">Correlation with current PP points / 60</div>
+        <div class="sf-analysis-impact-note">Top-${Math.min(20, Number(analysis?.summary?.top_n || 20)).toLocaleString()} mean: ${esc(formatSignedMetric(row.top20_mean, 3))}</div>
+        <div class="sf-analysis-impact-note">Qualified-pool mean: ${esc(formatSignedMetric(row.qualified_mean, 3))}</div>
+        <div class="sf-analysis-impact-note">Sample size: ${Number(row.sample_size || 0).toLocaleString()} skaters</div>
+      </article>
+    `).join('');
+  }
+
+  function buildScatterGridMarkup(width, height, padding, xTicks, yTicks, xAt, yAt) {
+    const horizontal = yTicks.map((tick) => {
+      const y = yAt(tick);
+      return `<line x1="${padding.left}" y1="${y.toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${y.toFixed(2)}" stroke="#dce8ed" stroke-width="1" />`;
+    }).join('');
+    const vertical = xTicks.map((tick) => {
+      const x = xAt(tick);
+      return `<line x1="${x.toFixed(2)}" y1="${padding.top}" x2="${x.toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#dce8ed" stroke-width="1" />`;
+    }).join('');
+    const xLabels = xTicks.map((tick) => {
+      const x = xAt(tick);
+      return `<text x="${x.toFixed(2)}" y="${(height - padding.bottom + 18).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">${esc(formatFixed(tick, 2))}</text>`;
+    }).join('');
+    const yLabels = yTicks.map((tick) => {
+      const y = yAt(tick);
+      return `<text x="${(padding.left - 8).toFixed(2)}" y="${(y + 4).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">${esc(formatFixed(tick, 2))}</text>`;
+    }).join('');
+    return `${horizontal}${vertical}${xLabels}${yLabels}`;
+  }
+
+  function renderPowerplayTraitScatterChart(analysis, metricKey) {
+    const svg = document.getElementById('ppDevTraitScatterChart');
+    if (!svg) return;
+    const traits = Array.isArray(analysis?.trait_correlations) ? analysis.trait_correlations : [];
+    const trait = traits.find((row) => String(row.metric_key || '') === String(metricKey || '')) || traits[0] || null;
+    const rows = (Array.isArray(analysis?.opportunity_scatter?.rows) ? analysis.opportunity_scatter.rows : [])
+      .filter((row) => Number.isFinite(Number(row?.current_pp_points_per60)) && Number.isFinite(Number(row?.[String(trait?.metric_key || '')])));
+    if (!trait || !rows.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">Not enough qualified players were available for the 5v5-trait scatter.</text>';
+      return;
+    }
+
+    const width = 760;
+    const height = 420;
+    const padding = { top: 26, right: 26, bottom: 56, left: 64 };
+    const xDomain = paddedDomain(rows.map((row) => Number(row?.[trait.metric_key] || 0)), -1, 1);
+    const yDomain = paddedDomain(rows.map((row) => Number(row?.current_pp_points_per60 || 0)), 0, 10);
+    const xAt = (value) => padding.left + ((width - padding.left - padding.right) * (Number(value || 0) - xDomain[0])) / (xDomain[1] - xDomain[0]);
+    const yAt = (value) => (height - padding.bottom) - ((height - padding.top - padding.bottom) * (Number(value || 0) - yDomain[0])) / (yDomain[1] - yDomain[0]);
+    const xTicks = axisTickValues(xDomain, 5);
+    const yTicks = axisTickValues(yDomain, 5);
+    const grid = buildScatterGridMarkup(width, height, padding, xTicks, yTicks, xAt, yAt);
+    const points = rows.map((row) => {
+      const isTop = Boolean(row?.is_top_twenty);
+      const x = xAt(row[trait.metric_key]);
+      const y = yAt(row.current_pp_points_per60);
+      const color = isTop ? POWERPLAY_COLORS.top : POWERPLAY_COLORS.qualified;
+      const radius = isTop ? 5.1 : 3.4;
+      const tooltip = `${row.player_name} (${row.team} ${row.position}) | ${trait.label}: ${formatSignedMetric(row[trait.metric_key], 3)} | Current PP P/60: ${formatMetric(row.current_pp_points_per60, 2)} | Current PP min: ${formatFixed(row.current_pp_minutes, 1)}`;
+      return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${radius}" fill="${color}" fill-opacity="${isTop ? 0.92 : 0.72}" stroke="${isTop ? '#163744' : 'none'}" stroke-width="1.1"><title>${esc(tooltip)}</title></circle>`;
+    }).join('');
+    const labels = rows
+      .filter((row) => Boolean(row?.is_top_twenty))
+      .sort((a, b) => Number(b?.current_pp_points_per60 || 0) - Number(a?.current_pp_points_per60 || 0))
+      .map((row, idx) => {
+        const x = xAt(row[trait.metric_key]);
+        const y = yAt(row.current_pp_points_per60);
+        const dx = idx % 2 === 0 ? 8 : -8;
+        const dy = ((idx % 4) - 1.5) * 11;
+        const anchor = dx > 0 ? 'start' : 'end';
+        return `<text x="${(x + dx).toFixed(2)}" y="${(y + dy).toFixed(2)}" text-anchor="${anchor}" font-size="10.5" fill="#25444f">${esc(row.player_name)}</text>`;
+      }).join('');
+
+    svg.innerHTML = `
+      <rect x="0" y="0" width="${width}" height="${height}" rx="16" ry="16" fill="#fbfeff" stroke="#dbe7ed" />
+      ${grid}
+      <line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      ${points}
+      ${labels}
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 14).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Top-20 current PP players are highlighted</text>
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">${esc(trait.label || '5v5 trait')}</text>
+      <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Current PP points per 60</text>
+    `;
+  }
+
+  function renderPowerplayOpportunityChart(analysis) {
+    const svg = document.getElementById('ppDevOpportunityChart');
+    if (!svg) return;
+    const summary = analysis?.summary || {};
+    const rows = (Array.isArray(analysis?.opportunity_scatter?.rows) ? analysis.opportunity_scatter.rows : [])
+      .filter((row) => Number.isFinite(Number(row?.career_pp_minutes)) && Number.isFinite(Number(row?.current_pp_points_per60)));
+    if (!rows.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">No career-opportunity scatter is available in this build.</text>';
+      return;
+    }
+
+    const width = 760;
+    const height = 420;
+    const padding = { top: 26, right: 26, bottom: 56, left: 64 };
+    const xDomain = paddedDomain(rows.map((row) => Number(row.career_pp_minutes || 0)), 0, 100);
+    const yDomain = paddedDomain(rows.map((row) => Number(row.current_pp_points_per60 || 0)), 0, 10);
+    const xAt = (value) => padding.left + ((width - padding.left - padding.right) * (Number(value || 0) - xDomain[0])) / (xDomain[1] - xDomain[0]);
+    const yAt = (value) => (height - padding.bottom) - ((height - padding.top - padding.bottom) * (Number(value || 0) - yDomain[0])) / (yDomain[1] - yDomain[0]);
+    const xTicks = axisTickValues(xDomain, 5);
+    const yTicks = axisTickValues(yDomain, 5);
+    const grid = buildScatterGridMarkup(width, height, padding, xTicks, yTicks, xAt, yAt);
+    const points = rows.map((row) => {
+      const isTop = Boolean(row?.is_top_twenty);
+      const x = xAt(row.career_pp_minutes);
+      const y = yAt(row.current_pp_points_per60);
+      const color = isTop ? POWERPLAY_COLORS.accent : POWERPLAY_COLORS.qualified;
+      const radius = isTop ? 5.2 : 3.3;
+      const tooltip = `${row.player_name} (${row.team} ${row.position}) | Career PP min: ${formatFixed(row.career_pp_minutes, 1)} | Career PP P/60: ${formatMetric(row.career_pp_points_per60, 2)} | Current PP P/60: ${formatMetric(row.current_pp_points_per60, 2)}`;
+      return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${radius}" fill="${color}" fill-opacity="${isTop ? 0.92 : 0.68}" stroke="${isTop ? '#6b3a0f' : 'none'}" stroke-width="1.1"><title>${esc(tooltip)}</title></circle>`;
+    }).join('');
+    const labels = rows
+      .filter((row) => Boolean(row?.is_top_twenty))
+      .sort((a, b) => Number(b?.current_pp_points_per60 || 0) - Number(a?.current_pp_points_per60 || 0))
+      .map((row, idx) => {
+        const x = xAt(row.career_pp_minutes);
+        const y = yAt(row.current_pp_points_per60);
+        const dx = idx % 2 === 0 ? 8 : -8;
+        const dy = ((idx % 4) - 1.5) * 11;
+        const anchor = dx > 0 ? 'start' : 'end';
+        return `<text x="${(x + dx).toFixed(2)}" y="${(y + dy).toFixed(2)}" text-anchor="${anchor}" font-size="10.5" fill="#5a3b18">${esc(row.player_name)}</text>`;
+      }).join('');
+
+    svg.innerHTML = `
+      <rect x="0" y="0" width="${width}" height="${height}" rx="16" ry="16" fill="#fbfeff" stroke="#dbe7ed" />
+      ${grid}
+      <line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      ${points}
+      ${labels}
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 14).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Corr(current PP skill, career PP minutes) = ${esc(formatSignedMetric(summary.current_vs_career_minutes_correlation, 3))}</text>
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Career regular-season PP minutes</text>
+      <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Current-season PP points per 60</text>
+    `;
+  }
+
+  function renderPowerplayCareerChart(analysis, requestedPlayerId = '') {
+    const select = document.getElementById('ppDevCareerPlayerSelect');
+    const svg = document.getElementById('ppDevCareerChart');
+    if (!select || !svg) return;
+    const rows = Array.isArray(analysis?.career_progressions) ? analysis.career_progressions : [];
+    if (!rows.length) {
+      select.innerHTML = '<option value="">No player data</option>';
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">No career PP progression data is available in this build.</text>';
+      return;
+    }
+
+    const optionsHtml = rows.map((row) => (
+      `<option value="${esc(String(row.player_id || ''))}">${esc(`${row.player_name || 'Unknown'} (${row.team || ''})`)}</option>`
+    )).join('');
+    if (select.innerHTML !== optionsHtml) {
+      select.innerHTML = optionsHtml;
+    }
+    const preferred = String(requestedPlayerId || select.value || rows[0]?.player_id || '').trim();
+    const selected = rows.find((row) => String(row.player_id || '') === preferred) || rows[0];
+    if (!selected) return;
+    select.value = String(selected.player_id || '');
+
+    const samples = Array.isArray(selected?.samples) ? selected.samples : [];
+    const validSamples = samples.filter((row) => Number.isFinite(Number(row?.career_pp_minutes)) && Number.isFinite(Number(row?.career_pp_points_per60)));
+    if (!validSamples.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">Selected player does not have enough PP sample data for a career curve.</text>';
+      return;
+    }
+
+    const width = 760;
+    const height = 420;
+    const padding = { top: 28, right: 26, bottom: 56, left: 64 };
+    const xDomain = paddedDomain(validSamples.map((row) => Number(row.career_pp_minutes || 0)), 0, 100);
+    const yDomain = paddedDomain(validSamples.map((row) => Number(row.career_pp_points_per60 || 0)), 0, 10);
+    const xAt = (value) => padding.left + ((width - padding.left - padding.right) * (Number(value || 0) - xDomain[0])) / (xDomain[1] - xDomain[0]);
+    const yAt = (value) => (height - padding.bottom) - ((height - padding.top - padding.bottom) * (Number(value || 0) - yDomain[0])) / (yDomain[1] - yDomain[0]);
+    const xTicks = axisTickValues(xDomain, 5);
+    const yTicks = axisTickValues(yDomain, 5);
+    const grid = buildScatterGridMarkup(width, height, padding, xTicks, yTicks, xAt, yAt);
+    const path = validSamples.map((row, idx) => `${idx === 0 ? 'M' : 'L'} ${xAt(row.career_pp_minutes).toFixed(2)} ${yAt(row.career_pp_points_per60).toFixed(2)}`).join(' ');
+    const circles = validSamples.map((row, idx) => {
+      const isFirst = idx === 0;
+      const isLast = idx === validSamples.length - 1;
+      const radius = isFirst || isLast ? 4.8 : 3.0;
+      const fill = isFirst ? POWERPLAY_COLORS.accent : isLast ? POWERPLAY_COLORS.top : POWERPLAY_COLORS.line;
+      const tooltip = `${selected.player_name} | ${row.season || ''} ${row.game_date || ''} | Career PP min: ${formatFixed(row.career_pp_minutes, 1)} | Career PP points: ${Number(row.career_pp_points || 0).toLocaleString()} | Career PP P/60: ${formatMetric(row.career_pp_points_per60, 2)}`;
+      return `<circle cx="${xAt(row.career_pp_minutes).toFixed(2)}" cy="${yAt(row.career_pp_points_per60).toFixed(2)}" r="${radius}" fill="${fill}" stroke="#ffffff" stroke-width="1.1"><title>${esc(tooltip)}</title></circle>`;
+    }).join('');
+    const early = validSamples[0];
+    const latest = validSamples[validSamples.length - 1];
+
+    svg.innerHTML = `
+      <rect x="0" y="0" width="${width}" height="${height}" rx="16" ry="16" fill="#fbfeff" stroke="#dbe7ed" />
+      ${grid}
+      <line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      <path d="${path}" fill="none" stroke="${POWERPLAY_COLORS.line}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" />
+      ${circles}
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 12).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Early sample: ${esc(formatFixed(selected.early_sample_minutes, 1))} min at ${esc(formatMetric(selected.early_sample_pp_points_per60, 2))} P/60</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 28).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Career now: ${esc(formatFixed(selected.career_pp_minutes, 1))} min at ${esc(formatMetric(selected.career_pp_points_per60, 2))} P/60</text>
+      <text x="${(xAt(early.career_pp_minutes) + 8).toFixed(2)}" y="${(yAt(early.career_pp_points_per60) - 10).toFixed(2)}" font-size="10.5" fill="#6b3a0f">Early</text>
+      <text x="${(xAt(latest.career_pp_minutes) + 8).toFixed(2)}" y="${(yAt(latest.career_pp_points_per60) - 10).toFixed(2)}" font-size="10.5" fill="#163744">Current career level</text>
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Career PP minutes accumulated</text>
+      <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Career PP points per 60</text>
+    `;
+  }
+
+  function renderPowerplayDevelopmentTable(analysis) {
+    const tableWrap = document.getElementById('ppDevDevelopmentTable');
+    const notesEl = document.getElementById('ppDevNotes');
+    if (!tableWrap || !notesEl) return;
+    const rows = Array.isArray(analysis?.development_rows) ? analysis.development_rows : [];
+    const notes = Array.isArray(analysis?.notes) ? analysis.notes : [];
+    if (!rows.length) {
+      tableWrap.innerHTML = '<div class="sf-empty-state">No PP development summary rows are available.</div>';
+      notesEl.innerHTML = notes.map((note) => `<li>${esc(note)}</li>`).join('');
+      return;
+    }
+    tableWrap.innerHTML = `
+      <table class="sf-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Early PP Min</th>
+            <th>Early PP P/60</th>
+            <th>Career PP P/60</th>
+            <th>Delta</th>
+            <th>Current PP P/60</th>
+            <th>Career PP Min</th>
+            <th>Career PP Pts</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => `
+            <tr>
+              <td>${esc(row.player_name || '')}</td>
+              <td>${esc(row.team || '')}</td>
+              <td>${esc(formatFixed(row.early_sample_minutes, 1))}</td>
+              <td>${esc(formatMetric(row.early_sample_pp_points_per60, 2))}</td>
+              <td>${esc(formatMetric(row.career_pp_points_per60, 2))}</td>
+              <td class="${classForSigned(row.development_delta_per60)}">${esc(formatSignedMetric(row.development_delta_per60, 3))}</td>
+              <td>${esc(formatMetric(row.current_pp_points_per60, 2))}</td>
+              <td>${esc(formatFixed(row.career_pp_minutes, 1))}</td>
+              <td>${Number(row.career_pp_points || 0).toLocaleString()}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    notesEl.innerHTML = notes.map((note) => `<li>${esc(note)}</li>`).join('');
+  }
+
+  function renderPowerplaySection() {
+    const analysis = state.analysisPayload?.powerplay_development_analysis || {};
+    const traitSelect = document.getElementById('ppDevTraitSelect');
+    const careerSelect = document.getElementById('ppDevCareerPlayerSelect');
+    const traitRows = Array.isArray(analysis?.trait_correlations) ? analysis.trait_correlations : [];
+    const progressionRows = Array.isArray(analysis?.career_progressions) ? analysis.career_progressions : [];
+
+    renderPowerplaySummaryCards(analysis);
+    renderPowerplayTopPlayersTable(analysis);
+    renderPowerplayTraitCorrelationGrid(analysis);
+    renderPowerplayDevelopmentTable(analysis);
+
+    if (traitSelect) {
+      traitSelect.innerHTML = traitRows.length
+        ? traitRows.map((row) => `<option value="${esc(String(row.metric_key || ''))}">${esc(row.label || row.metric_key || '')}</option>`).join('')
+        : '<option value="">No trait data</option>';
+      if (!traitSelect.dataset.bound) {
+        traitSelect.addEventListener('change', () => {
+          renderPowerplayTraitScatterChart(
+            analysis,
+            String(traitSelect.value || ''),
+          );
+        });
+        traitSelect.dataset.bound = '1';
+      }
+      if (traitRows.length) {
+        traitSelect.value = String(traitRows[0]?.metric_key || '');
+      }
+    }
+
+    if (careerSelect && !careerSelect.dataset.bound) {
+      careerSelect.addEventListener('change', () => {
+        renderPowerplayCareerChart(
+          analysis,
+          String(careerSelect.value || ''),
+        );
+      });
+      careerSelect.dataset.bound = '1';
+    }
+
+    renderPowerplayTraitScatterChart(
+      analysis,
+      String(traitSelect?.value || traitRows[0]?.metric_key || ''),
+    );
+    renderPowerplayOpportunityChart(analysis);
+    renderPowerplayCareerChart(
+      analysis,
+      String(careerSelect?.value || progressionRows[0]?.player_id || ''),
+    );
+  }
+
   function renderPenaltySection() {
     const introEl = document.getElementById('penaltyIntro');
     const cardsEl = document.getElementById('penaltyImpactCards');
@@ -1176,9 +1634,10 @@
   }
 
   async function init() {
-    const payload = await fetchJson('data/analysis.json');
     state.suppressUrlSync = true;
     state.initialUrlState = readShareStateFromUrl();
+    setupSectionNavigation(state.initialUrlState.section);
+    const payload = readInlineAnalysisPayload() || await fetchJson('data/analysis.json');
     state.analysisPayload = payload || {};
     state.teams = Array.isArray(payload?.teams) ? payload.teams : [];
     state.baseRinkMarkup = document.getElementById('xgRink')?.innerHTML || '';
@@ -1200,9 +1659,9 @@
       document.getElementById('compareTeamB')?.addEventListener('change', refreshTeamCards);
     }
 
+    renderPowerplaySection();
     renderPenaltySection();
     initializeXgPanel();
-    setupSectionNavigation(state.initialUrlState.section);
     state.suppressUrlSync = false;
     syncUrlState();
   }
@@ -1216,6 +1675,10 @@
       if (svg) svg.innerHTML = `${state.baseRinkMarkup}<text x="0" y="0" text-anchor="middle" font-size="4.5" fill="#b13a30">${esc(error.message)}</text>`;
       const penaltySvg = document.getElementById('penaltyTypeImpactChart');
       if (penaltySvg) penaltySvg.innerHTML = `<text x="380" y="180" text-anchor="middle" font-size="16" fill="#b13a30">${esc(error.message)}</text>`;
+      const ppTraitSvg = document.getElementById('ppDevTraitScatterChart');
+      if (ppTraitSvg) ppTraitSvg.innerHTML = `<text x="380" y="210" text-anchor="middle" font-size="16" fill="#b13a30">${esc(error.message)}</text>`;
+      const ppCareerSvg = document.getElementById('ppDevCareerChart');
+      if (ppCareerSvg) ppCareerSvg.innerHTML = `<text x="380" y="210" text-anchor="middle" font-size="16" fill="#b13a30">${esc(error.message)}</text>`;
     });
   });
 })();
