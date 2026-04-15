@@ -8,7 +8,7 @@
   } = window.NetOutcomesCommon;
 
   const DEFAULT_SECTION_ID = 'overviewPanel';
-  const VALID_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'xgPanel'];
+  const FALLBACK_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'xgPanel'];
   const SECTION_SLUG_BY_ID = {
     overviewPanel: 'overview',
     teamPanel: 'line-analysis',
@@ -82,16 +82,34 @@
     analysisPayload: null,
   };
 
+  function getAvailableSectionIds() {
+    const buttonTargets = Array.from(document.querySelectorAll('#analysisSectionNav .sf-section-btn'))
+      .map((btn) => String(btn?.dataset?.sectionTarget || '').trim())
+      .filter(Boolean);
+    const panelIds = Array.from(document.querySelectorAll('.sf-section-panel'))
+      .map((panel) => String(panel?.id || '').trim())
+      .filter(Boolean);
+    const available = FALLBACK_SECTION_IDS.filter((id) => buttonTargets.includes(id) && panelIds.includes(id));
+    return available.length ? available : FALLBACK_SECTION_IDS;
+  }
+
+  function getDefaultSectionId() {
+    const available = getAvailableSectionIds();
+    return available.includes(DEFAULT_SECTION_ID) ? DEFAULT_SECTION_ID : (available[0] || DEFAULT_SECTION_ID);
+  }
+
   function sanitizeSectionTarget(value) {
     const target = String(value || '').trim();
-    if (VALID_SECTION_IDS.includes(target)) return target;
+    const validSectionIds = getAvailableSectionIds();
+    if (validSectionIds.includes(target)) return target;
     const mapped = Object.entries(SECTION_SLUG_BY_ID).find(([, slug]) => slug === target);
-    return mapped ? mapped[0] : '';
+    return mapped && validSectionIds.includes(mapped[0]) ? mapped[0] : '';
   }
 
   function sectionSlugFromTarget(value) {
-    const target = sanitizeSectionTarget(value) || DEFAULT_SECTION_ID;
-    return SECTION_SLUG_BY_ID[target] || SECTION_SLUG_BY_ID[DEFAULT_SECTION_ID];
+    const defaultSectionId = getDefaultSectionId();
+    const target = sanitizeSectionTarget(value) || defaultSectionId;
+    return SECTION_SLUG_BY_ID[target] || SECTION_SLUG_BY_ID[defaultSectionId];
   }
 
   function parseBooleanParam(value, fallback = false) {
@@ -126,8 +144,9 @@
   function readShareStateFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const hashSection = sanitizeSectionTarget(window.location.hash.replace(/^#/, ''));
+    const defaultSectionId = getDefaultSectionId();
     return {
-      section: hashSection || sanitizeSectionTarget(params.get('section')) || DEFAULT_SECTION_ID,
+      section: hashSection || sanitizeSectionTarget(params.get('section')) || defaultSectionId,
       lineTeam: String(params.get('lineTeam') || '').trim(),
       compareA: String(params.get('compareA') || '').trim(),
       compareB: String(params.get('compareB') || '').trim(),
@@ -159,7 +178,8 @@
     if (state.suppressUrlSync) return;
 
     const params = new URLSearchParams();
-    const activeSection = sanitizeSectionTarget(state.activeSection) || DEFAULT_SECTION_ID;
+    const defaultSectionId = getDefaultSectionId();
+    const activeSection = sanitizeSectionTarget(state.activeSection) || defaultSectionId;
 
     if (activeSection === 'teamPanel') {
       const lineTeam = String(document.getElementById('teamSearch')?.value || '').trim();
@@ -179,7 +199,7 @@
       if (showGoals === false) params.set('xgGoals', '0');
     }
 
-    const hash = activeSection !== DEFAULT_SECTION_ID ? `#${sectionSlugFromTarget(activeSection)}` : '';
+    const hash = activeSection !== defaultSectionId ? `#${sectionSlugFromTarget(activeSection)}` : '';
     const query = params.toString();
     const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${hash}`;
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
@@ -192,9 +212,10 @@
     const buttons = Array.from(document.querySelectorAll('#analysisSectionNav .sf-section-btn'));
     const panels = Array.from(document.querySelectorAll('.sf-section-panel'));
     if (!buttons.length || !panels.length) return;
+    const defaultSectionId = getDefaultSectionId();
 
     const activate = (targetId, options = {}) => {
-      const nextTarget = sanitizeSectionTarget(targetId) || DEFAULT_SECTION_ID;
+      const nextTarget = sanitizeSectionTarget(targetId) || defaultSectionId;
       state.activeSection = nextTarget;
       buttons.forEach((btn) => {
         btn.classList.toggle('is-active', btn.dataset.sectionTarget === nextTarget);
@@ -212,7 +233,7 @@
     });
 
     window.addEventListener('hashchange', () => {
-      const requested = sanitizeSectionTarget(window.location.hash.replace(/^#/, '')) || DEFAULT_SECTION_ID;
+      const requested = sanitizeSectionTarget(window.location.hash.replace(/^#/, '')) || defaultSectionId;
       if (requested !== state.activeSection) {
         activate(requested, { syncUrl: false });
       }
@@ -1084,10 +1105,18 @@
     const currentSeasonLabel = String(summary.current_season_label || '').trim();
     const careerStart = String(summary.career_start_season_label || '').trim();
     const careerEnd = String(summary.career_end_season_label || '').trim();
+    const bucketMinutes = Number(summary.career_bucket_minutes || 60);
+    const missingCareerSeasons = Array.isArray(summary.career_history_missing_season_labels)
+      ? summary.career_history_missing_season_labels.filter(Boolean)
+      : [];
+    const refreshedCareerGames = Number(summary.career_history_refreshed_games || 0);
+    const coverageSentence = missingCareerSeasons.length
+      ? `Draft-to-present coverage still has gaps in ${missingCareerSeasons.length.toLocaleString()} season${missingCareerSeasons.length === 1 ? '' : 's'} (${esc(missingCareerSeasons.join(', '))}).`
+      : 'Draft-to-present career coverage is loaded for the qualified pool whenever draft metadata is available.';
 
     introEl.innerHTML = `
       <p>The current leaderboard takes the top ${topN.toLocaleString()} skaters in <strong>${esc(currentSeasonLabel || 'the current season')}</strong> by power-play points per 60 minutes, but only after filtering to a real PP-opportunity pool of <strong>${qualifiedPlayers.toLocaleString()}</strong> skaters with at least <strong>${esc(formatFixed(threshold, 1))}</strong> current-season PP minutes.</p>
-      <p>This lets us compare true power-play finishers against their 5v5 profile, then trace those same players back through their careers to see how much of PP excellence looks like transferable skill versus a role that grows only after coaches keep feeding minutes. Career coverage in this local database currently runs from <strong>${esc(careerStart || 'the earliest loaded season')}</strong> through <strong>${esc(careerEnd || 'the latest loaded season')}</strong>.</p>
+      <p>The career chart now uses sequential <strong>${esc(formatFixed(bucketMinutes, 1))}-minute PP buckets</strong>, so the first point on the curve is the first full usage bucket rather than a tiny “career start” sample. Career coverage in this local database currently runs from <strong>${esc(careerStart || 'the earliest loaded season')}</strong> through <strong>${esc(careerEnd || 'the latest loaded season')}</strong>. ${coverageSentence}${refreshedCareerGames > 0 ? ` This build refreshed ${refreshedCareerGames.toLocaleString()} historical game${refreshedCareerGames === 1 ? '' : 's'} while checking career coverage.` : ''}</p>
     `;
     cardsEl.innerHTML = `
       <article class="sf-analysis-impact-card">
@@ -1106,13 +1135,13 @@
         <div class="sf-analysis-impact-label">Strongest 5v5 Link</div>
         <div class="sf-analysis-impact-value">${esc(formatSignedMetric(strongestTraitCorr, 3))}</div>
         <div class="sf-analysis-impact-subvalue">${esc(strongestTrait || 'No stable 5v5 trait correlation')}</div>
-        <div class="sf-analysis-impact-note">Correlation against current PP points / 60 in the qualified pool</div>
+        <div class="sf-analysis-impact-note">Pearson r against current PP points / 60 in the qualified pool</div>
       </article>
       <article class="sf-analysis-impact-card">
-        <div class="sf-analysis-impact-label">Minutes vs Skill</div>
+        <div class="sf-analysis-impact-label">Career Opportunity Link</div>
         <div class="sf-analysis-impact-value">${esc(formatSignedMetric(currentVsCareerCorr, 3))}</div>
-        <div class="sf-analysis-impact-subvalue">Correlation between career PP minutes and current PP points / 60</div>
-        <div class="sf-analysis-impact-note">Career PP rate vs career minutes: ${esc(formatSignedMetric(careerRateVsMinutesCorr, 3))}</div>
+        <div class="sf-analysis-impact-subvalue">Pearson r: career PP minutes vs current PP points / 60</div>
+        <div class="sf-analysis-impact-note">Pearson r: career PP rate vs career PP minutes = ${esc(formatSignedMetric(careerRateVsMinutesCorr, 3))}</div>
       </article>
     `;
   }
@@ -1183,9 +1212,9 @@
       <article class="sf-analysis-impact-card">
         <div class="sf-analysis-impact-label">${esc(row.label || '')}</div>
         <div class="sf-analysis-impact-value">${esc(formatSignedMetric(row.correlation, 3))}</div>
-        <div class="sf-analysis-impact-subvalue">Correlation with current PP points / 60</div>
-        <div class="sf-analysis-impact-note">Top-${Math.min(20, Number(analysis?.summary?.top_n || 20)).toLocaleString()} mean: ${esc(formatSignedMetric(row.top20_mean, 3))}</div>
-        <div class="sf-analysis-impact-note">Qualified-pool mean: ${esc(formatSignedMetric(row.qualified_mean, 3))}</div>
+        <div class="sf-analysis-impact-subvalue">Pearson r with current PP points / 60</div>
+        <div class="sf-analysis-impact-note">Top-${Math.min(20, Number(analysis?.summary?.top_n || 20)).toLocaleString()} ${esc(row.label || 'trait')} mean: ${esc(formatSignedMetric(row.top20_mean, 3))}</div>
+        <div class="sf-analysis-impact-note">Qualified-pool ${esc(row.label || 'trait')} mean: ${esc(formatSignedMetric(row.qualified_mean, 3))}</div>
         <div class="sf-analysis-impact-note">Sample size: ${Number(row.sample_size || 0).toLocaleString()} skaters</div>
       </article>
     `).join('');
@@ -1316,7 +1345,7 @@
       <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
       ${points}
       ${labels}
-      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 14).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Corr(current PP skill, career PP minutes) = ${esc(formatSignedMetric(summary.current_vs_career_minutes_correlation, 3))}</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 14).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Pearson r(current PP P/60, career PP minutes) = ${esc(formatSignedMetric(summary.current_vs_career_minutes_correlation, 3))}</text>
       <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Career regular-season PP minutes</text>
       <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Current-season PP points per 60</text>
     `;
@@ -1329,7 +1358,7 @@
     const rows = Array.isArray(analysis?.career_progressions) ? analysis.career_progressions : [];
     if (!rows.length) {
       select.innerHTML = '<option value="">No player data</option>';
-      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">No career PP progression data is available in this build.</text>';
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">No career PP bucket data is available in this build.</text>';
       return;
     }
 
@@ -1344,34 +1373,36 @@
     if (!selected) return;
     select.value = String(selected.player_id || '');
 
-    const samples = Array.isArray(selected?.samples) ? selected.samples : [];
-    const validSamples = samples.filter((row) => Number.isFinite(Number(row?.career_pp_minutes)) && Number.isFinite(Number(row?.career_pp_points_per60)));
-    if (!validSamples.length) {
-      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">Selected player does not have enough PP sample data for a career curve.</text>';
+    const buckets = Array.isArray(selected?.buckets) ? selected.buckets : [];
+    const validBuckets = buckets.filter((row) => Number.isFinite(Number(row?.bucket_end_pp_minutes)) && Number.isFinite(Number(row?.bucket_pp_points_per60)));
+    if (!validBuckets.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">Selected player does not have enough PP bucket data for a career curve.</text>';
       return;
     }
 
     const width = 760;
     const height = 420;
     const padding = { top: 28, right: 26, bottom: 56, left: 64 };
-    const xDomain = paddedDomain(validSamples.map((row) => Number(row.career_pp_minutes || 0)), 0, 100);
-    const yDomain = paddedDomain(validSamples.map((row) => Number(row.career_pp_points_per60 || 0)), 0, 10);
+    const xDomain = paddedDomain(validBuckets.map((row) => Number(row.bucket_end_pp_minutes || 0)), 0, 100);
+    const yDomain = paddedDomain(validBuckets.map((row) => Number(row.bucket_pp_points_per60 || 0)), 0, 10);
     const xAt = (value) => padding.left + ((width - padding.left - padding.right) * (Number(value || 0) - xDomain[0])) / (xDomain[1] - xDomain[0]);
     const yAt = (value) => (height - padding.bottom) - ((height - padding.top - padding.bottom) * (Number(value || 0) - yDomain[0])) / (yDomain[1] - yDomain[0]);
     const xTicks = axisTickValues(xDomain, 5);
     const yTicks = axisTickValues(yDomain, 5);
     const grid = buildScatterGridMarkup(width, height, padding, xTicks, yTicks, xAt, yAt);
-    const path = validSamples.map((row, idx) => `${idx === 0 ? 'M' : 'L'} ${xAt(row.career_pp_minutes).toFixed(2)} ${yAt(row.career_pp_points_per60).toFixed(2)}`).join(' ');
-    const circles = validSamples.map((row, idx) => {
-      const isFirst = idx === 0;
-      const isLast = idx === validSamples.length - 1;
+    const path = validBuckets.map((row, idx) => `${idx === 0 ? 'M' : 'L'} ${xAt(row.bucket_end_pp_minutes).toFixed(2)} ${yAt(row.bucket_pp_points_per60).toFixed(2)}`).join(' ');
+    const first = validBuckets.find((row) => Boolean(row?.is_first_bucket)) || validBuckets[0];
+    const latest = validBuckets.find((row) => Boolean(row?.is_latest_bucket)) || validBuckets[validBuckets.length - 1];
+    const circles = validBuckets.map((row, idx) => {
+      const isFirst = Boolean(row?.is_first_bucket) || row === first || idx === 0;
+      const isLast = Boolean(row?.is_latest_bucket) || row === latest || idx === validBuckets.length - 1;
       const radius = isFirst || isLast ? 4.8 : 3.0;
       const fill = isFirst ? POWERPLAY_COLORS.accent : isLast ? POWERPLAY_COLORS.top : POWERPLAY_COLORS.line;
-      const tooltip = `${selected.player_name} | ${row.season || ''} ${row.game_date || ''} | Career PP min: ${formatFixed(row.career_pp_minutes, 1)} | Career PP points: ${Number(row.career_pp_points || 0).toLocaleString()} | Career PP P/60: ${formatMetric(row.career_pp_points_per60, 2)}`;
-      return `<circle cx="${xAt(row.career_pp_minutes).toFixed(2)}" cy="${yAt(row.career_pp_points_per60).toFixed(2)}" r="${radius}" fill="${fill}" stroke="#ffffff" stroke-width="1.1"><title>${esc(tooltip)}</title></circle>`;
+      const bucketStart = formatFixed(row.bucket_start_pp_minutes, 1);
+      const bucketEnd = formatFixed(row.bucket_end_pp_minutes, 1);
+      const tooltip = `${selected.player_name} | Bucket ${Number(row.bucket_number || 0).toLocaleString()} (${bucketStart}-${bucketEnd} PP min) | Bucket P/60: ${formatMetric(row.bucket_pp_points_per60, 2)} | Bucket points: ${formatFixed(row.bucket_pp_points, 2)} | Bucket minutes: ${formatFixed(row.bucket_pp_minutes, 1)}${row.is_partial_bucket ? ' (partial)' : ''} | Career PP P/60 to date: ${formatMetric(row.career_pp_points_per60, 2)}`;
+      return `<circle cx="${xAt(row.bucket_end_pp_minutes).toFixed(2)}" cy="${yAt(row.bucket_pp_points_per60).toFixed(2)}" r="${radius}" fill="${fill}" stroke="#ffffff" stroke-width="1.1"><title>${esc(tooltip)}</title></circle>`;
     }).join('');
-    const early = validSamples[0];
-    const latest = validSamples[validSamples.length - 1];
 
     svg.innerHTML = `
       <rect x="0" y="0" width="${width}" height="${height}" rx="16" ry="16" fill="#fbfeff" stroke="#dbe7ed" />
@@ -1380,12 +1411,13 @@
       <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
       <path d="${path}" fill="none" stroke="${POWERPLAY_COLORS.line}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" />
       ${circles}
-      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 12).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Early sample: ${esc(formatFixed(selected.early_sample_minutes, 1))} min at ${esc(formatMetric(selected.early_sample_pp_points_per60, 2))} P/60</text>
-      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 28).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Career now: ${esc(formatFixed(selected.career_pp_minutes, 1))} min at ${esc(formatMetric(selected.career_pp_points_per60, 2))} P/60</text>
-      <text x="${(xAt(early.career_pp_minutes) + 8).toFixed(2)}" y="${(yAt(early.career_pp_points_per60) - 10).toFixed(2)}" font-size="10.5" fill="#6b3a0f">Early</text>
-      <text x="${(xAt(latest.career_pp_minutes) + 8).toFixed(2)}" y="${(yAt(latest.career_pp_points_per60) - 10).toFixed(2)}" font-size="10.5" fill="#163744">Current career level</text>
-      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Career PP minutes accumulated</text>
-      <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Career PP points per 60</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 12).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Bucket size: ${esc(formatFixed(selected.bucket_minutes, 1))} PP minutes</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 28).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Career total: ${esc(formatFixed(selected.career_pp_minutes, 1))} min, ${Number(selected.career_pp_points || 0).toLocaleString()} pts, ${esc(formatMetric(selected.career_pp_points_per60, 2))} P/60</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 44).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">First bucket: ${esc(formatMetric(selected.first_bucket_pp_points_per60, 2))} P/60 | Latest bucket: ${esc(formatMetric(selected.latest_bucket_pp_points_per60, 2))} P/60</text>
+      <text x="${(xAt(first.bucket_end_pp_minutes) + 8).toFixed(2)}" y="${(yAt(first.bucket_pp_points_per60) - 10).toFixed(2)}" font-size="10.5" fill="#6b3a0f">Career start bucket</text>
+      <text x="${(xAt(latest.bucket_end_pp_minutes) + 8).toFixed(2)}" y="${(yAt(latest.bucket_pp_points_per60) - 10).toFixed(2)}" font-size="10.5" fill="#163744">${latest.is_partial_bucket ? 'Latest partial bucket' : 'Latest bucket'}</text>
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Career PP minutes accumulated at bucket end</text>
+      <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">PP points per 60 in each bucket</text>
     `;
   }
 
@@ -1396,7 +1428,7 @@
     const rows = Array.isArray(analysis?.development_rows) ? analysis.development_rows : [];
     const notes = Array.isArray(analysis?.notes) ? analysis.notes : [];
     if (!rows.length) {
-      tableWrap.innerHTML = '<div class="sf-empty-state">No PP development summary rows are available.</div>';
+      tableWrap.innerHTML = '<div class="sf-empty-state">No career PP bucket summary rows are available.</div>';
       notesEl.innerHTML = notes.map((note) => `<li>${esc(note)}</li>`).join('');
       return;
     }
@@ -1404,12 +1436,14 @@
       <table class="sf-table">
         <thead>
           <tr>
+            <th>Rank</th>
             <th>Player</th>
             <th>Team</th>
-            <th>Early PP Min</th>
-            <th>Early PP P/60</th>
+            <th>First Bucket P/60</th>
+            <th>Latest Bucket P/60</th>
+            <th>Latest Bucket Min</th>
+            <th>Best Bucket P/60</th>
             <th>Career PP P/60</th>
-            <th>Delta</th>
             <th>Current PP P/60</th>
             <th>Career PP Min</th>
             <th>Career PP Pts</th>
@@ -1418,12 +1452,14 @@
         <tbody>
           ${rows.map((row) => `
             <tr>
+              <td>${Number(row.rank || 0).toLocaleString()}</td>
               <td>${esc(row.player_name || '')}</td>
               <td>${esc(row.team || '')}</td>
-              <td>${esc(formatFixed(row.early_sample_minutes, 1))}</td>
-              <td>${esc(formatMetric(row.early_sample_pp_points_per60, 2))}</td>
+              <td>${esc(formatMetric(row.first_bucket_pp_points_per60, 2))}</td>
+              <td>${esc(formatMetric(row.latest_bucket_pp_points_per60, 2))}</td>
+              <td>${esc(formatFixed(row.latest_bucket_minutes, 1))}${row.latest_bucket_is_partial ? ' (partial)' : ''}</td>
+              <td>${esc(formatMetric(row.best_bucket_pp_points_per60, 2))}</td>
               <td>${esc(formatMetric(row.career_pp_points_per60, 2))}</td>
-              <td class="${classForSigned(row.development_delta_per60)}">${esc(formatSignedMetric(row.development_delta_per60, 3))}</td>
               <td>${esc(formatMetric(row.current_pp_points_per60, 2))}</td>
               <td>${esc(formatFixed(row.career_pp_minutes, 1))}</td>
               <td>${Number(row.career_pp_points || 0).toLocaleString()}</td>
@@ -1659,7 +1695,9 @@
       document.getElementById('compareTeamB')?.addEventListener('change', refreshTeamCards);
     }
 
-    renderPowerplaySection();
+    if (document.getElementById('powerplayPanel')) {
+      renderPowerplaySection();
+    }
     renderPenaltySection();
     initializeXgPanel();
     state.suppressUrlSync = false;
