@@ -17,6 +17,32 @@
     el.innerHTML = rows.map(renderRow).join('');
   }
 
+  function renderPredictionCard(row) {
+    const awayTeam = String(row.away_team || '').trim();
+    const homeTeam = String(row.home_team || '').trim();
+    const factorItems = Array.isArray(row.top_factor_items) ? row.top_factor_items : [];
+    return `
+      <article class="sf-prediction-card">
+        <div class="sf-prediction-card-head">${esc(awayTeam)} at ${esc(homeTeam)}</div>
+        <div class="sf-prediction-card-pick">${esc(row.favorite_team)} ${Number(row.favorite_win_prob || 0).toFixed(1)}%</div>
+        <div class="sf-prediction-card-meta">${formatLocalDateTime(row.start_time_utc || row.game_date)}</div>
+        <div class="sf-prediction-card-sub">Edge ${Number(row.confidence_edge || 0).toFixed(1)} pts</div>
+        ${factorItems.length ? `
+          <ol class="sf-factor-list">
+            ${factorItems.map((item) => `
+              <li>
+                <span class="sf-factor-edge-item">
+                  <span class="sf-factor-edge-label">${esc(item.label || '')}</span>
+                  ${item.edge_logo_url && item.edge_team ? `<span class="sf-factor-edge-logo-box" aria-hidden="true"><img class="sf-factor-edge-logo" src="${esc(item.edge_logo_url)}" alt="" loading="lazy" decoding="async"/></span>` : ''}
+                </span>
+              </li>
+            `).join('')}
+          </ol>
+        ` : ''}
+      </article>
+    `;
+  }
+
   function renderPredictionCards(rows) {
     const el = document.getElementById('homeTodayGames');
     if (!el) return;
@@ -24,19 +50,7 @@
       el.innerHTML = '<div class="sf-empty-state">No games are scheduled today in the current prediction window.</div>';
       return;
     }
-    const cards = rows.slice(0, 3).map((row) => `
-      <article class="sf-prediction-card">
-        <div class="sf-prediction-card-head">${esc(row.away_team)} at ${esc(row.home_team)}</div>
-        <div class="sf-prediction-card-pick">${esc(row.favorite_team)} ${Number(row.favorite_win_prob || 0).toFixed(1)}%</div>
-        <div class="sf-prediction-card-meta">${formatLocalDateTime(row.start_time_utc || row.game_date)}</div>
-        <div class="sf-prediction-card-sub">Edge ${Number(row.confidence_edge || 0).toFixed(1)} pts</div>
-        ${Array.isArray(row.top_factors) && row.top_factors.length ? `
-          <ol class="sf-factor-list">
-            ${row.top_factors.map((factor) => `<li>${esc(factor)}</li>`).join('')}
-          </ol>
-        ` : ''}
-      </article>
-    `);
+    const cards = rows.slice(0, 3).map((row) => renderPredictionCard(row));
     cards.push(`
       <a class="sf-prediction-card sf-prediction-card--cta" href="/predictions.html" aria-label="See all predictions for today">
         <div class="sf-prediction-card-cta-kicker">More Predictions</div>

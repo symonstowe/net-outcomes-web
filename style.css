@@ -168,6 +168,33 @@ body.lato {
   gap: 18px;
 }
 
+.sf-site-footer {
+  margin-top: 28px;
+  padding: 18px 20px 0;
+  border-top: 1px solid #d9e6eb;
+}
+
+.sf-site-footer-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  gap: 8px;
+}
+
+.sf-site-footer-copy,
+.sf-site-footer-legal,
+.sf-site-footer-note {
+  margin: 0;
+  color: #5b6b60;
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+
+.sf-site-footer-copy {
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  color: #48594d;
+}
+
 .sf-section-nav {
   margin-top: 14px;
   display: grid;
@@ -456,12 +483,12 @@ body.lato {
 }
 
 .sf-prediction-card-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   margin-top: 14px;
 }
 
 .sf-prediction-card-grid--home {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
 .sf-home-grid {
@@ -479,6 +506,12 @@ body.lato {
 
 .sf-prediction-card-grid--home .sf-prediction-card {
   height: 100%;
+}
+
+.sf-prediction-card--detailed {
+  display: grid;
+  gap: 10px;
+  align-content: start;
 }
 
 .sf-quick-card {
@@ -544,9 +577,66 @@ body.lato {
 
 .sf-prediction-card-meta,
 .sf-prediction-card-sub {
-  margin-top: 6px;
   color: #59695e;
   font-size: 0.9rem;
+}
+
+.sf-prediction-card-prob-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sf-prediction-card-prob,
+.sf-prediction-card-detail {
+  border: 1px solid #dde8ed;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 8px 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.sf-prediction-card-prob-label,
+.sf-prediction-card-detail-label,
+.sf-prediction-card-section-label,
+.sf-prediction-card-goalie-team {
+  color: #687970;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sf-prediction-card-prob-value,
+.sf-prediction-card-detail-value,
+.sf-prediction-card-goalie-value {
+  color: var(--sf-dark);
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.sf-prediction-card-detail-grid,
+.sf-prediction-card-goalies {
+  display: grid;
+  gap: 8px;
+}
+
+.sf-prediction-card-goalie {
+  border-top: 1px solid #e5eef2;
+  padding-top: 8px;
+  display: grid;
+  gap: 4px;
+}
+
+.sf-prediction-card-goalie:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.sf-prediction-card-factors {
+  display: grid;
+  gap: 6px;
 }
 
 .sf-prediction-card--cta {
@@ -604,6 +694,49 @@ body.lato {
 
 .sf-factor-list li + li {
   margin-top: 4px;
+}
+
+.sf-factor-edge-list {
+  display: grid;
+  gap: 6px;
+}
+
+.sf-factor-edge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  min-width: 0;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.sf-factor-edge-logo-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8em;
+  min-width: 1.8em;
+  max-width: 1.8em;
+  height: 1.8em;
+  min-height: 1.8em;
+  max-height: 1.8em;
+  flex: 0 0 1.8em;
+  overflow: hidden;
+}
+
+.sf-factor-edge-logo {
+  display: block;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain;
+}
+
+.sf-factor-edge-label {
+  color: #526257;
 }
 
 .sf-empty-state {
@@ -1013,6 +1146,11 @@ body.lato {
   padding: 8px 9px;
   border-bottom: 1px solid #e6eef1;
   white-space: nowrap;
+}
+
+.sf-prediction-factor-cell {
+  white-space: normal !important;
+  min-width: 320px;
 }
 
 .sf-table th {
@@ -1550,7 +1688,7 @@ body.lato {
   }
 
   .sf-prediction-card-grid--home {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .sf-team-grid {
@@ -1659,6 +1797,10 @@ body.lato {
   }
 
   .sf-prediction-card-grid--home {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-prediction-card-prob-grid {
     grid-template-columns: 1fr;
   }
 
