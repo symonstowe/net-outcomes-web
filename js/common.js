@@ -55,6 +55,74 @@
     }).format(dt);
   }
 
+  function formatUtcDateTime(value) {
+    if (!value) return '';
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return String(value);
+    return new Intl.DateTimeFormat('en-CA', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'UTC',
+      timeZoneName: 'short',
+    }).format(dt);
+  }
+
+  function formatVenueDateTime(value, venueTimeZone, venueUtcOffset) {
+    if (!value) return '';
+    const dt = new Date(value);
+    if (Number.isNaN(dt.getTime())) return String(value);
+
+    const tz = String(venueTimeZone || '').trim();
+    if (tz) {
+      try {
+        return new Intl.DateTimeFormat('en-CA', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          timeZone: tz,
+          timeZoneName: 'short',
+        }).format(dt);
+      } catch (error) {
+        // Fall through to the offset fallback below.
+      }
+    }
+
+    const offsetText = String(venueUtcOffset || '').trim();
+    if (offsetText) {
+      const match = offsetText.match(/^([+-])(\d{2}):?(\d{2})$/);
+      if (match) {
+        const [, sign, hoursText, minutesText] = match;
+        const totalMinutes = (Number(hoursText) * 60 + Number(minutesText))
+          * (sign === '-' ? -1 : 1);
+        const shifted = new Date(dt.getTime() + totalMinutes * 60 * 1000);
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const month = months[shifted.getUTCMonth()] || '';
+        const day = shifted.getUTCDate();
+        const year = shifted.getUTCFullYear();
+        const rawHours = shifted.getUTCHours();
+        const minutes = String(shifted.getUTCMinutes()).padStart(2, '0');
+        const meridiem = rawHours >= 12 ? 'PM' : 'AM';
+        const hour12 = rawHours % 12 || 12;
+        return `${month} ${day}, ${year} ${hour12}:${minutes} ${meridiem} UTC${offsetText}`;
+      }
+    }
+
+    return formatUtcDateTime(value);
+  }
+
+  function formatGameDateTime(row) {
+    if (!row || typeof row !== 'object') {
+      return formatVenueDateTime(row);
+    }
+    if (row.start_time_label) return String(row.start_time_label);
+    return formatVenueDateTime(row.start_time_utc || row.game_date, row.venue_timezone, row.venue_utc_offset);
+  }
+
   function formatLocalDate(value) {
     if (!value) return '';
     const dt = new Date(value);
@@ -130,6 +198,9 @@
     fetchJson,
     setText,
     formatLocalDateTime,
+    formatUtcDateTime,
+    formatVenueDateTime,
+    formatGameDateTime,
     formatLocalDate,
     normalizeText,
     updateSortableHeaders,

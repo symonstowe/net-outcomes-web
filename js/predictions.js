@@ -3,8 +3,8 @@
     esc,
     fetchJson,
     setText,
-    formatLocalDateTime,
-    formatLocalDate,
+    formatGameDateTime,
+    formatUtcDateTime,
     emptyRow,
   } = window.NetOutcomesCommon;
 
@@ -47,7 +47,7 @@
       <article class="sf-prediction-card sf-prediction-card--detailed">
         <div class="sf-prediction-card-head">${esc(awayTeam)} at ${esc(homeTeam)}</div>
         <div class="sf-prediction-card-pick">${esc(row.favorite_team)} ${Number(row.favorite_win_prob || 0).toFixed(1)}%</div>
-        <div class="sf-prediction-card-meta">${formatLocalDateTime(row.start_time_utc || row.game_date)}</div>
+        <div class="sf-prediction-card-meta">${formatGameDateTime(row)}</div>
         <div class="sf-prediction-card-sub">Edge ${Number(row.confidence_edge || 0).toFixed(1)} pts</div>
         <div class="sf-prediction-card-prob-grid">
           <div class="sf-prediction-card-prob"><span class="sf-prediction-card-prob-label">${esc(awayTeam)} Win</span><span class="sf-prediction-card-prob-value">${Number(row.away_win_prob || 0).toFixed(1)}%</span></div>
@@ -90,16 +90,13 @@
     if (basisEl) basisEl.textContent = String(predictions?.basis || '');
     const timeNoteEl = document.getElementById('predictionsLocalTimeNote');
     if (timeNoteEl) {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      timeNoteEl.textContent = tz
-        ? `Times are shown in your local timezone (${tz}).`
-        : 'Times are shown in your local timezone.';
+      timeNoteEl.textContent = 'Game times are shown in the local time zone of the venue.';
     }
 
     if (predictions?.window_start_utc || predictions?.window_end_utc) {
       setText(
         'predictionsWindowValue',
-        `${formatLocalDateTime(predictions.window_start_utc)} to ${formatLocalDateTime(predictions.window_end_utc)}`,
+        `${formatUtcDateTime(predictions.window_start_utc)} to ${formatUtcDateTime(predictions.window_end_utc)}`,
       );
     }
     setText('predictionsGameCount', rows.length);

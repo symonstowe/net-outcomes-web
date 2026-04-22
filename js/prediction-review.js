@@ -2,7 +2,8 @@
   const {
     esc,
     fetchJson,
-    formatLocalDateTime,
+    formatGameDateTime,
+    formatUtcDateTime,
     formatLocalDate,
     emptyRow,
   } = window.NetOutcomesCommon;
@@ -28,7 +29,7 @@
     }
     tbody.innerHTML = rows.map((row) => `
       <tr>
-        <td>${esc(formatLocalDateTime(row.start_time_utc) || formatLocalDate(row.game_date))}</td>
+        <td>${esc(formatGameDateTime(row) || formatLocalDate(row.game_date))}</td>
         <td>${esc(row.away_team)} at ${esc(row.home_team)}</td>
         <td><strong>${esc(row.predicted_team)}</strong> ${Number(row.favorite_win_prob || 0).toFixed(1)}%</td>
         <td>${esc(row.away_team)} ${Number(row.away_score || 0)} - ${Number(row.home_score || 0)} ${esc(row.home_team)}</td>
@@ -69,7 +70,7 @@
       ? formatLocalDate(review.snapshot_date)
       : 'Yesterday';
     const publishedText = review?.published_at_utc
-      ? `Published ${formatLocalDateTime(review.published_at_utc)}. `
+      ? `Published ${formatUtcDateTime(review.published_at_utc)}. `
       : '';
 
     if (

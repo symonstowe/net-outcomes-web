@@ -4,7 +4,8 @@
     signed,
     fetchJson,
     setText,
-    formatLocalDateTime,
+    formatGameDateTime,
+    formatUtcDateTime,
   } = window.NetOutcomesCommon;
 
   function renderHighlightList(containerId, rows, renderRow, emptyText) {
@@ -25,7 +26,7 @@
       <article class="sf-prediction-card">
         <div class="sf-prediction-card-head">${esc(awayTeam)} at ${esc(homeTeam)}</div>
         <div class="sf-prediction-card-pick">${esc(row.favorite_team)} ${Number(row.favorite_win_prob || 0).toFixed(1)}%</div>
-        <div class="sf-prediction-card-meta">${formatLocalDateTime(row.start_time_utc || row.game_date)}</div>
+        <div class="sf-prediction-card-meta">${formatGameDateTime(row)}</div>
         <div class="sf-prediction-card-sub">Edge ${Number(row.confidence_edge || 0).toFixed(1)} pts</div>
         ${factorItems.length ? `
           <ol class="sf-factor-list">
@@ -77,7 +78,7 @@
     if (predictionWindow.start_utc || predictionWindow.end_utc) {
       setText(
         'homePredictionWindow',
-        `${formatLocalDateTime(predictionWindow.start_utc)} to ${formatLocalDateTime(predictionWindow.end_utc)}`,
+        `${formatUtcDateTime(predictionWindow.start_utc)} to ${formatUtcDateTime(predictionWindow.end_utc)}`,
       );
     }
 
