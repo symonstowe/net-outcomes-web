@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams." />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Net Outcomes | NHL Playoff Bracket &amp; Probabilities" />
+  <meta property="og:description" content="NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams." />
+  <meta property="og:url" content="https://netoutcomes.ca/playoffs.html" />
+  <meta property="og:site_name" content="Net Outcomes" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Net Outcomes | NHL Playoff Bracket &amp; Probabilities" />
+  <meta name="twitter:description" content="NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams." />
+  <link rel="canonical" href="https://netoutcomes.ca/playoffs.html" />
+  <link rel="icon" href="imgs/netoutcomes_favicon.svg" />
+  <link rel="stylesheet" href="latofonts.css?v=18a9502bc8f5a780" />
+  <link rel="stylesheet" href="style.css?v=18a9502bc8f5a780" />
+  <title>Net Outcomes | NHL Playoff Bracket &amp; Probabilities</title>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/netoutcomes_favicon.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"WebPage","@id":"https://netoutcomes.ca/playoffs.html#webpage","url":"https://netoutcomes.ca/playoffs.html","name":"Net Outcomes | NHL Playoff Bracket & Probabilities","description":"NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams.","inLanguage":"en-CA","isPartOf":{"@id":"https://netoutcomes.ca/#website"},"publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"BreadcrumbList","@id":"https://netoutcomes.ca/playoffs.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://netoutcomes.ca/"},{"@type":"ListItem","position":2,"name":"Playoffs","item":"https://netoutcomes.ca/playoffs.html"}]}]}</script>
+</head>
+<body class="lato sf-background">
+  <div id="container" class="sf-container">
+    <header class="sf-header sf-header--page">
+      <div class="sf-header-top">
+        <a class="brand_name brand_name--link" href="/" aria-label="Net Outcomes home">
+          <img class="name_pic" src="imgs/netoutcomes_favicon.svg" alt="Net Outcomes logo" />
+          <div class="name">Net Outcomes</div>
+        </a>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link is-active" href="/playoffs.html">Playoffs</a><a class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
+      </div>
+      <p class="sf-subtitle">NHL static analytics for season 2025-2026</p>
+      <h1 class="sf-page-title">Playoffs</h1>
+      <p class="sf-page-lede">Probability flow from Round 1 to the Stanley Cup. Ribbon widths show each team&#x27;s odds of reaching every round.</p>
+      <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
+    </header>
+    <main class="sf-main">
+      
+      
+      <script src="https://cdn.jsdelivr.net/npm/d3@7" defer></script>
+
+      <style>
+        .sf-playoff-bracket-panel { padding: 0; overflow: hidden; }
+        .sf-playoff-bracket-panel > .sf-panel-header { padding: 20px 22px 10px; }
+        .sf-bracket-controls {
+          display: flex; gap: 10px; align-items: center; justify-content: flex-end;
+          padding: 0 22px 10px; flex-wrap: wrap;
+        }
+        .sf-bracket-controls label { color: #7d959c; font-size: 13px; }
+        .sf-bracket-controls select {
+          color: var(--sf-dark); background: var(--sf-white);
+          border: 1px solid var(--sf-border); border-radius: 9px;
+          padding: 7px 10px; font: inherit;
+        }
+        .sf-bracket-chart-shell {
+          position: relative;
+          background: transparent;
+          border-top: 1px solid var(--sf-border);
+          border-bottom: 1px solid var(--sf-border);
+          overflow: hidden;
+        }
+        .sf-bracket-chart-shell svg {
+          display: block; width: 100%; height: auto; min-height: 640px;
+        }
+        .sf-bracket-details {
+          position: absolute; left: 50%; top: 460px; transform: translateX(-50%);
+          min-width: 280px; pointer-events: none;
+          background: rgba(255,255,255,.94);
+          border: 1px solid var(--sf-border); border-radius: 12px;
+          padding: 12px 14px; box-shadow: 0 10px 28px rgba(59,71,59,.12);
+          color: var(--sf-dark);
+          font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+        }
+        .sf-bracket-details .team {
+          font-weight: 750; font-size: 15px; margin-bottom: 8px;
+        }
+        .sf-bracket-details .metric-row {
+          display: grid; grid-template-columns: 1fr auto; gap: 10px;
+          font-size: 12px; padding: 3px 0; color: #7d959c;
+        }
+        .sf-bracket-details .metric-row b { color: var(--sf-dark); }
+        .sf-bracket-chart-shell .team-card rect {
+          fill: var(--sf-white);
+          stroke: var(--sf-border);
+          stroke-width: 1;
+        }
+        .sf-bracket-chart-shell .round-node .node-border {
+          fill: rgba(255,255,255,0);
+          stroke: var(--sf-border);
+          stroke-width: 1.2;
+          shape-rendering: crispEdges;
+        }
+        .sf-bracket-chart-shell .round-node .node-fill {
+          stroke: none; shape-rendering: crispEdges;
+          transition: opacity 120ms ease;
+        }
+        .sf-bracket-chart-shell .team-card text,
+        .sf-bracket-chart-shell .round-node text {
+          fill: var(--sf-dark); font-size: 12px; dominant-baseline: middle;
+          font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+        }
+        .sf-bracket-chart-shell .team-card .small,
+        .sf-bracket-chart-shell .round-node .small {
+          fill: #7d959c; font-size: 10px;
+        }
+        .sf-bracket-chart-shell .team-card:hover rect {
+          stroke: var(--sf-blue);
+        }
+        .sf-bracket-chart-shell .team-card.selected rect {
+          stroke: var(--sf-blue); stroke-width: 2;
+        }
+        .sf-bracket-chart-shell .flow-ribbon {
+          cursor: pointer; mix-blend-mode: multiply;
+          transition: opacity 120ms ease, filter 120ms ease;
+        }
+        .sf-bracket-chart-shell .round-label {
+          fill: #7d959c; font-size: 11px; text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+        }
+        .sf-bracket-chart-shell .conf-label {
+          font-weight: 800; font-size: 15px; letter-spacing: 0.08em;
+          text-transform: uppercase;
+          font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+        }
+        .sf-bracket-chart-shell .series-score {
+          fill: #3b473b; font-size: 11px; font-weight: 600;
+          font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+          paint-order: stroke;
+          stroke: rgba(255,255,255,.92); stroke-width: 3px; stroke-linejoin: round;
+        }
+        .sf-bracket-chart-shell .annotation {
+          fill: var(--sf-dark); font-size: 11px; font-weight: 700;
+          paint-order: stroke;
+          stroke: rgba(255,255,255,.92); stroke-width: 4px; stroke-linejoin: round;
+          font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+        }
+        .sf-bracket-chart-shell .tooltip {
+          position: absolute; pointer-events: none; opacity: 0;
+          background: var(--sf-white);
+          border: 1px solid var(--sf-border);
+          border-radius: 10px; padding: 8px 10px; color: var(--sf-dark);
+          font-size: 12px; transform: translate(-50%,-120%);
+          white-space: nowrap; box-shadow: 0 10px 28px rgba(59,71,59,.14);
+          font-family: "LatoWeb", sans-serif;
+        }
+      </style>
+
+      <section class="sf-panel sf-playoff-bracket-panel" id="playoffBracketSection">
+        <div class="sf-panel-header">
+          <h2>Playoff Bracket</h2>
+          <div class="sf-rank-basis" id="bracketBasis">
+            Ribbon widths are proportional to the probability a team advances
+            to each round. Series probabilities come from per-game model
+            win odds folded into a best-of-7 dynamic-programming calculation;
+            Cup and conference odds come from 10&#8202;000 full-bracket
+            Monte Carlo simulations. Click a ribbon, node, or team card to
+            highlight a single team.
+          </div>
+        </div>
+        <div class="sf-bracket-controls">
+          <label for="bracketTeamSelect">Highlight</label>
+          <select id="bracketTeamSelect"></select>
+        </div>
+        <div id="bracketLoading" class="sf-loading-state">Loading bracket&hellip;</div>
+        <div id="bracketContainer" class="sf-bracket-chart-shell" hidden>
+          <div class="sf-bracket-details" id="bracketDetails"></div>
+          <svg id="bracketChart" viewBox="0 0 1600 800"></svg>
+          <div class="tooltip" id="bracketTooltip"></div>
+        </div>
+      </section>
+
+      <section class="sf-panel" id="standingsSection">
+        <div class="sf-panel-header">
+          <h2>Season Outcome Probabilities</h2>
+          <div class="sf-rank-basis">
+            Probabilities are derived from 10&#8202;000 Monte Carlo simulations
+            of the remaining schedule and playoff bracket.
+            Once the regular season has ended all values reflect
+            the actual final outcomes (0% or 100%).
+          </div>
+        </div>
+        <div id="standingsLoading" class="sf-loading-state">Loading standings&hellip;</div>
+        <div id="standingsTableMount" class="sf-table-wrap" hidden>
+          <table id="standingsTable" class="sf-table sf-playoff-standings-table">
+            <thead>
+              <tr>
+                <th class="sf-col-rank">#</th>
+                <th class="sf-col-team">Team</th>
+                <th class="sf-col-pts" title="Regular-season points">PTS</th>
+                <th class="sf-col-pct" title="Probability to win the Stanley Cup">Win Cup</th>
+                <th class="sf-col-pct" title="Probability to win the Conference">Win Conf.</th>
+                <th class="sf-col-pct" title="Probability to win the Division">Win Div.</th>
+                <th class="sf-col-pct" title="Probability to qualify for the playoffs">Make Playoffs</th>
+              </tr>
+            </thead>
+            <tbody id="standingsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    
+    </main>
+    <footer class="sf-site-footer"><div class="sf-site-footer-inner"><p class="sf-site-footer-copy">&copy; <!--NETOUTCOMES_COPYRIGHT_YEAR-->2026<!--/NETOUTCOMES_COPYRIGHT_YEAR--> Net Outcomes. All rights reserved.</p><p class="sf-site-footer-legal">Net Outcomes is an independent, unofficial hockey analytics site and is not affiliated with, endorsed by, or sponsored by the National Hockey League or any NHL club. Team names, team logos, and other marks shown here are the property of the National Hockey League and the respective clubs and are displayed only to identify the teams discussed on this site. All other trademarks and copyrights are the property of their respective owners.</p><p class="sf-site-footer-note">Team logos displayed on this site are loaded from official NHL-hosted club logo assets for identification and informational display only.</p></div></footer>
+  </div>
+  <script src="js/common.js?v=18a9502bc8f5a780" defer></script>
+  <script src="js/playoffs.js?v=18a9502bc8f5a780" defer></script>
+</body>
+</html>
