@@ -50,6 +50,14 @@
     const standingsMap = new Map();
     (standingsRows || []).forEach((row) => standingsMap.set(row.team, row));
 
+    // Any team that lost a completed series at any round is eliminated.
+    const eliminated = new Set();
+    (seriesFlat || []).forEach((s) => {
+      if (!s || !s.is_complete || !s.winner) return;
+      if (s.top_seed && s.top_seed !== s.winner) eliminated.add(s.top_seed);
+      if (s.bottom_seed && s.bottom_seed !== s.winner) eliminated.add(s.bottom_seed);
+    });
+
     const teams = [];
     const r1Series = [];
 
@@ -102,6 +110,7 @@
             logo,
             color: teamColor(abbrev),
             probs: { r2, cf, final: finalProb, cup },
+            eliminated: abbrev ? eliminated.has(abbrev) : false,
           });
         });
       }
@@ -442,9 +451,13 @@
 
     function clearSelection() {
       select.property('value', '');
-      flows.selectAll('.flow-ribbon').transition().duration(110).attr('opacity', 0.68).attr('filter', null);
-      nodes.selectAll('.node-fill').transition().duration(110).attr('opacity', 0.76);
-      cards.classed('selected', false).transition().duration(110).attr('opacity', 1);
+      flows.selectAll('.flow-ribbon').transition().duration(110)
+        .attr('opacity', (d) => (d.team.eliminated ? 0.08 : 0.68))
+        .attr('filter', null);
+      nodes.selectAll('.node-fill').transition().duration(110)
+        .attr('opacity', (d) => (d.eliminated ? 0.08 : 0.76));
+      cards.classed('selected', false).transition().duration(110)
+        .attr('opacity', (d) => (d.eliminated ? 0.32 : 1));
       labels.selectAll('.annotation').remove();
       details.html('<div class="team">NHL playoffs</div>'
         + '<div class="metric-row"><span>Teams</span><b>16</b></div>'
