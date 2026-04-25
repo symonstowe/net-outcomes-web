@@ -30,12 +30,26 @@
   const CONF_TO_SIDE = { Western: 'West', Eastern: 'East' };
   const BRACKET_SLOT_ORDER = 4; // 4 R1 series per conference
 
+  const DIVISION_ABBR = {
+    Atlantic: 'ATL',
+    Metropolitan: 'MET',
+    Central: 'CEN',
+    Pacific: 'PAC',
+  };
+
+  function seedLabelFor(slot, division) {
+    if (slot === 1) return 'WC2';
+    if (slot === 5) return 'WC1';
+    const abbr = DIVISION_ABBR[division] || (division ? division.slice(0, 3).toUpperCase() : 'DIV');
+    const rank = (slot === 0 || slot === 4) ? 1 : ((slot === 2 || slot === 6) ? 2 : 3);
+    return `${abbr}${rank}`;
+  }
+
   // Build the 16-team array the visualization expects, from the payload.
   function buildTeams(seriesFlat, standingsRows) {
     const standingsMap = new Map();
     (standingsRows || []).forEach((row) => standingsMap.set(row.team, row));
 
-    const seedLabels = [1, 8, 4, 5, 2, 7, 3, 6];
     const teams = [];
     const r1Series = [];
 
@@ -75,13 +89,16 @@
           const finalProb = Number(sRow.win_conf_pct ?? 0) / 100;
           const cup = Number(sRow.win_cup_pct ?? 0) / 100;
 
+          const division = sRow.division || '';
+          const seedLabel = seedLabelFor(slot, division);
+
           teams.push({
             id: `${side.toLowerCase()}${slot}`,
             conf: side,
-            seed: seedLabels[slot],
+            seed: seedLabel,
             slot,
             abbrev,
-            name: name || `${side} ${seedLabels[slot]}`,
+            name: name || `${side} ${seedLabel}`,
             logo,
             color: teamColor(abbrev),
             probs: { r2, cf, final: finalProb, cup },
@@ -133,11 +150,11 @@
 
     const W = 1600;
     const cardW = 172;
-    const cardH = 42;
+    const flowScale = 48;
+    const cardH = flowScale;
     const nodeW = 30;
     const yTop = 134;
     const yGap = 74;
-    const flowScale = 48;
     const gap = 2.0;
 
     const xs = {
@@ -370,14 +387,22 @@
         selectTeam(d.id, true);
       });
 
-    cards.append('rect')
-      .attr('width', cardW)
-      .attr('height', cardH)
-      .attr('rx', 6);
+    function cardPath(w, h, r, squareSide) {
+      if (squareSide === 'right') {
+        return `M ${r},0 L ${w},0 L ${w},${h} L ${r},${h}`
+          + ` Q 0,${h} 0,${h - r} L 0,${r} Q 0,0 ${r},0 Z`;
+      }
+      return `M 0,0 L ${w - r},0 Q ${w},0 ${w},${r} L ${w},${h - r}`
+        + ` Q ${w},${h} ${w - r},${h} L 0,${h} Z`;
+    }
+
+    cards.append('path')
+      .attr('class', 'card-bg')
+      .attr('d', (d) => cardPath(cardW, cardH, 6, d.conf === 'West' ? 'right' : 'left'));
 
     cards.each(function appendCardContent(d) {
       const g = d3.select(this);
-      const logoSize = 26;
+      const logoSize = 28;
       const logoX = d.conf === 'West' ? 8 : cardW - 8 - logoSize;
       if (d.logo) {
         g.append('image')
@@ -391,15 +416,15 @@
       const textX = d.conf === 'West' ? 8 + logoSize + 8 : cardW - 8 - logoSize - 8;
       g.append('text')
         .attr('x', textX)
-        .attr('y', 17)
+        .attr('y', 19)
         .attr('text-anchor', textAnchor)
         .attr('font-weight', 700)
         .attr('font-size', 13)
-        .text(`${d.seed}. ${d.abbrev || 'TBD'}`);
+        .text(`${d.seed} · ${d.abbrev || 'TBD'}`);
       g.append('text')
         .attr('class', 'small')
         .attr('x', textX)
-        .attr('y', 32)
+        .attr('y', 36)
         .attr('text-anchor', textAnchor)
         .text(`R1 ${fmtPct(d.probs.r2)} · Cup ${fmtPct(d.probs.cup)}`);
     });
@@ -519,7 +544,7 @@
     return `<tr class="${row.in_playoffs ? 'sf-standings-playoff-team' : 'sf-standings-out-team'}">
       <td class="sf-col-rank">${rank}</td>
       <td class="sf-col-team"><span class="sf-team-cell">
-        <img class="sf-team-logo-sm" src="${esc(row.logo_url)}" alt="${esc(row.team)}" loading="lazy"/>
+        <span class="sf-factor-edge-logo-box" aria-hidden="true"><img class="sf-factor-edge-logo" src="${esc(row.logo_url)}" alt="" loading="lazy" decoding="async"/></span>
         <span class="sf-team-name-cell">
           <span class="sf-team-abbrev">${esc(row.team)}</span>
           <span class="sf-team-fullname">${esc(row.full_name)}</span>
