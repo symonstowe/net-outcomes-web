@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-04-25 11:08 UTC",
-  "last_updated_utc": "2026-04-25 11:08 UTC",
-  "last_updated_iso": "2026-04-25T11:08:38.727047+00:00",
+  "generated_at": "2026-04-25 19:46 UTC",
+  "last_updated_utc": "2026-04-25 19:46 UTC",
+  "last_updated_iso": "2026-04-25T19:46:29.320738+00:00",
   "season_label": "2025-2026",
   "counts": {
     "skaters": 885,
     "goalies": 71,
     "teams": 32,
     "today_games": 3,
-    "predictions": 7
+    "predictions": 10
   },
   "recent_basis": "Recent mover lists use custom rating changes versus the 2026-03-27 snapshot, which is the day before the weighted-median 10th most recent team game. Skater movers use overall talent score, team movers use total team score, goalie movers use goalie score, and usage lists compare the most recent 10 games to the previous 10.",
   "today_games": [
@@ -634,7 +634,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-04-25T08:00:00+00:00",
-    "end_utc": "2026-04-27T08:00:00+00:00"
+    "start_utc": "2026-04-25T19:00:00+00:00",
+    "end_utc": "2026-04-27T19:00:00+00:00"
   }
 }
