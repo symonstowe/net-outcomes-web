@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-02 07:30 UTC",
-  "last_updated_utc": "2026-05-02 07:30 UTC",
-  "last_updated_iso": "2026-05-02T07:30:17.448482+00:00",
+  "generated_at": "2026-05-02 12:37 UTC",
+  "last_updated_utc": "2026-05-02 12:37 UTC",
+  "last_updated_iso": "2026-05-02T12:37:01.500238+00:00",
   "season_label": "2025-2026",
   "counts": {
     "skaters": 842,
@@ -20,10 +20,10 @@
       "home_team": "CAR",
       "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
       "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-      "home_win_prob": 66.3,
-      "away_win_prob": 33.7,
-      "ot_prob": 23.0,
-      "home_expected_goals": 2.22,
+      "home_win_prob": 68.2,
+      "away_win_prob": 31.8,
+      "ot_prob": 24.2,
+      "home_expected_goals": 2.23,
       "away_expected_goals": 1.6,
       "home_rest_days": 6,
       "away_rest_days": 2,
@@ -35,85 +35,85 @@
       "away_goalie_mix": "Vladar 99% (adj 0.997), Ersson 0% (adj 1.166), Kolosov 0% (adj 1.250)",
       "home_goalie_mix_html": "<strong>Andersen 85% (adj 0.868)</strong>, Bussi 11% (adj 1.126), Kochetkov 4% (adj 1.155)",
       "away_goalie_mix_html": "<strong>Vladar 99% (adj 0.997)</strong>, Ersson 0% (adj 1.166), Kolosov 0% (adj 1.250)",
-      "top_deciding_factors": "rest-day edge (+0.698); special-teams RAPM edge (-0.360); home rust (4+ days off) (-0.339); lineup xG defensive depth-score edge (+0.311); finishing talent edge (-0.239)",
-      "home_factor_pushes": "rest-day edge (+0.698); lineup xG defensive depth-score edge (+0.311); team xG defensive depth-score edge (+0.205); home-ice base edge (+0.181); readiness edge (+0.176)",
-      "away_factor_pushes": "special-teams RAPM edge (-0.360); home rust (4+ days off) (-0.339); finishing talent edge (-0.239); lineup xG offensive depth edge (-0.200); xG suppression edge (-0.182)",
+      "top_deciding_factors": "rest-day edge (+0.749); readiness edge (+0.502); team xG offensive depth edge (+0.356); rush finishing edge (-0.342); home rust (4+ days off) (-0.336)",
+      "home_factor_pushes": "rest-day edge (+0.749); readiness edge (+0.502); team xG offensive depth edge (+0.356); lineup xG defensive depth-score edge (+0.331); team xG defensive depth-score edge (+0.265)",
+      "away_factor_pushes": "rush finishing edge (-0.342); home rust (4+ days off) (-0.336); deployment context edge (-0.284); special-teams RAPM edge (-0.278); independent TOI edge (-0.267)",
       "top_deciding_factor_items": [
         {
           "label": "rest-day edge",
           "edge_team": "CAR",
           "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.698
+          "contribution": 0.749
         },
         {
-          "label": "special-teams RAPM edge",
+          "label": "readiness edge",
+          "edge_team": "CAR",
+          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "contribution": 0.502
+        },
+        {
+          "label": "team xG offensive depth edge",
+          "edge_team": "CAR",
+          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "contribution": 0.356
+        },
+        {
+          "label": "rush finishing edge",
           "edge_team": "PHI",
           "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-          "contribution": -0.36
+          "contribution": -0.342
         },
         {
           "label": "home rust (4+ days off)",
           "edge_team": "PHI",
           "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-          "contribution": -0.339
-        },
-        {
-          "label": "lineup xG defensive depth-score edge",
-          "edge_team": "CAR",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.311
-        },
-        {
-          "label": "finishing talent edge",
-          "edge_team": "PHI",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-          "contribution": -0.239
+          "contribution": -0.336
         }
       ],
-      "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">rest-day edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">special-teams RAPM edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">home rust (4+ days off)</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">lineup xG defensive depth-score edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">finishing talent edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
+      "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">rest-day edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">readiness edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">team xG offensive depth edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">rush finishing edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">home rust (4+ days off)</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
       "venue_timezone": "US/Eastern",
       "venue_utc_offset": "-04:00",
       "start_time_label": "May 2, 2026 8:00 PM EDT",
       "favorite_team": "CAR",
-      "favorite_win_prob": 66.3,
-      "confidence_edge": 32.6,
+      "favorite_win_prob": 68.2,
+      "confidence_edge": 36.3,
       "top_factors": [
-        "rest-day edge (+0.698)",
-        "special-teams RAPM edge (-0.360)",
-        "home rust (4+ days off) (-0.339)",
-        "lineup xG defensive depth-score edge (+0.311)",
-        "finishing talent edge (-0.239)"
+        "rest-day edge (+0.749)",
+        "readiness edge (+0.502)",
+        "team xG offensive depth edge (+0.356)",
+        "rush finishing edge (-0.342)",
+        "home rust (4+ days off) (-0.336)"
       ],
       "top_factor_items": [
         {
           "label": "rest-day edge",
           "edge_team": "CAR",
           "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.698
+          "contribution": 0.749
         },
         {
-          "label": "special-teams RAPM edge",
+          "label": "readiness edge",
+          "edge_team": "CAR",
+          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "contribution": 0.502
+        },
+        {
+          "label": "team xG offensive depth edge",
+          "edge_team": "CAR",
+          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "contribution": 0.356
+        },
+        {
+          "label": "rush finishing edge",
           "edge_team": "PHI",
           "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-          "contribution": -0.36
+          "contribution": -0.342
         },
         {
           "label": "home rust (4+ days off)",
           "edge_team": "PHI",
           "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-          "contribution": -0.339
-        },
-        {
-          "label": "lineup xG defensive depth-score edge",
-          "edge_team": "CAR",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.311
-        },
-        {
-          "label": "finishing talent edge",
-          "edge_team": "PHI",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-          "contribution": -0.239
+          "contribution": -0.336
         }
       ]
     }
@@ -424,7 +424,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-05-02T06:00:00+00:00",
-    "end_utc": "2026-05-04T06:00:00+00:00"
+    "start_utc": "2026-05-02T12:00:00+00:00",
+    "end_utc": "2026-05-04T12:00:00+00:00"
   }
 }
