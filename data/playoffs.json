@@ -1,6 +1,6 @@
 {
   "playoffs": {
-    "built_at": "2026-05-02T13:04:56.174644+00:00",
+    "built_at": "2026-05-02T13:56:13.444769+00:00",
     "season": 20252026,
     "season_year": 2026,
     "n_sims": 10000,
@@ -25,9 +25,9 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 4.18,
+          "top_seed_cup_pct": 5.07,
           "bottom_seed_cup_pct": 0.0,
-          "top_seed_conf_pct": 30.85,
+          "top_seed_conf_pct": 37.16,
           "bottom_seed_conf_pct": 0.0
         },
         {
@@ -49,10 +49,10 @@
           "winner_logo": "",
           "top_seed_series_win_pct": 56.1,
           "bottom_seed_series_win_pct": 43.9,
-          "top_seed_cup_pct": 4.74,
-          "bottom_seed_cup_pct": 1.9,
-          "top_seed_conf_pct": 21.13,
-          "bottom_seed_conf_pct": 13.19
+          "top_seed_cup_pct": 5.41,
+          "bottom_seed_cup_pct": 2.2,
+          "top_seed_conf_pct": 24.24,
+          "bottom_seed_conf_pct": 16.23
         },
         {
           "series_letter": "C",
@@ -73,9 +73,9 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 1.03,
+          "top_seed_cup_pct": 1.63,
           "bottom_seed_cup_pct": 0.0,
-          "top_seed_conf_pct": 9.77,
+          "top_seed_conf_pct": 15.08,
           "bottom_seed_conf_pct": 0.0
         },
         {
@@ -98,9 +98,9 @@
           "top_seed_series_win_pct": 0.0,
           "bottom_seed_series_win_pct": 100.0,
           "top_seed_cup_pct": 0.0,
-          "bottom_seed_cup_pct": 3.36,
+          "bottom_seed_cup_pct": 0.32,
           "top_seed_conf_pct": 0.0,
-          "bottom_seed_conf_pct": 25.06
+          "bottom_seed_conf_pct": 7.29
         },
         {
           "series_letter": "E",
@@ -121,7 +121,7 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 81.14,
+          "top_seed_cup_pct": 81.63,
           "bottom_seed_cup_pct": 0.0,
           "top_seed_conf_pct": 90.08,
           "bottom_seed_conf_pct": 0.0
@@ -169,7 +169,7 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 2.51,
+          "top_seed_cup_pct": 2.6,
           "bottom_seed_cup_pct": 0.0,
           "top_seed_conf_pct": 6.7,
           "bottom_seed_conf_pct": 0.0
@@ -219,9 +219,9 @@
           "winner_logo": "",
           "top_seed_series_win_pct": 50.0,
           "bottom_seed_series_win_pct": 50.0,
-          "top_seed_cup_pct": 4.18,
+          "top_seed_cup_pct": 5.07,
           "bottom_seed_cup_pct": 0.0,
-          "top_seed_conf_pct": 30.85,
+          "top_seed_conf_pct": 37.16,
           "bottom_seed_conf_pct": 0.0
         },
         {
@@ -241,12 +241,12 @@
           "is_complete": false,
           "winner": "",
           "winner_logo": "",
-          "top_seed_series_win_pct": 37.0,
-          "bottom_seed_series_win_pct": 63.0,
-          "top_seed_cup_pct": 1.03,
-          "bottom_seed_cup_pct": 3.36,
-          "top_seed_conf_pct": 9.77,
-          "bottom_seed_conf_pct": 25.06
+          "top_seed_series_win_pct": 65.7,
+          "bottom_seed_series_win_pct": 34.3,
+          "top_seed_cup_pct": 1.63,
+          "bottom_seed_cup_pct": 0.32,
+          "top_seed_conf_pct": 15.08,
+          "bottom_seed_conf_pct": 7.29
         },
         {
           "series_letter": "K",
@@ -267,7 +267,7 @@
           "winner_logo": "",
           "top_seed_series_win_pct": 95.2,
           "bottom_seed_series_win_pct": 4.8,
-          "top_seed_cup_pct": 81.14,
+          "top_seed_cup_pct": 81.63,
           "bottom_seed_cup_pct": 0.98,
           "top_seed_conf_pct": 90.08,
           "bottom_seed_conf_pct": 2.33
@@ -291,7 +291,7 @@
           "winner_logo": "",
           "top_seed_series_win_pct": 77.0,
           "bottom_seed_series_win_pct": 23.0,
-          "top_seed_cup_pct": 2.51,
+          "top_seed_cup_pct": 2.6,
           "bottom_seed_cup_pct": 0.16,
           "top_seed_conf_pct": 6.7,
           "bottom_seed_conf_pct": 0.89
@@ -392,7 +392,7 @@
         "win_round1_pct": 0.0,
         "win_round2_pct": 95.23,
         "win_conf_pct": 90.08,
-        "win_cup_pct": 81.14
+        "win_cup_pct": 81.63
       },
       {
         "team": "CAR",
@@ -409,9 +409,9 @@
         "make_playoffs_pct": 100.0,
         "win_division_pct": 100.0,
         "win_round1_pct": 0.0,
-        "win_round2_pct": 36.74,
-        "win_conf_pct": 9.77,
-        "win_cup_pct": 1.03
+        "win_round2_pct": 56.66,
+        "win_conf_pct": 15.08,
+        "win_cup_pct": 1.63
       },
       {
         "team": "DAL",
@@ -448,8 +448,8 @@
         "win_division_pct": 100.0,
         "win_round1_pct": 0.0,
         "win_round2_pct": 47.8,
-        "win_conf_pct": 30.85,
-        "win_cup_pct": 4.18
+        "win_conf_pct": 37.16,
+        "win_cup_pct": 5.07
       },
       {
         "team": "TBL",
@@ -467,8 +467,8 @@
         "win_division_pct": 0.0,
         "win_round1_pct": 56.41,
         "win_round2_pct": 30.22,
-        "win_conf_pct": 21.13,
-        "win_cup_pct": 4.74
+        "win_conf_pct": 24.24,
+        "win_cup_pct": 5.41
       },
       {
         "team": "MTL",
@@ -486,8 +486,8 @@
         "win_division_pct": 0.0,
         "win_round1_pct": 43.59,
         "win_round2_pct": 21.98,
-        "win_conf_pct": 13.19,
-        "win_cup_pct": 1.9
+        "win_conf_pct": 16.23,
+        "win_cup_pct": 2.2
       },
       {
         "team": "MIN",
@@ -580,9 +580,9 @@
         "make_playoffs_pct": 100.0,
         "win_division_pct": 0.0,
         "win_round1_pct": 0.0,
-        "win_round2_pct": 63.26,
-        "win_conf_pct": 25.06,
-        "win_cup_pct": 3.36
+        "win_round2_pct": 43.34,
+        "win_conf_pct": 7.29,
+        "win_cup_pct": 0.32
       },
       {
         "team": "WSH",
@@ -620,7 +620,7 @@
         "win_round1_pct": 0.0,
         "win_round2_pct": 76.97,
         "win_conf_pct": 6.7,
-        "win_cup_pct": 2.51
+        "win_cup_pct": 2.6
       },
       {
         "team": "EDM",
