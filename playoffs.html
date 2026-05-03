@@ -11,13 +11,20 @@
   <meta property="og:description" content="NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams." />
   <meta property="og:url" content="https://netoutcomes.ca/playoffs.html" />
   <meta property="og:site_name" content="Net Outcomes" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://netoutcomes.ca/imgs/social/playoffs-preview.png" />
+  <meta property="og:image:secure_url" content="https://netoutcomes.ca/imgs/social/playoffs-preview.png" />
+  <meta property="og:image:alt" content="Net Outcomes NHL playoff bracket probability flow chart" />
+  <meta name="twitter:image" content="https://netoutcomes.ca/imgs/social/playoffs-preview.png" />
+  <meta name="twitter:image:alt" content="Net Outcomes NHL playoff bracket probability flow chart" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Net Outcomes | NHL Playoff Bracket &amp; Probabilities" />
   <meta name="twitter:description" content="NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams." />
   <link rel="canonical" href="https://netoutcomes.ca/playoffs.html" />
   <link rel="icon" href="imgs/netoutcomes_favicon.svg" />
-  <link rel="stylesheet" href="latofonts.css?v=18a9f399f827ad5e" />
-  <link rel="stylesheet" href="style.css?v=18a9f399f827ad5e" />
+  <link rel="stylesheet" href="latofonts.css?v=18ac211d0fbab44a" />
+  <link rel="stylesheet" href="style.css?v=18ac211d0fbab44a" />
   <title>Net Outcomes | NHL Playoff Bracket &amp; Probabilities</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/netoutcomes_favicon.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"WebPage","@id":"https://netoutcomes.ca/playoffs.html#webpage","url":"https://netoutcomes.ca/playoffs.html","name":"Net Outcomes | NHL Playoff Bracket & Probabilities","description":"NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams.","inLanguage":"en-CA","isPartOf":{"@id":"https://netoutcomes.ca/#website"},"publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"BreadcrumbList","@id":"https://netoutcomes.ca/playoffs.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://netoutcomes.ca/"},{"@type":"ListItem","position":2,"name":"Playoffs","item":"https://netoutcomes.ca/playoffs.html"}]}]}</script>
 </head>
@@ -48,7 +55,7 @@
           display: flex; gap: 10px; align-items: center; justify-content: flex-end;
           padding: 0 22px 10px; flex-wrap: wrap;
         }
-        .sf-bracket-controls label { color: #7d959c; font-size: 13px; }
+        .sf-bracket-controls label { color: #7d959c; font-size: 15px; }
         .sf-bracket-controls select {
           color: var(--sf-dark); background: var(--sf-white);
           border: 1px solid var(--sf-border); border-radius: 9px;
@@ -59,13 +66,26 @@
           background: transparent;
           border-top: 1px solid var(--sf-border);
           border-bottom: 1px solid var(--sf-border);
-          overflow: hidden;
+          /* Overflow lives on the inner scroll wrapper, not here, so the
+             absolute-positioned details panel doesn't scroll with the chart. */
+          overflow: visible;
+        }
+        .sf-bracket-chart-scroll {
+          overflow-x: auto;
+          overflow-y: hidden;
         }
         .sf-bracket-chart-shell svg {
-          display: block; width: 100%; height: auto; min-height: 640px;
+          display: block; width: 100%; height: auto;
+          /* Stops the chart from shrinking to the point of being unreadable.
+             Below this width the wrapper scrolls horizontally instead. */
+          min-width: 1000px;
         }
         .sf-bracket-details {
-          position: absolute; left: 50%; top: 460px; transform: translateX(-50%);
+          /* Anchored to the bottom of the chart so it stays in the empty
+             zone below the Cup node at any scale, instead of drifting onto
+             ribbons when the SVG height changes. */
+          position: absolute; left: 50%; bottom: 24px;
+          transform: translateX(-50%);
           min-width: 280px; pointer-events: none;
           background: rgba(255,255,255,.94);
           border: 1px solid var(--sf-border); border-radius: 12px;
@@ -74,11 +94,11 @@
           font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
         }
         .sf-bracket-details .team {
-          font-weight: 750; font-size: 15px; margin-bottom: 8px;
+          font-weight: 750; font-size: 16px; margin-bottom: 8px;
         }
         .sf-bracket-details .metric-row {
           display: grid; grid-template-columns: 1fr auto; gap: 10px;
-          font-size: 12px; padding: 3px 0; color: #7d959c;
+          font-size: 13px; padding: 3px 0; color: #7d959c;
         }
         .sf-bracket-details .metric-row b { color: var(--sf-dark); }
         .sf-bracket-chart-shell .team-card .card-bg {
@@ -98,12 +118,12 @@
         }
         .sf-bracket-chart-shell .team-card text,
         .sf-bracket-chart-shell .round-node text {
-          fill: var(--sf-dark); font-size: 12px; dominant-baseline: middle;
+          fill: var(--sf-dark); font-size: 17px; dominant-baseline: middle;
           font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
         }
         .sf-bracket-chart-shell .team-card .small,
         .sf-bracket-chart-shell .round-node .small {
-          fill: #7d959c; font-size: 10px;
+          fill: #7d959c; font-size: 14px;
         }
         .sf-bracket-chart-shell .team-card:hover .card-bg {
           stroke: var(--sf-blue);
@@ -116,23 +136,23 @@
           transition: opacity 120ms ease, filter 120ms ease;
         }
         .sf-bracket-chart-shell .round-label {
-          fill: #7d959c; font-size: 11px; text-transform: uppercase;
+          fill: #7d959c; font-size: 17px; text-transform: uppercase;
           letter-spacing: 0.08em;
           font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
         }
         .sf-bracket-chart-shell .conf-label {
-          font-weight: 800; font-size: 15px; letter-spacing: 0.08em;
+          font-weight: 800; font-size: 22px; letter-spacing: 0.08em;
           text-transform: uppercase;
           font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
         }
         .sf-bracket-chart-shell .series-score {
-          fill: #3b473b; font-size: 11px; font-weight: 600;
+          fill: #3b473b; font-size: 16px; font-weight: 600;
           font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
           paint-order: stroke;
           stroke: rgba(255,255,255,.92); stroke-width: 3px; stroke-linejoin: round;
         }
         .sf-bracket-chart-shell .annotation {
-          fill: var(--sf-dark); font-size: 11px; font-weight: 700;
+          fill: var(--sf-dark); font-size: 17px; font-weight: 700;
           paint-order: stroke;
           stroke: rgba(255,255,255,.92); stroke-width: 4px; stroke-linejoin: round;
           font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
@@ -142,9 +162,50 @@
           background: var(--sf-white);
           border: 1px solid var(--sf-border);
           border-radius: 10px; padding: 8px 10px; color: var(--sf-dark);
-          font-size: 12px; transform: translate(-50%,-120%);
+          font-size: 14px; transform: translate(-50%,-120%);
           white-space: nowrap; box-shadow: 0 10px 28px rgba(59,71,59,.14);
           font-family: "LatoWeb", sans-serif;
+        }
+        html.sf-social-card-mode body {
+          background:
+            radial-gradient(circle at top left, rgba(6,121,159,.14), transparent 34%),
+            linear-gradient(180deg, #f3f7f7 0%, #eef4f4 100%);
+        }
+        html.sf-social-card-mode #playoffBracketSection {
+          width: 1200px;
+          height: 630px;
+          margin: 0;
+          padding: 12px 40px 14px;
+          box-sizing: border-box;
+          border-radius: 0;
+          box-shadow: none;
+          background: transparent;
+        }
+        html.sf-social-card-mode #playoffBracketSection > .sf-panel-header {
+          padding: 0 0 8px;
+        }
+        html.sf-social-card-mode #playoffBracketSection h2 {
+          margin: 0;
+          font-size: 28px;
+          letter-spacing: 0.02em;
+        }
+        html.sf-social-card-mode #bracketBasis,
+        html.sf-social-card-mode .sf-bracket-controls,
+        html.sf-social-card-mode .sf-bracket-details,
+        html.sf-social-card-mode .sf-bracket-chart-shell .tooltip {
+          display: none !important;
+        }
+        html.sf-social-card-mode .sf-bracket-chart-shell {
+          border-radius: 18px;
+          overflow: hidden;
+          background: rgba(255,255,255,.72);
+          box-shadow: 0 18px 44px rgba(59,71,59,.10);
+        }
+        html.sf-social-card-mode .sf-bracket-chart-scroll {
+          overflow: hidden;
+        }
+        html.sf-social-card-mode .sf-bracket-chart-shell svg {
+          min-width: 0;
         }
       </style>
 
@@ -166,8 +227,10 @@
         </div>
         <div id="bracketLoading" class="sf-loading-state">Loading bracket&hellip;</div>
         <div id="bracketContainer" class="sf-bracket-chart-shell" hidden>
+          <div class="sf-bracket-chart-scroll">
+            <svg id="bracketChart" viewBox="0 0 1600 820"></svg>
+          </div>
           <div class="sf-bracket-details" id="bracketDetails"></div>
-          <svg id="bracketChart" viewBox="0 0 1600 800"></svg>
           <div class="tooltip" id="bracketTooltip"></div>
         </div>
       </section>
@@ -204,7 +267,7 @@
     </main>
     <footer class="sf-site-footer"><div class="sf-site-footer-inner"><p class="sf-site-footer-copy">&copy; <!--NETOUTCOMES_COPYRIGHT_YEAR-->2026<!--/NETOUTCOMES_COPYRIGHT_YEAR--> Net Outcomes. All rights reserved.</p><p class="sf-site-footer-legal">Net Outcomes is an independent, unofficial hockey analytics site and is not affiliated with, endorsed by, or sponsored by the National Hockey League or any NHL club. Team names, team logos, and other marks shown here are the property of the National Hockey League and the respective clubs and are displayed only to identify the teams discussed on this site. All other trademarks and copyrights are the property of their respective owners.</p><p class="sf-site-footer-note">Team logos displayed on this site are loaded from official NHL-hosted club logo assets for identification and informational display only.</p></div></footer>
   </div>
-  <script src="js/common.js?v=18a9f399f827ad5e" defer></script>
-  <script src="js/playoffs.js?v=18a9f399f827ad5e" defer></script>
+  <script src="js/common.js?v=18ac211d0fbab44a" defer></script>
+  <script src="js/playoffs.js?v=18ac211d0fbab44a" defer></script>
 </body>
 </html>

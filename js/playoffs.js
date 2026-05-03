@@ -2,6 +2,56 @@
 (() => {
   const common = window.NetOutcomesCommon || {};
   const esc = common.esc || ((value) => String(value ?? ''));
+  const socialCardMode = (() => {
+    try {
+      return new URLSearchParams(window.location.search).get('social-card') === '1';
+    } catch (_error) {
+      return false;
+    }
+  })();
+
+  function setRenderStatus(status) {
+    document.documentElement.setAttribute('data-playoffs-render-status', String(status || ''));
+  }
+
+  function markRenderStatus(status) {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setRenderStatus(status));
+    });
+  }
+
+  function settleSvgImages(root, timeoutMs = 4000) {
+    const imageNodes = Array.from((root || document).querySelectorAll('#bracketChart image'));
+    if (!imageNodes.length) return Promise.resolve();
+    return Promise.all(imageNodes.map((node) => new Promise((resolve) => {
+      let finished = false;
+      const done = () => {
+        if (finished) return;
+        finished = true;
+        node.removeEventListener('load', done);
+        node.removeEventListener('error', done);
+        resolve();
+      };
+      node.addEventListener('load', done, { once: true });
+      node.addEventListener('error', done, { once: true });
+      window.setTimeout(done, timeoutMs);
+    }))).then(() => undefined);
+  }
+
+  function settleSocialCapture(root) {
+    const waits = [settleSvgImages(root)];
+    if (document.fonts && typeof document.fonts.ready?.then === 'function') {
+      waits.push(document.fonts.ready.catch(() => undefined));
+    }
+    return Promise.allSettled(waits).then(() => new Promise((resolve) => {
+      window.setTimeout(resolve, 150);
+    }));
+  }
+
+  if (socialCardMode) {
+    document.documentElement.classList.add('sf-social-card-mode');
+  }
+  setRenderStatus('pending');
 
   async function fetchJson(url) {
     if (typeof common.fetchJson === 'function') {
@@ -60,6 +110,35 @@
 
     const teams = [];
     const r1Series = [];
+    const allSeries = [];
+
+    const ROUND_STAGE = { 1: 'r1', 2: 'r2', 3: 'cf', 4: 'cup' };
+    const slotGroupForRound = (roundNum, bracketSlot) => {
+      if (roundNum === 1) return bracketSlot * 2;
+      if (roundNum === 2) return bracketSlot * 4;
+      return 0;
+    };
+
+    (seriesFlat || []).forEach((series) => {
+      const roundNum = Number(series.round || 0);
+      const stage = ROUND_STAGE[roundNum];
+      if (!stage) return;
+      // Cup is rendered only on the West side; map "Finals" (or any non-conf) to West.
+      const side = stage === 'cup'
+        ? 'West'
+        : CONF_TO_SIDE[series.conference] || 'West';
+      allSeries.push({
+        stage,
+        conf: side,
+        slotGroup: slotGroupForRound(roundNum, Number(series.bracket_slot || 0)),
+        topAbbrev: series.top_seed || '',
+        topWins: Number(series.top_seed_wins || 0),
+        bottomAbbrev: series.bottom_seed || '',
+        bottomWins: Number(series.bottom_seed_wins || 0),
+        isComplete: Boolean(series.is_complete),
+        winner: series.winner || '',
+      });
+    });
 
     ['Western', 'Eastern'].forEach((conference) => {
       const side = CONF_TO_SIDE[conference];
@@ -116,7 +195,7 @@
       }
     });
 
-    return { teams, r1Series };
+    return { teams, r1Series, allSeries };
   }
 
   function seriesScoreLabel(series) {
@@ -138,7 +217,7 @@
     return `${(v * 100).toFixed(1)}%`;
   }
 
-  function renderFlowChart(teams, r1Series) {
+  function renderFlowChart(teams, r1Series, allSeries) {
     const d3 = window.d3;
     if (!d3) {
       const container = document.getElementById('bracketContainer');
@@ -157,25 +236,46 @@
     svg.selectAll('*').remove();
     svg.on('click', clearSelection);
 
+    // Layout is fixed in viewBox coordinates; the SVG uses CSS
+    // `width:100%; height:auto` so the entire visual scales uniformly with the
+    // container. A CSS `min-width` keeps the chart from shrinking past the
+    // point of legibility — below it the container scrolls horizontally.
     const W = 1600;
     const cardW = 172;
-    const flowScale = 48;
+    const flowScale = 60;        // vertical thickness of bars/cards (+25%)
     const cardH = flowScale;
     const nodeW = 30;
-    const yTop = 134;
-    const yGap = 74;
-    const gap = 2.0;
+    const yTop = 140;
+    // Bracket-style spacing: small visible gap inside a matchup (~14px),
+    // much larger gap (~52px) between matchups for clear bracket structure.
+    const intraGap = 74;         // slots 0↔1, 2↔3, 4↔5, 6↔7
+    const interGap = 84;         // slots 1↔2, 3↔4, 5↔6
+    const gap = 2.0;             // gap between stacked ribbons within a node
+    const headerY = 92;
+    const H = 820;
 
+    // X positions are tuned so the curves with the most vertical change
+    // (r1→r2, r2→cf) get the most horizontal room. The gentle start→r1 and
+    // cf→cup curves can be tighter without looking pinched.
+    const r1X = 290;
+    const r2X = 460;
+    const cfX = 670;
     const xs = {
-      West: { start: 40, r1: 330, r2: 520, cf: 700, cup: W / 2 - nodeW / 2 },
+      West: { start: 40, r1: r1X, r2: r2X, cf: cfX, cup: W / 2 - nodeW / 2 },
       East: {
         start: W - 40 - cardW,
-        r1: W - 330 - nodeW,
-        r2: W - 520 - nodeW,
-        cf: W - 700 - nodeW,
+        r1: W - r1X - nodeW,
+        r2: W - r2X - nodeW,
+        cf: W - cfX - nodeW,
         cup: W / 2 - nodeW / 2,
       },
     };
+
+    svg
+      .attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .attr('width', null)
+      .attr('height', null);
 
     const stages = ['start', 'r1', 'r2', 'cf', 'cup'];
     const stageLabel = {
@@ -184,6 +284,13 @@
       r2: 'Round 2',
       cf: 'Conf. Final',
       cup: 'Cup Final',
+    };
+    const stageLabelLines = {
+      start: ['Teams'],
+      r1: ['Round 1'],
+      r2: ['Round 2'],
+      cf: ['Conf.', 'Final'],
+      cup: ['Cup', 'Final'],
     };
 
     const prob = (t, s) => {
@@ -194,18 +301,29 @@
       return t.probs.cup;
     };
 
-    const ySlot = (i) => yTop + i * yGap;
+    // Variable spacing: matchup pairs (0&1, 2&3, 4&5, 6&7) are tight; the
+    // gaps between matchups are wider so the bracket structure reads clearly.
+    const ySlot = (i) => yTop
+      + Math.floor((i + 1) / 2) * intraGap
+      + Math.floor(i / 2) * interGap;
     const groupSlots = (stage) => {
       if (stage === 'start') return d3.range(8);
       if (stage === 'r1') return [0, 2, 4, 6];
       if (stage === 'r2') return [0, 4];
       return [0];
     };
+    const cupCenter = d3.mean(d3.range(8).map(ySlot));
+    // Pull the two Round-2 nodes inward toward the cup-final center so the
+    // ribbons flow more cleanly through Conf. Final and Cup Final.
+    const R2_PULL = 0.32;
     const yNode = (stage, slot) => {
       if (stage === 'start') return ySlot(slot);
       if (stage === 'r1') return (ySlot(slot) + ySlot(slot + 1)) / 2;
-      if (stage === 'r2') return d3.mean([0, 1, 2, 3].map((i) => ySlot(slot + i)));
-      return d3.mean(d3.range(8).map(ySlot));
+      if (stage === 'r2') {
+        const slotMean = d3.mean([0, 1, 2, 3].map((i) => ySlot(slot + i)));
+        return slotMean + (cupCenter - slotMean) * R2_PULL;
+      }
+      return cupCenter;
     };
     const stageGroup = (stage, slot) => {
       if (stage === 'start') return slot;
@@ -215,6 +333,11 @@
     };
     const stageX = (t, stage) => (stage === 'start' ? xs[t.conf].start : xs[t.conf][stage]);
 
+    const PROB_EPS = 1e-6;
+    // Include zero-probability teams in each stack so eliminated teams still
+    // have a lane position — their ribbon tapers to a zero-width point at
+    // the node's edge instead of vanishing entirely. Teams whose previous
+    // stage already had zero probability are excluded (no incoming flow).
     const sortTeamsAt = (stage, conf, group) => teams
       .filter((t) => (stage === 'cup' || t.conf === conf) && stageGroup(stage, t.slot) === group)
       .sort((a, b) => (a.conf === b.conf ? 0 : a.conf === 'West' ? -1 : 1) || a.slot - b.slot);
@@ -224,13 +347,25 @@
       const key = `${stage === 'cup' ? 'League' : t.conf}-${stage}-${stageGroup(stage, t.slot)}`;
       if (!laneCache.has(key)) {
         const arr = sortTeamsAt(stage, t.conf, stageGroup(stage, t.slot));
-        const total = d3.sum(arr, (d) => prob(d, stage) * flowScale) + gap * (arr.length - 1);
+        const visible = arr.filter((d) => prob(d, stage) > PROB_EPS);
+        const total = d3.sum(visible, (d) => prob(d, stage) * flowScale)
+          + gap * Math.max(0, visible.length - 1);
         let y = yNode(stage, stageGroup(stage, t.slot)) - total / 2;
         const map = new Map();
+        let lastVisibleBottom = y;
         for (const a of arr) {
           const h = prob(a, stage) * flowScale;
-          map.set(a.id, { top: y, bottom: y + h, mid: y + h / 2, h });
-          y += h + gap;
+          if (h > PROB_EPS) {
+            map.set(a.id, { top: y, bottom: y + h, mid: y + h / 2, h });
+            y += h + gap;
+            lastVisibleBottom = y - gap;
+          } else {
+            // Zero-probability team: collapse to a single point at the
+            // current cursor (the boundary just past the previous visible
+            // ribbon) so the incoming ribbon tapers to that edge.
+            const py = lastVisibleBottom;
+            map.set(a.id, { top: py, bottom: py, mid: py, h: 0 });
+          }
         }
         laneCache.set(key, map);
       }
@@ -256,6 +391,11 @@
     const links = [];
     for (const t of teams) {
       for (let i = 0; i < stages.length - 1; i += 1) {
+        // Skip ribbons with no incoming flow — once a team has zero
+        // probability at the source stage, no further ribbons are drawn.
+        // The ribbon INTO their elimination round is still drawn (and
+        // tapers to a point at the round node's edge).
+        if (prob(t, stages[i]) <= PROB_EPS) continue;
         links.push({
           team: t,
           from: stages[i],
@@ -280,9 +420,13 @@
       .attr('y2', (d) => ySlot(d))
       .attr('stroke', 'rgba(255,255,255,.025)');
 
+
     const header = [];
     for (const conf of ['West', 'East']) {
       for (const s of stages) {
+        // Cup column is shared between conferences — render its label only
+        // once so the text isn't drawn on top of itself.
+        if (s === 'cup' && conf === 'East') continue;
         header.push({
           conf,
           s,
@@ -291,15 +435,40 @@
         });
       }
     }
-    labels.selectAll('.round-label')
+    const headerLabels = labels.selectAll('.round-label')
       .data(header)
       .join('text')
       .attr('class', (d) => (d.s === 'start' ? 'conf-label' : 'round-label'))
+      .attr('data-stage', (d) => d.s)
       .attr('x', (d) => d.x)
-      .attr('y', 78)
+      .attr('y', headerY)
       .attr('text-anchor', 'middle')
-      .attr('fill', (d) => (d.conf === 'West' ? '#06799f' : '#ff8300'))
-      .text((d) => (d.s === 'start' ? d.conf : d.text));
+      .attr('fill', (d) => {
+        if (d.s === 'cup') return '#3b473b';
+        return d.conf === 'West' ? '#06799f' : '#ff8300';
+      })
+      .style('cursor', (d) => (d.s === 'start' ? 'default' : 'pointer'))
+      .on('click', (ev, d) => {
+        if (d.s === 'start') return;
+        ev.stopPropagation();
+        selectRound(d.s);
+      });
+    headerLabels.each(function renderHeaderLabel(d) {
+      const lines = d.s === 'start' ? [d.conf] : (stageLabelLines[d.s] || [d.text]);
+      const sel = d3.select(this);
+      sel.selectAll('tspan').remove();
+      // Vertically center the multi-line block on the original baseline so a
+      // 2-line label (e.g. "Conference Final") and a 1-line label (e.g.
+      // "Round 1") visually align.
+      const lineHeight = 20;
+      const startDy = -((lines.length - 1) * lineHeight) / 2;
+      lines.forEach((line, i) => {
+        sel.append('tspan')
+          .attr('x', d.x)
+          .attr('dy', i === 0 ? startDy : lineHeight)
+          .text(line);
+      });
+    });
 
     flows.selectAll('path')
       .data(links, (d) => d.team.id + d.from + d.to)
@@ -336,10 +505,11 @@
         .join('rect')
         .attr('class', 'node-fill')
         .attr('data-team', (d) => d.id)
+        .attr('data-stage', stage)
         .attr('x', x)
         .attr('y', (d) => lane(d, stage).top)
         .attr('width', nodeW)
-        .attr('height', (d) => Math.max(0.75, lane(d, stage).bottom - lane(d, stage).top))
+        .attr('height', (d) => Math.max(0, lane(d, stage).bottom - lane(d, stage).top))
         .attr('fill', (d) => d.color)
         .attr('opacity', 0.76)
         .style('cursor', 'pointer')
@@ -369,15 +539,17 @@
       }
     }
 
-    (r1Series || []).forEach((series) => {
+    (allSeries || r1Series || []).forEach((series) => {
+      const stage = series.stage || 'r1';
       const label = seriesScoreLabel(series);
       if (!label) return;
-      const e = nodeExtent(series.conf, 'r1', series.slotGroup);
-      const x = xs[series.conf].r1 + nodeW / 2;
+      const e = nodeExtent(series.conf, stage, series.slotGroup);
+      const x = xs[series.conf][stage] + nodeW / 2;
       labels.append('text')
         .attr('class', 'series-score')
+        .attr('data-stage', stage)
         .attr('x', x)
-        .attr('y', e.bottom + 14)
+        .attr('y', e.bottom + 18)
         .attr('text-anchor', 'middle')
         .text(label);
     });
@@ -411,8 +583,8 @@
 
     cards.each(function appendCardContent(d) {
       const g = d3.select(this);
-      const logoSize = 28;
-      const logoX = d.conf === 'West' ? 8 : cardW - 8 - logoSize;
+      const logoSize = 36;
+      const logoX = d.conf === 'West' ? 10 : cardW - 10 - logoSize;
       if (d.logo) {
         g.append('image')
           .attr('href', d.logo)
@@ -422,20 +594,20 @@
           .attr('height', logoSize);
       }
       const textAnchor = d.conf === 'West' ? 'start' : 'end';
-      const textX = d.conf === 'West' ? 8 + logoSize + 8 : cardW - 8 - logoSize - 8;
+      const textX = d.conf === 'West' ? 10 + logoSize + 10 : cardW - 10 - logoSize - 10;
       g.append('text')
         .attr('x', textX)
-        .attr('y', 19)
+        .attr('y', 24)
         .attr('text-anchor', textAnchor)
         .attr('font-weight', 700)
-        .attr('font-size', 13)
+        .attr('font-size', 17)
         .text(`${d.seed} · ${d.abbrev || 'TBD'}`);
       g.append('text')
         .attr('class', 'small')
         .attr('x', textX)
-        .attr('y', 36)
+        .attr('y', 44)
         .attr('text-anchor', textAnchor)
-        .text(`R1 ${fmtPct(d.probs.r2)} · Cup ${fmtPct(d.probs.cup)}`);
+        .text(`Cup ${fmtPct(d.probs.cup)}`);
     });
 
     // Populate select dropdown.
@@ -458,10 +630,75 @@
         .attr('opacity', (d) => (d.eliminated ? 0.08 : 0.76));
       cards.classed('selected', false).transition().duration(110)
         .attr('opacity', (d) => (d.eliminated ? 0.32 : 1));
+      labels.selectAll('.series-score').transition().duration(110).attr('opacity', 1);
+      labels.selectAll('.round-label')
+        .attr('font-weight', null)
+        .attr('opacity', 1);
       labels.selectAll('.annotation').remove();
       details.html('<div class="team">NHL playoffs</div>'
         + '<div class="metric-row"><span>Teams</span><b>16</b></div>'
-        + '<div class="metric-row"><span>Click a team or ribbon</span><b>for details</b></div>');
+        + '<div class="metric-row"><span>Click a team, ribbon, or round</span><b>for details</b></div>');
+    }
+
+    function selectRound(stage) {
+      if (!stage || stage === 'start') return;
+      select.property('value', '');
+      // Fade everything; matchup nodes for this round stay full-strength.
+      flows.selectAll('.flow-ribbon').transition().duration(110)
+        .attr('opacity', 0.06)
+        .attr('filter', null);
+      nodes.selectAll('.node-fill').transition().duration(110)
+        .attr('opacity', function () {
+          return this.getAttribute('data-stage') === stage ? 0.9 : 0.06;
+        });
+      cards.classed('selected', false).transition().duration(110)
+        .attr('opacity', 0.32);
+      labels.selectAll('.series-score').transition().duration(110)
+        .attr('opacity', function () {
+          return this.getAttribute('data-stage') === stage ? 1 : 0.12;
+        });
+      labels.selectAll('.round-label')
+        .attr('font-weight', function () {
+          return this.getAttribute('data-stage') === stage ? 800 : null;
+        })
+        .attr('opacity', function () {
+          const s = this.getAttribute('data-stage');
+          return (s === stage || s === 'start') ? 1 : 0.45;
+        });
+      // Top-team annotation above each matchup at this stage.
+      labels.selectAll('.annotation').remove();
+      const matchupKeys = new Set();
+      for (const t of teams) {
+        if (stage !== 'cup' && t.conf !== t.conf) continue;
+        const conf = stage === 'cup' ? 'League' : t.conf;
+        const grp = stageGroup(stage, t.slot);
+        matchupKeys.add(`${conf}|${grp}|${t.conf}`);
+      }
+      const seen = new Set();
+      for (const t of teams) {
+        const grp = stageGroup(stage, t.slot);
+        const key = stage === 'cup' ? 'cup' : `${t.conf}|${grp}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const arr = sortTeamsAt(stage, t.conf, grp).filter((x) => x.abbrev);
+        if (!arr.length) continue;
+        const top = arr.reduce((a, b) => (prob(b, stage) > prob(a, stage) ? b : a));
+        const e = nodeExtent(t.conf, stage, grp);
+        const x = stageX(t, stage) + nodeW / 2;
+        labels.append('text')
+          .attr('class', 'annotation')
+          .attr('x', x)
+          .attr('y', e.top - 10)
+          .attr('text-anchor', 'middle')
+          .text(`${top.abbrev} ${fmtPct(prob(top, stage))}`);
+      }
+
+      details.html(
+        `<div class="team">${esc(stageLabel[stage])}</div>`
+        + '<div class="metric-row"><span>View</span><b>round highlight</b></div>'
+        + '<div class="metric-row"><span>Annotations</span><b>top team per matchup</b></div>'
+        + '<div class="metric-row"><span>Click background</span><b>to clear</b></div>',
+      );
     }
 
     function selectTeam(id, update) {
@@ -477,6 +714,8 @@
       cards.classed('selected', (d) => d.id === id)
         .transition().duration(110)
         .attr('opacity', (d) => (d.id === id ? 1 : 0.32));
+      labels.selectAll('.series-score').transition().duration(110).attr('opacity', 1);
+      labels.selectAll('.round-label').attr('font-weight', null).attr('opacity', 1);
       labels.selectAll('.annotation').remove();
       for (const s of stages.slice(1)) {
         const e = nodeExtent(t.conf, s, stageGroup(s, t.slot));
@@ -484,7 +723,7 @@
         labels.append('text')
           .attr('class', 'annotation')
           .attr('x', x)
-          .attr('y', e.top - 8)
+          .attr('y', e.top - 10)
           .attr('text-anchor', 'middle')
           .text(fmtPct(prob(t, s)));
       }
@@ -515,26 +754,32 @@
     clearSelection();
   }
 
-  function renderBracket(allSeries, standingsRows) {
+  function renderBracket(seriesByRound, standingsRows) {
     const loading = document.getElementById('bracketLoading');
     const container = document.getElementById('bracketContainer');
     if (!container) return;
 
-    const seriesFlat = Object.values(allSeries || {}).flat();
+    const seriesFlat = Object.values(seriesByRound || {}).flat();
     if (!seriesFlat.some((s) => s.top_seed || s.bottom_seed)) {
       if (loading) loading.textContent = 'Playoff bracket not yet available.';
+      markRenderStatus('empty');
       return;
     }
 
-    const { teams, r1Series } = buildTeams(seriesFlat, standingsRows);
-    if (!teams.some((t) => t.abbrev)) {
+    const built = buildTeams(seriesFlat, standingsRows);
+    if (!built.teams.some((t) => t.abbrev)) {
       if (loading) loading.textContent = 'Playoff bracket not yet available.';
+      markRenderStatus('empty');
       return;
     }
 
-    renderFlowChart(teams, r1Series);
+    renderFlowChart(built.teams, built.r1Series, built.allSeries);
     if (loading) loading.hidden = true;
     container.hidden = false;
+    const settled = socialCardMode ? settleSocialCapture(container) : Promise.resolve();
+    settled.then(() => {
+      markRenderStatus('ready');
+    });
   }
 
   function renderProbBar(pct) {
@@ -614,6 +859,7 @@
       const standingsLoading = document.getElementById('standingsLoading');
       if (bracketLoading) bracketLoading.textContent = `Error: ${error.message}`;
       if (standingsLoading) standingsLoading.textContent = `Error: ${error.message}`;
+      markRenderStatus('error');
     });
   });
 })();

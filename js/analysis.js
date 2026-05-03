@@ -1101,12 +1101,22 @@
     const topN = Number(summary.top_n || topPlayers.length || 0);
     const strongestTrait = String(summary.strongest_trait_label || '').trim();
     const strongestTraitCorr = Number(summary.strongest_trait_correlation);
-    const currentVsCareerCorr = Number(summary.current_vs_career_minutes_correlation);
-    const careerRateVsMinutesCorr = Number(summary.career_rate_vs_career_minutes_correlation);
+    const draftCurrentOpportunityCorr = Number(summary.draft_current_opportunity_correlation);
+    const draftCareerOpportunityCorr = Number(summary.draft_career_opportunity_correlation);
+    const draftCurrentSkillCorr = Number(summary.draft_current_skill_correlation);
+    const draftCareerSkillCorr = Number(summary.draft_career_skill_correlation);
+    const draftedPlayers = Number(summary.drafted_players || 0);
+    const ppMinutesVs5v5PointsCorr = Number(summary.pp_minutes_vs_5v5_points_correlation);
+    const ppMinutesVsDeltaVOffCorr = Number(summary.pp_minutes_vs_delta_v_offence_correlation);
+    const ppMinutesVs5v5XgfCorr = Number(summary.pp_minutes_vs_5v5_xgf_correlation);
     const currentSeasonLabel = String(summary.current_season_label || '').trim();
     const careerStart = String(summary.career_start_season_label || '').trim();
     const careerEnd = String(summary.career_end_season_label || '').trim();
     const rollingWindowMinutes = Number(summary.career_rolling_window_minutes || 60);
+    const comparisonTopPpCount = Number(summary.comparison_top_pp_count || 0);
+    const comparisonTopOffenceCount = Number(summary.comparison_top_offence_count || 0);
+    const comparisonOverlapCount = Number(summary.comparison_overlap_count || 0);
+    const comparisonUnionCount = Number(summary.comparison_union_count || 0);
     const missingCareerSeasons = Array.isArray(summary.career_history_missing_season_labels)
       ? summary.career_history_missing_season_labels.filter(Boolean)
       : [];
@@ -1117,7 +1127,8 @@
 
     introEl.innerHTML = `
       <p>The current leaderboard takes the top ${topN.toLocaleString()} skaters in <strong>${esc(currentSeasonLabel || 'the current season')}</strong> by power-play points per 60 minutes, but only after filtering to a real PP-opportunity pool of <strong>${qualifiedPlayers.toLocaleString()}</strong> skaters with at least <strong>${esc(formatFixed(threshold, 1))}</strong> current-season PP minutes.</p>
-      <p>The career comparison chart now recalculates PP scoring in a trailing <strong>${esc(formatFixed(rollingWindowMinutes, 1))}-minute rolling window</strong> after every PP game, so each line starts from that player’s own career minute zero and moves smoothly instead of jumping bucket to bucket. Career coverage in this local database currently runs from <strong>${esc(careerStart || 'the earliest loaded season')}</strong> through <strong>${esc(careerEnd || 'the latest loaded season')}</strong>. ${coverageSentence}${refreshedCareerGames > 0 ? ` This build refreshed ${refreshedCareerGames.toLocaleString()} historical game${refreshedCareerGames === 1 ? '' : 's'} while checking career coverage.` : ''}</p>
+      <p>The broader comparison set now tracks <strong>${comparisonTopPpCount.toLocaleString()}</strong> top current PP scorers and <strong>${comparisonTopOffenceCount.toLocaleString()}</strong> top offence-score skaters from the same qualified pool, with <strong>${comparisonOverlapCount.toLocaleString()}</strong> showing up in both groups. That lets the career charts compare pure PP specialists against elite 5v5 creators instead of only the top-${topN.toLocaleString()} leaderboard, while the trait cards below stay focused on non-leaky EV and 5v5 signals instead of offence score itself.</p>
+      <p>The career comparison charts now show both a trailing <strong>${esc(formatFixed(rollingWindowMinutes, 1))}-minute PP rate curve</strong> and a cumulative PP points curve. The rate chart only begins once a player has a full ${esc(formatFixed(rollingWindowMinutes, 1))}-minute sample, while the cumulative chart still starts from career minute zero so the earliest tiny samples do not blow up the rate view. Career coverage in this local database currently runs from <strong>${esc(careerStart || 'the earliest loaded season')}</strong> through <strong>${esc(careerEnd || 'the latest loaded season')}</strong>. ${coverageSentence}${refreshedCareerGames > 0 ? ` This build refreshed ${refreshedCareerGames.toLocaleString()} historical game${refreshedCareerGames === 1 ? '' : 's'} while checking career coverage.` : ''}</p>
     `;
     cardsEl.innerHTML = `
       <article class="sf-analysis-impact-card">
@@ -1133,16 +1144,28 @@
         <div class="sf-analysis-impact-note">Threshold used this run: ${esc(formatFixed(threshold, 1))} PP minutes</div>
       </article>
       <article class="sf-analysis-impact-card">
-        <div class="sf-analysis-impact-label">Strongest 5v5 Link</div>
+        <div class="sf-analysis-impact-label">Strongest EV Link</div>
         <div class="sf-analysis-impact-value">${esc(formatSignedMetric(strongestTraitCorr, 3))}</div>
-        <div class="sf-analysis-impact-subvalue">${esc(strongestTrait || 'No stable 5v5 trait correlation')}</div>
+        <div class="sf-analysis-impact-subvalue">${esc(strongestTrait || 'No stable EV or 5v5 trait correlation')}</div>
         <div class="sf-analysis-impact-note">Pearson r against current PP points / 60 in the qualified pool</div>
       </article>
       <article class="sf-analysis-impact-card">
-        <div class="sf-analysis-impact-label">Career Opportunity Link</div>
-        <div class="sf-analysis-impact-value">${esc(formatSignedMetric(currentVsCareerCorr, 3))}</div>
-        <div class="sf-analysis-impact-subvalue">Pearson r: career PP minutes vs current PP points / 60</div>
-        <div class="sf-analysis-impact-note">Pearson r: career PP rate vs career PP minutes = ${esc(formatSignedMetric(careerRateVsMinutesCorr, 3))}</div>
+        <div class="sf-analysis-impact-label">Broader Cohort</div>
+        <div class="sf-analysis-impact-value">${comparisonUnionCount.toLocaleString()}</div>
+        <div class="sf-analysis-impact-subvalue">Union of the top PP-rate and offence-score comparison groups</div>
+        <div class="sf-analysis-impact-note">Overlap between both groups: ${comparisonOverlapCount.toLocaleString()} skaters</div>
+      </article>
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">Draft Opportunity Link</div>
+        <div class="sf-analysis-impact-value">${esc(formatSignedMetric(draftCurrentOpportunityCorr, 3))}</div>
+        <div class="sf-analysis-impact-subvalue">Spearman rho: draft overall vs current PP minutes across ${draftedPlayers.toLocaleString()} drafted skaters</div>
+        <div class="sf-analysis-impact-note">Career rho: ${esc(formatSignedMetric(draftCareerOpportunityCorr, 3))} | PP min vs 5v5 P/60: ${esc(formatSignedMetric(ppMinutesVs5v5PointsCorr, 3))} | vs Delta-V offence: ${esc(formatSignedMetric(ppMinutesVsDeltaVOffCorr, 3))} | vs 5v5 xGF/60: ${esc(formatSignedMetric(ppMinutesVs5v5XgfCorr, 3))}</div>
+      </article>
+      <article class="sf-analysis-impact-card">
+        <div class="sf-analysis-impact-label">Draft Skill Link</div>
+        <div class="sf-analysis-impact-value">${esc(formatSignedMetric(draftCurrentSkillCorr, 3))}</div>
+        <div class="sf-analysis-impact-subvalue">Spearman rho: draft overall vs current PP points / 60</div>
+        <div class="sf-analysis-impact-note">Career rho: ${esc(formatSignedMetric(draftCareerSkillCorr, 3))} | Negative values mean earlier picks tended to rate better.</div>
       </article>
     `;
   }
@@ -1194,6 +1217,58 @@
               <td class="${classForSigned(row.on_ice_5v5_xg_diff_no_en_per60)}">${esc(formatSignedMetric(row.on_ice_5v5_xg_diff_no_en_per60, 3))}</td>
               <td>${esc(formatMetric(row.career_pp_points_per60, 2))}</td>
               <td>${esc(formatFixed(row.career_pp_minutes, 1))}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function renderPowerplayCohortTable(analysis) {
+    const tableWrap = document.getElementById('ppDevCohortTable');
+    if (!tableWrap) return;
+    const rows = Array.isArray(analysis?.comparison_cohorts?.rows) ? analysis.comparison_cohorts.rows : [];
+    if (!rows.length) {
+      tableWrap.innerHTML = '<div class="sf-empty-state">No broader PP comparison cohort is available.</div>';
+      return;
+    }
+    tableWrap.innerHTML = `
+      <table class="sf-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Pos</th>
+            <th>Top PP</th>
+            <th>Top Offence</th>
+            <th>PP Rank</th>
+            <th>Off Rank</th>
+            <th>PP P/60</th>
+            <th>PP Min</th>
+            <th>Offence</th>
+            <th>Playmaking</th>
+            <th>Finishing</th>
+            <th>Career PP P/60</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => `
+            <tr>
+              <td>${Number(row.rank || 0).toLocaleString()}</td>
+              <td>${esc(row.player_name || '')}</td>
+              <td>${esc(row.team || '')}</td>
+              <td>${esc(row.position || '')}</td>
+              <td>${row.is_comparison_top_pp ? 'Yes' : '&mdash;'}</td>
+              <td>${row.is_comparison_top_offence ? 'Yes' : '&mdash;'}</td>
+              <td>${row.top_pp_rank ? Number(row.top_pp_rank).toLocaleString() : '&mdash;'}</td>
+              <td>${row.top_offence_rank ? Number(row.top_offence_rank).toLocaleString() : '&mdash;'}</td>
+              <td>${esc(formatMetric(row.current_pp_points_per60, 2))}</td>
+              <td>${esc(formatFixed(row.current_pp_minutes, 1))}</td>
+              <td class="${classForSigned(row.offence_score)}">${esc(formatSignedMetric(row.offence_score, 3))}</td>
+              <td class="${classForSigned(row.playmaking)}">${esc(formatSignedMetric(row.playmaking, 3))}</td>
+              <td class="${classForSigned(row.finishing)}">${esc(formatSignedMetric(row.finishing, 3))}</td>
+              <td>${esc(formatMetric(row.career_pp_points_per60, 2))}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -1352,12 +1427,18 @@
     `;
   }
 
-  function renderPowerplayCareerChart(analysis, requestedPlayerId = '') {
-    const select = document.getElementById('ppDevCareerPlayerSelect');
-    const svg = document.getElementById('ppDevCareerChart');
-    if (!select || !svg) return;
+  function filterCareerProgressionsByCohort(rows, cohortKey) {
+    if (cohortKey === 'offence') return rows.filter((row) => Boolean(row?.is_comparison_top_offence));
+    if (cohortKey === 'pp') return rows.filter((row) => Boolean(row?.is_comparison_top_pp));
+    if (cohortKey === 'overlap') {
+      return rows.filter((row) => Boolean(row?.is_comparison_top_pp) && Boolean(row?.is_comparison_top_offence));
+    }
+    return rows;
+  }
+
+  function getPowerplayCareerChartRows(analysis) {
     const rows = Array.isArray(analysis?.career_progressions) ? analysis.career_progressions : [];
-    const chartRows = rows
+    return rows
       .map((row) => {
         const curvePoints = Array.isArray(row?.curve_points)
           ? row.curve_points.filter(
@@ -1365,30 +1446,46 @@
               && Number.isFinite(Number(point?.window_pp_points_per60)),
           )
           : [];
+        const rateCurvePoints = Array.isArray(row?.rate_curve_points)
+          ? row.rate_curve_points.filter(
+            (point) => Number.isFinite(Number(point?.window_end_pp_minutes))
+              && Number.isFinite(Number(point?.window_pp_points_per60)),
+          )
+          : curvePoints.filter((point) => !Boolean(point?.is_partial_window));
         return {
           ...row,
           curve_points: curvePoints,
+          rate_curve_points: rateCurvePoints.length ? rateCurvePoints : curvePoints,
         };
       })
       .filter((row) => row.curve_points.length);
+  }
+
+  function renderPowerplayCareerChart(analysis, requestedPlayerId = '', cohortKey = 'all') {
+    const select = document.getElementById('ppDevCareerPlayerSelect');
+    const svg = document.getElementById('ppDevCareerChart');
+    if (!select || !svg) return;
+    const chartRows = getPowerplayCareerChartRows(analysis);
     if (!chartRows.length) {
       select.innerHTML = '<option value="">No player data</option>';
       svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">No rolling-window career PP data is available in this build.</text>';
       return;
     }
 
-    const optionsHtml = chartRows.map((row) => (
+    const cohortRows = filterCareerProgressionsByCohort(chartRows, cohortKey);
+    const availableRows = cohortRows.length ? cohortRows : chartRows;
+    const optionsHtml = availableRows.map((row) => (
       `<option value="${esc(String(row.player_id || ''))}">${esc(`${row.player_name || 'Unknown'} (${row.team || ''})`)}</option>`
     )).join('');
     if (select.innerHTML !== optionsHtml) {
       select.innerHTML = optionsHtml;
     }
-    const preferred = String(requestedPlayerId || select.value || chartRows[0]?.player_id || '').trim();
-    const selected = chartRows.find((row) => String(row.player_id || '') === preferred) || chartRows[0];
+    const preferred = String(requestedPlayerId || select.value || availableRows[0]?.player_id || '').trim();
+    const selected = availableRows.find((row) => String(row.player_id || '') === preferred) || availableRows[0];
     if (!selected) return;
     select.value = String(selected.player_id || '');
 
-    const selectedPoints = Array.isArray(selected?.curve_points) ? selected.curve_points : [];
+    const selectedPoints = Array.isArray(selected?.rate_curve_points) ? selected.rate_curve_points : [];
     if (!selectedPoints.length) {
       svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">Selected player does not have enough PP history for a career curve.</text>';
       return;
@@ -1397,7 +1494,9 @@
     const width = 760;
     const height = 420;
     const padding = { top: 28, right: 26, bottom: 56, left: 64 };
-    const allPoints = chartRows.flatMap((row) => row.curve_points);
+    const allPoints = availableRows.flatMap((row) => (
+      Array.isArray(row?.rate_curve_points) ? row.rate_curve_points : []
+    ));
     const maxCareerMinutes = Math.max(
       ...allPoints.map((row) => Number(row.window_end_pp_minutes || 0)),
       Number(selected?.career_pp_minutes || 0),
@@ -1417,8 +1516,9 @@
     const grid = buildScatterGridMarkup(width, height, padding, xTicks, yTicks, xAt, yAt);
     const buildCurvePath = (points) => {
       if (!Array.isArray(points) || !points.length) return '';
+      const firstEnd = Number(points[0]?.window_end_pp_minutes || 0);
       const firstRate = Number(points[0]?.window_pp_points_per60 || 0);
-      const commands = [`M ${xAt(0).toFixed(2)} ${yAt(firstRate).toFixed(2)}`];
+      const commands = [`M ${xAt(firstEnd).toFixed(2)} ${yAt(firstRate).toFixed(2)}`];
       points.forEach((point) => {
         commands.push(
           `L ${xAt(point.window_end_pp_minutes).toFixed(2)} ${yAt(point.window_pp_points_per60).toFixed(2)}`,
@@ -1426,12 +1526,12 @@
       });
       return commands.join(' ');
     };
-    const backgroundPaths = chartRows
+    const backgroundPaths = availableRows
       .filter((row) => String(row.player_id || '') !== String(selected.player_id || ''))
       .map((row) => {
-        const path = buildCurvePath(row.curve_points);
+        const path = buildCurvePath(row.rate_curve_points);
         if (!path) return '';
-        const title = `${row.player_name} (${row.team || ''}) | Career PP minutes: ${formatFixed(row.career_pp_minutes, 1)} | Career PP P/60: ${formatMetric(row.career_pp_points_per60, 2)} | Opening ${formatFixed(row.rolling_window_minutes, 1)}-minute window: ${formatMetric(row.first_window_pp_points_per60, 2)} | Latest window: ${formatMetric(row.latest_window_pp_points_per60, 2)}`;
+        const title = `${row.player_name} (${row.team || ''}) | Career PP minutes: ${formatFixed(row.career_pp_minutes, 1)} | Career PP P/60: ${formatMetric(row.career_pp_points_per60, 2)} | First full ${formatFixed(row.rolling_window_minutes, 1)}-minute window: ${formatMetric(row.first_window_pp_points_per60, 2)} | Latest window: ${formatMetric(row.latest_window_pp_points_per60, 2)}`;
         return `<path d="${path}" fill="none" stroke="${POWERPLAY_COLORS.comparison}" stroke-width="1.6" stroke-opacity="0.9" stroke-linejoin="round" stroke-linecap="round"><title>${esc(title)}</title></path>`;
       })
       .join('');
@@ -1439,7 +1539,7 @@
     const firstWindow = selectedPoints[0];
     const latestWindow = selectedPoints[selectedPoints.length - 1];
     const startMarker = firstWindow
-      ? `<circle cx="${xAt(0).toFixed(2)}" cy="${yAt(firstWindow.window_pp_points_per60).toFixed(2)}" r="4.2" fill="${POWERPLAY_COLORS.accent}" stroke="#ffffff" stroke-width="1.2"><title>${esc(`${selected.player_name} | Career minute 0 anchor | Opening rolling-window PP rate: ${formatMetric(firstWindow.window_pp_points_per60, 2)} P/60`)}</title></circle>`
+      ? `<circle cx="${xAt(firstWindow.window_end_pp_minutes).toFixed(2)}" cy="${yAt(firstWindow.window_pp_points_per60).toFixed(2)}" r="4.2" fill="${POWERPLAY_COLORS.accent}" stroke="#ffffff" stroke-width="1.2"><title>${esc(`${selected.player_name} | First full rolling window ending at ${formatFixed(firstWindow.window_end_pp_minutes, 1)} PP min | Window rate: ${formatMetric(firstWindow.window_pp_points_per60, 2)} P/60`)}</title></circle>`
       : '';
     const latestMarker = latestWindow
       ? `<circle cx="${xAt(latestWindow.window_end_pp_minutes).toFixed(2)}" cy="${yAt(latestWindow.window_pp_points_per60).toFixed(2)}" r="5.0" fill="${POWERPLAY_COLORS.top}" stroke="#ffffff" stroke-width="1.2"><title>${esc(`${selected.player_name} | Latest rolling window (${formatFixed(latestWindow.window_start_pp_minutes, 1)}-${formatFixed(latestWindow.window_end_pp_minutes, 1)} PP min) | Window P/60: ${formatMetric(latestWindow.window_pp_points_per60, 2)} | Window points: ${formatFixed(latestWindow.window_pp_points, 2)} | Window minutes: ${formatFixed(latestWindow.window_pp_minutes, 1)}${latestWindow.is_partial_window ? ' (partial)' : ''}`)}</title></circle>`
@@ -1447,6 +1547,13 @@
     const selectedLabel = latestWindow
       ? `<text x="${(xAt(latestWindow.window_end_pp_minutes) + 8).toFixed(2)}" y="${(yAt(latestWindow.window_pp_points_per60) - 10).toFixed(2)}" font-size="10.5" fill="#163744">${esc(selected.player_name || '')}</text>`
       : '';
+    const cohortLabel = cohortKey === 'offence'
+      ? 'Gray lines: top offence-score cohort'
+      : cohortKey === 'pp'
+        ? 'Gray lines: top PP-rate cohort'
+        : cohortKey === 'overlap'
+          ? 'Gray lines: overlap between both cohorts'
+          : 'Gray lines: broader PP comparison cohort';
 
     svg.innerHTML = `
       <rect x="0" y="0" width="${width}" height="${height}" rx="16" ry="16" fill="#fbfeff" stroke="#dbe7ed" />
@@ -1458,11 +1565,161 @@
       ${startMarker}
       ${latestMarker}
       ${selectedLabel}
-      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 12).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Rolling window: ${esc(formatFixed(selected.rolling_window_minutes, 1))} PP minutes | Gray lines: other top PP scorers</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 12).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Rolling window: ${esc(formatFixed(selected.rolling_window_minutes, 1))} PP minutes | full windows only | ${esc(cohortLabel)}</text>
       <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 28).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Career total: ${esc(formatFixed(selected.career_pp_minutes, 1))} min, ${Number(selected.career_pp_points || 0).toLocaleString()} pts, ${esc(formatMetric(selected.career_pp_points_per60, 2))} P/60</text>
-      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 44).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Opening window: ${esc(formatMetric(selected.first_window_pp_points_per60, 2))} P/60 | Latest window: ${esc(formatMetric(selected.latest_window_pp_points_per60, 2))} P/60 | Peak window: ${esc(formatMetric(selected.best_window_pp_points_per60, 2))} P/60</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 44).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">First full window: ${esc(formatMetric(selected.first_window_pp_points_per60, 2))} P/60 | Latest window: ${esc(formatMetric(selected.latest_window_pp_points_per60, 2))} P/60 | Peak window: ${esc(formatMetric(selected.best_window_pp_points_per60, 2))} P/60</text>
       <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Career PP minutes from player career start</text>
       <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Rolling PP points per 60</text>
+    `;
+  }
+
+  function renderPowerplayCareerCumulativeChart(analysis, requestedPlayerId = '', cohortKey = 'all') {
+    const svg = document.getElementById('ppDevCareerCumulativeChart');
+    if (!svg) return;
+    const chartRows = getPowerplayCareerChartRows(analysis);
+    const cohortRows = filterCareerProgressionsByCohort(chartRows, cohortKey);
+    const availableRows = cohortRows.length ? cohortRows : chartRows;
+    if (!availableRows.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">No cumulative career PP data is available in this build.</text>';
+      return;
+    }
+
+    const preferred = String(requestedPlayerId || document.getElementById('ppDevCareerPlayerSelect')?.value || availableRows[0]?.player_id || '').trim();
+    const selected = availableRows.find((row) => String(row.player_id || '') === preferred) || availableRows[0];
+    const selectedPoints = Array.isArray(selected?.curve_points) ? selected.curve_points : [];
+    if (!selectedPoints.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="16" fill="#6a7a70">Selected player does not have enough PP history for a cumulative curve.</text>';
+      return;
+    }
+
+    const width = 760;
+    const height = 420;
+    const padding = { top: 28, right: 26, bottom: 56, left: 64 };
+    const allPoints = availableRows.flatMap((row) => row.curve_points);
+    const maxCareerMinutes = Math.max(
+      ...allPoints.map((row) => Number(row.career_end_pp_minutes || row.window_end_pp_minutes || 0)),
+      Number(selected?.career_pp_minutes || 0),
+      100,
+    );
+    const maxCareerPoints = Math.max(
+      ...allPoints.map((row) => Number(row.career_pp_points || 0)),
+      Number(selected?.career_pp_points || 0),
+      10,
+    );
+    const xDomain = [0, maxCareerMinutes * 1.04];
+    const yDomain = [0, maxCareerPoints * 1.08];
+    const xAt = (value) => padding.left + ((width - padding.left - padding.right) * (Number(value || 0) - xDomain[0])) / (xDomain[1] - xDomain[0]);
+    const yAt = (value) => (height - padding.bottom) - ((height - padding.top - padding.bottom) * (Number(value || 0) - yDomain[0])) / (yDomain[1] - yDomain[0]);
+    const xTicks = axisTickValues(xDomain, 5);
+    const yTicks = axisTickValues(yDomain, 5);
+    const grid = buildScatterGridMarkup(width, height, padding, xTicks, yTicks, xAt, yAt);
+    const buildCurvePath = (points) => {
+      if (!Array.isArray(points) || !points.length) return '';
+      const commands = [`M ${xAt(0).toFixed(2)} ${yAt(0).toFixed(2)}`];
+      points.forEach((point) => {
+        commands.push(
+          `L ${xAt(point.career_end_pp_minutes).toFixed(2)} ${yAt(point.career_pp_points).toFixed(2)}`,
+        );
+      });
+      return commands.join(' ');
+    };
+    const backgroundPaths = availableRows
+      .filter((row) => String(row.player_id || '') !== String(selected.player_id || ''))
+      .map((row) => {
+        const path = buildCurvePath(row.curve_points);
+        if (!path) return '';
+        const title = `${row.player_name} (${row.team || ''}) | Career PP minutes: ${formatFixed(row.career_pp_minutes, 1)} | Career PP points: ${Number(row.career_pp_points || 0).toLocaleString()} | Career PP P/60: ${formatMetric(row.career_pp_points_per60, 2)}`;
+        return `<path d="${path}" fill="none" stroke="${POWERPLAY_COLORS.comparison}" stroke-width="1.6" stroke-opacity="0.9" stroke-linejoin="round" stroke-linecap="round"><title>${esc(title)}</title></path>`;
+      })
+      .join('');
+    const selectedPath = buildCurvePath(selectedPoints);
+    const latestPoint = selectedPoints[selectedPoints.length - 1];
+    const latestMarker = latestPoint
+      ? `<circle cx="${xAt(latestPoint.career_end_pp_minutes).toFixed(2)}" cy="${yAt(latestPoint.career_pp_points).toFixed(2)}" r="5.0" fill="${POWERPLAY_COLORS.top}" stroke="#ffffff" stroke-width="1.2"><title>${esc(`${selected.player_name} | Career total: ${formatFixed(latestPoint.career_end_pp_minutes, 1)} PP min, ${formatFixed(latestPoint.career_pp_points, 1)} PP points`)}</title></circle>`
+      : '';
+    const selectedLabel = latestPoint
+      ? `<text x="${(xAt(latestPoint.career_end_pp_minutes) + 8).toFixed(2)}" y="${(yAt(latestPoint.career_pp_points) - 10).toFixed(2)}" font-size="10.5" fill="#163744">${esc(selected.player_name || '')}</text>`
+      : '';
+    const cohortLabel = cohortKey === 'offence'
+      ? 'Gray lines: top offence-score cohort'
+      : cohortKey === 'pp'
+        ? 'Gray lines: top PP-rate cohort'
+        : cohortKey === 'overlap'
+          ? 'Gray lines: overlap between both cohorts'
+          : 'Gray lines: broader PP comparison cohort';
+
+    svg.innerHTML = `
+      <rect x="0" y="0" width="${width}" height="${height}" rx="16" ry="16" fill="#fbfeff" stroke="#dbe7ed" />
+      ${grid}
+      <line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      <line x1="${padding.left}" y1="${(height - padding.bottom).toFixed(2)}" x2="${(width - padding.right).toFixed(2)}" y2="${(height - padding.bottom).toFixed(2)}" stroke="#6e8175" stroke-width="1.2" />
+      ${backgroundPaths}
+      <path d="${selectedPath}" fill="none" stroke="${POWERPLAY_COLORS.accent}" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" />
+      ${latestMarker}
+      ${selectedLabel}
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 12).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">${esc(cohortLabel)}</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 28).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Career total: ${esc(formatFixed(selected.career_pp_minutes, 1))} min, ${Number(selected.career_pp_points || 0).toLocaleString()} pts</text>
+      <text x="${(width - padding.right - 4).toFixed(2)}" y="${(padding.top + 44).toFixed(2)}" text-anchor="end" font-size="11" fill="#597166">Current PP P/60: ${esc(formatMetric(selected.current_pp_points_per60, 2))} | Career PP P/60: ${esc(formatMetric(selected.career_pp_points_per60, 2))}</text>
+      <text x="${(width / 2).toFixed(2)}" y="${(height - 10).toFixed(2)}" text-anchor="middle" font-size="11" fill="#597166">Career PP minutes from player career start</text>
+      <text x="18" y="${(height / 2).toFixed(2)}" transform="rotate(-90 18 ${height / 2})" text-anchor="middle" font-size="11" fill="#597166">Career PP points</text>
+    `;
+  }
+
+  function renderPowerplayPairChemistryTable(analysis) {
+    const tableWrap = document.getElementById('ppDevPairChemistryTable');
+    const copyEl = document.getElementById('ppDevPairChemistryCopy');
+    if (!tableWrap || !copyEl) return;
+    const summary = analysis?.pair_chemistry?.summary || {};
+    const rows = Array.isArray(analysis?.pair_chemistry?.rows) ? analysis.pair_chemistry.rows : [];
+    if (!rows.length) {
+      copyEl.innerHTML = '<p>No PP pair chemistry table is available in this build.</p>';
+      tableWrap.innerHTML = '<div class="sf-empty-state">No same-unit PP pair sample met the shared-ice threshold.</div>';
+      return;
+    }
+    const topPairLabel = String(summary.top_pair_label || '').trim();
+    const topPairTeam = String(summary.top_pair_team || '').trim();
+    const topPairScore = summary.top_pair_chemistry_score;
+    const topPairGoalLift = summary.top_pair_goal_lift_per60;
+    const minSharedMinutes = Number(summary.min_shared_pp_minutes || 0);
+    const seasonStart = String(summary.season_start_label || '').trim();
+    const seasonEnd = String(summary.season_end_label || '').trim();
+    copyEl.innerHTML = `
+      <p>These pair rows use standard power-play states only (5v4, 5v3, 4v3) across <strong>${esc(seasonStart || 'the loaded start season')}</strong> through <strong>${esc(seasonEnd || 'the current season')}</strong>, with a minimum of ${esc(formatFixed(minSharedMinutes, 1))} shared PP minutes.</p>
+      <p><strong>With pair</strong> means team PP production while both skaters are on the ice together. <strong>Without pair</strong> means the same team’s other PP minutes in the same season range. The table is sorted by <strong>xG lift / 60</strong> so we lean on the more stable shot-quality signal first. The strongest pair in this build is <strong>${esc(topPairLabel || 'n/a')}</strong>${topPairTeam ? ` for <strong>${esc(topPairTeam)}</strong>` : ''}${topPairScore == null ? '' : ` at <strong>${esc(formatSignedMetric(topPairScore, 3))}</strong> xG/60`}${topPairGoalLift == null ? '' : ` and <strong>${esc(formatSignedMetric(topPairGoalLift, 3))}</strong> G/60`}.</p>
+    `;
+    tableWrap.innerHTML = `
+      <table class="sf-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Pair</th>
+            <th>Team</th>
+            <th>Seasons</th>
+            <th>Shared PP Min</th>
+            <th>xG Lift/60</th>
+            <th>Team PP G/60 With Pair</th>
+            <th>Team PP G/60 Without Pair</th>
+            <th>Team PP xG/60 With Pair</th>
+            <th>Team PP xG/60 Without Pair</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => `
+            <tr>
+              <td>${Number(row.rank || 0).toLocaleString()}</td>
+              <td>${esc(`${row.player_a_name || ''} + ${row.player_b_name || ''}`)}</td>
+              <td>${esc(row.team || '')}</td>
+              <td>${esc(Array.isArray(row.shared_season_labels) ? row.shared_season_labels.join(', ') : '')}</td>
+              <td>${esc(formatFixed(row.shared_pp_minutes, 1))}</td>
+              <td class="${classForSigned(row.chemistry_score)}">${esc(formatSignedMetric(row.chemistry_score, 3))}</td>
+              <td>${esc(formatMetric(row.team_pp_goals_per60_together, 2))}</td>
+              <td>${esc(formatMetric(row.team_pp_goals_per60_without_pair, 2))}</td>
+              <td>${esc(formatMetric(row.team_pp_xg_per60_together, 2))}</td>
+              <td>${esc(formatMetric(row.team_pp_xg_per60_without_pair, 2))}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
     `;
   }
 
@@ -1484,7 +1741,7 @@
             <th>Rank</th>
             <th>Player</th>
             <th>Team</th>
-            <th>Opening Window P/60</th>
+            <th>First Full Window P/60</th>
             <th>Latest Window P/60</th>
             <th>Latest Window Min</th>
             <th>Peak Window P/60</th>
@@ -1520,13 +1777,14 @@
     const analysis = state.analysisPayload?.powerplay_development_analysis || {};
     const traitSelect = document.getElementById('ppDevTraitSelect');
     const careerSelect = document.getElementById('ppDevCareerPlayerSelect');
+    const careerCohortSelect = document.getElementById('ppDevCareerCohortSelect');
     const traitRows = Array.isArray(analysis?.trait_correlations) ? analysis.trait_correlations : [];
     const progressionRows = Array.isArray(analysis?.career_progressions) ? analysis.career_progressions : [];
 
     renderPowerplaySummaryCards(analysis);
     renderPowerplayTopPlayersTable(analysis);
     renderPowerplayTraitCorrelationGrid(analysis);
-    renderPowerplayDevelopmentTable(analysis);
+    renderPowerplayPairChemistryTable(analysis);
 
     if (traitSelect) {
       traitSelect.innerHTML = traitRows.length
@@ -1546,11 +1804,43 @@
       }
     }
 
+    if (careerCohortSelect && !careerCohortSelect.dataset.bound) {
+      careerCohortSelect.addEventListener('change', () => {
+        const cohortKey = String(careerCohortSelect.value || 'all');
+        renderPowerplayCareerChart(
+          analysis,
+          String(careerSelect?.value || progressionRows[0]?.player_id || ''),
+          cohortKey,
+        );
+        renderPowerplayCareerCumulativeChart(
+          analysis,
+          String(careerSelect?.value || progressionRows[0]?.player_id || ''),
+          cohortKey,
+        );
+      });
+      careerCohortSelect.dataset.bound = '1';
+    }
+    if (careerCohortSelect) {
+      careerCohortSelect.innerHTML = [
+        ['all', 'All comparison players'],
+        ['pp', 'Top PP scorers'],
+        ['offence', 'Top offence-score players'],
+        ['overlap', 'Overlap only'],
+      ].map(([value, label]) => `<option value="${esc(value)}">${esc(label)}</option>`).join('');
+      careerCohortSelect.value = String(careerCohortSelect.value || 'all');
+    }
+
     if (careerSelect && !careerSelect.dataset.bound) {
       careerSelect.addEventListener('change', () => {
         renderPowerplayCareerChart(
           analysis,
           String(careerSelect.value || ''),
+          String(careerCohortSelect?.value || 'all'),
+        );
+        renderPowerplayCareerCumulativeChart(
+          analysis,
+          String(careerSelect.value || ''),
+          String(careerCohortSelect?.value || 'all'),
         );
       });
       careerSelect.dataset.bound = '1';
@@ -1564,6 +1854,12 @@
     renderPowerplayCareerChart(
       analysis,
       String(careerSelect?.value || progressionRows[0]?.player_id || ''),
+      String(careerCohortSelect?.value || 'all'),
+    );
+    renderPowerplayCareerCumulativeChart(
+      analysis,
+      String(careerSelect?.value || progressionRows[0]?.player_id || ''),
+      String(careerCohortSelect?.value || 'all'),
     );
   }
 
@@ -1762,6 +2058,8 @@
       if (ppTraitSvg) ppTraitSvg.innerHTML = `<text x="380" y="210" text-anchor="middle" font-size="16" fill="#b13a30">${esc(error.message)}</text>`;
       const ppCareerSvg = document.getElementById('ppDevCareerChart');
       if (ppCareerSvg) ppCareerSvg.innerHTML = `<text x="380" y="210" text-anchor="middle" font-size="16" fill="#b13a30">${esc(error.message)}</text>`;
+      const ppCareerCumulativeSvg = document.getElementById('ppDevCareerCumulativeChart');
+      if (ppCareerCumulativeSvg) ppCareerCumulativeSvg.innerHTML = `<text x="380" y="210" text-anchor="middle" font-size="16" fill="#b13a30">${esc(error.message)}</text>`;
     });
   });
 })();
