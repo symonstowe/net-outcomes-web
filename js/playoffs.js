@@ -257,8 +257,8 @@
     // X positions are tuned so the curves with the most vertical change
     // (r1→r2, r2→cf) get the most horizontal room. The gentle start→r1 and
     // cf→cup curves can be tighter without looking pinched.
-    const r1X = 290;
-    const r2X = 460;
+    const r1X = 315;
+    const r2X = 485;
     const cfX = 670;
     const xs = {
       West: { start: 40, r1: r1X, r2: r2X, cf: cfX, cup: W / 2 - nodeW / 2 },
