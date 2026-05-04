@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-04 08:04 UTC",
-  "last_updated_utc": "2026-05-04 08:04 UTC",
-  "last_updated_iso": "2026-05-04T08:04:03.299409+00:00",
+  "generated_at": "2026-05-04 20:31 UTC",
+  "last_updated_utc": "2026-05-04 20:31 UTC",
+  "last_updated_iso": "2026-05-04T20:31:50.934830+00:00",
   "season_label": "2025-2026",
   "predictions": {
     "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
     "window_hours": 48,
-    "window_start_utc": "2026-05-04T06:00:00+00:00",
-    "window_end_utc": "2026-05-06T06:00:00+00:00",
+    "window_start_utc": "2026-05-04T20:00:00+00:00",
+    "window_end_utc": "2026-05-06T20:00:00+00:00",
     "games": [
       {
         "game_id": 2025030222,
@@ -17,11 +17,11 @@
         "home_team": "CAR",
         "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
         "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-        "home_win_prob": 61.2,
-        "away_win_prob": 38.8,
-        "ot_prob": 23.9,
-        "home_expected_goals": 2.36,
-        "away_expected_goals": 1.61,
+        "home_win_prob": 84.6,
+        "away_win_prob": 15.4,
+        "ot_prob": 22.2,
+        "home_expected_goals": 2.33,
+        "away_expected_goals": 1.62,
         "home_rest_days": 1,
         "away_rest_days": 1,
         "home_rest_hours": 47.0,
@@ -32,48 +32,48 @@
         "away_goalie_mix": "Vladar 98% (adj 1.008), Ersson 2% (adj 1.176), Kolosov 0% (adj 1.250)",
         "home_goalie_mix_html": "<strong>Andersen 86% (adj 0.858)</strong>, Bussi 11% (adj 1.097), Kochetkov 4% (adj 1.156)",
         "away_goalie_mix_html": "<strong>Vladar 98% (adj 1.008)</strong>, Ersson 2% (adj 1.176), Kolosov 0% (adj 1.250)",
-        "top_deciding_factors": "special-teams RAPM edge (-0.331); lineup xG defensive depth-score edge (+0.329); team xG defensive depth-score edge (+0.256); xG suppression edge (-0.192); finishing talent edge (-0.169)",
-        "home_factor_pushes": "lineup xG defensive depth-score edge (+0.329); team xG defensive depth-score edge (+0.256); star-load edge (+0.163); team offensive depth-score edge (+0.156); xG depth-score under-injury edge (+0.154)",
-        "away_factor_pushes": "special-teams RAPM edge (-0.331); xG suppression edge (-0.192); finishing talent edge (-0.169); rebound edge (-0.142); form trend edge (last 5 vs last 20 xG diff) (-0.134)",
+        "top_deciding_factors": "deployment context edge (+1.237); skellam win probability (-0.515); rush finishing edge (+0.476); base win probability (-0.444); recent talent trend edge (+0.394)",
+        "home_factor_pushes": "deployment context edge (+1.237); rush finishing edge (+0.476); recent talent trend edge (+0.394); goalie adjustment edge (+0.315); goalie recent starts edge (7d) (+0.250)",
+        "away_factor_pushes": "skellam win probability (-0.515); base win probability (-0.444); team delta-V defensive depth edge (-0.263); stability edge (-0.212); special-teams RAPM edge (-0.182)",
         "top_deciding_factor_items": [
           {
-            "label": "special-teams RAPM edge",
-            "edge_team": "PHI",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-            "contribution": -0.331
-          },
-          {
-            "label": "lineup xG defensive depth-score edge",
+            "label": "deployment context edge",
             "edge_team": "CAR",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-            "contribution": 0.329
+            "contribution": 1.237
           },
           {
-            "label": "team xG defensive depth-score edge",
+            "label": "skellam win probability",
+            "edge_team": "PHI",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
+            "contribution": -0.515
+          },
+          {
+            "label": "rush finishing edge",
             "edge_team": "CAR",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-            "contribution": 0.256
+            "contribution": 0.476
           },
           {
-            "label": "xG suppression edge",
+            "label": "base win probability",
             "edge_team": "PHI",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-            "contribution": -0.192
+            "contribution": -0.444
           },
           {
-            "label": "finishing talent edge",
-            "edge_team": "PHI",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
-            "contribution": -0.169
+            "label": "recent talent trend edge",
+            "edge_team": "CAR",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+            "contribution": 0.394
           }
         ],
-        "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">special-teams RAPM edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">lineup xG defensive depth-score edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">team xG defensive depth-score edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">xG suppression edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">finishing talent edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
+        "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">deployment context edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">skellam win probability</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">rush finishing edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">base win probability</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/PHI_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">recent talent trend edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
         "venue_timezone": "US/Eastern",
         "venue_utc_offset": "-04:00",
         "start_time_label": "May 4, 2026 7:00 PM EDT",
         "favorite_team": "CAR",
-        "favorite_win_prob": 61.2,
-        "confidence_edge": 22.5
+        "favorite_win_prob": 84.6,
+        "confidence_edge": 69.2
       },
       {
         "game_id": 2025030241,
@@ -83,11 +83,11 @@
         "home_team": "VGK",
         "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
         "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-        "home_win_prob": 67.4,
-        "away_win_prob": 32.6,
-        "ot_prob": 25.1,
-        "home_expected_goals": 2.67,
-        "away_expected_goals": 2.02,
+        "home_win_prob": 67.3,
+        "away_win_prob": 32.7,
+        "ot_prob": 21.7,
+        "home_expected_goals": 2.52,
+        "away_expected_goals": 1.97,
         "home_rest_days": 2,
         "away_rest_days": 3,
         "home_rest_hours": 71.5,
@@ -98,48 +98,48 @@
         "away_goalie_mix": "Dostal 96% (adj 1.127), Husso 2% (adj 1.250), Mrazek 2% (adj 1.106)",
         "home_goalie_mix_html": "<strong>Hart 95% (adj 1.104)</strong>, Hill 3% (adj 1.113), Schmid 2% (adj 1.250)",
         "away_goalie_mix_html": "<strong>Dostal 96% (adj 1.127)</strong>, Husso 2% (adj 1.250), Mrazek 2% (adj 1.106)",
-        "top_deciding_factors": "special-teams RAPM edge (-0.477); high-danger shot generation edge (-0.283); rest-day edge (-0.208); home-ice base edge (+0.207); lineup xG defensive depth-score edge (+0.171)",
-        "home_factor_pushes": "home-ice base edge (+0.207); lineup xG defensive depth-score edge (+0.171); lineup xG defensive depth edge (+0.161); form trend edge (last 5 vs last 20 xG diff) (+0.157); star-load edge (+0.152)",
-        "away_factor_pushes": "special-teams RAPM edge (-0.477); high-danger shot generation edge (-0.283); rest-day edge (-0.208); goalie recent shots faced edge (3GP) (-0.142); shot quality edge (-0.120)",
+        "top_deciding_factors": "deployment context edge (+0.405); skellam win probability (-0.361); lineup delta-V defensive depth-score edge (+0.359); base win probability (-0.319); lineup xG offensive depth-score edge (+0.293)",
+        "home_factor_pushes": "deployment context edge (+0.405); lineup delta-V defensive depth-score edge (+0.359); lineup xG offensive depth-score edge (+0.293); defensive depth edge (+0.188); team xG offensive depth-score edge (+0.185)",
+        "away_factor_pushes": "skellam win probability (-0.361); base win probability (-0.319); special-teams RAPM edge (-0.262); rest-day edge (-0.192); goalie recent shots faced edge (3GP) (-0.188)",
         "top_deciding_factor_items": [
           {
-            "label": "special-teams RAPM edge",
-            "edge_team": "ANA",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
-            "contribution": -0.477
-          },
-          {
-            "label": "high-danger shot generation edge",
-            "edge_team": "ANA",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
-            "contribution": -0.283
-          },
-          {
-            "label": "rest-day edge",
-            "edge_team": "ANA",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
-            "contribution": -0.208
-          },
-          {
-            "label": "home-ice base edge",
+            "label": "deployment context edge",
             "edge_team": "VGK",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-            "contribution": 0.207
+            "contribution": 0.405
           },
           {
-            "label": "lineup xG defensive depth-score edge",
+            "label": "skellam win probability",
+            "edge_team": "ANA",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
+            "contribution": -0.361
+          },
+          {
+            "label": "lineup delta-V defensive depth-score edge",
             "edge_team": "VGK",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-            "contribution": 0.171
+            "contribution": 0.359
+          },
+          {
+            "label": "base win probability",
+            "edge_team": "ANA",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
+            "contribution": -0.319
+          },
+          {
+            "label": "lineup xG offensive depth-score edge",
+            "edge_team": "VGK",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
+            "contribution": 0.293
           }
         ],
-        "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">special-teams RAPM edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/ANA_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">high-danger shot generation edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/ANA_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">rest-day edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/ANA_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">home-ice base edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">lineup xG defensive depth-score edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
+        "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">deployment context edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">skellam win probability</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/ANA_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">lineup delta-V defensive depth-score edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">base win probability</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/ANA_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">lineup xG offensive depth-score edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
         "venue_timezone": "US/Pacific",
         "venue_utc_offset": "-07:00",
         "start_time_label": "May 4, 2026 6:30 PM PDT",
         "favorite_team": "VGK",
-        "favorite_win_prob": 67.4,
-        "confidence_edge": 34.9
+        "favorite_win_prob": 67.3,
+        "confidence_edge": 34.7
       },
       {
         "game_id": 2025030232,
@@ -149,11 +149,11 @@
         "home_team": "COL",
         "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg",
         "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-        "home_win_prob": 67.9,
-        "away_win_prob": 32.1,
-        "ot_prob": 23.2,
-        "home_expected_goals": 2.28,
-        "away_expected_goals": 1.44,
+        "home_win_prob": 68.1,
+        "away_win_prob": 31.9,
+        "ot_prob": 22.8,
+        "home_expected_goals": 1.99,
+        "away_expected_goals": 1.45,
         "home_rest_days": 1,
         "away_rest_days": 1,
         "home_rest_hours": 47.0,
@@ -164,48 +164,48 @@
         "away_goalie_mix": "Wallstedt 74% (adj 0.980), Gustavsson 21% (adj 1.141), Petersen 5% (adj 1.223)",
         "home_goalie_mix_html": "<strong>Wedgewood 89% (adj 0.750)</strong>, Blackwood 10% (adj 0.897), Posch 2% (adj 1.000)",
         "away_goalie_mix_html": "<strong>Wallstedt 74% (adj 0.980)</strong>, Gustavsson 21% (adj 1.141), Petersen 5% (adj 1.223)",
-        "top_deciding_factors": "special-teams RAPM edge (+0.348); home-ice base edge (-0.294); center offensive strength edge (+0.290); xG depth-score under-injury edge (+0.281); playmaking edge (-0.248)",
-        "home_factor_pushes": "special-teams RAPM edge (+0.348); center offensive strength edge (+0.290); xG depth-score under-injury edge (+0.281); lineup offensive depth-score edge (+0.187); lineup delta-V defensive depth edge (+0.173)",
-        "away_factor_pushes": "home-ice base edge (-0.294); playmaking edge (-0.248); recent point/cycle edge (-0.194); season point/cycle edge (-0.154); depth-under-injury edge (-0.131)",
+        "top_deciding_factors": "goalie adjustment edge (+0.693); skellam win probability (-0.429); base win probability (-0.365); playmaking edge (+0.335); recent talent trend edge (+0.330)",
+        "home_factor_pushes": "goalie adjustment edge (+0.693); playmaking edge (+0.335); recent talent trend edge (+0.330); special-teams RAPM edge (+0.191); team offensive depth-score edge (+0.187)",
+        "away_factor_pushes": "skellam win probability (-0.429); base win probability (-0.365); depth-under-injury edge (-0.304); center offensive strength edge (-0.212); lineup xG offensive depth-score edge (-0.187)",
         "top_deciding_factor_items": [
           {
-            "label": "special-teams RAPM edge",
+            "label": "goalie adjustment edge",
             "edge_team": "COL",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-            "contribution": 0.348
+            "contribution": 0.693
           },
           {
-            "label": "home-ice base edge",
+            "label": "skellam win probability",
             "edge_team": "MIN",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg",
-            "contribution": -0.294
+            "contribution": -0.429
           },
           {
-            "label": "center offensive strength edge",
-            "edge_team": "COL",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-            "contribution": 0.29
-          },
-          {
-            "label": "xG depth-score under-injury edge",
-            "edge_team": "COL",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-            "contribution": 0.281
+            "label": "base win probability",
+            "edge_team": "MIN",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg",
+            "contribution": -0.365
           },
           {
             "label": "playmaking edge",
-            "edge_team": "MIN",
-            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg",
-            "contribution": -0.248
+            "edge_team": "COL",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+            "contribution": 0.335
+          },
+          {
+            "label": "recent talent trend edge",
+            "edge_team": "COL",
+            "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+            "contribution": 0.33
           }
         ],
-        "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">special-teams RAPM edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/COL_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">home-ice base edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/MIN_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">center offensive strength edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/COL_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">xG depth-score under-injury edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/COL_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">playmaking edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/MIN_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
+        "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">goalie adjustment edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/COL_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">skellam win probability</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/MIN_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">base win probability</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/MIN_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">playmaking edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/COL_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">recent talent trend edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/COL_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
         "venue_timezone": "America/Denver",
         "venue_utc_offset": "-06:00",
         "start_time_label": "May 5, 2026 6:00 PM MDT",
         "favorite_team": "COL",
-        "favorite_win_prob": 67.9,
-        "confidence_edge": 35.8
+        "favorite_win_prob": 68.1,
+        "confidence_edge": 36.2
       }
     ],
     "model_summary": {
@@ -216,18 +216,18 @@
         20242025,
         20252026
       ],
-      "goal_rate_games": 1500,
-      "goal_rate_home_mae": 1.3905,
-      "goal_rate_away_mae": 1.3367,
-      "calibration_games": 1500,
-      "calibration_logloss": 0.6481,
+      "goal_rate_games": 6312,
+      "goal_rate_home_mae": 1.3992,
+      "goal_rate_away_mae": 1.3701,
+      "calibration_games": 6312,
+      "calibration_logloss": 0.6592,
       "calibration_n_simulations": 400,
-      "playoff_calibration_games": 1528,
-      "playoff_calibration_logloss": 0.6513,
-      "playoff_side_training_rows": 1528,
-      "playoff_ot_training_rows": 1898,
-      "playoff_side_augmented_regular": 1130,
-      "playoff_ot_augmented_regular": 1500
+      "playoff_calibration_games": 5301,
+      "playoff_calibration_logloss": 0.6523,
+      "playoff_side_training_rows": 5498,
+      "playoff_ot_training_rows": 6956,
+      "playoff_side_augmented_regular": 5100,
+      "playoff_ot_augmented_regular": 6558
     }
   }
 }
