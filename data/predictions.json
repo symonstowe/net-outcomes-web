@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-06 04:25 UTC",
-  "last_updated_utc": "2026-05-06 04:25 UTC",
-  "last_updated_iso": "2026-05-06T04:25:16.748476+00:00",
+  "generated_at": "2026-05-06 19:18 UTC",
+  "last_updated_utc": "2026-05-06 19:18 UTC",
+  "last_updated_iso": "2026-05-06T19:18:36.640679+00:00",
   "season_label": "2025-2026",
   "predictions": {
     "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
     "window_hours": 48,
-    "window_start_utc": "2026-05-06T03:00:00+00:00",
-    "window_end_utc": "2026-05-08T03:00:00+00:00",
+    "window_start_utc": "2026-05-06T18:00:00+00:00",
+    "window_end_utc": "2026-05-08T18:00:00+00:00",
     "games": [
       {
         "game_id": 2025030211,
@@ -17,9 +17,9 @@
         "home_team": "BUF",
         "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg",
         "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
-        "home_win_prob": 62.5,
-        "away_win_prob": 37.5,
-        "ot_prob": 22.3,
+        "home_win_prob": 62.4,
+        "away_win_prob": 37.6,
+        "ot_prob": 22.4,
         "home_expected_goals": 2.04,
         "away_expected_goals": 2.34,
         "home_rest_days": 4,
@@ -72,8 +72,8 @@
         "venue_utc_offset": "-04:00",
         "start_time_label": "May 6, 2026 7:00 PM EDT",
         "favorite_team": "BUF",
-        "favorite_win_prob": 62.5,
-        "confidence_edge": 25.0
+        "favorite_win_prob": 62.4,
+        "confidence_edge": 24.8
       },
       {
         "game_id": 2025030242,
@@ -98,9 +98,9 @@
         "away_goalie_mix": "Dostal 94% (adj 1.177), Husso 4% (adj 1.250), Mrazek 2% (adj 1.106)",
         "home_goalie_mix_html": "<strong>Hart 96% (adj 1.069)</strong>, Hill 2% (adj 1.034), Schmid 2% (adj 1.250)",
         "away_goalie_mix_html": "<strong>Dostal 94% (adj 1.177)</strong>, Husso 4% (adj 1.250), Mrazek 2% (adj 1.106)",
-        "top_deciding_factors": "deployment context edge (+0.419); skellam win probability (-0.415); lineup delta-V defensive depth-score edge (+0.380); base win probability (-0.342); goalie adjustment edge (+0.295)",
+        "top_deciding_factors": "deployment context edge (+0.419); skellam win probability (-0.415); lineup delta-V defensive depth-score edge (+0.380); base win probability (-0.341); goalie adjustment edge (+0.295)",
         "home_factor_pushes": "deployment context edge (+0.419); lineup delta-V defensive depth-score edge (+0.380); goalie adjustment edge (+0.295); lineup xG offensive depth-score edge (+0.245); team delta-V defensive depth-score edge (+0.230)",
-        "away_factor_pushes": "skellam win probability (-0.415); base win probability (-0.342); goalie recent shots faced edge (3GP) (-0.239); special-teams RAPM edge (-0.220); lineup defensive depth-score edge (-0.167)",
+        "away_factor_pushes": "skellam win probability (-0.415); base win probability (-0.341); goalie recent shots faced edge (3GP) (-0.239); special-teams RAPM edge (-0.220); lineup defensive depth-score edge (-0.167)",
         "top_deciding_factor_items": [
           {
             "label": "deployment context edge",
@@ -124,7 +124,7 @@
             "label": "base win probability",
             "edge_team": "ANA",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
-            "contribution": -0.342
+            "contribution": -0.341
           },
           {
             "label": "goalie adjustment edge",
