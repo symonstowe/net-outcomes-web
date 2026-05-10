@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-10 05:14 UTC",
-  "last_updated_utc": "2026-05-10 05:14 UTC",
-  "last_updated_iso": "2026-05-10T05:14:05.320197+00:00",
+  "generated_at": "2026-05-10 09:07 UTC",
+  "last_updated_utc": "2026-05-10 09:07 UTC",
+  "last_updated_iso": "2026-05-10T09:07:20.856218+00:00",
   "season_label": "2025-2026",
   "predictions": {
     "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
     "window_hours": 48,
-    "window_start_utc": "2026-05-10T04:00:00+00:00",
-    "window_end_utc": "2026-05-12T04:00:00+00:00",
+    "window_start_utc": "2026-05-10T09:00:00+00:00",
+    "window_end_utc": "2026-05-12T09:00:00+00:00",
     "games": [
       {
         "game_id": 2025030213,
