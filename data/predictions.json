@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-25 18:33 UTC",
-  "last_updated_utc": "2026-05-25 18:33 UTC",
-  "last_updated_iso": "2026-05-25T18:33:52.893068+00:00",
+  "generated_at": "2026-05-25 18:40 UTC",
+  "last_updated_utc": "2026-05-25 18:40 UTC",
+  "last_updated_iso": "2026-05-25T18:40:02.059387+00:00",
   "season_label": "2025-2026",
   "predictions": {
     "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
@@ -34,7 +34,7 @@
         "away_goalie_mix_html": "<strong>Andersen 92% (adj 0.836)</strong>, Bussi 5% (adj 1.086), Kochetkov 3% (adj 1.200)",
         "top_deciding_factors": "deployment context edge (-0.282); goalie recent shots faced edge (3GP) (-0.241); special-teams RAPM edge (+0.189); penalty minutes edge (opponent takes more) (-0.167); recent talent trend edge (-0.160)",
         "home_factor_pushes": "special-teams RAPM edge (+0.189); depth-under-injury edge (+0.128); team delta-V offensive depth-score edge (+0.055); goalie flank-style edge (+0.044); pace edge (shot rate differential) (+0.034)",
-        "away_factor_pushes": "deployment context edge (-0.282); goalie recent shots faced edge (3GP) (-0.241); penalty minutes edge (opponent takes more) (-0.167); recent talent trend edge (-0.160); lineup xG offensive depth-score edge (-0.131)",
+        "away_factor_pushes": "deployment context edge (-0.282); goalie recent shots faced edge (3GP) (-0.241); penalty minutes edge (opponent takes more) (-0.167); recent talent trend edge (-0.160); lineup xG offensive depth-score edge (-0.130)",
         "top_deciding_factor_items": [
           {
             "label": "deployment context edge",
@@ -83,9 +83,9 @@
         "home_team": "VGK",
         "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
         "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-        "home_win_prob": 48.2,
-        "away_win_prob": 51.8,
-        "ot_prob": 22.4,
+        "home_win_prob": 48.1,
+        "away_win_prob": 51.9,
+        "ot_prob": 22.3,
         "home_expected_goals": 2.79,
         "away_expected_goals": 3.22,
         "home_rest_days": 1,
@@ -95,18 +95,18 @@
         "home_travel_48h_km": 0.0,
         "away_travel_48h_km": 0.0,
         "home_goalie_mix": "Hart 98% (adj 0.809), Lindbom 1% (adj 1.018), Schmid 1% (adj 1.250)",
-        "away_goalie_mix": "Wedgewood 96% (adj 0.750), Blackwood 3% (adj 0.925), Posch 1% (adj 1.000)",
+        "away_goalie_mix": "Wedgewood 95% (adj 0.750), Blackwood 3% (adj 0.925), Miner 1% (adj 0.886)",
         "home_goalie_mix_html": "<strong>Hart 98% (adj 0.809)</strong>, Lindbom 1% (adj 1.018), Schmid 1% (adj 1.250)",
-        "away_goalie_mix_html": "<strong>Wedgewood 96% (adj 0.750)</strong>, Blackwood 3% (adj 0.925), Posch 1% (adj 1.000)",
-        "top_deciding_factors": "goalie recent shots faced edge (3GP) (-0.224); lineup xG offensive depth-score edge (+0.207); special-teams RAPM edge (-0.194); discipline edge (-0.193); trailing-team urgency edge (playoff series) (+0.178)",
+        "away_goalie_mix_html": "<strong>Wedgewood 95% (adj 0.750)</strong>, Blackwood 3% (adj 0.925), Miner 1% (adj 0.886)",
+        "top_deciding_factors": "goalie recent shots faced edge (3GP) (-0.218); lineup xG offensive depth-score edge (+0.207); special-teams RAPM edge (-0.194); discipline edge (-0.193); trailing-team urgency edge (playoff series) (+0.178)",
         "home_factor_pushes": "lineup xG offensive depth-score edge (+0.207); trailing-team urgency edge (playoff series) (+0.178); high-danger suppression edge (+0.164); depth-under-injury edge (+0.151); game xG total (+0.092)",
-        "away_factor_pushes": "goalie recent shots faced edge (3GP) (-0.224); special-teams RAPM edge (-0.194); discipline edge (-0.193); team delta-V defensive depth edge (-0.162); recent talent trend edge (-0.162)",
+        "away_factor_pushes": "goalie recent shots faced edge (3GP) (-0.218); special-teams RAPM edge (-0.194); discipline edge (-0.193); recent talent trend edge (-0.163); team delta-V defensive depth edge (-0.162)",
         "top_deciding_factor_items": [
           {
             "label": "goalie recent shots faced edge (3GP)",
             "edge_team": "COL",
             "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
-            "contribution": -0.224
+            "contribution": -0.218
           },
           {
             "label": "lineup xG offensive depth-score edge",
@@ -138,8 +138,8 @@
         "venue_utc_offset": "-07:00",
         "start_time_label": "May 26, 2026 6:00 PM PDT",
         "favorite_team": "COL",
-        "favorite_win_prob": 51.8,
-        "confidence_edge": 3.5
+        "favorite_win_prob": 51.9,
+        "confidence_edge": 3.7
       }
     ],
     "model_summary": {
