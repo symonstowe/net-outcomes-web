@@ -1,6 +1,6 @@
 {
   "playoffs": {
-    "built_at": "2026-06-10T04:45:58.313340+00:00",
+    "built_at": "2026-06-12T04:36:19.590713+00:00",
     "season": 20252026,
     "season_year": 2026,
     "n_sims": 10000,
@@ -73,7 +73,7 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 65.31,
+          "top_seed_cup_pct": 83.48,
           "bottom_seed_cup_pct": 0.0,
           "top_seed_conf_pct": 100.0,
           "bottom_seed_conf_pct": 0.0
@@ -169,7 +169,7 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 34.69,
+          "top_seed_cup_pct": 16.52,
           "bottom_seed_cup_pct": 0.0,
           "top_seed_conf_pct": 100.0,
           "bottom_seed_conf_pct": 0.0
@@ -243,7 +243,7 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 65.31,
+          "top_seed_cup_pct": 83.48,
           "bottom_seed_cup_pct": 0.0,
           "top_seed_conf_pct": 100.0,
           "bottom_seed_conf_pct": 0.0
@@ -291,7 +291,7 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 34.69,
+          "top_seed_cup_pct": 16.52,
           "bottom_seed_cup_pct": 0.0,
           "top_seed_conf_pct": 100.0,
           "bottom_seed_conf_pct": 0.0
@@ -317,7 +317,7 @@
           "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
           "top_seed_series_win_pct": 100.0,
           "bottom_seed_series_win_pct": 0.0,
-          "top_seed_cup_pct": 65.31,
+          "top_seed_cup_pct": 83.48,
           "bottom_seed_cup_pct": 0.0,
           "top_seed_conf_pct": 100.0,
           "bottom_seed_conf_pct": 0.0
@@ -342,7 +342,7 @@
           "top_seed_series_win_pct": 0.0,
           "bottom_seed_series_win_pct": 100.0,
           "top_seed_cup_pct": 0.0,
-          "bottom_seed_cup_pct": 34.69,
+          "bottom_seed_cup_pct": 16.52,
           "top_seed_conf_pct": 0.0,
           "bottom_seed_conf_pct": 100.0
         }
@@ -359,16 +359,16 @@
           "bottom_seed_full_name": "Vegas Golden Knights",
           "top_seed_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
           "bottom_seed_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-          "top_seed_wins": 2,
+          "top_seed_wins": 3,
           "bottom_seed_wins": 2,
           "games_to_win": 4,
           "is_complete": false,
           "winner": "",
           "winner_logo": "",
-          "top_seed_series_win_pct": 67.4,
-          "bottom_seed_series_win_pct": 32.6,
-          "top_seed_cup_pct": 65.31,
-          "bottom_seed_cup_pct": 34.69,
+          "top_seed_series_win_pct": 86.0,
+          "bottom_seed_series_win_pct": 14.0,
+          "top_seed_cup_pct": 83.48,
+          "bottom_seed_cup_pct": 16.52,
           "top_seed_conf_pct": 100.0,
           "bottom_seed_conf_pct": 100.0
         }
@@ -411,7 +411,7 @@
         "win_round1_pct": 100.0,
         "win_round2_pct": 100.0,
         "win_conf_pct": 100.0,
-        "win_cup_pct": 65.31
+        "win_cup_pct": 83.48
       },
       {
         "team": "DAL",
@@ -620,7 +620,7 @@
         "win_round1_pct": 100.0,
         "win_round2_pct": 100.0,
         "win_conf_pct": 100.0,
-        "win_cup_pct": 34.69
+        "win_cup_pct": 16.52
       },
       {
         "team": "EDM",

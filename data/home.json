@@ -1,47 +1,43 @@
 {
-  "generated_at": "2026-06-10 06:05 UTC",
-  "last_updated_utc": "2026-06-10 06:05 UTC",
-  "last_updated_iso": "2026-06-10T06:05:11.671707+00:00",
+  "generated_at": "2026-06-12 05:50 UTC",
+  "last_updated_utc": "2026-06-12 05:50 UTC",
+  "last_updated_iso": "2026-06-12T05:50:01.694838+00:00",
   "season_label": "2025-2026",
   "model_performance": {
     "lookback_days": 50,
-    "games_reviewed": 12,
+    "games_reviewed": 8,
     "games_pending": 0,
     "current": {
-      "model_accuracy": 41.67,
-      "brier_score": 0.2845,
-      "log_loss": 0.7637,
-      "calibration_error": 29.9,
-      "avg_goal_diff_mae": 1.502,
-      "units_profit": -1.09,
-      "roi_pct": -36.37,
-      "top_pick_accuracy": 33.33
+      "model_accuracy": 50.0,
+      "brier_score": 0.2567,
+      "log_loss": 0.7076,
+      "calibration_error": 21.65,
+      "avg_goal_diff_mae": 1.602,
+      "units_profit": -0.09,
+      "roi_pct": -4.55,
+      "top_pick_accuracy": 50.0
     },
     "prior": {
-      "model_accuracy": 57.69,
-      "brier_score": 0.2418,
-      "log_loss": 0.6751,
-      "calibration_error": 15.29,
-      "avg_goal_diff_mae": 2.033,
-      "units_profit": 4.82,
-      "roi_pct": 24.09,
-      "top_pick_accuracy": 65.0
+      "model_accuracy": 56.34,
+      "brier_score": 0.2497,
+      "log_loss": 0.6916,
+      "calibration_error": 19.01,
+      "avg_goal_diff_mae": 1.991,
+      "units_profit": 3.0,
+      "roi_pct": 16.66,
+      "top_pick_accuracy": 61.11
     },
     "delta": {
-      "model_accuracy": -16.02,
-      "brier_score": 0.043,
-      "log_loss": 0.089,
-      "calibration_error": 14.61,
-      "avg_goal_diff_mae": -0.531,
-      "units_profit": -5.91,
-      "roi_pct": -60.46,
-      "top_pick_accuracy": -31.67
+      "model_accuracy": -6.34,
+      "brier_score": 0.007,
+      "log_loss": 0.016,
+      "calibration_error": 2.64,
+      "avg_goal_diff_mae": -0.389,
+      "units_profit": -3.09,
+      "roi_pct": -21.21,
+      "top_pick_accuracy": -11.11
     },
     "daily_accuracy": [
-      {
-        "date": "2026-04-21",
-        "value": 25.0
-      },
       {
         "date": "2026-04-28",
         "value": 33.33
@@ -65,10 +61,6 @@
     ],
     "daily_units": [
       {
-        "date": "2026-04-21",
-        "value": -2.091
-      },
-      {
         "date": "2026-04-28",
         "value": -1.091
       },
@@ -91,10 +83,9 @@
     ],
     "snapshot_coverage": {
       "scoring_n_simulations": 4000,
-      "current_days_scored": 6,
-      "current_days_missing_snapshot": 43,
+      "current_days_scored": 5,
+      "current_days_missing_snapshot": 44,
       "current_missing_dates": [
-        "2026-04-22",
         "2026-04-23",
         "2026-04-24",
         "2026-04-25",
@@ -136,12 +127,13 @@
         "2026-06-06",
         "2026-06-07",
         "2026-06-08",
-        "2026-06-09"
+        "2026-06-09",
+        "2026-06-10",
+        "2026-06-11"
       ],
       "prior_days_scored": 7,
       "prior_days_missing_snapshot": 43,
       "prior_missing_dates": [
-        "2026-03-02",
         "2026-03-04",
         "2026-03-05",
         "2026-03-06",
@@ -183,7 +175,8 @@
         "2026-04-17",
         "2026-04-18",
         "2026-04-19",
-        "2026-04-20"
+        "2026-04-20",
+        "2026-04-22"
       ]
     }
   },
@@ -192,7 +185,7 @@
       "rank": 1,
       "team": "COL",
       "games_played": 83,
-      "total_team_score": 0.829,
+      "total_team_score": 0.83,
       "shooting_talent": 0.071,
       "playmaking_talent": 0.052,
       "goaltending_talent": 0.4,
@@ -221,13 +214,13 @@
       "playmaking_talent": 0.055,
       "goaltending_talent": 0.089,
       "chance_generation": 0.127,
-      "chance_suppression": 0.31,
+      "chance_suppression": 0.311,
       "offensive_depth": 7.317,
       "defensive_depth": 11.866,
       "physicality_depth": 7.122,
       "oz_non_offsetting_penalties_pg": 1.573,
       "rush_defence": -0.314,
-      "leverage_xg_net": 0.08,
+      "leverage_xg_net": 0.081,
       "high_danger_for": 0.67,
       "high_danger_against": 0.56,
       "special_teams": 0.258,
@@ -268,7 +261,7 @@
       "shooting_talent": 0.071,
       "playmaking_talent": 0.055,
       "goaltending_talent": -0.145,
-      "chance_generation": 0.199,
+      "chance_generation": 0.2,
       "chance_suppression": -0.132,
       "offensive_depth": 11.988,
       "defensive_depth": 9.354,
@@ -288,12 +281,12 @@
       "rank": 5,
       "team": "OTT",
       "games_played": 82,
-      "total_team_score": 0.367,
+      "total_team_score": 0.366,
       "shooting_talent": 0.005,
       "playmaking_talent": 0.048,
       "goaltending_talent": 0.051,
       "chance_generation": 0.108,
-      "chance_suppression": 0.451,
+      "chance_suppression": 0.45,
       "offensive_depth": 7.354,
       "defensive_depth": 10.305,
       "physicality_depth": 10.183,
@@ -311,7 +304,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-06-10T04:45:58.313340+00:00",
+      "built_at": "2026-06-12T04:36:19.590713+00:00",
       "season": 20252026,
       "season_year": 2026,
       "n_sims": 10000,
@@ -384,7 +377,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 65.31,
+            "top_seed_cup_pct": 83.48,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -480,7 +473,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 34.69,
+            "top_seed_cup_pct": 16.52,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -554,7 +547,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 65.31,
+            "top_seed_cup_pct": 83.48,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -602,7 +595,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 34.69,
+            "top_seed_cup_pct": 16.52,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -628,7 +621,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 65.31,
+            "top_seed_cup_pct": 83.48,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -653,7 +646,7 @@
             "top_seed_series_win_pct": 0.0,
             "bottom_seed_series_win_pct": 100.0,
             "top_seed_cup_pct": 0.0,
-            "bottom_seed_cup_pct": 34.69,
+            "bottom_seed_cup_pct": 16.52,
             "top_seed_conf_pct": 0.0,
             "bottom_seed_conf_pct": 100.0
           }
@@ -670,16 +663,16 @@
             "bottom_seed_full_name": "Vegas Golden Knights",
             "top_seed_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "bottom_seed_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-            "top_seed_wins": 2,
+            "top_seed_wins": 3,
             "bottom_seed_wins": 2,
             "games_to_win": 4,
             "is_complete": false,
             "winner": "",
             "winner_logo": "",
-            "top_seed_series_win_pct": 67.4,
-            "bottom_seed_series_win_pct": 32.6,
-            "top_seed_cup_pct": 65.31,
-            "bottom_seed_cup_pct": 34.69,
+            "top_seed_series_win_pct": 86.0,
+            "bottom_seed_series_win_pct": 14.0,
+            "top_seed_cup_pct": 83.48,
+            "bottom_seed_cup_pct": 16.52,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 100.0
           }
@@ -722,7 +715,7 @@
           "win_round1_pct": 100.0,
           "win_round2_pct": 100.0,
           "win_conf_pct": 100.0,
-          "win_cup_pct": 65.31
+          "win_cup_pct": 83.48
         },
         {
           "team": "DAL",
@@ -931,7 +924,7 @@
           "win_round1_pct": 100.0,
           "win_round2_pct": 100.0,
           "win_conf_pct": 100.0,
-          "win_cup_pct": 34.69
+          "win_cup_pct": 16.52
         },
         {
           "team": "EDM",
@@ -1301,117 +1294,11 @@
     "skaters": 850,
     "goalies": 71,
     "teams": 32,
-    "today_games": 1,
-    "predictions": 1
+    "today_games": 0,
+    "predictions": 0
   },
   "recent_basis": "Recent mover lists use custom rating changes versus the 2026-03-27 snapshot, which is the day before the weighted-median 10th most recent team game. Skater movers use overall talent score, team movers use total team score, goalie movers use goalie score, and usage lists compare the most recent 10 games to the previous 10.",
-  "today_games": [
-    {
-      "game_id": 2025030415,
-      "game_date": "2026-06-11",
-      "start_time_utc": "2026-06-12T00:00:00+00:00",
-      "away_team": "VGK",
-      "home_team": "CAR",
-      "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-      "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-      "home_win_prob": 65.4,
-      "away_win_prob": 34.6,
-      "ot_prob": 23.6,
-      "home_expected_goals": 2.75,
-      "away_expected_goals": 2.4,
-      "home_rest_days": 1,
-      "away_rest_days": 1,
-      "home_rest_hours": 48.0,
-      "away_rest_hours": 48.0,
-      "home_travel_48h_km": 3262.1,
-      "away_travel_48h_km": 3262.1,
-      "home_goalie_mix": "Bussi 52% (adj 0.938), Andersen 39% (adj 0.807), Kochetkov 10% (adj 1.221)",
-      "away_goalie_mix": "Hart 90% (adj 1.034), Lindbom 6% (adj 1.059), Schmid 5% (adj 1.250)",
-      "home_goalie_mix_html": "<strong>Bussi 52% (adj 0.938)</strong>, Andersen 39% (adj 0.807), Kochetkov 10% (adj 1.221)",
-      "away_goalie_mix_html": "<strong>Hart 90% (adj 1.034)</strong>, Lindbom 6% (adj 1.059), Schmid 5% (adj 1.250)",
-      "top_deciding_factors": "deployment context edge (+0.577); stability edge (-0.375); reliability edge (+0.173); team delta-V offensive depth-score edge (-0.132); playmaking edge (-0.118)",
-      "home_factor_pushes": "deployment context edge (+0.577); reliability edge (+0.173); lineup xG offensive depth-score edge (+0.117); goalie recent starts edge (7d) (+0.097); offensive depth edge (+0.092)",
-      "away_factor_pushes": "stability edge (-0.375); team delta-V offensive depth-score edge (-0.132); playmaking edge (-0.118); lineup delta-V defensive depth edge (-0.077); team delta-V defensive depth-score edge (-0.071)",
-      "top_deciding_factor_items": [
-        {
-          "label": "deployment context edge",
-          "edge_team": "CAR",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.577
-        },
-        {
-          "label": "stability edge",
-          "edge_team": "VGK",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-          "contribution": -0.375
-        },
-        {
-          "label": "reliability edge",
-          "edge_team": "CAR",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.173
-        },
-        {
-          "label": "team delta-V offensive depth-score edge",
-          "edge_team": "VGK",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-          "contribution": -0.132
-        },
-        {
-          "label": "playmaking edge",
-          "edge_team": "VGK",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-          "contribution": -0.118
-        }
-      ],
-      "top_deciding_factors_html": "<div class=\"sf-factor-edge-list\"><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">deployment context edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">stability edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">reliability edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/CAR_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">team delta-V offensive depth-score edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span><span class=\"sf-factor-edge-item\"><span class=\"sf-factor-edge-label\">playmaking edge</span><span class=\"sf-factor-edge-logo-box\" aria-hidden=\"true\"><img class=\"sf-factor-edge-logo\" src=\"https://assets.nhle.com/logos/nhl/svg/VGK_light.svg\" alt=\"\" loading=\"lazy\" decoding=\"async\"/></span></span></div>",
-      "venue_timezone": "US/Eastern",
-      "venue_utc_offset": "-04:00",
-      "start_time_label": "Jun 11, 2026 8:00 PM EDT",
-      "favorite_team": "CAR",
-      "favorite_win_prob": 65.4,
-      "confidence_edge": 30.7,
-      "top_factors": [
-        "deployment context edge (+0.577)",
-        "stability edge (-0.375)",
-        "reliability edge (+0.173)",
-        "team delta-V offensive depth-score edge (-0.132)",
-        "playmaking edge (-0.118)"
-      ],
-      "top_factor_items": [
-        {
-          "label": "deployment context edge",
-          "edge_team": "CAR",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.577
-        },
-        {
-          "label": "stability edge",
-          "edge_team": "VGK",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-          "contribution": -0.375
-        },
-        {
-          "label": "reliability edge",
-          "edge_team": "CAR",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
-          "contribution": 0.173
-        },
-        {
-          "label": "team delta-V offensive depth-score edge",
-          "edge_team": "VGK",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-          "contribution": -0.132
-        },
-        {
-          "label": "playmaking edge",
-          "edge_team": "VGK",
-          "edge_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-          "contribution": -0.118
-        }
-      ]
-    }
-  ],
+  "today_games": [],
   "trending_skaters": [
     {
       "player_id": 8484188,
@@ -1553,7 +1440,7 @@
       "prior_total_team_score": -0.375,
       "total_team_score_delta": 0.262,
       "chance_generation_delta": 0.387,
-      "chance_suppression_delta": -0.04,
+      "chance_suppression_delta": -0.041,
       "goaltending_talent_delta": 0.054
     },
     {
@@ -1585,9 +1472,9 @@
     },
     {
       "team": "CAR",
-      "current_total_team_score": 0.289,
+      "current_total_team_score": 0.29,
       "prior_total_team_score": 0.124,
-      "total_team_score_delta": 0.165,
+      "total_team_score_delta": 0.166,
       "chance_generation_delta": 0.118,
       "chance_suppression_delta": -0.046,
       "goaltending_talent_delta": 0.037
@@ -1718,7 +1605,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-06-10T03:00:00+00:00",
-    "end_utc": "2026-06-12T03:00:00+00:00"
+    "start_utc": "2026-06-12T03:00:00+00:00",
+    "end_utc": "2026-06-14T03:00:00+00:00"
   }
 }
