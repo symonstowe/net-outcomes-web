@@ -1,41 +1,41 @@
 {
-  "generated_at": "2026-06-12 05:50 UTC",
-  "last_updated_utc": "2026-06-12 05:50 UTC",
-  "last_updated_iso": "2026-06-12T05:50:01.694838+00:00",
+  "generated_at": "2026-06-15 07:23 UTC",
+  "last_updated_utc": "2026-06-15 07:23 UTC",
+  "last_updated_iso": "2026-06-15T07:23:27.868205+00:00",
   "season_label": "2025-2026",
   "model_performance": {
     "lookback_days": 50,
-    "games_reviewed": 8,
+    "games_reviewed": 9,
     "games_pending": 0,
     "current": {
-      "model_accuracy": 50.0,
-      "brier_score": 0.2567,
-      "log_loss": 0.7076,
-      "calibration_error": 21.65,
-      "avg_goal_diff_mae": 1.602,
+      "model_accuracy": 55.56,
+      "brier_score": 0.2461,
+      "log_loss": 0.686,
+      "calibration_error": 16.23,
+      "avg_goal_diff_mae": 1.676,
       "units_profit": -0.09,
       "roi_pct": -4.55,
       "top_pick_accuracy": 50.0
     },
     "prior": {
       "model_accuracy": 56.34,
-      "brier_score": 0.2497,
-      "log_loss": 0.6916,
-      "calibration_error": 19.01,
-      "avg_goal_diff_mae": 1.991,
-      "units_profit": 3.0,
-      "roi_pct": 16.66,
-      "top_pick_accuracy": 61.11
+      "brier_score": 0.2488,
+      "log_loss": 0.6894,
+      "calibration_error": 18.75,
+      "avg_goal_diff_mae": 1.99,
+      "units_profit": 4.91,
+      "roi_pct": 27.27,
+      "top_pick_accuracy": 66.67
     },
     "delta": {
-      "model_accuracy": -6.34,
-      "brier_score": 0.007,
-      "log_loss": 0.016,
-      "calibration_error": 2.64,
-      "avg_goal_diff_mae": -0.389,
-      "units_profit": -3.09,
-      "roi_pct": -21.21,
-      "top_pick_accuracy": -11.11
+      "model_accuracy": -0.78,
+      "brier_score": -0.003,
+      "log_loss": -0.003,
+      "calibration_error": -2.52,
+      "avg_goal_diff_mae": -0.314,
+      "units_profit": -5.0,
+      "roi_pct": -31.82,
+      "top_pick_accuracy": -16.67
     },
     "daily_accuracy": [
       {
@@ -57,6 +57,10 @@
       {
         "date": "2026-06-02",
         "value": 0.0
+      },
+      {
+        "date": "2026-06-09",
+        "value": 100.0
       }
     ],
     "daily_units": [
@@ -79,16 +83,17 @@
       {
         "date": "2026-06-02",
         "value": -1.0
+      },
+      {
+        "date": "2026-06-09",
+        "value": 0.909
       }
     ],
     "snapshot_coverage": {
       "scoring_n_simulations": 4000,
-      "current_days_scored": 5,
-      "current_days_missing_snapshot": 44,
+      "current_days_scored": 6,
+      "current_days_missing_snapshot": 43,
       "current_missing_dates": [
-        "2026-04-23",
-        "2026-04-24",
-        "2026-04-25",
         "2026-04-26",
         "2026-04-27",
         "2026-04-29",
@@ -127,16 +132,15 @@
         "2026-06-06",
         "2026-06-07",
         "2026-06-08",
-        "2026-06-09",
         "2026-06-10",
-        "2026-06-11"
+        "2026-06-11",
+        "2026-06-12",
+        "2026-06-13",
+        "2026-06-14"
       ],
       "prior_days_scored": 7,
       "prior_days_missing_snapshot": 43,
       "prior_missing_dates": [
-        "2026-03-04",
-        "2026-03-05",
-        "2026-03-06",
         "2026-03-07",
         "2026-03-08",
         "2026-03-09",
@@ -176,7 +180,10 @@
         "2026-04-18",
         "2026-04-19",
         "2026-04-20",
-        "2026-04-22"
+        "2026-04-22",
+        "2026-04-23",
+        "2026-04-24",
+        "2026-04-25"
       ]
     }
   },
@@ -185,20 +192,20 @@
       "rank": 1,
       "team": "COL",
       "games_played": 83,
-      "total_team_score": 0.83,
+      "total_team_score": 0.695,
       "shooting_talent": 0.071,
       "playmaking_talent": 0.052,
       "goaltending_talent": 0.4,
-      "chance_generation": 0.464,
-      "chance_suppression": 0.222,
+      "chance_generation": 0.374,
+      "chance_suppression": 0.225,
       "offensive_depth": 9.646,
       "defensive_depth": 11.927,
       "physicality_depth": 4.707,
       "oz_non_offsetting_penalties_pg": 0.89,
       "rush_defence": -0.212,
-      "leverage_xg_net": 0.082,
-      "high_danger_for": 0.88,
-      "high_danger_against": 0.76,
+      "leverage_xg_net": 0.069,
+      "high_danger_for": 0.84,
+      "high_danger_against": 0.94,
       "special_teams": -0.029,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
@@ -209,20 +216,20 @@
       "rank": 2,
       "team": "TBL",
       "games_played": 82,
-      "total_team_score": 0.659,
+      "total_team_score": 0.596,
       "shooting_talent": 0.098,
       "playmaking_talent": 0.055,
       "goaltending_talent": 0.089,
-      "chance_generation": 0.127,
-      "chance_suppression": 0.311,
+      "chance_generation": -0.02,
+      "chance_suppression": 0.356,
       "offensive_depth": 7.317,
       "defensive_depth": 11.866,
       "physicality_depth": 7.122,
       "oz_non_offsetting_penalties_pg": 1.573,
       "rush_defence": -0.314,
-      "leverage_xg_net": 0.081,
-      "high_danger_for": 0.67,
-      "high_danger_against": 0.56,
+      "leverage_xg_net": 0.048,
+      "high_danger_for": 0.63,
+      "high_danger_against": 0.57,
       "special_teams": 0.258,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
@@ -231,46 +238,22 @@
     },
     {
       "rank": 3,
-      "team": "WSH",
-      "games_played": 82,
-      "total_team_score": 0.48,
-      "shooting_talent": 0.052,
-      "playmaking_talent": 0.046,
-      "goaltending_talent": 0.306,
-      "chance_generation": 0.116,
-      "chance_suppression": -0.3,
-      "offensive_depth": 7.561,
-      "defensive_depth": 9.695,
-      "physicality_depth": 8.646,
-      "oz_non_offsetting_penalties_pg": 1.244,
-      "rush_defence": 0.221,
-      "leverage_xg_net": -0.026,
-      "high_danger_for": 1.05,
-      "high_danger_against": 0.84,
-      "special_teams": 0.101,
-      "team_off_system_per_60": 0.0,
-      "team_def_system_per_60": 0.0,
-      "team_system_net_per_60": 0.0,
-      "suppressed_talent_per_60": 0.083
-    },
-    {
-      "rank": 4,
       "team": "PIT",
       "games_played": 82,
-      "total_team_score": 0.432,
+      "total_team_score": 0.542,
       "shooting_talent": 0.071,
       "playmaking_talent": 0.055,
       "goaltending_talent": -0.145,
-      "chance_generation": 0.2,
-      "chance_suppression": -0.132,
+      "chance_generation": 0.367,
+      "chance_suppression": -0.207,
       "offensive_depth": 11.988,
       "defensive_depth": 9.354,
       "physicality_depth": 6.317,
       "oz_non_offsetting_penalties_pg": 0.89,
       "rush_defence": 0.259,
-      "leverage_xg_net": -0.05,
-      "high_danger_for": 0.9,
-      "high_danger_against": 1.02,
+      "leverage_xg_net": -0.043,
+      "high_danger_for": 1.04,
+      "high_danger_against": 0.98,
       "special_teams": 0.256,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
@@ -278,23 +261,47 @@
       "suppressed_talent_per_60": 0.08
     },
     {
+      "rank": 4,
+      "team": "WSH",
+      "games_played": 82,
+      "total_team_score": 0.483,
+      "shooting_talent": 0.052,
+      "playmaking_talent": 0.046,
+      "goaltending_talent": 0.306,
+      "chance_generation": 0.24,
+      "chance_suppression": -0.376,
+      "offensive_depth": 7.561,
+      "defensive_depth": 9.695,
+      "physicality_depth": 8.646,
+      "oz_non_offsetting_penalties_pg": 1.244,
+      "rush_defence": 0.221,
+      "leverage_xg_net": -0.009,
+      "high_danger_for": 1.18,
+      "high_danger_against": 1.01,
+      "special_teams": 0.101,
+      "team_off_system_per_60": 0.0,
+      "team_def_system_per_60": 0.0,
+      "team_system_net_per_60": 0.0,
+      "suppressed_talent_per_60": 0.083
+    },
+    {
       "rank": 5,
       "team": "OTT",
       "games_played": 82,
-      "total_team_score": 0.366,
+      "total_team_score": 0.481,
       "shooting_talent": 0.005,
       "playmaking_talent": 0.048,
       "goaltending_talent": 0.051,
-      "chance_generation": 0.108,
-      "chance_suppression": 0.45,
+      "chance_generation": 0.269,
+      "chance_suppression": 0.388,
       "offensive_depth": 7.354,
       "defensive_depth": 10.305,
       "physicality_depth": 10.183,
       "oz_non_offsetting_penalties_pg": 1.244,
       "rush_defence": -0.23,
-      "leverage_xg_net": 0.059,
-      "high_danger_for": 0.78,
-      "high_danger_against": 0.54,
+      "leverage_xg_net": 0.071,
+      "high_danger_for": 1.04,
+      "high_danger_against": 0.57,
       "special_teams": 0.741,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
@@ -304,7 +311,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-06-12T04:36:19.590713+00:00",
+      "built_at": "2026-06-15T06:04:00.196970+00:00",
       "season": 20252026,
       "season_year": 2026,
       "n_sims": 10000,
@@ -377,7 +384,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 83.48,
+            "top_seed_cup_pct": 100.0,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -473,7 +480,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 16.52,
+            "top_seed_cup_pct": 0.0,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -547,7 +554,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 83.48,
+            "top_seed_cup_pct": 100.0,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -595,7 +602,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 16.52,
+            "top_seed_cup_pct": 0.0,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -621,7 +628,7 @@
             "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "top_seed_series_win_pct": 100.0,
             "bottom_seed_series_win_pct": 0.0,
-            "top_seed_cup_pct": 83.48,
+            "top_seed_cup_pct": 100.0,
             "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 0.0
@@ -646,7 +653,7 @@
             "top_seed_series_win_pct": 0.0,
             "bottom_seed_series_win_pct": 100.0,
             "top_seed_cup_pct": 0.0,
-            "bottom_seed_cup_pct": 16.52,
+            "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 0.0,
             "bottom_seed_conf_pct": 100.0
           }
@@ -663,16 +670,16 @@
             "bottom_seed_full_name": "Vegas Golden Knights",
             "top_seed_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
             "bottom_seed_logo": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
-            "top_seed_wins": 3,
+            "top_seed_wins": 4,
             "bottom_seed_wins": 2,
             "games_to_win": 4,
-            "is_complete": false,
-            "winner": "",
-            "winner_logo": "",
-            "top_seed_series_win_pct": 86.0,
-            "bottom_seed_series_win_pct": 14.0,
-            "top_seed_cup_pct": 83.48,
-            "bottom_seed_cup_pct": 16.52,
+            "is_complete": true,
+            "winner": "CAR",
+            "winner_logo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+            "top_seed_series_win_pct": 100.0,
+            "bottom_seed_series_win_pct": 0.0,
+            "top_seed_cup_pct": 100.0,
+            "bottom_seed_cup_pct": 0.0,
             "top_seed_conf_pct": 100.0,
             "bottom_seed_conf_pct": 100.0
           }
@@ -715,7 +722,7 @@
           "win_round1_pct": 100.0,
           "win_round2_pct": 100.0,
           "win_conf_pct": 100.0,
-          "win_cup_pct": 83.48
+          "win_cup_pct": 100.0
         },
         {
           "team": "DAL",
@@ -924,7 +931,7 @@
           "win_round1_pct": 100.0,
           "win_round2_pct": 100.0,
           "win_conf_pct": 100.0,
-          "win_cup_pct": 16.52
+          "win_cup_pct": 0.0
         },
         {
           "team": "EDM",
@@ -1435,49 +1442,49 @@
   ],
   "trending_teams": [
     {
-      "team": "EDM",
-      "current_total_team_score": -0.113,
-      "prior_total_team_score": -0.375,
-      "total_team_score_delta": 0.262,
-      "chance_generation_delta": 0.387,
-      "chance_suppression_delta": -0.041,
-      "goaltending_talent_delta": 0.054
+      "team": "PIT",
+      "current_total_team_score": 0.542,
+      "prior_total_team_score": 0.389,
+      "total_team_score_delta": 0.153,
+      "chance_generation_delta": -0.012,
+      "chance_suppression_delta": 0.032,
+      "goaltending_talent_delta": -0.037
     },
     {
-      "team": "PHI",
-      "current_total_team_score": 0.15,
-      "prior_total_team_score": -0.063,
-      "total_team_score_delta": 0.213,
-      "chance_generation_delta": 0.118,
-      "chance_suppression_delta": -0.041,
-      "goaltending_talent_delta": -0.007
+      "team": "NYR",
+      "current_total_team_score": -0.43,
+      "prior_total_team_score": -0.569,
+      "total_team_score_delta": 0.139,
+      "chance_generation_delta": 0.018,
+      "chance_suppression_delta": 0.006,
+      "goaltending_talent_delta": 0.08
     },
     {
       "team": "VGK",
-      "current_total_team_score": 0.05,
+      "current_total_team_score": -0.009,
       "prior_total_team_score": -0.137,
-      "total_team_score_delta": 0.187,
-      "chance_generation_delta": 0.222,
-      "chance_suppression_delta": -0.088,
+      "total_team_score_delta": 0.128,
+      "chance_generation_delta": 0.077,
+      "chance_suppression_delta": 0.002,
       "goaltending_talent_delta": 0.091
     },
     {
-      "team": "NJD",
-      "current_total_team_score": -0.226,
-      "prior_total_team_score": -0.395,
-      "total_team_score_delta": 0.169,
-      "chance_generation_delta": 0.164,
-      "chance_suppression_delta": -0.146,
-      "goaltending_talent_delta": 0.081
+      "team": "FLA",
+      "current_total_team_score": 0.286,
+      "prior_total_team_score": 0.161,
+      "total_team_score_delta": 0.125,
+      "chance_generation_delta": -0.039,
+      "chance_suppression_delta": -0.055,
+      "goaltending_talent_delta": 0.067
     },
     {
-      "team": "CAR",
-      "current_total_team_score": 0.29,
-      "prior_total_team_score": 0.124,
-      "total_team_score_delta": 0.166,
-      "chance_generation_delta": 0.118,
-      "chance_suppression_delta": -0.046,
-      "goaltending_talent_delta": 0.037
+      "team": "STL",
+      "current_total_team_score": -0.357,
+      "prior_total_team_score": -0.463,
+      "total_team_score_delta": 0.106,
+      "chance_generation_delta": 0.042,
+      "chance_suppression_delta": 0.023,
+      "goaltending_talent_delta": 0.008
     }
   ],
   "trending_goalies": [
@@ -1605,7 +1612,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-06-12T03:00:00+00:00",
-    "end_utc": "2026-06-14T03:00:00+00:00"
+    "start_utc": "2026-06-15T04:00:00+00:00",
+    "end_utc": "2026-06-17T04:00:00+00:00"
   }
 }
