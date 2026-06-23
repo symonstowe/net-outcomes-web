@@ -1,47 +1,43 @@
 {
-  "generated_at": "2026-06-15 07:23 UTC",
-  "last_updated_utc": "2026-06-15 07:23 UTC",
-  "last_updated_iso": "2026-06-15T07:23:27.868205+00:00",
+  "generated_at": "2026-06-23 23:53 UTC",
+  "last_updated_utc": "2026-06-23 23:53 UTC",
+  "last_updated_iso": "2026-06-23T23:53:11.988062+00:00",
   "season_label": "2025-2026",
   "model_performance": {
     "lookback_days": 50,
-    "games_reviewed": 9,
+    "games_reviewed": 6,
     "games_pending": 0,
     "current": {
-      "model_accuracy": 55.56,
-      "brier_score": 0.2461,
-      "log_loss": 0.686,
-      "calibration_error": 16.23,
-      "avg_goal_diff_mae": 1.676,
+      "model_accuracy": 83.33,
+      "brier_score": 0.2226,
+      "log_loss": 0.6396,
+      "calibration_error": 45.5,
+      "avg_goal_diff_mae": 1.448,
       "units_profit": -0.09,
       "roi_pct": -4.55,
       "top_pick_accuracy": 50.0
     },
     "prior": {
-      "model_accuracy": 56.34,
-      "brier_score": 0.2488,
-      "log_loss": 0.6894,
-      "calibration_error": 18.75,
-      "avg_goal_diff_mae": 1.99,
-      "units_profit": 4.91,
-      "roi_pct": 27.27,
-      "top_pick_accuracy": 66.67
+      "model_accuracy": 54.1,
+      "brier_score": 0.2529,
+      "log_loss": 0.697,
+      "calibration_error": 18.3,
+      "avg_goal_diff_mae": 1.992,
+      "units_profit": 6.0,
+      "roi_pct": 39.99,
+      "top_pick_accuracy": 73.33
     },
     "delta": {
-      "model_accuracy": -0.78,
-      "brier_score": -0.003,
-      "log_loss": -0.003,
-      "calibration_error": -2.52,
-      "avg_goal_diff_mae": -0.314,
-      "units_profit": -5.0,
-      "roi_pct": -31.82,
-      "top_pick_accuracy": -16.67
+      "model_accuracy": 29.23,
+      "brier_score": -0.03,
+      "log_loss": -0.057,
+      "calibration_error": 27.2,
+      "avg_goal_diff_mae": -0.544,
+      "units_profit": -6.09,
+      "roi_pct": -44.54,
+      "top_pick_accuracy": -23.33
     },
     "daily_accuracy": [
-      {
-        "date": "2026-04-28",
-        "value": 33.33
-      },
       {
         "date": "2026-05-05",
         "value": 100.0
@@ -56,7 +52,7 @@
       },
       {
         "date": "2026-06-02",
-        "value": 0.0
+        "value": 100.0
       },
       {
         "date": "2026-06-09",
@@ -64,10 +60,6 @@
       }
     ],
     "daily_units": [
-      {
-        "date": "2026-04-28",
-        "value": -1.091
-      },
       {
         "date": "2026-05-05",
         "value": 0.909
@@ -82,7 +74,7 @@
       },
       {
         "date": "2026-06-02",
-        "value": -1.0
+        "value": 0.909
       },
       {
         "date": "2026-06-09",
@@ -91,16 +83,9 @@
     ],
     "snapshot_coverage": {
       "scoring_n_simulations": 4000,
-      "current_days_scored": 6,
-      "current_days_missing_snapshot": 43,
+      "current_days_scored": 5,
+      "current_days_missing_snapshot": 44,
       "current_missing_dates": [
-        "2026-04-26",
-        "2026-04-27",
-        "2026-04-29",
-        "2026-04-30",
-        "2026-05-01",
-        "2026-05-02",
-        "2026-05-03",
         "2026-05-04",
         "2026-05-06",
         "2026-05-07",
@@ -136,18 +121,19 @@
         "2026-06-11",
         "2026-06-12",
         "2026-06-13",
-        "2026-06-14"
+        "2026-06-14",
+        "2026-06-15",
+        "2026-06-16",
+        "2026-06-17",
+        "2026-06-18",
+        "2026-06-19",
+        "2026-06-20",
+        "2026-06-21",
+        "2026-06-22"
       ],
       "prior_days_scored": 7,
       "prior_days_missing_snapshot": 43,
       "prior_missing_dates": [
-        "2026-03-07",
-        "2026-03-08",
-        "2026-03-09",
-        "2026-03-11",
-        "2026-03-12",
-        "2026-03-13",
-        "2026-03-14",
         "2026-03-15",
         "2026-03-16",
         "2026-03-18",
@@ -183,7 +169,14 @@
         "2026-04-22",
         "2026-04-23",
         "2026-04-24",
-        "2026-04-25"
+        "2026-04-25",
+        "2026-04-26",
+        "2026-04-27",
+        "2026-04-29",
+        "2026-04-30",
+        "2026-05-01",
+        "2026-05-02",
+        "2026-05-03"
       ]
     }
   },
@@ -192,9 +185,9 @@
       "rank": 1,
       "team": "COL",
       "games_played": 83,
-      "total_team_score": 0.695,
-      "shooting_talent": 0.071,
-      "playmaking_talent": 0.052,
+      "total_team_score": 0.784,
+      "shooting_talent": 0.089,
+      "playmaking_talent": 0.053,
       "goaltending_talent": 0.4,
       "chance_generation": 0.374,
       "chance_suppression": 0.225,
@@ -202,23 +195,23 @@
       "defensive_depth": 11.927,
       "physicality_depth": 4.707,
       "oz_non_offsetting_penalties_pg": 0.89,
-      "rush_defence": -0.212,
+      "rush_defence": -0.188,
       "leverage_xg_net": 0.069,
       "high_danger_for": 0.84,
       "high_danger_against": 0.94,
-      "special_teams": -0.029,
+      "special_teams": -0.027,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
       "team_system_net_per_60": 0.0,
-      "suppressed_talent_per_60": 0.06
+      "suppressed_talent_per_60": 0.062
     },
     {
       "rank": 2,
       "team": "TBL",
       "games_played": 82,
-      "total_team_score": 0.596,
-      "shooting_talent": 0.098,
-      "playmaking_talent": 0.055,
+      "total_team_score": 0.637,
+      "shooting_talent": 0.105,
+      "playmaking_talent": 0.057,
       "goaltending_talent": 0.089,
       "chance_generation": -0.02,
       "chance_suppression": 0.356,
@@ -226,21 +219,21 @@
       "defensive_depth": 11.866,
       "physicality_depth": 7.122,
       "oz_non_offsetting_penalties_pg": 1.573,
-      "rush_defence": -0.314,
+      "rush_defence": -0.304,
       "leverage_xg_net": 0.048,
       "high_danger_for": 0.63,
       "high_danger_against": 0.57,
-      "special_teams": 0.258,
+      "special_teams": 0.23,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
       "team_system_net_per_60": 0.0,
-      "suppressed_talent_per_60": 0.038
+      "suppressed_talent_per_60": 0.041
     },
     {
       "rank": 3,
       "team": "PIT",
       "games_played": 82,
-      "total_team_score": 0.542,
+      "total_team_score": 0.53,
       "shooting_talent": 0.071,
       "playmaking_talent": 0.055,
       "goaltending_talent": -0.145,
@@ -250,11 +243,11 @@
       "defensive_depth": 9.354,
       "physicality_depth": 6.317,
       "oz_non_offsetting_penalties_pg": 0.89,
-      "rush_defence": 0.259,
+      "rush_defence": 0.26,
       "leverage_xg_net": -0.043,
       "high_danger_for": 1.04,
       "high_danger_against": 0.98,
-      "special_teams": 0.256,
+      "special_teams": 0.257,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
       "team_system_net_per_60": 0.0,
@@ -264,21 +257,21 @@
       "rank": 4,
       "team": "WSH",
       "games_played": 82,
-      "total_team_score": 0.483,
+      "total_team_score": 0.484,
       "shooting_talent": 0.052,
-      "playmaking_talent": 0.046,
-      "goaltending_talent": 0.306,
+      "playmaking_talent": 0.047,
+      "goaltending_talent": 0.305,
       "chance_generation": 0.24,
       "chance_suppression": -0.376,
       "offensive_depth": 7.561,
-      "defensive_depth": 9.695,
+      "defensive_depth": 8.793,
       "physicality_depth": 8.646,
       "oz_non_offsetting_penalties_pg": 1.244,
       "rush_defence": 0.221,
       "leverage_xg_net": -0.009,
       "high_danger_for": 1.18,
       "high_danger_against": 1.01,
-      "special_teams": 0.101,
+      "special_teams": 0.1,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
       "team_system_net_per_60": 0.0,
@@ -288,30 +281,30 @@
       "rank": 5,
       "team": "OTT",
       "games_played": 82,
-      "total_team_score": 0.481,
-      "shooting_talent": 0.005,
-      "playmaking_talent": 0.048,
+      "total_team_score": 0.454,
+      "shooting_talent": 0.013,
+      "playmaking_talent": 0.047,
       "goaltending_talent": 0.051,
       "chance_generation": 0.269,
       "chance_suppression": 0.388,
       "offensive_depth": 7.354,
-      "defensive_depth": 10.305,
+      "defensive_depth": 10.439,
       "physicality_depth": 10.183,
       "oz_non_offsetting_penalties_pg": 1.244,
-      "rush_defence": -0.23,
+      "rush_defence": -0.219,
       "leverage_xg_net": 0.071,
       "high_danger_for": 1.04,
       "high_danger_against": 0.57,
-      "special_teams": 0.741,
+      "special_teams": 0.685,
       "team_off_system_per_60": 0.0,
       "team_def_system_per_60": 0.0,
       "team_system_net_per_60": 0.0,
-      "suppressed_talent_per_60": 0.069
+      "suppressed_talent_per_60": 0.049
     }
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-06-15T06:04:00.196970+00:00",
+      "built_at": "2026-06-23T22:37:36.926524+00:00",
       "season": 20252026,
       "season_year": 2026,
       "n_sims": 10000,
@@ -1312,11 +1305,11 @@
       "player_name": "Theo Lindstein",
       "team": "STL",
       "position": "LD",
-      "current_overall_talent_score": 0.696,
+      "current_overall_talent_score": 0.694,
       "prior_overall_talent_score": 0.047,
-      "talent_score_delta": 0.649,
-      "offence_score_delta": 0.585,
-      "defence_score_delta": 0.695,
+      "talent_score_delta": 0.647,
+      "offence_score_delta": 0.586,
+      "defence_score_delta": 0.691,
       "player_url": "/player-analysis-unavailable.html#player_id=8484188&player=Theo+Lindstein&team=STL"
     },
     {
@@ -1324,11 +1317,11 @@
       "player_name": "JJ Peterka",
       "team": "UTA",
       "position": "R",
-      "current_overall_talent_score": 0.435,
+      "current_overall_talent_score": 0.434,
       "prior_overall_talent_score": -0.049,
-      "talent_score_delta": 0.484,
+      "talent_score_delta": 0.483,
       "offence_score_delta": 0.491,
-      "defence_score_delta": 0.475,
+      "defence_score_delta": 0.473,
       "player_url": "/player-analysis-unavailable.html#player_id=8482175&player=JJ+Peterka&team=UTA"
     },
     {
@@ -1338,9 +1331,9 @@
       "position": "C",
       "current_overall_talent_score": 0.199,
       "prior_overall_talent_score": -0.264,
-      "talent_score_delta": 0.464,
-      "offence_score_delta": 0.562,
-      "defence_score_delta": 0.327,
+      "talent_score_delta": 0.463,
+      "offence_score_delta": 0.564,
+      "defence_score_delta": 0.325,
       "player_url": "/player-analysis-unavailable.html#player_id=8471215&player=Evgeni+Malkin&team=PIT"
     },
     {
@@ -1348,10 +1341,10 @@
       "player_name": "Danton Heinen",
       "team": "CBJ",
       "position": "L",
-      "current_overall_talent_score": 0.182,
+      "current_overall_talent_score": 0.183,
       "prior_overall_talent_score": -0.276,
-      "talent_score_delta": 0.458,
-      "offence_score_delta": 0.503,
+      "talent_score_delta": 0.459,
+      "offence_score_delta": 0.504,
       "defence_score_delta": 0.395,
       "player_url": "/player-analysis-unavailable.html#player_id=8478046&player=Danton+Heinen&team=CBJ"
     },
@@ -1360,11 +1353,11 @@
       "player_name": "Tommy Novak",
       "team": "PIT",
       "position": "C",
-      "current_overall_talent_score": 0.743,
+      "current_overall_talent_score": 0.74,
       "prior_overall_talent_score": 0.287,
-      "talent_score_delta": 0.455,
-      "offence_score_delta": 0.507,
-      "defence_score_delta": 0.384,
+      "talent_score_delta": 0.452,
+      "offence_score_delta": 0.504,
+      "defence_score_delta": 0.381,
       "player_url": "/player-analysis-unavailable.html#player_id=8478438&player=Tommy+Novak&team=PIT"
     }
   ],
@@ -1379,8 +1372,8 @@
       "toi_delta": 5.168,
       "recent_count": 10,
       "prior_count": 10,
-      "current_overall_talent_score": 0.128,
-      "talent_score_delta": 0.195,
+      "current_overall_talent_score": 0.122,
+      "talent_score_delta": 0.189,
       "player_url": "/player-analysis-unavailable.html#player_id=8482111&player=Justin+Barron&team=NSH"
     },
     {
@@ -1393,8 +1386,8 @@
       "toi_delta": 4.935,
       "recent_count": 10,
       "prior_count": 10,
-      "current_overall_talent_score": 0.128,
-      "talent_score_delta": -0.202,
+      "current_overall_talent_score": 0.129,
+      "talent_score_delta": -0.201,
       "player_url": "/player-analysis-unavailable.html#player_id=8484305&player=Zach+Metsa&team=BUF"
     },
     {
@@ -1407,8 +1400,8 @@
       "toi_delta": 4.81,
       "recent_count": 10,
       "prior_count": 9,
-      "current_overall_talent_score": -0.199,
-      "talent_score_delta": -0.129,
+      "current_overall_talent_score": -0.201,
+      "talent_score_delta": -0.131,
       "player_url": "/player-analysis-unavailable.html#player_id=8481600&player=Tobias+Bjornfot&team=FLA"
     },
     {
@@ -1421,8 +1414,8 @@
       "toi_delta": 4.667,
       "recent_count": 10,
       "prior_count": 10,
-      "current_overall_talent_score": 0.294,
-      "talent_score_delta": 0.017,
+      "current_overall_talent_score": 0.291,
+      "talent_score_delta": 0.014,
       "player_url": "/player-analysis-unavailable.html#player_id=8481655&player=Cole+Schwindt&team=FLA"
     },
     {
@@ -1435,29 +1428,47 @@
       "toi_delta": 3.997,
       "recent_count": 10,
       "prior_count": 10,
-      "current_overall_talent_score": -0.357,
-      "talent_score_delta": -0.038,
+      "current_overall_talent_score": -0.358,
+      "talent_score_delta": -0.039,
       "player_url": "/player-analysis-unavailable.html#player_id=8482095&player=Tyler+Kleven&team=OTT"
     }
   ],
   "trending_teams": [
     {
-      "team": "PIT",
-      "current_total_team_score": 0.542,
-      "prior_total_team_score": 0.389,
-      "total_team_score_delta": 0.153,
-      "chance_generation_delta": -0.012,
-      "chance_suppression_delta": 0.032,
-      "goaltending_talent_delta": -0.037
+      "team": "FLA",
+      "current_total_team_score": 0.352,
+      "prior_total_team_score": 0.161,
+      "total_team_score_delta": 0.191,
+      "chance_generation_delta": -0.039,
+      "chance_suppression_delta": -0.055,
+      "goaltending_talent_delta": 0.066
     },
     {
       "team": "NYR",
-      "current_total_team_score": -0.43,
+      "current_total_team_score": -0.416,
       "prior_total_team_score": -0.569,
-      "total_team_score_delta": 0.139,
+      "total_team_score_delta": 0.153,
       "chance_generation_delta": 0.018,
       "chance_suppression_delta": 0.006,
-      "goaltending_talent_delta": 0.08
+      "goaltending_talent_delta": 0.079
+    },
+    {
+      "team": "NJD",
+      "current_total_team_score": -0.247,
+      "prior_total_team_score": -0.395,
+      "total_team_score_delta": 0.148,
+      "chance_generation_delta": 0.016,
+      "chance_suppression_delta": -0.058,
+      "goaltending_talent_delta": 0.081
+    },
+    {
+      "team": "PIT",
+      "current_total_team_score": 0.53,
+      "prior_total_team_score": 0.389,
+      "total_team_score_delta": 0.141,
+      "chance_generation_delta": -0.012,
+      "chance_suppression_delta": 0.032,
+      "goaltending_talent_delta": -0.037
     },
     {
       "team": "VGK",
@@ -1466,25 +1477,7 @@
       "total_team_score_delta": 0.128,
       "chance_generation_delta": 0.077,
       "chance_suppression_delta": 0.002,
-      "goaltending_talent_delta": 0.091
-    },
-    {
-      "team": "FLA",
-      "current_total_team_score": 0.286,
-      "prior_total_team_score": 0.161,
-      "total_team_score_delta": 0.125,
-      "chance_generation_delta": -0.039,
-      "chance_suppression_delta": -0.055,
-      "goaltending_talent_delta": 0.067
-    },
-    {
-      "team": "STL",
-      "current_total_team_score": -0.357,
-      "prior_total_team_score": -0.463,
-      "total_team_score_delta": 0.106,
-      "chance_generation_delta": 0.042,
-      "chance_suppression_delta": 0.023,
-      "goaltending_talent_delta": 0.008
+      "goaltending_talent_delta": 0.092
     }
   ],
   "trending_goalies": [
@@ -1492,51 +1485,51 @@
       "goalie_id": 8479394,
       "goalie_name": "Carter Hart",
       "team": "VGK",
-      "current_goalie_score": -0.382,
+      "current_goalie_score": -0.379,
       "prior_goalie_score": -0.727,
-      "goalie_score_delta": 0.345,
-      "hld_goalie_talent_gsax_5v5_per60": -0.382,
-      "gsax_current_per60": -0.609
+      "goalie_score_delta": 0.348,
+      "hld_goalie_talent_gsax_5v5_per60": -0.379,
+      "gsax_current_per60": -0.61
     },
     {
       "goalie_id": 8476341,
       "goalie_name": "Anton Forsberg",
       "team": "LAK",
-      "current_goalie_score": 0.593,
+      "current_goalie_score": 0.594,
       "prior_goalie_score": 0.313,
-      "goalie_score_delta": 0.28,
-      "hld_goalie_talent_gsax_5v5_per60": 0.593,
-      "gsax_current_per60": 0.092
+      "goalie_score_delta": 0.281,
+      "hld_goalie_talent_gsax_5v5_per60": 0.594,
+      "gsax_current_per60": 0.093
     },
     {
       "goalie_id": 8481551,
       "goalie_name": "Colten Ellis",
       "team": "BUF",
-      "current_goalie_score": -0.039,
+      "current_goalie_score": -0.038,
       "prior_goalie_score": -0.267,
-      "goalie_score_delta": 0.228,
-      "hld_goalie_talent_gsax_5v5_per60": -0.039,
+      "goalie_score_delta": 0.229,
+      "hld_goalie_talent_gsax_5v5_per60": -0.038,
       "gsax_current_per60": -0.176
     },
     {
       "goalie_id": 8481020,
       "goalie_name": "Justus Annunen",
       "team": "NSH",
-      "current_goalie_score": 0.241,
+      "current_goalie_score": 0.24,
       "prior_goalie_score": 0.04,
-      "goalie_score_delta": 0.201,
-      "hld_goalie_talent_gsax_5v5_per60": 0.241,
+      "goalie_score_delta": 0.2,
+      "hld_goalie_talent_gsax_5v5_per60": 0.24,
       "gsax_current_per60": 0.441
     },
     {
       "goalie_id": 8476914,
       "goalie_name": "Joonas Korpisalo",
       "team": "BOS",
-      "current_goalie_score": -0.009,
+      "current_goalie_score": -0.01,
       "prior_goalie_score": -0.154,
-      "goalie_score_delta": 0.145,
-      "hld_goalie_talent_gsax_5v5_per60": -0.009,
-      "gsax_current_per60": -0.071
+      "goalie_score_delta": 0.144,
+      "hld_goalie_talent_gsax_5v5_per60": -0.01,
+      "gsax_current_per60": -0.073
     }
   ],
   "goalie_start_share_up": [
@@ -1551,8 +1544,8 @@
       "recent_start_share": 0.6,
       "prior_start_share": 0.0,
       "start_share_delta": 0.6,
-      "current_goalie_score": -0.382,
-      "goalie_score_delta": 0.345
+      "current_goalie_score": -0.379,
+      "goalie_score_delta": 0.348
     },
     {
       "goalie_id": 8476341,
@@ -1565,8 +1558,8 @@
       "recent_start_share": 0.6,
       "prior_start_share": 0.3,
       "start_share_delta": 0.3,
-      "current_goalie_score": 0.593,
-      "goalie_score_delta": 0.28
+      "current_goalie_score": 0.594,
+      "goalie_score_delta": 0.281
     },
     {
       "goalie_id": 8483668,
@@ -1593,8 +1586,8 @@
       "recent_start_share": 0.5,
       "prior_start_share": 0.2,
       "start_share_delta": 0.3,
-      "current_goalie_score": -0.22,
-      "goalie_score_delta": -0.156
+      "current_goalie_score": -0.222,
+      "goalie_score_delta": -0.158
     },
     {
       "goalie_id": 8482515,
@@ -1612,7 +1605,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-06-15T04:00:00+00:00",
-    "end_utc": "2026-06-17T04:00:00+00:00"
+    "start_utc": "2026-06-23T20:00:00+00:00",
+    "end_utc": "2026-06-25T20:00:00+00:00"
   }
 }
