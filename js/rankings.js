@@ -43,8 +43,8 @@
     'ev_xgar_per_60',
     'pp_xgar_per_60',
     'pk_xgar_per_60',
-    'gim_forward',
-    'gim_defense',
+    'dz_def_rapm',
+    'rush_def_rapm',
     'season_gp',
     'season_toi_min',
   ];
@@ -361,8 +361,8 @@
         <td class="${classForSigned(row.ev_xgar_per_60)}">${signed(row.ev_xgar_per_60)}</td>
         <td class="${classForSigned(row.pp_xgar_per_60)}">${signed(row.pp_xgar_per_60)}</td>
         <td class="${classForSigned(row.pk_xgar_per_60)}">${signed(row.pk_xgar_per_60)}</td>
-        <td class="${classForSigned(row.gim_forward)}">${signed(row.gim_forward)}</td>
-        <td class="${classForSigned(row.gim_defense)}">${signed(row.gim_defense)}</td>
+        <td class="${classForSigned(row.dz_def_rapm)}">${signed(row.dz_def_rapm)}</td>
+        <td class="${classForSigned(row.rush_def_rapm)}">${signed(row.rush_def_rapm)}</td>
         <td>${row.season_gp}</td>
         <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
       </tr>
@@ -538,8 +538,8 @@
       ev_xgar_per_60: { field: 'ev_xgar_per_60', type: 'number' },
       pp_xgar_per_60: { field: 'pp_xgar_per_60', type: 'number' },
       pk_xgar_per_60: { field: 'pk_xgar_per_60', type: 'number' },
-      gim_forward: { field: 'gim_forward', type: 'number' },
-      gim_defense: { field: 'gim_defense', type: 'number' },
+      dz_def_rapm: { field: 'dz_def_rapm', type: 'number' },
+      rush_def_rapm: { field: 'rush_def_rapm', type: 'number' },
       season_gp: { field: 'season_gp', type: 'number' },
       season_toi_min: { field: 'season_toi_min', type: 'number' },
     };
