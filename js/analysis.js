@@ -2043,7 +2043,13 @@
       const tip = `${r.player_name} (${r.team} ${r.position}) | ${opts.xLabel}: ${formatFixed(Number(r[xKey]), xd)} | ${opts.yLabel}: ${formatFixed(Number(r[yKey]), yd)} | TOI ${Math.round(Number(r.toi_min || 0))}`;
       return `<circle cx="${xAt(Number(r[xKey])).toFixed(1)}" cy="${yAt(Number(r[yKey])).toFixed(1)}" r="${hl ? 5.4 : 3.0}" fill="${col}" fill-opacity="${hl ? 0.95 : 0.5}" stroke="${hl ? '#10231b' : 'none'}" stroke-width="1.2"><title>${esc(tip)}</title></circle>`;
     }).join('');
-    const labels = pts.filter((r) => q && normalizeText(r.player_name || '').includes(q)).map((r) => `<text x="${(xAt(Number(r[xKey])) + 8).toFixed(1)}" y="${(yAt(Number(r[yKey])) - 6).toFixed(1)}" font-size="11" fill="#23433a">${esc(r.player_name)}</text>`).join('');
+    const toLabel = opts.labelAll ? pts : pts.filter((r) => q && normalizeText(r.player_name || '').includes(q));
+    const labels = toLabel.map((r, idx) => {
+      const lx = xAt(Number(r[xKey])), ly = yAt(Number(r[yKey]));
+      const right = idx % 2 === 0;
+      const nm = opts.labelAll ? String(r.player_name || '').split(' ').slice(-1)[0] : r.player_name;
+      return `<text x="${(lx + (right ? 6 : -6)).toFixed(1)}" y="${(ly + 3).toFixed(1)}" text-anchor="${right ? 'start' : 'end'}" font-size="${opts.labelAll ? '9.5' : '11'}" fill="#23433a">${esc(nm)}</text>`;
+    }).join('');
     svg.innerHTML = `<rect x="0" y="0" width="${W}" height="${H}" rx="16" fill="#fbfeff" stroke="#dbe7ed"/>${grid}${diag}<line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${H - pad.bottom}" stroke="#6e8175"/><line x1="${pad.left}" y1="${H - pad.bottom}" x2="${W - pad.right}" y2="${H - pad.bottom}" stroke="#6e8175"/>${pointsHtml}${labels}<text x="${W / 2}" y="${H - 10}" text-anchor="middle" font-size="11" fill="#597166">${esc(opts.xLabel)}</text><text x="16" y="${H / 2}" transform="rotate(-90 16 ${H / 2})" text-anchor="middle" font-size="11" fill="#597166">${esc(opts.yLabel)}</text>`;
   }
 
@@ -2053,10 +2059,11 @@
     const team = document.getElementById('defTalentTeam')?.value || 'ALL';
     if (group !== 'ALL') rows = rows.filter((r) => r.position_group === group);
     if (team !== 'ALL') rows = rows.filter((r) => r.team === team);
-    renderDefScatter('defTalentDzScatter', rows, { xKey: 'dz_def', yKey: 'rush_def', xLabel: 'Set Def (higher = better)', yLabel: 'Rush Def (higher = better)', xdig: 2, ydig: 2 });
-    renderDefScatter('defTalentPaceChaos', rows, { xKey: 'event_for', yKey: 'event_against', xLabel: 'Events for /60 (pace)', yLabel: 'Events against /60 (chaos, lower better)', xdig: 0, ydig: 0 });
-    renderDefScatter('defTalentGoalie', rows, { xKey: 'gsv_off', yKey: 'gsv_on', xLabel: 'Goalie SV% with you OFF', yLabel: 'Goalie SV% with you ON', xdig: 3, ydig: 3, diagonal: true });
-    renderDefScatter('defTalentTidbits', rows, { xKey: 'tk_gv', yKey: 'ca', xLabel: 'Takeaways minus giveaways /60', yLabel: 'Shot attempts against /60 (lower better)', xdig: 2, ydig: 0 });
+    const labelAll = team !== 'ALL' || rows.length <= 40;
+    renderDefScatter('defTalentDzScatter', rows, { xKey: 'dz_def', yKey: 'rush_def', xLabel: 'Set Def (higher = better)', yLabel: 'Rush Def (higher = better)', xdig: 2, ydig: 2, labelAll });
+    renderDefScatter('defTalentPaceChaos', rows, { xKey: 'event_for', yKey: 'event_against', xLabel: 'Events for /60 (pace)', yLabel: 'Events against /60 (chaos, lower better)', xdig: 0, ydig: 0, labelAll });
+    renderDefScatter('defTalentGoalie', rows, { xKey: 'gsv_off', yKey: 'gsv_on', xLabel: 'Goalie SV% with you OFF', yLabel: 'Goalie SV% with you ON', xdig: 3, ydig: 3, diagonal: true, labelAll });
+    renderDefScatter('defTalentTidbits', rows, { xKey: 'tk_gv', yKey: 'ca', xLabel: 'Takeaways minus giveaways /60', yLabel: 'Shot attempts against /60 (lower better)', xdig: 2, ydig: 0, labelAll });
   }
 
   function setupDefensiveTalent() {
