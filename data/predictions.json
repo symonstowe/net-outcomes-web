@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-06-29 15:55 UTC",
-  "last_updated_utc": "2026-06-29 15:55 UTC",
-  "last_updated_iso": "2026-06-29T15:55:06.467766+00:00",
+  "generated_at": "2026-06-29 19:02 UTC",
+  "last_updated_utc": "2026-06-29 19:02 UTC",
+  "last_updated_iso": "2026-06-29T19:02:46.627573+00:00",
   "season_label": "2025-2026",
   "predictions": {
     "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
     "window_hours": 48,
-    "window_start_utc": "2026-06-29T15:00:00+00:00",
-    "window_end_utc": "2026-07-01T15:00:00+00:00",
+    "window_start_utc": "2026-06-29T18:00:00+00:00",
+    "window_end_utc": "2026-07-01T18:00:00+00:00",
     "games": [],
     "model_summary": {
       "training_seasons": [
