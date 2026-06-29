@@ -8,12 +8,13 @@
   } = window.NetOutcomesCommon;
 
   const DEFAULT_SECTION_ID = 'overviewPanel';
-  const FALLBACK_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'xgPanel'];
+  const FALLBACK_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'coachDefensePanel', 'xgPanel'];
   const SECTION_SLUG_BY_ID = {
     overviewPanel: 'overview',
     teamPanel: 'line-analysis',
     penaltyPanel: 'penalties',
     powerplayPanel: 'pp-development',
+    coachDefensePanel: 'coach-defense',
     xgPanel: 'team-xg',
   };
   const DEFAULT_XG_MIN_PROB = 0.015;
