@@ -8,13 +8,14 @@
   } = window.NetOutcomesCommon;
 
   const DEFAULT_SECTION_ID = 'overviewPanel';
-  const FALLBACK_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'coachDefensePanel', 'xgPanel'];
+  const FALLBACK_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'coachDefensePanel', 'defensiveTalentPanel', 'xgPanel'];
   const SECTION_SLUG_BY_ID = {
     overviewPanel: 'overview',
     teamPanel: 'line-analysis',
     penaltyPanel: 'penalties',
     powerplayPanel: 'pp-development',
     coachDefensePanel: 'coach-defense',
+    defensiveTalentPanel: 'defensive-talent',
     xgPanel: 'team-xg',
   };
   const DEFAULT_XG_MIN_PROB = 0.015;
@@ -2011,6 +2012,67 @@
     renderPenaltyOfficialsTable(analysis);
   }
 
+  function renderDefScatter(svgId, rows, opts) {
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    const xKey = opts.xKey, yKey = opts.yKey;
+    const xd = opts.xdig == null ? 2 : opts.xdig, yd = opts.ydig == null ? 2 : opts.ydig;
+    const pts = rows.filter((r) => r[xKey] != null && r[yKey] != null);
+    if (!pts.length) {
+      svg.innerHTML = '<text x="380" y="210" text-anchor="middle" font-size="15" fill="#6a7a70">No players match the current filter.</text>';
+      return;
+    }
+    const W = 760, H = 420, pad = { top: 24, right: 28, bottom: 54, left: 66 };
+    const xs = pts.map((r) => Number(r[xKey])), ys = pts.map((r) => Number(r[yKey]));
+    let x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const xp = (x1 - x0) * 0.08 || 1, yp = (y1 - y0) * 0.08 || 1;
+    x0 -= xp; x1 += xp; y0 -= yp; y1 += yp;
+    const xAt = (v) => pad.left + (W - pad.left - pad.right) * (v - x0) / (x1 - x0);
+    const yAt = (v) => (H - pad.bottom) - (H - pad.top - pad.bottom) * (v - y0) / (y1 - y0);
+    const grid = axisTickValues([x0, x1], 5).map((t) => `<line x1="${xAt(t).toFixed(1)}" y1="${pad.top}" x2="${xAt(t).toFixed(1)}" y2="${H - pad.bottom}" stroke="#dce8ed"/><text x="${xAt(t).toFixed(1)}" y="${H - pad.bottom + 18}" text-anchor="middle" font-size="11" fill="#597166">${esc(formatFixed(t, xd))}</text>`).join('')
+      + axisTickValues([y0, y1], 5).map((t) => `<line x1="${pad.left}" y1="${yAt(t).toFixed(1)}" x2="${W - pad.right}" y2="${yAt(t).toFixed(1)}" stroke="#dce8ed"/><text x="${pad.left - 8}" y="${(yAt(t) + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="#597166">${esc(formatFixed(t, yd))}</text>`).join('');
+    let diag = '';
+    if (opts.diagonal) {
+      const lo = Math.max(x0, y0), hi = Math.min(x1, y1);
+      diag = `<line x1="${xAt(lo).toFixed(1)}" y1="${yAt(lo).toFixed(1)}" x2="${xAt(hi).toFixed(1)}" y2="${yAt(hi).toFixed(1)}" stroke="#8fa1a9" stroke-width="1.3" stroke-dasharray="6 5"/>`;
+    }
+    const q = normalizeText(document.getElementById('defTalentSearch')?.value || '');
+    const pointsHtml = pts.map((r) => {
+      const hl = q && normalizeText(r.player_name || '').includes(q);
+      const col = r.position_group === 'D' ? '#1d6fae' : '#0f8a6b';
+      const tip = `${r.player_name} (${r.team} ${r.position}) | ${opts.xLabel}: ${formatFixed(Number(r[xKey]), xd)} | ${opts.yLabel}: ${formatFixed(Number(r[yKey]), yd)} | TOI ${Math.round(Number(r.toi_min || 0))}`;
+      return `<circle cx="${xAt(Number(r[xKey])).toFixed(1)}" cy="${yAt(Number(r[yKey])).toFixed(1)}" r="${hl ? 5.4 : 3.0}" fill="${col}" fill-opacity="${hl ? 0.95 : 0.5}" stroke="${hl ? '#10231b' : 'none'}" stroke-width="1.2"><title>${esc(tip)}</title></circle>`;
+    }).join('');
+    const labels = pts.filter((r) => q && normalizeText(r.player_name || '').includes(q)).map((r) => `<text x="${(xAt(Number(r[xKey])) + 8).toFixed(1)}" y="${(yAt(Number(r[yKey])) - 6).toFixed(1)}" font-size="11" fill="#23433a">${esc(r.player_name)}</text>`).join('');
+    svg.innerHTML = `<rect x="0" y="0" width="${W}" height="${H}" rx="16" fill="#fbfeff" stroke="#dbe7ed"/>${grid}${diag}<line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${H - pad.bottom}" stroke="#6e8175"/><line x1="${pad.left}" y1="${H - pad.bottom}" x2="${W - pad.right}" y2="${H - pad.bottom}" stroke="#6e8175"/>${pointsHtml}${labels}<text x="${W / 2}" y="${H - 10}" text-anchor="middle" font-size="11" fill="#597166">${esc(opts.xLabel)}</text><text x="16" y="${H / 2}" transform="rotate(-90 16 ${H / 2})" text-anchor="middle" font-size="11" fill="#597166">${esc(opts.yLabel)}</text>`;
+  }
+
+  function renderDefensiveTalent() {
+    let rows = Array.isArray(state.analysisPayload?.defensive_talent?.rows) ? state.analysisPayload.defensive_talent.rows : [];
+    const group = document.getElementById('defTalentGroup')?.value || 'ALL';
+    const team = document.getElementById('defTalentTeam')?.value || 'ALL';
+    if (group !== 'ALL') rows = rows.filter((r) => r.position_group === group);
+    if (team !== 'ALL') rows = rows.filter((r) => r.team === team);
+    renderDefScatter('defTalentDzScatter', rows, { xKey: 'dz_def', yKey: 'rush_def', xLabel: 'Set Def (higher = better)', yLabel: 'Rush Def (higher = better)', xdig: 2, ydig: 2 });
+    renderDefScatter('defTalentPaceChaos', rows, { xKey: 'event_for', yKey: 'event_against', xLabel: 'Events for /60 (pace)', yLabel: 'Events against /60 (chaos, lower better)', xdig: 0, ydig: 0 });
+    renderDefScatter('defTalentGoalie', rows, { xKey: 'gsv_off', yKey: 'gsv_on', xLabel: 'Goalie SV% with you OFF', yLabel: 'Goalie SV% with you ON', xdig: 3, ydig: 3, diagonal: true });
+    renderDefScatter('defTalentTidbits', rows, { xKey: 'tk_gv', yKey: 'ca', xLabel: 'Takeaways minus giveaways /60', yLabel: 'Shot attempts against /60 (lower better)', xdig: 2, ydig: 0 });
+  }
+
+  function setupDefensiveTalent() {
+    const rows = Array.isArray(state.analysisPayload?.defensive_talent?.rows) ? state.analysisPayload.defensive_talent.rows : [];
+    const teamSel = document.getElementById('defTalentTeam');
+    if (teamSel && teamSel.options.length <= 1) {
+      Array.from(new Set(rows.map((r) => r.team).filter(Boolean))).sort().forEach((t) => {
+        const o = document.createElement('option'); o.value = t; o.textContent = t; teamSel.appendChild(o);
+      });
+    }
+    document.getElementById('defTalentGroup')?.addEventListener('change', renderDefensiveTalent);
+    document.getElementById('defTalentTeam')?.addEventListener('change', renderDefensiveTalent);
+    document.getElementById('defTalentSearch')?.addEventListener('input', renderDefensiveTalent);
+    renderDefensiveTalent();
+  }
+
   async function init() {
     state.suppressUrlSync = true;
     state.initialUrlState = readShareStateFromUrl();
@@ -2041,6 +2103,9 @@
       renderPowerplaySection();
     }
     renderPenaltySection();
+    if (document.getElementById('defensiveTalentPanel')) {
+      setupDefensiveTalent();
+    }
     initializeXgPanel();
     state.suppressUrlSync = false;
     syncUrlState();
