@@ -255,6 +255,7 @@
         <thead><tr><th>State</th><th>G</th><th>iXG</th><th>G-iXG</th><th>A1</th><th>A2</th><th>P/60</th><th>Pctl</th></tr></thead>
         <tbody>${(pr.states || []).map((s) => `<tr><td>${esc(s.state)}</td><td>${s.g ?? '—'}</td><td>${s.ixg ?? '—'}</td><td>${s.g != null && s.ixg != null ? sgn(s.g - s.ixg, 1) : '—'}</td><td>${s.a1 ?? '—'}</td><td>${s.a2 ?? '—'}</td><td>${s.p60 ?? '—'}</td><td>${ord(s.p60_pct)}</td></tr>`).join('')}</tbody>
       </table>
+      ${d.faceoffs && d.faceoffs.n >= 100 ? bar(`Faceoffs (${d.faceoffs.n} taken)`, d.faceoffs.m, 1) : ''}
       <div class="head" style="margin-top:18px;margin-bottom:10px"><h2 style="font-size:18px">Shooting</h2><span>Finishing sustainability</span></div>
       <div class="shooting-grid">
         <div class="shooting-card"><b>Goals vs iXG</b><span>${sgn(pr.g_minus_ixg, 1)}</span><small>${pr.g_minus_ixg > 1 ? 'Finishing above expected' : pr.g_minus_ixg < -1 ? 'Finishing below expected' : 'Near expected'}</small></div>
@@ -270,6 +271,10 @@
         <div class="trust-card"><b>Trailing by 1</b><span>${ord(mp(tr.trail1))} pct</span></div>
         <div class="trust-card"><b>Protecting lead</b><span>${ord(mp(tr.lead1))} pct</span></div>
         <div class="trust-card"><b>Recent trust</b><span>${trustWord(tr.trend_min)}</span></div>
+      </div>
+      <div class="head" style="margin:12px 0 8px"><h2 style="font-size:18px">3-Year Trajectory</h2><span>Net impact percentile by season</span></div>
+      <div class="trust-grid" style="grid-template-columns:repeat(3,1fr)">
+        ${(d.trajectory || []).map((t) => `<div class="trust-card"><b>${esc(t.s)}</b><span>${t.pct == null ? '—' : ord(t.pct) + ' pct'}</span></div>`).join('')}
       </div>
     </article>
 
@@ -305,6 +310,8 @@
       ${bar('Hits /60', st.hits60, 1)}
       ${bar('Penalties drawn /60', st.pen_drawn60, 2)}
       ${bar('Penalties taken /60', st.pen_taken60, 2)}
+      ${bar('Takeaways − Giveaways /60', st.tkgv60, 2)}
+      ${bar('Blocked shots /60', st.blk60, 2)}
     </article>
   </section>
 
