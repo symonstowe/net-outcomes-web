@@ -346,7 +346,7 @@
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
         <td class="${classForSigned(row.fwd_total)}">${signed(row.fwd_total)}</td>
-        <td>${row.fwd_pct != null ? `${Math.round(row.fwd_pct)}<small> ${Math.round(row.fwd_pct_lo ?? row.fwd_pct)}-${Math.round(row.fwd_pct_hi ?? row.fwd_pct)}</small>` : '—'}</td>
+        <td>${row.fwd_pct != null ? `${Math.round(row.fwd_pct)}` : '—'}</td>
         <td class="${classForSigned(row.fwd_off)}">${signed(row.fwd_off)}</td>
         <td class="${classForSigned(row.fwd_def)}">${signed(row.fwd_def)}</td>
         <td class="${classForSigned(row.off_oz)}">${signed(row.off_oz)}</td>

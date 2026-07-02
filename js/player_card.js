@@ -185,7 +185,7 @@
   <section class="row">
     <div><h1>${esc(b.name)}${retTag}</h1><div class="summary">GP ${b.gp} · TOI ${Math.floor((b.toi_min || 0) / 60)}h ${Math.round((b.toi_min || 0) % 60)}m · TOI/GP ${b.gp ? `${Math.floor(b.toi_min / b.gp)}:${String(Math.round(((b.toi_min / b.gp) % 1) * 60)).padStart(2, '0')}` : '—'}</div></div>
     <aside class="war"><b>Proj. Impact /60</b><div class="big">${ord(bd.pct)}</div><div style="font-size:24px;font-weight:900">${sgn(bd.total60)}</div>
-    <div class="muted" style="font-size:13px;font-weight:700;margin-top:4px">band ${ord(bd.pct_lo)}–${ord(bd.pct_hi)}</div></aside>
+    <div class="muted" style="font-size:13px;font-weight:700;margin-top:4px">±${(bd.sd60 ?? 0).toFixed(2)} /60</div></aside>
   </section>
 
   <section class="table">
