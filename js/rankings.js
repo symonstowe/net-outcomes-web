@@ -38,6 +38,7 @@
     'off_fly',
     'dz_def_rapm',
     'rush_def_rapm',
+    'rush_defence',
     'fwd_pp',
     'fwd_pk',
     'fwd_pen',
@@ -335,7 +336,7 @@
     const tbody = document.querySelector('#rankingsTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(17, 'No skater rankings available.');
+      tbody.innerHTML = emptyRow(18, 'No skater rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
@@ -352,6 +353,7 @@
         <td class="${classForSigned(row.off_fly)}">${signed(row.off_fly)}</td>
         <td class="${classForSigned(row.dz_def_rapm)}">${signed(row.dz_def_rapm)}</td>
         <td class="${classForSigned(row.rush_def_rapm)}">${signed(row.rush_def_rapm)}</td>
+        <td class="${classForSigned(row.rush_defence)}">${signed(row.rush_defence)}</td>
         <td class="${classForSigned(row.fwd_pp)}">${signed(row.fwd_pp)}</td>
         <td class="${classForSigned(row.fwd_pk)}">${signed(row.fwd_pk)}</td>
         <td class="${classForSigned(row.fwd_pen)}">${signed(row.fwd_pen)}</td>
@@ -525,6 +527,7 @@
       off_fly: { field: 'off_fly', type: 'number' },
       dz_def_rapm: { field: 'dz_def_rapm', type: 'number' },
       rush_def_rapm: { field: 'rush_def_rapm', type: 'number' },
+      rush_defence: { field: 'rush_defence', type: 'number' },
       fwd_pp: { field: 'fwd_pp', type: 'number' },
       fwd_pk: { field: 'fwd_pk', type: 'number' },
       fwd_pen: { field: 'fwd_pen', type: 'number' },
