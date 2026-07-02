@@ -30,21 +30,17 @@
     'player_name',
     'team',
     'position',
-    'total_talent',
-    'offence_score',
-    'finishing',
-    'playmaking',
-    'chance_creation',
-    'leverage_xg_diff',
-    'defence_score',
-    'rush_defence',
-    'chance_suppression',
-    'special_teams',
-    'ev_xgar_per_60',
-    'pp_xgar_per_60',
-    'pk_xgar_per_60',
+    'fwd_total',
+    'fwd_pct',
+    'fwd_off',
+    'fwd_def',
+    'off_oz',
+    'off_fly',
     'dz_def_rapm',
     'rush_def_rapm',
+    'fwd_pp',
+    'fwd_pk',
+    'fwd_pen',
     'season_gp',
     'season_toi_min',
   ];
@@ -103,7 +99,7 @@
     teamRankings: [],
     underrated: [],
     scoringAnomalies: {},
-    rankingsSort: { key: 'total_talent', direction: 'desc' },
+    rankingsSort: { key: 'fwd_total', direction: 'desc' },
     goalieSort: { key: 'rank', direction: 'asc' },
     teamSort: { key: 'total_team_score', direction: 'desc' },
     underratedSort: { key: 'rank', direction: 'asc' },
@@ -248,7 +244,7 @@
       if (player) params.set('player', player);
       if (skaterTeam) params.set('skaterTeam', skaterTeam);
       if (positions.length) params.set('pos', positions.join(','));
-      if (skaterSort && (skaterSort !== 'total_talent' || skaterDir !== 'desc')) {
+      if (skaterSort && (skaterSort !== 'fwd_total' || skaterDir !== 'desc')) {
         params.set('sort', skaterSort);
         params.set('dir', skaterDir);
       }
@@ -339,30 +335,26 @@
     const tbody = document.querySelector('#rankingsTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(21, 'No skater rankings available.');
+      tbody.innerHTML = emptyRow(17, 'No skater rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
       <tr>
         <td>${row.display_rank ?? row.rank}</td>
-        <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}</td>
+        <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}${row.fwd_returning ? ' <sup>R</sup>' : ''}</td>
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
-        <td class="${classForSigned(row.total_talent)}">${signed(row.total_talent)}</td>
-        <td class="${classForSigned(row.offence_score)}">${signed(row.offence_score)}</td>
-        <td class="${classForSigned(row.finishing)}">${signed(row.finishing)}</td>
-        <td class="${classForSigned(row.playmaking)}">${signed(row.playmaking)}</td>
-        <td class="${classForSigned(row.chance_creation)}">${signed(row.chance_creation)}</td>
-        <td class="${classForSigned(row.leverage_xg_diff)}">${signed(row.leverage_xg_diff)}</td>
-        <td class="${classForSigned(row.defence_score)}">${signed(row.defence_score)}</td>
-        <td class="${classForSigned(row.rush_defence)}">${signed(row.rush_defence)}</td>
-        <td class="${classForSigned(row.chance_suppression)}">${signed(row.chance_suppression)}</td>
-        <td class="${classForSigned(row.special_teams)}">${signed(row.special_teams)}</td>
-        <td class="${classForSigned(row.ev_xgar_per_60)}">${signed(row.ev_xgar_per_60)}</td>
-        <td class="${classForSigned(row.pp_xgar_per_60)}">${signed(row.pp_xgar_per_60)}</td>
-        <td class="${classForSigned(row.pk_xgar_per_60)}">${signed(row.pk_xgar_per_60)}</td>
+        <td class="${classForSigned(row.fwd_total)}">${signed(row.fwd_total)}</td>
+        <td>${row.fwd_pct != null ? `${Math.round(row.fwd_pct)}<small> ${Math.round(row.fwd_pct_lo ?? row.fwd_pct)}-${Math.round(row.fwd_pct_hi ?? row.fwd_pct)}</small>` : '—'}</td>
+        <td class="${classForSigned(row.fwd_off)}">${signed(row.fwd_off)}</td>
+        <td class="${classForSigned(row.fwd_def)}">${signed(row.fwd_def)}</td>
+        <td class="${classForSigned(row.off_oz)}">${signed(row.off_oz)}</td>
+        <td class="${classForSigned(row.off_fly)}">${signed(row.off_fly)}</td>
         <td class="${classForSigned(row.dz_def_rapm)}">${signed(row.dz_def_rapm)}</td>
         <td class="${classForSigned(row.rush_def_rapm)}">${signed(row.rush_def_rapm)}</td>
+        <td class="${classForSigned(row.fwd_pp)}">${signed(row.fwd_pp)}</td>
+        <td class="${classForSigned(row.fwd_pk)}">${signed(row.fwd_pk)}</td>
+        <td class="${classForSigned(row.fwd_pen)}">${signed(row.fwd_pen)}</td>
         <td>${row.season_gp}</td>
         <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
       </tr>
@@ -518,32 +510,28 @@
   }
 
   function sortRankings(rows) {
-    const key = String(state.rankingsSort?.key || 'total_talent');
+    const key = String(state.rankingsSort?.key || 'fwd_total');
     const direction = String(state.rankingsSort?.direction || 'desc');
     const dir = direction === 'asc' ? 1 : -1;
     const fieldMap = {
       player_name: { field: 'player_name', type: 'string' },
       team: { field: 'team', type: 'string' },
       position: { field: 'position', type: 'string' },
-      total_talent: { field: 'total_talent', type: 'number' },
-      offence_score: { field: 'offence_score', type: 'number' },
-      finishing: { field: 'finishing', type: 'number' },
-      playmaking: { field: 'playmaking', type: 'number' },
-      chance_creation: { field: 'chance_creation', type: 'number' },
-      leverage_xg_diff: { field: 'leverage_xg_diff', type: 'number' },
-      defence_score: { field: 'defence_score', type: 'number' },
-      rush_defence: { field: 'rush_defence', type: 'number' },
-      chance_suppression: { field: 'chance_suppression', type: 'number' },
-      special_teams: { field: 'special_teams', type: 'number' },
-      ev_xgar_per_60: { field: 'ev_xgar_per_60', type: 'number' },
-      pp_xgar_per_60: { field: 'pp_xgar_per_60', type: 'number' },
-      pk_xgar_per_60: { field: 'pk_xgar_per_60', type: 'number' },
+      fwd_total: { field: 'fwd_total', type: 'number' },
+      fwd_pct: { field: 'fwd_pct', type: 'number' },
+      fwd_off: { field: 'fwd_off', type: 'number' },
+      fwd_def: { field: 'fwd_def', type: 'number' },
+      off_oz: { field: 'off_oz', type: 'number' },
+      off_fly: { field: 'off_fly', type: 'number' },
       dz_def_rapm: { field: 'dz_def_rapm', type: 'number' },
       rush_def_rapm: { field: 'rush_def_rapm', type: 'number' },
+      fwd_pp: { field: 'fwd_pp', type: 'number' },
+      fwd_pk: { field: 'fwd_pk', type: 'number' },
+      fwd_pen: { field: 'fwd_pen', type: 'number' },
       season_gp: { field: 'season_gp', type: 'number' },
       season_toi_min: { field: 'season_toi_min', type: 'number' },
     };
-    const spec = fieldMap[key] || fieldMap.total_talent;
+    const spec = fieldMap[key] || fieldMap.fwd_total;
     return [...rows].sort((a, b) => {
       if (spec.type === 'string') {
         const primary = String(a?.[spec.field] || '').localeCompare(String(b?.[spec.field] || ''));

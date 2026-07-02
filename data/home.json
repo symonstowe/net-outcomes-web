@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-29 19:02 UTC",
-  "last_updated_utc": "2026-06-29 19:02 UTC",
-  "last_updated_iso": "2026-06-29T19:02:46.627573+00:00",
+  "generated_at": "2026-07-02 07:31 UTC",
+  "last_updated_utc": "2026-07-02 07:31 UTC",
+  "last_updated_iso": "2026-07-02T07:31:12.520323+00:00",
   "season_label": "2025-2026",
   "model_performance": {},
   "team_rankings_top": [
@@ -128,7 +128,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-06-29T18:59:03.797142+00:00",
+      "built_at": "2026-07-02T07:27:47.527545+00:00",
       "season": 20252026,
       "season_year": 2026,
       "n_sims": 10000,
@@ -1115,7 +1115,7 @@
     }
   },
   "counts": {
-    "skaters": 850,
+    "skaters": 750,
     "goalies": 71,
     "teams": 32,
     "today_games": 0,
@@ -1134,7 +1134,7 @@
       "talent_score_delta": 0.665,
       "offence_score_delta": -0.097,
       "defence_score_delta": 1.216,
-      "player_url": "/player-analysis-unavailable.html#player_id=8484839&player=Harrison+Brunicke&team=PIT"
+      "player_url": ""
     },
     {
       "player_id": 8484938,
@@ -1146,7 +1146,7 @@
       "talent_score_delta": 0.611,
       "offence_score_delta": 0.136,
       "defence_score_delta": 1.267,
-      "player_url": "/player-analysis-unavailable.html#player_id=8484938&player=Arttu+Hyry&team=DAL"
+      "player_url": "/players/arttu-hyry-8484938.html"
     },
     {
       "player_id": 8484188,
@@ -1158,7 +1158,7 @@
       "talent_score_delta": 0.591,
       "offence_score_delta": 0.805,
       "defence_score_delta": 0.436,
-      "player_url": "/player-analysis-unavailable.html#player_id=8484188&player=Theo+Lindstein&team=STL"
+      "player_url": "/players/theo-lindstein-8484188.html"
     },
     {
       "player_id": 8484806,
@@ -1170,7 +1170,7 @@
       "talent_score_delta": 0.583,
       "offence_score_delta": 0.106,
       "defence_score_delta": 0.929,
-      "player_url": "/player-analysis-unavailable.html#player_id=8484806&player=Sam+Dickinson&team=SJS"
+      "player_url": "/players/sam-dickinson-8484806.html"
     },
     {
       "player_id": 8477380,
@@ -1182,7 +1182,7 @@
       "talent_score_delta": 0.466,
       "offence_score_delta": 0.559,
       "defence_score_delta": 0.337,
-      "player_url": "/player-analysis-unavailable.html#player_id=8477380&player=Jonny+Brodzinski&team=NYR"
+      "player_url": "/players/jonny-brodzinski-8477380.html"
     }
   ],
   "skater_ice_time_up": [
@@ -1198,7 +1198,7 @@
       "prior_count": 10,
       "current_overall_talent_score": 0.023,
       "talent_score_delta": -0.017,
-      "player_url": "/player-analysis-unavailable.html#player_id=8482111&player=Justin+Barron&team=NSH"
+      "player_url": "/players/justin-barron-8482111.html"
     },
     {
       "player_id": 8484305,
@@ -1212,7 +1212,7 @@
       "prior_count": 10,
       "current_overall_talent_score": -0.058,
       "talent_score_delta": -0.054,
-      "player_url": "/player-analysis-unavailable.html#player_id=8484305&player=Zach+Metsa&team=BUF"
+      "player_url": "/players/zach-metsa-8484305.html"
     },
     {
       "player_id": 8481600,
@@ -1226,7 +1226,7 @@
       "prior_count": 9,
       "current_overall_talent_score": -0.358,
       "talent_score_delta": -0.298,
-      "player_url": "/player-analysis-unavailable.html#player_id=8481600&player=Tobias+Bjornfot&team=FLA"
+      "player_url": "/players/tobias-bjornfot-8481600.html"
     },
     {
       "player_id": 8481655,
@@ -1240,7 +1240,7 @@
       "prior_count": 10,
       "current_overall_talent_score": 0.05,
       "talent_score_delta": 0.119,
-      "player_url": "/player-analysis-unavailable.html#player_id=8481655&player=Cole+Schwindt&team=FLA"
+      "player_url": "/players/cole-schwindt-8481655.html"
     },
     {
       "player_id": 8482095,
@@ -1254,7 +1254,7 @@
       "prior_count": 10,
       "current_overall_talent_score": -0.16,
       "talent_score_delta": -0.008,
-      "player_url": "/player-analysis-unavailable.html#player_id=8482095&player=Tyler+Kleven&team=OTT"
+      "player_url": "/players/tyler-kleven-8482095.html"
     }
   ],
   "trending_teams": [
@@ -1429,7 +1429,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-06-29T18:00:00+00:00",
-    "end_utc": "2026-07-01T18:00:00+00:00"
+    "start_utc": "2026-07-02T07:00:00+00:00",
+    "end_utc": "2026-07-04T07:00:00+00:00"
   }
 }
