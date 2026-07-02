@@ -32,31 +32,39 @@
   }
 
   function spider(sp) {
-    if (!sp || !sp.axes || !sp.current) return '';
-    const n = sp.axes.length;
-    const R = 115;
-    const pt = (i, r) => {
-      const a = -Math.PI / 2 + (2 * Math.PI * i) / n;
-      return `${(r * Math.cos(a)).toFixed(1)},${(r * Math.sin(a)).toFixed(1)}`;
-    };
-    const ring = (r) => Array.from({ length: n }, (_, i) => pt(i, r)).join(' ');
-    const poly = (vals) => vals ? Array.from({ length: n }, (_, i) => pt(i, R * Math.max(0.04, Math.min(1, (vals[i] ?? 50) / 100)))).join(' ') : null;
-    const cur = poly(sp.current);
-    const prev = poly(sp.previous);
-    const labels = sp.axes.map((a, i) => {
-      const ang = -Math.PI / 2 + (2 * Math.PI * i) / n;
-      const x = 138 * Math.cos(ang);
-      const y = 138 * Math.sin(ang);
-      const anchor = Math.abs(x) < 20 ? 'middle' : x > 0 ? 'start' : 'end';
-      return `<text x="${x.toFixed(0)}" y="${(y + 4).toFixed(0)}" text-anchor="${anchor}" font-size="10.5" fill="#6b7280">${esc(a)}</text>`;
+    // offense axes on the LEFT half, defense on the RIGHT half; each axis is
+    // the same percentile as its panel bar (follows the Ranked Against toggle)
+    if (!sp || !sp.off || !sp.def) return '';
+    const R = 112;
+    const place = (list, side) => list.map((a, i) => {
+      const ang = ((i + 0.5) / list.length) * Math.PI; // top -> bottom
+      const sx = side === 'def' ? 1 : -1;
+      const ux = sx * Math.sin(ang);
+      const uy = -Math.cos(ang);
+      const pct = Math.max(4, Math.min(100, mp(a.m) ?? 4));
+      return { l: a.l, pct: mp(a.m), x: ux * R * pct / 100, y: uy * R * pct / 100,
+               lx: ux * (R + 14), ly: uy * (R + 14), right: sx > 0 };
+    });
+    const dpts = place(sp.def, 'def');
+    const opts = place(sp.off, 'off');
+    const ring = [...dpts, ...opts.slice().reverse()];
+    const poly = ring.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    const labels = ring.map((p) =>
+      `<text x="${p.lx.toFixed(0)}" y="${(p.ly + 3).toFixed(0)}" text-anchor="${p.right ? 'start' : 'end'}" font-size="10" fill="#6b7280">${esc(p.l)}</text>` +
+      `<text x="${p.lx.toFixed(0)}" y="${(p.ly + 14).toFixed(0)}" text-anchor="${p.right ? 'start' : 'end'}" font-size="9" font-weight="900" fill="var(--blue)">${ord(p.pct)}</text>`
+    ).join('');
+    const spokes = ring.map((p) => {
+      const n = Math.hypot(p.lx, p.ly) / (R + 14);
+      return `<line x1="0" y1="0" x2="${(p.lx / n / (R + 14) * R).toFixed(1)}" y2="${(p.ly / n / (R + 14) * R).toFixed(1)}" stroke="#eef2f7"/>`;
     }).join('');
-    return `<svg viewBox="0 0 420 330"><g transform="translate(210,162)">` +
-      `<polygon points="${ring(R)}" fill="none" stroke="#d9e2ec"/><polygon points="${ring(R / 2)}" fill="none" stroke="#d9e2ec"/>` +
-      (cur ? `<polygon points="${cur}" fill="var(--blue)" opacity=".3" stroke="var(--blue)" stroke-width="3.5"/>` : '') +
-      (prev ? `<polygon points="${prev}" fill="none" stroke="var(--orange)" stroke-width="3.5" stroke-dasharray="8 5"/>` : '') +
+    return `<svg viewBox="0 0 480 330"><g transform="translate(240,158)">` +
+      `<circle r="${R}" fill="none" stroke="#d9e2ec"/><circle r="${R / 2}" fill="none" stroke="#d9e2ec"/>` +
+      `<line x1="0" y1="${-R}" x2="0" y2="${R}" stroke="#d9e2ec"/>` +
+      spokes +
+      `<polygon points="${poly}" fill="var(--blue)" opacity=".3" stroke="var(--blue)" stroke-width="3"/>` +
       labels +
-      `</g><g transform="translate(64,312)"><rect width="12" height="12" fill="var(--blue)" opacity=".3" stroke="var(--blue)"/><text x="18" y="11" font-size="11">Current season</text>` +
-      (prev ? `<line x1="118" y1="6" x2="153" y2="6" stroke="var(--orange)" stroke-width="3.5" stroke-dasharray="8 5"/><text x="160" y="11" font-size="11">Last season</text>` : '') +
+      `<text x="-${R + 2}" y="-${R + 24}" text-anchor="end" font-size="11" font-weight="900" fill="#6b7280">OFFENCE</text>` +
+      `<text x="${R + 2}" y="-${R + 24}" text-anchor="start" font-size="11" font-weight="900" fill="#6b7280">DEFENCE</text>` +
       `</g></svg>`;
   }
 
@@ -210,26 +218,26 @@
     <article class="panel">
       <div class="head"><h2>Offence</h2><span>vs ${esc(vsLabel)} · goals of impact /60</span></div>
       ${bar('Overall Offence /60', comp.off)}
-      ${bar('OZ-Faceoff Offence (isolated)', c.off_oz)}
-      ${bar('In-Flow Offence (isolated)', c.off_fly)}
+      ${bar('OZ-Faceoff Offence', c.off_oz)}
+      ${bar('In-Flow Offence', c.off_fly)}
       ${bar('Finishing', sk.finishing)}
       ${bar('Playmaking', sk.playmaking)}
-      ${bar('Entry Creation / ΔV Offence', sk.dv_off)}
+      ${bar('Entry Creation', sk.dv_off)}
       ${bar('Power Play', comp.pp)}
     </article>
 
     <article class="panel">
       <div class="head"><h2>Defence</h2><span>vs ${esc(vsLabel)} · goals of impact /60</span></div>
       ${bar('Overall Defence /60', comp.def)}
-      ${bar('DZ-Faceoff Defence (isolated)', c.dz_set, 4)}
-      ${bar('Rush Defence (isolated)', c.dz_rush, 4)}
-      ${bar('Entry Prevention / ΔV Defence', sk.dv_def)}
+      ${bar('DZ-Faceoff Defence', c.dz_set, 4)}
+      ${bar('Rush Defence', c.dz_rush, 4)}
+      ${bar('Entry Prevention', sk.dv_def)}
       ${bar('Penalty Kill', comp.pk)}
       ${bar('Penalty Differential', comp.pen)}
     </article>
 
     <article class="panel">
-      <div class="head"><h2>Profile Spider</h2><span>Percentiles vs ${posGroup.toLowerCase()}</span></div>
+      <div class="head"><h2>Profile Spider</h2><span>Percentiles vs ${esc(vsLabel)}</span></div>
       <div class="spider">${spider(d.spider)}</div>
     </article>
 
