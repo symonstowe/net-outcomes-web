@@ -1,0 +1,35 @@
+# Actions-sourced GitHub Pages deploy for symonstowe/net-outcomes-web.
+# SINGLE attempt (no retries, per policy); the concurrency group prevents
+# stacked/racing deployments, which the legacy branch-sourced builds allowed.
+# This file lives in net-outcomes-web at .github/workflows/deploy-pages.yml
+# (added via the GitHub web UI — the hockey_stats publish rsync deliberately
+# excludes .github/ so it is never overwritten or deleted).
+# This copy in hockey_stats/deploy/ is the version-controlled reference.
+name: deploy-pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout site content
+        uses: actions/checkout@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages (single attempt)
+        id: deployment
+        uses: actions/deploy-pages@v5
