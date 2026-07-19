@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-18 17:50 UTC",
-  "last_updated_utc": "2026-07-18 17:50 UTC",
-  "last_updated_iso": "2026-07-18T17:50:21.026903+00:00",
+  "generated_at": "2026-07-19 18:03 UTC",
+  "last_updated_utc": "2026-07-19 18:03 UTC",
+  "last_updated_iso": "2026-07-19T18:03:54.857802+00:00",
   "season_label": "2025-2026",
   "model_performance": {},
   "team_rankings_top": [
@@ -128,7 +128,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-07-18T17:48:54.631102+00:00",
+      "built_at": "2026-07-19T18:02:29.498575+00:00",
       "season": 20252026,
       "season_year": 2026,
       "n_sims": 10000,
@@ -1115,7 +1115,7 @@
     }
   },
   "counts": {
-    "skaters": 762,
+    "skaters": 752,
     "goalies": 71,
     "teams": 32,
     "today_games": 0,
@@ -1429,7 +1429,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-07-18T17:00:00+00:00",
-    "end_utc": "2026-07-20T17:00:00+00:00"
+    "start_utc": "2026-07-19T17:00:00+00:00",
+    "end_utc": "2026-07-21T17:00:00+00:00"
   }
 }
