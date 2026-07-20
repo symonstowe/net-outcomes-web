@@ -342,7 +342,7 @@
     tbody.innerHTML = rows.map((row) => `
       <tr>
         <td>${row.display_rank ?? row.rank}</td>
-        <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}${row.fwd_returning ? ' <sup>R</sup>' : ''}</td>
+        <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}${row.fwd_rookie ? ' <sup>Rk</sup>' : (row.fwd_returning ? ' <sup>R</sup>' : '')}</td>
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
         <td class="${classForSigned(row.fwd_total)}">${signed(row.fwd_total)}</td>
@@ -810,7 +810,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     init().catch((error) => {
       console.error(error);
-      emptyMessage('#rankingsTable tbody', 19, error.message);
+      emptyMessage('#rankingsTable tbody', 24, error.message);
       emptyMessage('#goalieTable tbody', 13, error.message);
       emptyMessage('#teamRankingsTable tbody', 18, error.message);
       emptyMessage('#underratedTable tbody', 12, error.message);
