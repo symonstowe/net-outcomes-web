@@ -34,6 +34,8 @@
     'fwd_pct',
     'fwd_off',
     'fwd_def',
+    'fwd_gf60',
+    'fwd_ga60',
     'off_oz',
     'off_fly',
     'dz_def_rapm',
@@ -336,7 +338,7 @@
     const tbody = document.querySelector('#rankingsTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(18, 'No skater rankings available.');
+      tbody.innerHTML = emptyRow(20, 'No skater rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
@@ -349,6 +351,8 @@
         <td>${row.fwd_pct != null ? `${Math.round(row.fwd_pct)}` : '—'}</td>
         <td class="${classForSigned(row.fwd_off)}">${signed(row.fwd_off)}</td>
         <td class="${classForSigned(row.fwd_def)}">${signed(row.fwd_def)}</td>
+        <td>${row.fwd_gf60 != null ? row.fwd_gf60.toFixed(2) : '—'}</td>
+        <td>${row.fwd_ga60 != null ? row.fwd_ga60.toFixed(2) : '—'}</td>
         <td class="${classForSigned(row.off_oz)}">${signed(row.off_oz)}</td>
         <td class="${classForSigned(row.off_fly)}">${signed(row.off_fly)}</td>
         <td class="${classForSigned(row.dz_def_rapm)}">${signed(row.dz_def_rapm)}</td>
@@ -523,6 +527,8 @@
       fwd_pct: { field: 'fwd_pct', type: 'number' },
       fwd_off: { field: 'fwd_off', type: 'number' },
       fwd_def: { field: 'fwd_def', type: 'number' },
+      fwd_gf60: { field: 'fwd_gf60', type: 'number' },
+      fwd_ga60: { field: 'fwd_ga60', type: 'number' },
       off_oz: { field: 'off_oz', type: 'number' },
       off_fly: { field: 'off_fly', type: 'number' },
       dz_def_rapm: { field: 'dz_def_rapm', type: 'number' },

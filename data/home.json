@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-20 15:46 UTC",
-  "last_updated_utc": "2026-07-20 15:46 UTC",
-  "last_updated_iso": "2026-07-20T15:46:28.496002+00:00",
+  "generated_at": "2026-07-22 10:46 UTC",
+  "last_updated_utc": "2026-07-22 10:46 UTC",
+  "last_updated_iso": "2026-07-22T10:46:31.178421+00:00",
   "season_label": "2025-2026",
   "model_performance": {},
   "team_rankings_top": [
@@ -128,7 +128,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-07-20T15:44:19.789220+00:00",
+      "built_at": "2026-07-22T10:33:12.338511+00:00",
       "season": 20262027,
       "season_year": 2027,
       "mode": "preseason_projection",
@@ -155,10 +155,10 @@
             "winner_logo": "",
             "top_seed_series_win_pct": 71.9,
             "bottom_seed_series_win_pct": 28.1,
-            "top_seed_cup_pct": 9.05,
-            "bottom_seed_cup_pct": 1.29,
-            "top_seed_conf_pct": 15.42,
-            "bottom_seed_conf_pct": 2.66
+            "top_seed_cup_pct": 8.44,
+            "bottom_seed_cup_pct": 1.23,
+            "top_seed_conf_pct": 14.86,
+            "bottom_seed_conf_pct": 2.59
           },
           {
             "series_letter": "B",
@@ -179,10 +179,10 @@
             "winner_logo": "",
             "top_seed_series_win_pct": 41.5,
             "bottom_seed_series_win_pct": 58.5,
-            "top_seed_cup_pct": 5.03,
-            "bottom_seed_cup_pct": 8.15,
-            "top_seed_conf_pct": 9.18,
-            "bottom_seed_conf_pct": 13.39
+            "top_seed_cup_pct": 5.1,
+            "bottom_seed_cup_pct": 8.25,
+            "top_seed_conf_pct": 9.22,
+            "bottom_seed_conf_pct": 13.23
           },
           {
             "series_letter": "C",
@@ -203,10 +203,10 @@
             "winner_logo": "",
             "top_seed_series_win_pct": 54.1,
             "bottom_seed_series_win_pct": 45.9,
-            "top_seed_cup_pct": 9.51,
-            "bottom_seed_cup_pct": 3.64,
-            "top_seed_conf_pct": 15.89,
-            "bottom_seed_conf_pct": 6.63
+            "top_seed_cup_pct": 10.12,
+            "bottom_seed_cup_pct": 3.73,
+            "top_seed_conf_pct": 16.65,
+            "bottom_seed_conf_pct": 6.55
           },
           {
             "series_letter": "D",
@@ -228,9 +228,9 @@
             "top_seed_series_win_pct": 63.8,
             "bottom_seed_series_win_pct": 36.2,
             "top_seed_cup_pct": 4.32,
-            "bottom_seed_cup_pct": 1.29,
-            "top_seed_conf_pct": 8.04,
-            "bottom_seed_conf_pct": 2.61
+            "bottom_seed_cup_pct": 1.39,
+            "top_seed_conf_pct": 7.98,
+            "bottom_seed_conf_pct": 2.81
           },
           {
             "series_letter": "E",
@@ -251,10 +251,10 @@
             "winner_logo": "",
             "top_seed_series_win_pct": 63.4,
             "bottom_seed_series_win_pct": 36.6,
-            "top_seed_cup_pct": 6.54,
-            "bottom_seed_cup_pct": 1.54,
-            "top_seed_conf_pct": 14.04,
-            "bottom_seed_conf_pct": 3.97
+            "top_seed_cup_pct": 6.18,
+            "bottom_seed_cup_pct": 1.49,
+            "top_seed_conf_pct": 14.52,
+            "bottom_seed_conf_pct": 3.88
           },
           {
             "series_letter": "F",
@@ -275,10 +275,10 @@
             "winner_logo": "",
             "top_seed_series_win_pct": 54.7,
             "bottom_seed_series_win_pct": 45.3,
-            "top_seed_cup_pct": 7.12,
-            "bottom_seed_cup_pct": 4.19,
-            "top_seed_conf_pct": 15.03,
-            "bottom_seed_conf_pct": 9.19
+            "top_seed_cup_pct": 7.13,
+            "bottom_seed_cup_pct": 3.79,
+            "top_seed_conf_pct": 14.89,
+            "bottom_seed_conf_pct": 8.76
           },
           {
             "series_letter": "G",
@@ -299,10 +299,10 @@
             "winner_logo": "",
             "top_seed_series_win_pct": 59.3,
             "bottom_seed_series_win_pct": 40.7,
-            "top_seed_cup_pct": 5.75,
-            "bottom_seed_cup_pct": 2.05,
-            "top_seed_conf_pct": 13.06,
-            "bottom_seed_conf_pct": 5.32
+            "top_seed_cup_pct": 5.8,
+            "bottom_seed_cup_pct": 2.24,
+            "top_seed_conf_pct": 13.48,
+            "bottom_seed_conf_pct": 5.27
           },
           {
             "series_letter": "H",
@@ -323,10 +323,10 @@
             "winner_logo": "",
             "top_seed_series_win_pct": 60.1,
             "bottom_seed_series_win_pct": 39.9,
-            "top_seed_cup_pct": 3.78,
-            "bottom_seed_cup_pct": 1.56,
-            "top_seed_conf_pct": 9.5,
-            "bottom_seed_conf_pct": 4.23
+            "top_seed_cup_pct": 4.02,
+            "bottom_seed_cup_pct": 1.52,
+            "top_seed_conf_pct": 9.59,
+            "bottom_seed_conf_pct": 4.19
           }
         ],
         "2": [
@@ -521,10 +521,10 @@
           "division_winner": true,
           "make_playoffs_pct": 96.16,
           "win_division_pct": 67.51,
-          "win_round1_pct": 51.7,
-          "win_round2_pct": 31.29,
-          "win_conf_pct": 15.89,
-          "win_cup_pct": 9.51,
+          "win_round1_pct": 51.41,
+          "win_round2_pct": 31.31,
+          "win_conf_pct": 16.65,
+          "win_cup_pct": 10.12,
           "wildcard_pct": 3.51,
           "cutline_risk_pct": 8.24
         },
@@ -544,10 +544,10 @@
           "division_winner": false,
           "make_playoffs_pct": 91.12,
           "win_division_pct": 42.71,
-          "win_round1_pct": 55.46,
-          "win_round2_pct": 26.22,
-          "win_conf_pct": 14.04,
-          "win_cup_pct": 6.54,
+          "win_round1_pct": 55.5,
+          "win_round2_pct": 26.65,
+          "win_conf_pct": 14.52,
+          "win_cup_pct": 6.18,
           "wildcard_pct": 8.95,
           "cutline_risk_pct": 13.969999999999999
         },
@@ -567,10 +567,10 @@
           "division_winner": false,
           "make_playoffs_pct": 86.59,
           "win_division_pct": 30.459999999999997,
-          "win_round1_pct": 47.28,
-          "win_round2_pct": 26.83,
-          "win_conf_pct": 15.03,
-          "win_cup_pct": 7.12,
+          "win_round1_pct": 47.0,
+          "win_round2_pct": 26.8,
+          "win_conf_pct": 14.89,
+          "win_cup_pct": 7.13,
           "wildcard_pct": 11.690000000000001,
           "cutline_risk_pct": 18.92
         },
@@ -590,10 +590,10 @@
           "division_winner": false,
           "make_playoffs_pct": 83.61,
           "win_division_pct": 31.44,
-          "win_round1_pct": 57.0,
-          "win_round2_pct": 28.69,
-          "win_conf_pct": 15.42,
-          "win_cup_pct": 9.05,
+          "win_round1_pct": 56.96,
+          "win_round2_pct": 28.31,
+          "win_conf_pct": 14.86,
+          "win_cup_pct": 8.44,
           "wildcard_pct": 13.87,
           "cutline_risk_pct": 20.73
         },
@@ -613,10 +613,10 @@
           "division_winner": false,
           "make_playoffs_pct": 83.39999999999999,
           "win_division_pct": 36.620000000000005,
-          "win_round1_pct": 47.37,
-          "win_round2_pct": 26.96,
-          "win_conf_pct": 13.06,
-          "win_cup_pct": 5.75,
+          "win_round1_pct": 48.21,
+          "win_round2_pct": 27.43,
+          "win_conf_pct": 13.48,
+          "win_cup_pct": 5.8,
           "wildcard_pct": 9.969999999999999,
           "cutline_risk_pct": 19.869999999999997
         },
@@ -636,10 +636,10 @@
           "division_winner": false,
           "make_playoffs_pct": 80.77,
           "win_division_pct": 25.669999999999998,
-          "win_round1_pct": 34.79,
-          "win_round2_pct": 17.83,
-          "win_conf_pct": 9.18,
-          "win_cup_pct": 5.03,
+          "win_round1_pct": 34.51,
+          "win_round2_pct": 18.12,
+          "win_conf_pct": 9.22,
+          "win_cup_pct": 5.1,
           "wildcard_pct": 15.98,
           "cutline_risk_pct": 23.69
         },
@@ -659,10 +659,10 @@
           "division_winner": false,
           "make_playoffs_pct": 73.97,
           "win_division_pct": 22.67,
-          "win_round1_pct": 42.59,
-          "win_round2_pct": 20.39,
-          "win_conf_pct": 9.5,
-          "win_cup_pct": 3.78,
+          "win_round1_pct": 42.67,
+          "win_round2_pct": 20.41,
+          "win_conf_pct": 9.59,
+          "win_cup_pct": 4.02,
           "wildcard_pct": 12.920000000000002,
           "cutline_risk_pct": 25.009999999999998
         },
@@ -682,10 +682,10 @@
           "division_winner": false,
           "make_playoffs_pct": 72.24000000000001,
           "win_division_pct": 17.72,
-          "win_round1_pct": 41.13,
-          "win_round2_pct": 23.36,
-          "win_conf_pct": 13.39,
-          "win_cup_pct": 8.15,
+          "win_round1_pct": 41.37,
+          "win_round2_pct": 23.6,
+          "win_conf_pct": 13.23,
+          "win_cup_pct": 8.25,
           "wildcard_pct": 17.849999999999998,
           "cutline_risk_pct": 27.71
         },
@@ -705,10 +705,10 @@
           "division_winner": false,
           "make_playoffs_pct": 66.77,
           "win_division_pct": 11.42,
-          "win_round1_pct": 30.31,
-          "win_round2_pct": 16.41,
-          "win_conf_pct": 9.19,
-          "win_cup_pct": 4.19,
+          "win_round1_pct": 30.53,
+          "win_round2_pct": 16.31,
+          "win_conf_pct": 8.76,
+          "win_cup_pct": 3.79,
           "wildcard_pct": 17.69,
           "cutline_risk_pct": 27.889999999999997
         },
@@ -728,9 +728,9 @@
           "division_winner": false,
           "make_playoffs_pct": 65.22,
           "win_division_pct": 11.32,
-          "win_round1_pct": 40.06,
-          "win_round2_pct": 17.27,
-          "win_conf_pct": 8.04,
+          "win_round1_pct": 39.86,
+          "win_round2_pct": 17.3,
+          "win_conf_pct": 7.98,
           "win_cup_pct": 4.32,
           "wildcard_pct": 12.55,
           "cutline_risk_pct": 26.99
@@ -751,10 +751,10 @@
           "division_winner": false,
           "make_playoffs_pct": 58.28,
           "win_division_pct": 9.99,
-          "win_round1_pct": 18.55,
-          "win_round2_pct": 6.57,
-          "win_conf_pct": 2.66,
-          "win_cup_pct": 1.29,
+          "win_round1_pct": 18.57,
+          "win_round2_pct": 6.43,
+          "win_conf_pct": 2.59,
+          "win_cup_pct": 1.23,
           "wildcard_pct": 18.61,
           "cutline_risk_pct": 29.330000000000002
         },
@@ -774,10 +774,10 @@
           "division_winner": false,
           "make_playoffs_pct": 55.379999999999995,
           "win_division_pct": 11.18,
-          "win_round1_pct": 23.49,
-          "win_round2_pct": 9.97,
-          "win_conf_pct": 4.23,
-          "win_cup_pct": 1.56,
+          "win_round1_pct": 23.43,
+          "win_round2_pct": 9.75,
+          "win_conf_pct": 4.19,
+          "win_cup_pct": 1.52,
           "wildcard_pct": 14.85,
           "cutline_risk_pct": 28.12
         },
@@ -797,10 +797,10 @@
           "division_winner": false,
           "make_playoffs_pct": 53.92,
           "win_division_pct": 9.8,
-          "win_round1_pct": 23.29,
-          "win_round2_pct": 11.92,
-          "win_conf_pct": 5.32,
-          "win_cup_pct": 2.05,
+          "win_round1_pct": 22.75,
+          "win_round2_pct": 11.81,
+          "win_conf_pct": 5.27,
+          "win_cup_pct": 2.24,
           "wildcard_pct": 15.049999999999999,
           "cutline_risk_pct": 29.160000000000004
         },
@@ -820,10 +820,10 @@
           "division_winner": false,
           "make_playoffs_pct": 53.25,
           "win_division_pct": 9.06,
-          "win_round1_pct": 20.84,
-          "win_round2_pct": 8.33,
-          "win_conf_pct": 3.97,
-          "win_cup_pct": 1.54,
+          "win_round1_pct": 20.82,
+          "win_round2_pct": 8.18,
+          "win_conf_pct": 3.88,
+          "win_cup_pct": 1.49,
           "wildcard_pct": 16.259999999999998,
           "cutline_risk_pct": 29.160000000000004
         },
@@ -866,10 +866,10 @@
           "division_winner": false,
           "make_playoffs_pct": 50.949999999999996,
           "win_division_pct": 8.08,
-          "win_round1_pct": 23.56,
-          "win_round2_pct": 13.88,
-          "win_conf_pct": 6.63,
-          "win_cup_pct": 3.64,
+          "win_round1_pct": 23.71,
+          "win_round2_pct": 13.65,
+          "win_conf_pct": 6.55,
+          "win_cup_pct": 3.73,
           "wildcard_pct": 18.18,
           "cutline_risk_pct": 29.659999999999997
         },
@@ -889,10 +889,10 @@
           "division_winner": false,
           "make_playoffs_pct": 49.8,
           "win_division_pct": 5.88,
-          "win_round1_pct": 19.21,
-          "win_round2_pct": 6.84,
-          "win_conf_pct": 2.61,
-          "win_cup_pct": 1.29,
+          "win_round1_pct": 19.37,
+          "win_round2_pct": 7.03,
+          "win_conf_pct": 2.81,
+          "win_cup_pct": 1.39,
           "wildcard_pct": 12.82,
           "cutline_risk_pct": 26.810000000000002
         },
@@ -1560,7 +1560,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-07-20T15:00:00+00:00",
-    "end_utc": "2026-07-22T15:00:00+00:00"
+    "start_utc": "2026-07-22T10:00:00+00:00",
+    "end_utc": "2026-07-24T10:00:00+00:00"
   }
 }
