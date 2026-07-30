@@ -56,6 +56,7 @@
         </div>
         <div class="sf-prediction-card-detail-grid">
           <div class="sf-prediction-card-detail"><span class="sf-prediction-card-detail-label">xG</span><span class="sf-prediction-card-detail-value">${Number(row.away_expected_goals || 0).toFixed(2)} - ${Number(row.home_expected_goals || 0).toFixed(2)}</span></div>
+          <div class="sf-prediction-card-detail"><span class="sf-prediction-card-detail-label">Sim PP time</span><span class="sf-prediction-card-detail-value">${Number(row.simulated_away_pp_minutes || 0).toFixed(1)} - ${Number(row.simulated_home_pp_minutes || 0).toFixed(1)}</span></div>
           <div class="sf-prediction-card-detail"><span class="sf-prediction-card-detail-label">Rest</span><span class="sf-prediction-card-detail-value">${formatRestHours(row.away_rest_hours, row.away_rest_days)} / ${formatRestHours(row.home_rest_hours, row.home_rest_days)}</span></div>
           <div class="sf-prediction-card-detail"><span class="sf-prediction-card-detail-label">Travel 48h</span><span class="sf-prediction-card-detail-value">${formatTravelKm(row.away_travel_48h_km)} / ${formatTravelKm(row.home_travel_48h_km)}</span></div>
         </div>

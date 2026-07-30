@@ -13,29 +13,63 @@
   const DEFAULT_SECTION_ID = 'rankingsPanel';
   const VALID_SECTION_IDS = [
     'rankingsPanel',
+    'fantasyPanel',
+    'validationPanel',
     'goaliePanel',
     'teamRankingsPanel',
     'underratedPanel',
     'anomaliesPanel',
+    'trendsPanel',
   ];
   const SECTION_SLUG_BY_ID = {
     rankingsPanel: 'skaters',
+    fantasyPanel: 'fantasy',
+    validationPanel: 'model-check',
     goaliePanel: 'goalies',
     teamRankingsPanel: 'team-rankings',
     underratedPanel: 'underrated',
     anomaliesPanel: 'scoring-anomalies',
+    trendsPanel: 'trends',
   };
   const VALID_POSITION_FILTERS = ['L', 'C', 'R', 'LD', 'RD'];
   const VALID_SKATER_SORT_KEYS = [
     'player_name',
     'team',
     'position',
+    'fwd_total82',
     'fwd_total',
     'fwd_pct',
     'fwd_off',
     'fwd_def',
     'fwd_gf60',
     'fwd_ga60',
+    'fwd_process_xgf60',
+    'fwd_own_finishing',
+    'fwd_component_teammate_conversion',
+    'fwd_offense_residual',
+    'fwd_process_xga60',
+    'fwd_isolated_defense_effect',
+    'fwd_conditional_defense_environment_delta',
+    'fwd_own_shot_generation',
+    'fwd_teammate_xg_creation',
+    'fwd_assisted_xg',
+    'fwd_teammate_conversion',
+    'fwd_teammate_conversion_environment',
+    'fwd_pen_draw_value',
+    'fwd_pen_take_value',
+    'fwd_defending_penalties_taken',
+    'fwd_defending_penalty_take_value',
+    'fwd_draw_minor',
+    'fwd_take_minor',
+    'fwd_draw_double_minor',
+    'fwd_take_double_minor',
+    'fwd_draw_major',
+    'fwd_take_major',
+    'fwd_draw_penalty_shot',
+    'fwd_take_penalty_shot',
+    'fwd_standard_5v5_minutes82',
+    'fwd_total82_lo90',
+    'fwd_total82_hi90',
     'off_oz',
     'off_fly',
     'dz_def_rapm',
@@ -46,6 +80,42 @@
     'fwd_pen',
     'season_gp',
     'season_toi_min',
+  ];
+  const VALID_FANTASY_SORT_KEYS = [
+    'player_name',
+    'team',
+    'position',
+    'fantasy_score',
+    'fantasy_score_sd',
+    'fantasy_goals',
+    'fantasy_assists',
+    'fantasy_points',
+    'fantasy_powerplay_points',
+    'fantasy_shots',
+    'fantasy_hits',
+    'fantasy_blocks',
+    'fantasy_pim',
+    'fantasy_games',
+    'fantasy_appearance_probability',
+    'fantasy_games_if_appears',
+    'fantasy_process_xgf60',
+    'fantasy_own_conversion60',
+    'fantasy_teammate_conversion60',
+    'fantasy_offense_residual60',
+    'fantasy_process_xga60',
+    'fantasy_defense_conversion60',
+    'fantasy_defense_residual60',
+    'fantasy_own_finishing_component60',
+    'fantasy_own_shot_process_component60',
+    'fantasy_teammate_xg_process_component60',
+    'fantasy_teammate_conversion_component60',
+    'fantasy_environment_goals_delta60',
+    'fantasy_environment_assists_delta60',
+    'fantasy_scenario_environment_delta60',
+    'fantasy_total_minutes',
+    'fantasy_pp_minutes',
+    'fantasy_pk_minutes',
+    'fantasy_conditional_net82',
   ];
   const VALID_TEAM_SORT_KEYS = [
     'team',
@@ -98,11 +168,13 @@
 
   const state = {
     rankings: [],
+    fantasyRankings: [],
     goalieRankings: [],
     teamRankings: [],
     underrated: [],
     scoringAnomalies: {},
-    rankingsSort: { key: 'fwd_total', direction: 'desc' },
+    rankingsSort: { key: 'fwd_total82', direction: 'desc' },
+    fantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieSort: { key: 'rank', direction: 'asc' },
     teamSort: { key: 'total_team_score', direction: 'desc' },
     underratedSort: { key: 'rank', direction: 'asc' },
@@ -159,6 +231,11 @@
     return VALID_TEAM_SORT_KEYS.includes(key) ? key : '';
   }
 
+  function sanitizeFantasySortKey(value) {
+    const key = String(value || '').trim();
+    return VALID_FANTASY_SORT_KEYS.includes(key) ? key : '';
+  }
+
   function sanitizeGoalieSortKey(value) {
     const key = String(value || '').trim();
     return VALID_GOALIE_SORT_KEYS.includes(key) ? key : '';
@@ -186,6 +263,11 @@
       player: String(params.get('player') || '').trim(),
       skaterTeam: String(params.get('skaterTeam') || '').trim(),
       positions: parsePositionParam(params.get('pos')),
+      fantasyPlayer: String(params.get('fantasyPlayer') || '').trim(),
+      fantasyTeam: String(params.get('fantasyTeam') || '').trim(),
+      fantasyPositions: parsePositionParam(params.get('fantasyPos')),
+      fantasySort: sanitizeFantasySortKey(params.get('fantasySort')),
+      fantasyDir: sanitizeSortDirection(params.get('fantasyDir'), 'desc'),
       goalie: String(params.get('goalie') || '').trim(),
       goalieTeam: String(params.get('goalieTeam') || '').trim(),
       goalieSort: sanitizeGoalieSortKey(params.get('goalieSort')),
@@ -247,9 +329,22 @@
       if (player) params.set('player', player);
       if (skaterTeam) params.set('skaterTeam', skaterTeam);
       if (positions.length) params.set('pos', positions.join(','));
-      if (skaterSort && (skaterSort !== 'fwd_total' || skaterDir !== 'desc')) {
+      if (skaterSort && (skaterSort !== 'fwd_total82' || skaterDir !== 'desc')) {
         params.set('sort', skaterSort);
         params.set('dir', skaterDir);
+      }
+    } else if (activeSection === 'fantasyPanel') {
+      const player = String(document.getElementById('fantasyPlayerSearch')?.value || '').trim();
+      const team = String(document.getElementById('fantasyTeamSearch')?.value || '').trim();
+      const positions = selectedPositions('fantasyPos');
+      const sortKey = sanitizeFantasySortKey(state.fantasySort?.key);
+      const direction = sanitizeSortDirection(state.fantasySort?.direction, 'desc');
+      if (player) params.set('fantasyPlayer', player);
+      if (team) params.set('fantasyTeam', team);
+      if (positions.length) params.set('fantasyPos', positions.join(','));
+      if (sortKey && (sortKey !== 'fantasy_score' || direction !== 'desc')) {
+        params.set('fantasySort', sortKey);
+        params.set('fantasyDir', direction);
       }
     } else if (activeSection === 'goaliePanel') {
       const goalie = String(document.getElementById('goalieSearch')?.value || '').trim();
@@ -338,7 +433,7 @@
     const tbody = document.querySelector('#rankingsTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(20, 'No skater rankings available.');
+      tbody.innerHTML = emptyRow(45, 'No skater rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
@@ -347,22 +442,95 @@
         <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}${row.fwd_rookie ? ' <sup>Rk</sup>' : (row.fwd_returning ? ' <sup>R</sup>' : '')}</td>
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
+        <td class="${classForSigned(row.fwd_total82)}">${signed(row.fwd_total82)}</td>
         <td class="${classForSigned(row.fwd_total)}">${signed(row.fwd_total)}</td>
         <td>${row.fwd_pct != null ? `${Math.round(row.fwd_pct)}` : '—'}</td>
         <td class="${classForSigned(row.fwd_off)}">${signed(row.fwd_off)}</td>
         <td class="${classForSigned(row.fwd_def)}">${signed(row.fwd_def)}</td>
         <td>${row.fwd_gf60 != null ? row.fwd_gf60.toFixed(2) : '—'}</td>
         <td>${row.fwd_ga60 != null ? row.fwd_ga60.toFixed(2) : '—'}</td>
+        <td>${row.fwd_process_xgf60 != null ? Number(row.fwd_process_xgf60).toFixed(2) : '—'}</td>
+        <td class="${classForSigned(row.fwd_own_finishing)}">${signed(row.fwd_own_finishing)}</td>
+        <td class="${classForSigned(row.fwd_component_teammate_conversion)}">${signed(row.fwd_component_teammate_conversion)}</td>
+        <td class="${classForSigned(row.fwd_offense_residual)}">${signed(row.fwd_offense_residual)}</td>
+        <td>${row.fwd_process_xga60 != null ? Number(row.fwd_process_xga60).toFixed(2) : '—'}</td>
+        <td class="${classForSigned(row.fwd_isolated_defense_effect)}">${signed(row.fwd_isolated_defense_effect)}</td>
+        <td class="${classForSigned(row.fwd_conditional_defense_environment_delta)}">${signed(row.fwd_conditional_defense_environment_delta)}</td>
+        <td class="${classForSigned(row.fwd_own_shot_generation)}">${signed(row.fwd_own_shot_generation)}</td>
+        <td class="${classForSigned(row.fwd_teammate_xg_creation)}">${signed(row.fwd_teammate_xg_creation)}</td>
+        <td class="${classForSigned(row.fwd_assisted_xg)}">${signed(row.fwd_assisted_xg)}</td>
+        <td class="${classForSigned(row.fwd_teammate_conversion)}">${signed(row.fwd_teammate_conversion)}</td>
+        <td class="${classForSigned(row.fwd_teammate_conversion_environment)}">${signed(row.fwd_teammate_conversion_environment)}</td>
+        <td class="${classForSigned(row.fwd_pen)}">${signed(row.fwd_pen)}</td>
+        <td class="${classForSigned(row.fwd_pen_draw_value)}">${signed(row.fwd_pen_draw_value)}</td>
+        <td class="${classForSigned(row.fwd_pen_take_value)}">${signed(row.fwd_pen_take_value)}</td>
+        <td>${row.fwd_defending_penalties_taken != null ? Number(row.fwd_defending_penalties_taken).toFixed(3) : '—'}</td>
+        <td class="${classForSigned(row.fwd_defending_penalty_take_value)}">${signed(row.fwd_defending_penalty_take_value, 3)}</td>
+        <td>${row.fwd_draw_minor != null ? Number(row.fwd_draw_minor).toFixed(3) : '—'}</td>
+        <td>${row.fwd_take_minor != null ? Number(row.fwd_take_minor).toFixed(3) : '—'}</td>
+        <td>${row.fwd_draw_double_minor != null ? Number(row.fwd_draw_double_minor).toFixed(4) : '—'}</td>
+        <td>${row.fwd_take_double_minor != null ? Number(row.fwd_take_double_minor).toFixed(4) : '—'}</td>
+        <td>${row.fwd_draw_major != null ? Number(row.fwd_draw_major).toFixed(4) : '—'}</td>
+        <td>${row.fwd_take_major != null ? Number(row.fwd_take_major).toFixed(4) : '—'}</td>
+        <td>${row.fwd_draw_penalty_shot != null ? Number(row.fwd_draw_penalty_shot).toFixed(4) : '—'}</td>
+        <td>${row.fwd_take_penalty_shot != null ? Number(row.fwd_take_penalty_shot).toFixed(4) : '—'}</td>
+        <td>${row.fwd_standard_5v5_minutes82 != null ? Number(row.fwd_standard_5v5_minutes82).toFixed(1) : '—'}</td>
+        <td class="${classForSigned(row.fwd_total82_lo90)}">${signed(row.fwd_total82_lo90)}</td>
+        <td class="${classForSigned(row.fwd_total82_hi90)}">${signed(row.fwd_total82_hi90)}</td>
         <td class="${classForSigned(row.off_oz)}">${signed(row.off_oz)}</td>
         <td class="${classForSigned(row.off_fly)}">${signed(row.off_fly)}</td>
         <td class="${classForSigned(row.dz_def_rapm)}">${signed(row.dz_def_rapm)}</td>
         <td class="${classForSigned(row.rush_def_rapm)}">${signed(row.rush_def_rapm)}</td>
-        <td class="${classForSigned(row.rush_defence)}">${signed(row.rush_defence)}</td>
-        <td class="${classForSigned(row.fwd_pp)}">${signed(row.fwd_pp)}</td>
-        <td class="${classForSigned(row.fwd_pk)}">${signed(row.fwd_pk)}</td>
-        <td class="${classForSigned(row.fwd_pen)}">${signed(row.fwd_pen)}</td>
         <td>${row.season_gp}</td>
         <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderFantasy(rows) {
+    const tbody = document.querySelector('#fantasyTable tbody');
+    if (!tbody) return;
+    if (!rows.length) {
+      tbody.innerHTML = emptyRow(34, 'No conditional season forecasts available.');
+      return;
+    }
+    tbody.innerHTML = rows.map((row) => `
+      <tr>
+        <td>${row.display_rank ?? row.fantasy_rank}</td>
+        <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}</td>
+        <td>${esc(row.team)}</td>
+        <td>${esc(row.position)}</td>
+        <td>${row.fantasy_score != null ? Number(row.fantasy_score).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_score_sd != null ? Number(row.fantasy_score_sd).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_goals != null ? Number(row.fantasy_goals).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_assists != null ? Number(row.fantasy_assists).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_points != null ? Number(row.fantasy_points).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_powerplay_points != null ? Number(row.fantasy_powerplay_points).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_shots != null ? Number(row.fantasy_shots).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_hits != null ? Number(row.fantasy_hits).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_blocks != null ? Number(row.fantasy_blocks).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_pim != null ? Number(row.fantasy_pim).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_games != null ? Number(row.fantasy_games).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_appearance_probability != null ? `${(100 * Number(row.fantasy_appearance_probability)).toFixed(1)}%` : '—'}</td>
+        <td>${row.fantasy_games_if_appears != null ? Number(row.fantasy_games_if_appears).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_process_xgf60 != null ? Number(row.fantasy_process_xgf60).toFixed(3) : '—'}</td>
+        <td class="${classForSigned(row.fantasy_own_conversion60)}">${signed(row.fantasy_own_conversion60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_teammate_conversion60)}">${signed(row.fantasy_teammate_conversion60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_offense_residual60)}">${signed(row.fantasy_offense_residual60, 3)}</td>
+        <td>${row.fantasy_process_xga60 != null ? Number(row.fantasy_process_xga60).toFixed(3) : '—'}</td>
+        <td class="${classForSigned(row.fantasy_defense_conversion60)}">${signed(row.fantasy_defense_conversion60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_defense_residual60)}">${signed(row.fantasy_defense_residual60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_own_finishing_component60)}">${signed(row.fantasy_own_finishing_component60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_own_shot_process_component60)}">${signed(row.fantasy_own_shot_process_component60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_teammate_xg_process_component60)}">${signed(row.fantasy_teammate_xg_process_component60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_teammate_conversion_component60)}">${signed(row.fantasy_teammate_conversion_component60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_environment_goals_delta60)}">${signed(row.fantasy_environment_goals_delta60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_environment_assists_delta60)}">${signed(row.fantasy_environment_assists_delta60, 3)}</td>
+        <td class="${classForSigned(row.fantasy_scenario_environment_delta60)}">${signed(row.fantasy_scenario_environment_delta60, 3)}</td>
+        <td>${row.fantasy_total_minutes != null ? Number(row.fantasy_total_minutes).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_pp_minutes != null ? Number(row.fantasy_pp_minutes).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_pk_minutes != null ? Number(row.fantasy_pk_minutes).toFixed(1) : '—'}</td>
+        <td class="${classForSigned(row.fantasy_conditional_net82)}">${signed(row.fantasy_conditional_net82)}</td>
       </tr>
     `).join('');
   }
@@ -516,19 +684,45 @@
   }
 
   function sortRankings(rows) {
-    const key = String(state.rankingsSort?.key || 'fwd_total');
+    const key = String(state.rankingsSort?.key || 'fwd_total82');
     const direction = String(state.rankingsSort?.direction || 'desc');
     const dir = direction === 'asc' ? 1 : -1;
     const fieldMap = {
       player_name: { field: 'player_name', type: 'string' },
       team: { field: 'team', type: 'string' },
       position: { field: 'position', type: 'string' },
+      fwd_total82: { field: 'fwd_total82', type: 'number' },
       fwd_total: { field: 'fwd_total', type: 'number' },
       fwd_pct: { field: 'fwd_pct', type: 'number' },
       fwd_off: { field: 'fwd_off', type: 'number' },
       fwd_def: { field: 'fwd_def', type: 'number' },
       fwd_gf60: { field: 'fwd_gf60', type: 'number' },
       fwd_ga60: { field: 'fwd_ga60', type: 'number' },
+      fwd_process_xgf60: { field: 'fwd_process_xgf60', type: 'number' },
+      fwd_own_finishing: { field: 'fwd_own_finishing', type: 'number' },
+      fwd_component_teammate_conversion: { field: 'fwd_component_teammate_conversion', type: 'number' },
+      fwd_offense_residual: { field: 'fwd_offense_residual', type: 'number' },
+      fwd_process_xga60: { field: 'fwd_process_xga60', type: 'number' },
+      fwd_isolated_defense_effect: { field: 'fwd_isolated_defense_effect', type: 'number' },
+      fwd_conditional_defense_environment_delta: { field: 'fwd_conditional_defense_environment_delta', type: 'number' },
+      fwd_own_shot_generation: { field: 'fwd_own_shot_generation', type: 'number' },
+      fwd_teammate_xg_creation: { field: 'fwd_teammate_xg_creation', type: 'number' },
+      fwd_assisted_xg: { field: 'fwd_assisted_xg', type: 'number' },
+      fwd_teammate_conversion: { field: 'fwd_teammate_conversion', type: 'number' },
+      fwd_teammate_conversion_environment: { field: 'fwd_teammate_conversion_environment', type: 'number' },
+      fwd_pen_draw_value: { field: 'fwd_pen_draw_value', type: 'number' },
+      fwd_pen_take_value: { field: 'fwd_pen_take_value', type: 'number' },
+      fwd_draw_minor: { field: 'fwd_draw_minor', type: 'number' },
+      fwd_take_minor: { field: 'fwd_take_minor', type: 'number' },
+      fwd_draw_double_minor: { field: 'fwd_draw_double_minor', type: 'number' },
+      fwd_take_double_minor: { field: 'fwd_take_double_minor', type: 'number' },
+      fwd_draw_major: { field: 'fwd_draw_major', type: 'number' },
+      fwd_take_major: { field: 'fwd_take_major', type: 'number' },
+      fwd_draw_penalty_shot: { field: 'fwd_draw_penalty_shot', type: 'number' },
+      fwd_take_penalty_shot: { field: 'fwd_take_penalty_shot', type: 'number' },
+      fwd_standard_5v5_minutes82: { field: 'fwd_standard_5v5_minutes82', type: 'number' },
+      fwd_total82_lo90: { field: 'fwd_total82_lo90', type: 'number' },
+      fwd_total82_hi90: { field: 'fwd_total82_hi90', type: 'number' },
       off_oz: { field: 'off_oz', type: 'number' },
       off_fly: { field: 'off_fly', type: 'number' },
       dz_def_rapm: { field: 'dz_def_rapm', type: 'number' },
@@ -540,7 +734,7 @@
       season_gp: { field: 'season_gp', type: 'number' },
       season_toi_min: { field: 'season_toi_min', type: 'number' },
     };
-    const spec = fieldMap[key] || fieldMap.fwd_total;
+    const spec = fieldMap[key] || fieldMap.fwd_total82;
     return [...rows].sort((a, b) => {
       if (spec.type === 'string') {
         const primary = String(a?.[spec.field] || '').localeCompare(String(b?.[spec.field] || ''));
@@ -557,6 +751,26 @@
       const toiTie = Number(b?.season_toi_min || 0) - Number(a?.season_toi_min || 0);
       if (Math.abs(toiTie) > 1e-12) return toiTie;
       return String(a?.player_name || '').localeCompare(String(b?.player_name || ''));
+    });
+  }
+
+  function sortFantasy(rows) {
+    const key = String(state.fantasySort?.key || 'fantasy_score');
+    const direction = String(state.fantasySort?.direction || 'desc');
+    const dir = direction === 'asc' ? 1 : -1;
+    const stringKeys = new Set(['player_name', 'team', 'position']);
+    return [...rows].sort((a, b) => {
+      if (stringKeys.has(key)) {
+        const primary = String(a?.[key] || '').localeCompare(String(b?.[key] || ''));
+        if (primary !== 0) return dir * primary;
+      } else {
+        const aMissing = missingNumber(a?.[key]);
+        const bMissing = missingNumber(b?.[key]);
+        if (aMissing !== bMissing) return aMissing ? 1 : -1;
+        const primary = aMissing ? 0 : Number(a?.[key]) - Number(b?.[key]);
+        if (Math.abs(primary) > 1e-12) return dir * primary;
+      }
+      return Number(a?.fantasy_rank || 0) - Number(b?.fantasy_rank || 0);
     });
   }
 
@@ -680,6 +894,22 @@
     syncUrlState();
   }
 
+  function refreshFantasy() {
+    const positions = selectedPositions('fantasyPos');
+    const positionScoped = rankSortedRows(
+      filterRowsByPositions(sortFantasy(state.fantasyRankings), positions, (row) => row.position),
+    );
+    const playerQuery = normalizeText(document.getElementById('fantasyPlayerSearch')?.value);
+    const teamQuery = normalizeText(document.getElementById('fantasyTeamSearch')?.value);
+    const filtered = positionScoped.filter((row) => {
+      const playerMatch = !playerQuery || normalizeText(row.player_name).includes(playerQuery);
+      const teamMatch = !teamQuery || normalizeText(row.team).includes(teamQuery);
+      return playerMatch && teamMatch;
+    });
+    renderFantasy(filtered);
+    syncUrlState();
+  }
+
   function refreshTeams() {
     const sorted = rankSortedRows(sortTeams(state.teamRankings));
     const teamQuery = normalizeText(document.getElementById('teamRankingsSearch')?.value);
@@ -709,6 +939,7 @@
     state.suppressUrlSync = true;
     state.initialUrlState = readShareStateFromUrl();
     state.rankings = Array.isArray(payload?.rankings) ? payload.rankings : [];
+    state.fantasyRankings = Array.isArray(payload?.fantasy_rankings) ? payload.fantasy_rankings : [];
     state.goalieRankings = Array.isArray(payload?.goalie_rankings) ? payload.goalie_rankings : [];
     state.teamRankings = Array.isArray(payload?.team_rankings) ? payload.team_rankings : [];
     state.underrated = Array.isArray(payload?.underrated_rankings) ? payload.underrated_rankings : [];
@@ -726,6 +957,12 @@
         direction: state.initialUrlState.teamDir || 'desc',
       };
     }
+    if (state.initialUrlState.fantasySort) {
+      state.fantasySort = {
+        key: state.initialUrlState.fantasySort,
+        direction: state.initialUrlState.fantasyDir || 'desc',
+      };
+    }
     if (state.initialUrlState.goalieSort) {
       state.goalieSort = {
         key: state.initialUrlState.goalieSort,
@@ -741,6 +978,7 @@
 
     const basisIds = {
       skaterRankBasis: payload?.skater_rank_basis || '',
+      fantasyRankBasis: payload?.fantasy_rank_basis || '',
       goalieRankBasis: payload?.goalie_rank_basis || '',
       teamRankBasis: payload?.team_rank_basis || '',
       underratedRankBasis: payload?.underrated_rank_basis || '',
@@ -754,12 +992,15 @@
 
     setControlValue(document.getElementById('playerSearch'), state.initialUrlState.player);
     setControlValue(document.getElementById('rankingsTeamSearch'), state.initialUrlState.skaterTeam);
+    setControlValue(document.getElementById('fantasyPlayerSearch'), state.initialUrlState.fantasyPlayer);
+    setControlValue(document.getElementById('fantasyTeamSearch'), state.initialUrlState.fantasyTeam);
     setControlValue(document.getElementById('goalieSearch'), state.initialUrlState.goalie);
     setControlValue(document.getElementById('goalieTeamSearch'), state.initialUrlState.goalieTeam);
     setControlValue(document.getElementById('teamRankingsSearch'), state.initialUrlState.teamRank);
     setControlValue(document.getElementById('underratedSearch'), state.initialUrlState.underrated);
     setControlValue(document.getElementById('underratedTeamSearch'), state.initialUrlState.underratedTeam);
     setSelectedPositions('rankingsPos', state.initialUrlState.positions);
+    setSelectedPositions('fantasyPos', state.initialUrlState.fantasyPositions);
     setSelectedPositions('underratedPos', state.initialUrlState.underratedPositions);
 
     bindSortableHeaders(
@@ -767,6 +1008,12 @@
       () => state.rankingsSort,
       (next) => { state.rankingsSort = next; },
       refreshRankings,
+    );
+    bindSortableHeaders(
+      'fantasyTable',
+      () => state.fantasySort,
+      (next) => { state.fantasySort = next; },
+      refreshFantasy,
     );
     bindSortableHeaders(
       'goalieTable',
@@ -793,6 +1040,12 @@
     document.querySelectorAll('input[name="rankingsPos"]').forEach((input) => {
       input.addEventListener('change', refreshRankings);
     });
+    ['fantasyPlayerSearch', 'fantasyTeamSearch'].forEach((id) => {
+      document.getElementById(id)?.addEventListener('input', refreshFantasy);
+    });
+    document.querySelectorAll('input[name="fantasyPos"]').forEach((input) => {
+      input.addEventListener('change', refreshFantasy);
+    });
     document.querySelectorAll('input[name="underratedPos"]').forEach((input) => {
       input.addEventListener('change', refreshUnderrated);
     });
@@ -805,6 +1058,7 @@
     });
 
     refreshRankings();
+    refreshFantasy();
     refreshGoalies();
     refreshTeams();
     refreshUnderrated();
@@ -817,6 +1071,7 @@
     init().catch((error) => {
       console.error(error);
       emptyMessage('#rankingsTable tbody', 24, error.message);
+      emptyMessage('#fantasyTable tbody', 13, error.message);
       emptyMessage('#goalieTable tbody', 13, error.message);
       emptyMessage('#teamRankingsTable tbody', 18, error.message);
       emptyMessage('#underratedTable tbody', 12, error.message);
