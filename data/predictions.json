@@ -1,50 +1,57 @@
 {
-  "generated_at": "2026-07-30 13:15 UTC",
-  "last_updated_utc": "2026-07-30 13:15 UTC",
-  "last_updated_iso": "2026-07-30T13:15:05.666292+00:00",
+  "generated_at": "2026-07-30 15:51 UTC",
+  "last_updated_utc": "2026-07-30 15:51 UTC",
+  "last_updated_iso": "2026-07-30T15:51:05.736783+00:00",
   "season_label": "2025-2026",
   "predictions": {
-    "generated_at": "2026-07-30 12:59 UTC",
-    "last_updated_utc": "2026-07-30 12:59 UTC",
-    "last_updated_iso": "2026-07-30T12:59:37.637142+00:00",
+    "generated_at": "2026-07-30 13:15 UTC",
+    "last_updated_utc": "2026-07-30 13:15 UTC",
+    "last_updated_iso": "2026-07-30T13:15:05.666292+00:00",
     "season_label": "2025-2026",
     "predictions": {
-      "generated_at": "2026-07-30 12:37 UTC",
-      "last_updated_utc": "2026-07-30 12:37 UTC",
-      "last_updated_iso": "2026-07-30T12:37:25.710234+00:00",
+      "generated_at": "2026-07-30 12:59 UTC",
+      "last_updated_utc": "2026-07-30 12:59 UTC",
+      "last_updated_iso": "2026-07-30T12:59:37.637142+00:00",
       "season_label": "2025-2026",
       "predictions": {
-        "generated_at": "2026-07-22 10:46 UTC",
-        "last_updated_utc": "2026-07-22 10:46 UTC",
-        "last_updated_iso": "2026-07-22T10:46:31.178421+00:00",
+        "generated_at": "2026-07-30 12:37 UTC",
+        "last_updated_utc": "2026-07-30 12:37 UTC",
+        "last_updated_iso": "2026-07-30T12:37:25.710234+00:00",
         "season_label": "2025-2026",
         "predictions": {
-          "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
-          "window_hours": 48,
-          "window_start_utc": "2026-07-22T10:00:00+00:00",
-          "window_end_utc": "2026-07-24T10:00:00+00:00",
-          "games": [],
-          "model_summary": {
-            "training_seasons": [
-              20212022,
-              20222023,
-              20232024,
-              20242025,
-              20252026
-            ],
-            "goal_rate_games": 0,
-            "goal_rate_home_mae": 0.0,
-            "goal_rate_away_mae": 0.0,
-            "calibration_games": 0,
-            "calibration_logloss": 0.0,
-            "calibration_n_simulations": 400,
-            "playoff_calibration_games": 0,
-            "playoff_calibration_logloss": 0.0,
-            "playoff_side_training_rows": 5533,
-            "playoff_ot_training_rows": 6992,
-            "playoff_side_augmented_regular": 5101,
-            "playoff_ot_augmented_regular": 6560
-          }
+          "generated_at": "2026-07-22 10:46 UTC",
+          "last_updated_utc": "2026-07-22 10:46 UTC",
+          "last_updated_iso": "2026-07-22T10:46:31.178421+00:00",
+          "season_label": "2025-2026",
+          "predictions": {
+            "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
+            "window_hours": 48,
+            "window_start_utc": "2026-07-22T10:00:00+00:00",
+            "window_end_utc": "2026-07-24T10:00:00+00:00",
+            "games": [],
+            "model_summary": {
+              "training_seasons": [
+                20212022,
+                20222023,
+                20232024,
+                20242025,
+                20252026
+              ],
+              "goal_rate_games": 0,
+              "goal_rate_home_mae": 0.0,
+              "goal_rate_away_mae": 0.0,
+              "calibration_games": 0,
+              "calibration_logloss": 0.0,
+              "calibration_n_simulations": 400,
+              "playoff_calibration_games": 0,
+              "playoff_calibration_logloss": 0.0,
+              "playoff_side_training_rows": 5533,
+              "playoff_ot_training_rows": 6992,
+              "playoff_side_augmented_regular": 5101,
+              "playoff_ot_augmented_regular": 6560
+            }
+          },
+          "games": []
         },
         "games": []
       },

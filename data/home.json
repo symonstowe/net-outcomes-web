@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-30 13:15 UTC",
-  "last_updated_utc": "2026-07-30 13:15 UTC",
-  "last_updated_iso": "2026-07-30T13:15:05.666292+00:00",
+  "generated_at": "2026-07-30 15:51 UTC",
+  "last_updated_utc": "2026-07-30 15:51 UTC",
+  "last_updated_iso": "2026-07-30T15:51:05.736783+00:00",
   "season_label": "2025-2026",
   "model_performance": {},
   "team_rankings_top": [
@@ -1246,7 +1246,7 @@
     }
   },
   "counts": {
-    "skaters": 781,
+    "skaters": 954,
     "goalies": 71,
     "teams": 32,
     "today_games": 0,

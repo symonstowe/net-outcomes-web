@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-30 13:15 UTC",
-  "last_updated_utc": "2026-07-30 13:15 UTC",
-  "last_updated_iso": "2026-07-30T13:15:05.666292+00:00",
+  "generated_at": "2026-07-30 15:51 UTC",
+  "last_updated_utc": "2026-07-30 15:51 UTC",
+  "last_updated_iso": "2026-07-30T15:51:05.736783+00:00",
   "season_label": "2025-2026",
   "include_powerplay_development_section": false,
   "use_legacy_lineup_cards": false,
@@ -49640,22 +49640,6 @@
         "ca": 57.6
       },
       {
-        "pid": 8476461,
-        "player_name": "Sean Couturier",
-        "position": "C",
-        "position_group": "F",
-        "team": "PHI",
-        "toi_min": 991.0,
-        "dz_def": 0.482,
-        "rush_def": 0.173,
-        "event_for": 53.0,
-        "event_against": 53.9,
-        "gsv_on": 0.888,
-        "gsv_off": 0.9107,
-        "tk_gv": -2.24,
-        "ca": 53.9
-      },
-      {
         "pid": 8478449,
         "player_name": "Roope Hintz",
         "position": "C",
@@ -49670,6 +49654,22 @@
         "gsv_off": 0.9128,
         "tk_gv": -3.28,
         "ca": 55.2
+      },
+      {
+        "pid": 8476461,
+        "player_name": "Sean Couturier",
+        "position": "C",
+        "position_group": "F",
+        "team": "PHI",
+        "toi_min": 991.0,
+        "dz_def": 0.482,
+        "rush_def": 0.173,
+        "event_for": 53.0,
+        "event_against": 53.9,
+        "gsv_on": 0.888,
+        "gsv_off": 0.9107,
+        "tk_gv": -2.24,
+        "ca": 53.9
       },
       {
         "pid": 8477220,
@@ -49688,22 +49688,6 @@
         "ca": 49.2
       },
       {
-        "pid": 8475760,
-        "player_name": "Nick Bjugstad",
-        "position": "C",
-        "position_group": "F",
-        "team": "STL",
-        "toi_min": 608.0,
-        "dz_def": 0.462,
-        "rush_def": -0.117,
-        "event_for": 48.0,
-        "event_against": 59.1,
-        "gsv_on": 0.8984,
-        "gsv_off": 0.9025,
-        "tk_gv": -1.28,
-        "ca": 59.1
-      },
-      {
         "pid": 8482475,
         "player_name": "Egor Chinakhov",
         "position": "R",
@@ -49717,6 +49701,22 @@
         "gsv_on": 0.9024,
         "gsv_off": 0.8993,
         "tk_gv": -2.08,
+        "ca": 59.1
+      },
+      {
+        "pid": 8475760,
+        "player_name": "Nick Bjugstad",
+        "position": "C",
+        "position_group": "F",
+        "team": "STL",
+        "toi_min": 608.0,
+        "dz_def": 0.462,
+        "rush_def": -0.117,
+        "event_for": 48.0,
+        "event_against": 59.1,
+        "gsv_on": 0.8984,
+        "gsv_off": 0.9025,
+        "tk_gv": -1.28,
         "ca": 59.1
       },
       {
@@ -49992,22 +49992,6 @@
         "ca": 61.1
       },
       {
-        "pid": 8476331,
-        "player_name": "Dylan DeMelo",
-        "position": "D",
-        "position_group": "D",
-        "team": "WPG",
-        "toi_min": 1501.0,
-        "dz_def": 0.389,
-        "rush_def": 0.074,
-        "event_for": 53.4,
-        "event_against": 53.6,
-        "gsv_on": 0.9025,
-        "gsv_off": 0.9069,
-        "tk_gv": -2.28,
-        "ca": 53.6
-      },
-      {
         "pid": 8480036,
         "player_name": "Miro Heiskanen",
         "position": "D",
@@ -50022,6 +50006,22 @@
         "gsv_off": 0.9173,
         "tk_gv": -2.46,
         "ca": 52.0
+      },
+      {
+        "pid": 8476331,
+        "player_name": "Dylan DeMelo",
+        "position": "D",
+        "position_group": "D",
+        "team": "WPG",
+        "toi_min": 1501.0,
+        "dz_def": 0.389,
+        "rush_def": 0.074,
+        "event_for": 53.4,
+        "event_against": 53.6,
+        "gsv_on": 0.9025,
+        "gsv_off": 0.9069,
+        "tk_gv": -2.28,
+        "ca": 53.6
       },
       {
         "pid": 8475191,
@@ -50216,22 +50216,6 @@
         "ca": 63.0
       },
       {
-        "pid": 8473422,
-        "player_name": "Nick Foligno",
-        "position": "L",
-        "position_group": "F",
-        "team": "CHI",
-        "toi_min": 547.0,
-        "dz_def": 0.363,
-        "rush_def": -0.033,
-        "event_for": 48.8,
-        "event_against": 52.5,
-        "gsv_on": 0.9036,
-        "gsv_off": 0.8996,
-        "tk_gv": -2.52,
-        "ca": 52.5
-      },
-      {
         "pid": 8479983,
         "player_name": "Mario Ferraro",
         "position": "D",
@@ -50246,6 +50230,22 @@
         "gsv_off": 0.8897,
         "tk_gv": -2.25,
         "ca": 61.4
+      },
+      {
+        "pid": 8473422,
+        "player_name": "Nick Foligno",
+        "position": "L",
+        "position_group": "F",
+        "team": "CHI",
+        "toi_min": 547.0,
+        "dz_def": 0.363,
+        "rush_def": -0.033,
+        "event_for": 48.8,
+        "event_against": 52.5,
+        "gsv_on": 0.9036,
+        "gsv_off": 0.8996,
+        "tk_gv": -2.52,
+        "ca": 52.5
       },
       {
         "pid": 8478440,
@@ -50680,22 +50680,6 @@
         "ca": 53.7
       },
       {
-        "pid": 8476474,
-        "player_name": "Stefan Noesen",
-        "position": "R",
-        "position_group": "F",
-        "team": "NJD",
-        "toi_min": 366.0,
-        "dz_def": 0.299,
-        "rush_def": 0.055,
-        "event_for": 52.5,
-        "event_against": 61.3,
-        "gsv_on": 0.9202,
-        "gsv_off": 0.8958,
-        "tk_gv": -3.28,
-        "ca": 61.3
-      },
-      {
         "pid": 8475745,
         "player_name": "Charlie Coyle",
         "position": "C",
@@ -50726,6 +50710,22 @@
         "gsv_off": 0.9099,
         "tk_gv": -2.53,
         "ca": 57.8
+      },
+      {
+        "pid": 8476474,
+        "player_name": "Stefan Noesen",
+        "position": "R",
+        "position_group": "F",
+        "team": "NJD",
+        "toi_min": 366.0,
+        "dz_def": 0.299,
+        "rush_def": 0.055,
+        "event_for": 52.5,
+        "event_against": 61.3,
+        "gsv_on": 0.9202,
+        "gsv_off": 0.8958,
+        "tk_gv": -3.28,
+        "ca": 61.3
       },
       {
         "pid": 8473512,
@@ -50776,22 +50776,6 @@
         "ca": 58.3
       },
       {
-        "pid": 8481219,
-        "player_name": "Jonathan Aspirot",
-        "position": "D",
-        "position_group": "D",
-        "team": "BOS",
-        "toi_min": 934.0,
-        "dz_def": 0.295,
-        "rush_def": null,
-        "event_for": 56.4,
-        "event_against": 59.9,
-        "gsv_on": 0.9303,
-        "gsv_off": 0.9123,
-        "tk_gv": -2.96,
-        "ca": 59.9
-      },
-      {
         "pid": 8480113,
         "player_name": "Alex Iafallo",
         "position": "L",
@@ -50806,6 +50790,22 @@
         "gsv_off": 0.9085,
         "tk_gv": -1.0,
         "ca": 54.4
+      },
+      {
+        "pid": 8481219,
+        "player_name": "Jonathan Aspirot",
+        "position": "D",
+        "position_group": "D",
+        "team": "BOS",
+        "toi_min": 934.0,
+        "dz_def": 0.295,
+        "rush_def": null,
+        "event_for": 56.4,
+        "event_against": 59.9,
+        "gsv_on": 0.9303,
+        "gsv_off": 0.9123,
+        "tk_gv": -2.96,
+        "ca": 59.9
       },
       {
         "pid": 8478975,
@@ -50888,22 +50888,6 @@
         "ca": 47.5
       },
       {
-        "pid": 8482079,
-        "player_name": "Marco Rossi",
-        "position": "C",
-        "position_group": "F",
-        "team": "VAN",
-        "toi_min": 670.0,
-        "dz_def": 0.285,
-        "rush_def": 0.036,
-        "event_for": 51.6,
-        "event_against": 60.1,
-        "gsv_on": 0.8796,
-        "gsv_off": 0.8943,
-        "tk_gv": -2.42,
-        "ca": 60.1
-      },
-      {
         "pid": 8479351,
         "player_name": "Sam Steel",
         "position": "C",
@@ -50918,6 +50902,22 @@
         "gsv_off": 0.9144,
         "tk_gv": -1.91,
         "ca": 56.5
+      },
+      {
+        "pid": 8482079,
+        "player_name": "Marco Rossi",
+        "position": "C",
+        "position_group": "F",
+        "team": "VAN",
+        "toi_min": 670.0,
+        "dz_def": 0.285,
+        "rush_def": 0.036,
+        "event_for": 51.6,
+        "event_against": 60.1,
+        "gsv_on": 0.8796,
+        "gsv_off": 0.8943,
+        "tk_gv": -2.42,
+        "ca": 60.1
       },
       {
         "pid": 8482809,
@@ -51032,22 +51032,6 @@
         "ca": 51.3
       },
       {
-        "pid": 8476921,
-        "player_name": "Jordan Martinook",
-        "position": "L",
-        "position_group": "F",
-        "team": "CAR",
-        "toi_min": 940.0,
-        "dz_def": 0.269,
-        "rush_def": -0.002,
-        "event_for": 69.2,
-        "event_against": 46.5,
-        "gsv_on": 0.8799,
-        "gsv_off": 0.8995,
-        "tk_gv": -1.98,
-        "ca": 46.5
-      },
-      {
         "pid": 8475287,
         "player_name": "Erik Haula",
         "position": "L",
@@ -51064,20 +51048,20 @@
         "ca": 63.2
       },
       {
-        "pid": 8477511,
-        "player_name": "Anthony Mantha",
-        "position": "R",
+        "pid": 8476921,
+        "player_name": "Jordan Martinook",
+        "position": "L",
         "position_group": "F",
-        "team": "PIT",
-        "toi_min": 990.0,
-        "dz_def": 0.267,
-        "rush_def": -0.026,
-        "event_for": 56.1,
-        "event_against": 60.3,
-        "gsv_on": 0.896,
-        "gsv_off": 0.9014,
-        "tk_gv": -3.76,
-        "ca": 60.3
+        "team": "CAR",
+        "toi_min": 940.0,
+        "dz_def": 0.269,
+        "rush_def": -0.002,
+        "event_for": 69.2,
+        "event_against": 46.5,
+        "gsv_on": 0.8799,
+        "gsv_off": 0.8995,
+        "tk_gv": -1.98,
+        "ca": 46.5
       },
       {
         "pid": 8476278,
@@ -51094,6 +51078,22 @@
         "gsv_off": 0.9188,
         "tk_gv": -1.25,
         "ca": 52.3
+      },
+      {
+        "pid": 8477511,
+        "player_name": "Anthony Mantha",
+        "position": "R",
+        "position_group": "F",
+        "team": "PIT",
+        "toi_min": 990.0,
+        "dz_def": 0.267,
+        "rush_def": -0.026,
+        "event_for": 56.1,
+        "event_against": 60.3,
+        "gsv_on": 0.896,
+        "gsv_off": 0.9014,
+        "tk_gv": -3.76,
+        "ca": 60.3
       },
       {
         "pid": 8474716,
@@ -51256,22 +51256,6 @@
         "ca": 61.7
       },
       {
-        "pid": 8477935,
-        "player_name": "Sam Bennett",
-        "position": "C",
-        "position_group": "F",
-        "team": "FLA",
-        "toi_min": 1006.0,
-        "dz_def": 0.249,
-        "rush_def": -0.076,
-        "event_for": 63.4,
-        "event_against": 56.1,
-        "gsv_on": 0.8947,
-        "gsv_off": 0.8926,
-        "tk_gv": -2.86,
-        "ca": 56.1
-      },
-      {
         "pid": 8478507,
         "player_name": "John Marino",
         "position": "D",
@@ -51286,6 +51270,22 @@
         "gsv_off": 0.8945,
         "tk_gv": -2.79,
         "ca": 49.4
+      },
+      {
+        "pid": 8477935,
+        "player_name": "Sam Bennett",
+        "position": "C",
+        "position_group": "F",
+        "team": "FLA",
+        "toi_min": 1006.0,
+        "dz_def": 0.249,
+        "rush_def": -0.076,
+        "event_for": 63.4,
+        "event_against": 56.1,
+        "gsv_on": 0.8947,
+        "gsv_off": 0.8926,
+        "tk_gv": -2.86,
+        "ca": 56.1
       },
       {
         "pid": 8475722,
@@ -51368,22 +51368,6 @@
         "ca": 51.5
       },
       {
-        "pid": 8476468,
-        "player_name": "J.T. Miller",
-        "position": "C",
-        "position_group": "F",
-        "team": "NYR",
-        "toi_min": 948.0,
-        "dz_def": 0.243,
-        "rush_def": 0.026,
-        "event_for": 56.6,
-        "event_against": 57.7,
-        "gsv_on": 0.8826,
-        "gsv_off": 0.923,
-        "tk_gv": -4.37,
-        "ca": 57.7
-      },
-      {
         "pid": 8477504,
         "player_name": "Josh Morrissey",
         "position": "D",
@@ -51398,6 +51382,22 @@
         "gsv_off": 0.9026,
         "tk_gv": -3.23,
         "ca": 54.3
+      },
+      {
+        "pid": 8476468,
+        "player_name": "J.T. Miller",
+        "position": "C",
+        "position_group": "F",
+        "team": "NYR",
+        "toi_min": 948.0,
+        "dz_def": 0.243,
+        "rush_def": 0.026,
+        "event_for": 56.6,
+        "event_against": 57.7,
+        "gsv_on": 0.8826,
+        "gsv_off": 0.923,
+        "tk_gv": -4.37,
+        "ca": 57.7
       },
       {
         "pid": 8478402,
@@ -51432,22 +51432,6 @@
         "ca": 45.1
       },
       {
-        "pid": 8476878,
-        "player_name": "Zemgus Girgensons",
-        "position": "C",
-        "position_group": "F",
-        "team": "TBL",
-        "toi_min": 922.0,
-        "dz_def": 0.238,
-        "rush_def": 0.04,
-        "event_for": 52.0,
-        "event_against": 51.4,
-        "gsv_on": 0.9274,
-        "gsv_off": 0.9026,
-        "tk_gv": -2.34,
-        "ca": 51.4
-      },
-      {
         "pid": 8477845,
         "player_name": "Trevor van Riemsdyk",
         "position": "D",
@@ -51462,6 +51446,22 @@
         "gsv_off": 0.9166,
         "tk_gv": -1.81,
         "ca": 59.4
+      },
+      {
+        "pid": 8476878,
+        "player_name": "Zemgus Girgensons",
+        "position": "C",
+        "position_group": "F",
+        "team": "TBL",
+        "toi_min": 922.0,
+        "dz_def": 0.238,
+        "rush_def": 0.04,
+        "event_for": 52.0,
+        "event_against": 51.4,
+        "gsv_on": 0.9274,
+        "gsv_off": 0.9026,
+        "tk_gv": -2.34,
+        "ca": 51.4
       },
       {
         "pid": 8477501,
@@ -51640,22 +51640,6 @@
         "ca": 58.0
       },
       {
-        "pid": 8475231,
-        "player_name": "Casey Cizikas",
-        "position": "C",
-        "position_group": "F",
-        "team": "NYI",
-        "toi_min": 810.0,
-        "dz_def": 0.22,
-        "rush_def": -0.022,
-        "event_for": 51.9,
-        "event_against": 53.4,
-        "gsv_on": 0.9079,
-        "gsv_off": 0.9092,
-        "tk_gv": -2.89,
-        "ca": 53.4
-      },
-      {
         "pid": 8477505,
         "player_name": "Alexander Wennberg",
         "position": "C",
@@ -51670,6 +51654,22 @@
         "gsv_off": 0.9001,
         "tk_gv": -1.05,
         "ca": 56.3
+      },
+      {
+        "pid": 8475231,
+        "player_name": "Casey Cizikas",
+        "position": "C",
+        "position_group": "F",
+        "team": "NYI",
+        "toi_min": 810.0,
+        "dz_def": 0.22,
+        "rush_def": -0.022,
+        "event_for": 51.9,
+        "event_against": 53.4,
+        "gsv_on": 0.9079,
+        "gsv_off": 0.9092,
+        "tk_gv": -2.89,
+        "ca": 53.4
       },
       {
         "pid": 8479325,
@@ -52456,22 +52456,6 @@
         "ca": 60.9
       },
       {
-        "pid": 8473507,
-        "player_name": "Jeff Petry",
-        "position": "D",
-        "position_group": "D",
-        "team": "FLA",
-        "toi_min": 874.0,
-        "dz_def": 0.146,
-        "rush_def": -0.021,
-        "event_for": 58.7,
-        "event_against": 54.4,
-        "gsv_on": 0.8726,
-        "gsv_off": 0.8988,
-        "tk_gv": -2.95,
-        "ca": 54.4
-      },
-      {
         "pid": 8478474,
         "player_name": "Lawson Crouse",
         "position": "L",
@@ -52486,6 +52470,22 @@
         "gsv_off": 0.9004,
         "tk_gv": -2.16,
         "ca": 54.5
+      },
+      {
+        "pid": 8473507,
+        "player_name": "Jeff Petry",
+        "position": "D",
+        "position_group": "D",
+        "team": "FLA",
+        "toi_min": 874.0,
+        "dz_def": 0.146,
+        "rush_def": -0.021,
+        "event_for": 58.7,
+        "event_against": 54.4,
+        "gsv_on": 0.8726,
+        "gsv_off": 0.8988,
+        "tk_gv": -2.95,
+        "ca": 54.4
       },
       {
         "pid": 8480355,
@@ -52888,22 +52888,6 @@
         "ca": 63.6
       },
       {
-        "pid": 8482159,
-        "player_name": "Tyson Foerster",
-        "position": "R",
-        "position_group": "F",
-        "team": "PHI",
-        "toi_min": 375.0,
-        "dz_def": 0.117,
-        "rush_def": -0.007,
-        "event_for": 46.0,
-        "event_against": 55.8,
-        "gsv_on": 0.9424,
-        "gsv_off": 0.9017,
-        "tk_gv": -0.96,
-        "ca": 55.8
-      },
-      {
         "pid": 8480145,
         "player_name": "Neal Pionk",
         "position": "D",
@@ -52918,6 +52902,22 @@
         "gsv_off": 0.8988,
         "tk_gv": -2.75,
         "ca": 59.2
+      },
+      {
+        "pid": 8482159,
+        "player_name": "Tyson Foerster",
+        "position": "R",
+        "position_group": "F",
+        "team": "PHI",
+        "toi_min": 375.0,
+        "dz_def": 0.117,
+        "rush_def": -0.007,
+        "event_for": 46.0,
+        "event_against": 55.8,
+        "gsv_on": 0.9424,
+        "gsv_off": 0.9017,
+        "tk_gv": -0.96,
+        "ca": 55.8
       },
       {
         "pid": 8483573,
@@ -52952,22 +52952,6 @@
         "ca": 46.0
       },
       {
-        "pid": 8481711,
-        "player_name": "Matias Maccelli",
-        "position": "L",
-        "position_group": "F",
-        "team": "TOR",
-        "toi_min": 867.0,
-        "dz_def": 0.112,
-        "rush_def": 0.004,
-        "event_for": 53.2,
-        "event_against": 60.7,
-        "gsv_on": 0.8845,
-        "gsv_off": 0.9039,
-        "tk_gv": -3.6,
-        "ca": 60.7
-      },
-      {
         "pid": 8482111,
         "player_name": "Justin Barron",
         "position": "D",
@@ -52984,6 +52968,22 @@
         "ca": 55.3
       },
       {
+        "pid": 8481711,
+        "player_name": "Matias Maccelli",
+        "position": "L",
+        "position_group": "F",
+        "team": "TOR",
+        "toi_min": 867.0,
+        "dz_def": 0.112,
+        "rush_def": 0.004,
+        "event_for": 53.2,
+        "event_against": 60.7,
+        "gsv_on": 0.8845,
+        "gsv_off": 0.9039,
+        "tk_gv": -3.6,
+        "ca": 60.7
+      },
+      {
         "pid": 8477956,
         "player_name": "David Pastrnak",
         "position": "R",
@@ -52998,22 +52998,6 @@
         "gsv_off": 0.9221,
         "tk_gv": -5.16,
         "ca": 58.2
-      },
-      {
-        "pid": 8477498,
-        "player_name": "Darnell Nurse",
-        "position": "D",
-        "position_group": "D",
-        "team": "EDM",
-        "toi_min": 1521.0,
-        "dz_def": 0.11,
-        "rush_def": -0.038,
-        "event_for": 55.9,
-        "event_against": 60.0,
-        "gsv_on": 0.8976,
-        "gsv_off": 0.8844,
-        "tk_gv": -2.72,
-        "ca": 60.0
       },
       {
         "pid": 8476902,
@@ -53046,6 +53030,22 @@
         "gsv_off": 0.9018,
         "tk_gv": -3.43,
         "ca": 56.5
+      },
+      {
+        "pid": 8477498,
+        "player_name": "Darnell Nurse",
+        "position": "D",
+        "position_group": "D",
+        "team": "EDM",
+        "toi_min": 1521.0,
+        "dz_def": 0.11,
+        "rush_def": -0.038,
+        "event_for": 55.9,
+        "event_against": 60.0,
+        "gsv_on": 0.8976,
+        "gsv_off": 0.8844,
+        "tk_gv": -2.72,
+        "ca": 60.0
       },
       {
         "pid": 8484762,
@@ -53208,22 +53208,6 @@
         "ca": 63.9
       },
       {
-        "pid": 8478859,
-        "player_name": "Niko Mikkola",
-        "position": "D",
-        "position_group": "D",
-        "team": "FLA",
-        "toi_min": 1164.0,
-        "dz_def": 0.098,
-        "rush_def": 0.057,
-        "event_for": 57.5,
-        "event_against": 53.6,
-        "gsv_on": 0.9066,
-        "gsv_off": 0.8876,
-        "tk_gv": -2.94,
-        "ca": 53.6
-      },
-      {
         "pid": 8482740,
         "player_name": "Wyatt Johnston",
         "position": "C",
@@ -53238,6 +53222,22 @@
         "gsv_off": 0.9113,
         "tk_gv": -1.96,
         "ca": 62.5
+      },
+      {
+        "pid": 8478859,
+        "player_name": "Niko Mikkola",
+        "position": "D",
+        "position_group": "D",
+        "team": "FLA",
+        "toi_min": 1164.0,
+        "dz_def": 0.098,
+        "rush_def": 0.057,
+        "event_for": 57.5,
+        "event_against": 53.6,
+        "gsv_on": 0.9066,
+        "gsv_off": 0.8876,
+        "tk_gv": -2.94,
+        "ca": 53.6
       },
       {
         "pid": 8480196,
@@ -53656,22 +53656,6 @@
         "ca": 61.6
       },
       {
-        "pid": 8481178,
-        "player_name": "Egor Zamula",
-        "position": "D",
-        "position_group": "D",
-        "team": "CBJ",
-        "toi_min": 414.0,
-        "dz_def": 0.064,
-        "rush_def": 0.091,
-        "event_for": 51.0,
-        "event_against": 53.9,
-        "gsv_on": 0.9207,
-        "gsv_off": 0.9104,
-        "tk_gv": -3.04,
-        "ca": 53.9
-      },
-      {
         "pid": 8476473,
         "player_name": "Connor Murphy",
         "position": "D",
@@ -53686,6 +53670,22 @@
         "gsv_off": 0.8979,
         "tk_gv": -2.5,
         "ca": 55.2
+      },
+      {
+        "pid": 8481178,
+        "player_name": "Egor Zamula",
+        "position": "D",
+        "position_group": "D",
+        "team": "CBJ",
+        "toi_min": 414.0,
+        "dz_def": 0.064,
+        "rush_def": 0.091,
+        "event_for": 51.0,
+        "event_against": 53.9,
+        "gsv_on": 0.9207,
+        "gsv_off": 0.9104,
+        "tk_gv": -3.04,
+        "ca": 53.9
       },
       {
         "pid": 8478416,
@@ -53720,22 +53720,6 @@
         "ca": 58.9
       },
       {
-        "pid": 8482177,
-        "player_name": "Marat Khusnutdinov",
-        "position": "C",
-        "position_group": "F",
-        "team": "BOS",
-        "toi_min": 931.0,
-        "dz_def": 0.06,
-        "rush_def": 0.05,
-        "event_for": 54.0,
-        "event_against": 59.3,
-        "gsv_on": 0.9251,
-        "gsv_off": 0.9138,
-        "tk_gv": -1.67,
-        "ca": 59.3
-      },
-      {
         "pid": 8484806,
         "player_name": "Sam Dickinson",
         "position": "D",
@@ -53750,6 +53734,22 @@
         "gsv_off": 0.9008,
         "tk_gv": -3.51,
         "ca": 59.5
+      },
+      {
+        "pid": 8482177,
+        "player_name": "Marat Khusnutdinov",
+        "position": "C",
+        "position_group": "F",
+        "team": "BOS",
+        "toi_min": 931.0,
+        "dz_def": 0.06,
+        "rush_def": 0.05,
+        "event_for": 54.0,
+        "event_against": 59.3,
+        "gsv_on": 0.9251,
+        "gsv_off": 0.9138,
+        "tk_gv": -1.67,
+        "ca": 59.3
       },
       {
         "pid": 8475913,
@@ -53912,22 +53912,6 @@
         "ca": 52.1
       },
       {
-        "pid": 8478421,
-        "player_name": "A.J. Greer",
-        "position": "L",
-        "position_group": "F",
-        "team": "FLA",
-        "toi_min": 903.0,
-        "dz_def": 0.051,
-        "rush_def": 0.007,
-        "event_for": 59.9,
-        "event_against": 49.2,
-        "gsv_on": 0.8966,
-        "gsv_off": 0.8924,
-        "tk_gv": -2.86,
-        "ca": 49.2
-      },
-      {
         "pid": 8479576,
         "player_name": "Vincent Desharnais",
         "position": "D",
@@ -53942,6 +53926,22 @@
         "gsv_off": 0.8927,
         "tk_gv": -3.16,
         "ca": 55.3
+      },
+      {
+        "pid": 8478421,
+        "player_name": "A.J. Greer",
+        "position": "L",
+        "position_group": "F",
+        "team": "FLA",
+        "toi_min": 903.0,
+        "dz_def": 0.051,
+        "rush_def": 0.007,
+        "event_for": 59.9,
+        "event_against": 49.2,
+        "gsv_on": 0.8966,
+        "gsv_off": 0.8924,
+        "tk_gv": -2.86,
+        "ca": 49.2
       },
       {
         "pid": 8478043,
@@ -54200,22 +54200,6 @@
         "ca": 54.7
       },
       {
-        "pid": 8475842,
-        "player_name": "Sam Carrick",
-        "position": "C",
-        "position_group": "F",
-        "team": "NYR",
-        "toi_min": 680.0,
-        "dz_def": 0.027,
-        "rush_def": 0.04,
-        "event_for": 54.5,
-        "event_against": 59.1,
-        "gsv_on": 0.9189,
-        "gsv_off": 0.9124,
-        "tk_gv": -1.41,
-        "ca": 59.1
-      },
-      {
         "pid": 8481532,
         "player_name": "Alex Turcotte",
         "position": "C",
@@ -54232,6 +54216,22 @@
         "ca": 57.3
       },
       {
+        "pid": 8475842,
+        "player_name": "Sam Carrick",
+        "position": "C",
+        "position_group": "F",
+        "team": "NYR",
+        "toi_min": 680.0,
+        "dz_def": 0.027,
+        "rush_def": 0.04,
+        "event_for": 54.5,
+        "event_against": 59.1,
+        "gsv_on": 0.9189,
+        "gsv_off": 0.9124,
+        "tk_gv": -1.41,
+        "ca": 59.1
+      },
+      {
         "pid": 8478366,
         "player_name": "Frank Vatrano",
         "position": "R",
@@ -54246,6 +54246,22 @@
         "gsv_off": 0.8934,
         "tk_gv": -1.32,
         "ca": 64.9
+      },
+      {
+        "pid": 8481161,
+        "player_name": "Jake Christiansen",
+        "position": "D",
+        "position_group": "D",
+        "team": "CBJ",
+        "toi_min": 392.0,
+        "dz_def": 0.024,
+        "rush_def": 0.026,
+        "event_for": 58.3,
+        "event_against": 57.9,
+        "gsv_on": 0.9112,
+        "gsv_off": 0.9113,
+        "tk_gv": -1.68,
+        "ca": 57.9
       },
       {
         "pid": 8477496,
@@ -54278,22 +54294,6 @@
         "gsv_off": 0.9081,
         "tk_gv": -2.81,
         "ca": 56.1
-      },
-      {
-        "pid": 8481161,
-        "player_name": "Jake Christiansen",
-        "position": "D",
-        "position_group": "D",
-        "team": "CBJ",
-        "toi_min": 392.0,
-        "dz_def": 0.024,
-        "rush_def": 0.026,
-        "event_for": 58.3,
-        "event_against": 57.9,
-        "gsv_on": 0.9112,
-        "gsv_off": 0.9113,
-        "tk_gv": -1.68,
-        "ca": 57.9
       },
       {
         "pid": 8480281,
@@ -54552,22 +54552,6 @@
         "ca": 48.1
       },
       {
-        "pid": 8478454,
-        "player_name": "Noah Juulsen",
-        "position": "D",
-        "position_group": "D",
-        "team": "PHI",
-        "toi_min": 631.0,
-        "dz_def": 0.002,
-        "rush_def": -0.143,
-        "event_for": 45.9,
-        "event_against": 55.1,
-        "gsv_on": 0.8926,
-        "gsv_off": 0.9076,
-        "tk_gv": -4.09,
-        "ca": 55.1
-      },
-      {
         "pid": 8482146,
         "player_name": "Luke Evangelista",
         "position": "R",
@@ -54582,6 +54566,22 @@
         "gsv_off": 0.9057,
         "tk_gv": -1.77,
         "ca": 50.2
+      },
+      {
+        "pid": 8478454,
+        "player_name": "Noah Juulsen",
+        "position": "D",
+        "position_group": "D",
+        "team": "PHI",
+        "toi_min": 631.0,
+        "dz_def": 0.002,
+        "rush_def": -0.143,
+        "event_for": 45.9,
+        "event_against": 55.1,
+        "gsv_on": 0.8926,
+        "gsv_off": 0.9076,
+        "tk_gv": -4.09,
+        "ca": 55.1
       },
       {
         "pid": 8477416,
@@ -54648,6 +54648,22 @@
         "ca": 49.1
       },
       {
+        "pid": 8479345,
+        "player_name": "Jakob Chychrun",
+        "position": "D",
+        "position_group": "D",
+        "team": "WSH",
+        "toi_min": 1472.0,
+        "dz_def": -0.002,
+        "rush_def": -0.048,
+        "event_for": 61.4,
+        "event_against": 56.9,
+        "gsv_on": 0.9296,
+        "gsv_off": 0.9069,
+        "tk_gv": -2.65,
+        "ca": 56.9
+      },
+      {
         "pid": 8480891,
         "player_name": "Michael Kesselring",
         "position": "D",
@@ -54678,22 +54694,6 @@
         "gsv_off": 0.895,
         "tk_gv": -2.0,
         "ca": 53.4
-      },
-      {
-        "pid": 8479345,
-        "player_name": "Jakob Chychrun",
-        "position": "D",
-        "position_group": "D",
-        "team": "WSH",
-        "toi_min": 1472.0,
-        "dz_def": -0.002,
-        "rush_def": -0.048,
-        "event_for": 61.4,
-        "event_against": 56.9,
-        "gsv_on": 0.9296,
-        "gsv_off": 0.9069,
-        "tk_gv": -2.65,
-        "ca": 56.9
       },
       {
         "pid": 8482095,
@@ -54792,22 +54792,6 @@
         "ca": 54.8
       },
       {
-        "pid": 8478840,
-        "player_name": "Will Borgen",
-        "position": "D",
-        "position_group": "D",
-        "team": "NYR",
-        "toi_min": 1151.0,
-        "dz_def": -0.01,
-        "rush_def": 0.02,
-        "event_for": 50.9,
-        "event_against": 60.5,
-        "gsv_on": 0.9116,
-        "gsv_off": 0.9142,
-        "tk_gv": -2.14,
-        "ca": 60.5
-      },
-      {
         "pid": 8478460,
         "player_name": "Zach Werenski",
         "position": "D",
@@ -54822,6 +54806,22 @@
         "gsv_off": 0.9143,
         "tk_gv": -3.49,
         "ca": 58.0
+      },
+      {
+        "pid": 8478840,
+        "player_name": "Will Borgen",
+        "position": "D",
+        "position_group": "D",
+        "team": "NYR",
+        "toi_min": 1151.0,
+        "dz_def": -0.01,
+        "rush_def": 0.02,
+        "event_for": 50.9,
+        "event_against": 60.5,
+        "gsv_on": 0.9116,
+        "gsv_off": 0.9142,
+        "tk_gv": -2.14,
+        "ca": 60.5
       },
       {
         "pid": 8482751,
@@ -54840,22 +54840,6 @@
         "ca": 61.1
       },
       {
-        "pid": 8475324,
-        "player_name": "Nick Jensen",
-        "position": "D",
-        "position_group": "D",
-        "team": "OTT",
-        "toi_min": 953.0,
-        "dz_def": -0.013,
-        "rush_def": 0.063,
-        "event_for": 53.3,
-        "event_against": 57.0,
-        "gsv_on": 0.8699,
-        "gsv_off": 0.9018,
-        "tk_gv": -2.52,
-        "ca": 57.0
-      },
-      {
         "pid": 8478831,
         "player_name": "Kevin Stenlund",
         "position": "C",
@@ -54870,6 +54854,22 @@
         "gsv_off": 0.8998,
         "tk_gv": -2.56,
         "ca": 58.2
+      },
+      {
+        "pid": 8475324,
+        "player_name": "Nick Jensen",
+        "position": "D",
+        "position_group": "D",
+        "team": "OTT",
+        "toi_min": 953.0,
+        "dz_def": -0.013,
+        "rush_def": 0.063,
+        "event_for": 53.3,
+        "event_against": 57.0,
+        "gsv_on": 0.8699,
+        "gsv_off": 0.9018,
+        "tk_gv": -2.52,
+        "ca": 57.0
       },
       {
         "pid": 8480840,
@@ -54920,22 +54920,6 @@
         "ca": 55.6
       },
       {
-        "pid": 8482110,
-        "player_name": "Dawson Mercer",
-        "position": "C",
-        "position_group": "F",
-        "team": "NJD",
-        "toi_min": 1132.0,
-        "dz_def": -0.018,
-        "rush_def": 0.002,
-        "event_for": 64.3,
-        "event_against": 58.3,
-        "gsv_on": 0.9087,
-        "gsv_off": 0.8942,
-        "tk_gv": -2.54,
-        "ca": 58.3
-      },
-      {
         "pid": 8476462,
         "player_name": "Dougie Hamilton",
         "position": "D",
@@ -54950,6 +54934,22 @@
         "gsv_off": 0.8949,
         "tk_gv": -4.94,
         "ca": 56.5
+      },
+      {
+        "pid": 8482110,
+        "player_name": "Dawson Mercer",
+        "position": "C",
+        "position_group": "F",
+        "team": "NJD",
+        "toi_min": 1132.0,
+        "dz_def": -0.018,
+        "rush_def": 0.002,
+        "event_for": 64.3,
+        "event_against": 58.3,
+        "gsv_on": 0.9087,
+        "gsv_off": 0.8942,
+        "tk_gv": -2.54,
+        "ca": 58.3
       },
       {
         "pid": 8482516,
@@ -55080,6 +55080,22 @@
         "ca": 67.4
       },
       {
+        "pid": 8476480,
+        "player_name": "Vladislav Namestnikov",
+        "position": "C",
+        "position_group": "F",
+        "team": "WPG",
+        "toi_min": 668.0,
+        "dz_def": -0.028,
+        "rush_def": -0.035,
+        "event_for": 54.3,
+        "event_against": 54.5,
+        "gsv_on": 0.8993,
+        "gsv_off": 0.9065,
+        "tk_gv": -3.23,
+        "ca": 54.5
+      },
+      {
         "pid": 8480015,
         "player_name": "Owen Tippett",
         "position": "R",
@@ -55110,22 +55126,6 @@
         "gsv_off": 0.8952,
         "tk_gv": -1.45,
         "ca": 58.9
-      },
-      {
-        "pid": 8476480,
-        "player_name": "Vladislav Namestnikov",
-        "position": "C",
-        "position_group": "F",
-        "team": "WPG",
-        "toi_min": 668.0,
-        "dz_def": -0.028,
-        "rush_def": -0.035,
-        "event_for": 54.3,
-        "event_against": 54.5,
-        "gsv_on": 0.8993,
-        "gsv_off": 0.9065,
-        "tk_gv": -3.23,
-        "ca": 54.5
       },
       {
         "pid": 8476879,
@@ -55192,22 +55192,6 @@
         "ca": 65.4
       },
       {
-        "pid": 8475279,
-        "player_name": "Ben Chiarot",
-        "position": "D",
-        "position_group": "D",
-        "team": "DET",
-        "toi_min": 1467.0,
-        "dz_def": -0.032,
-        "rush_def": -0.14,
-        "event_for": 55.8,
-        "event_against": 65.0,
-        "gsv_on": 0.9083,
-        "gsv_off": 0.9029,
-        "tk_gv": -2.0,
-        "ca": 65.0
-      },
-      {
         "pid": 8483485,
         "player_name": "Denton Mateychuk",
         "position": "D",
@@ -55222,6 +55206,22 @@
         "gsv_off": 0.9124,
         "tk_gv": -3.19,
         "ca": 56.8
+      },
+      {
+        "pid": 8475279,
+        "player_name": "Ben Chiarot",
+        "position": "D",
+        "position_group": "D",
+        "team": "DET",
+        "toi_min": 1467.0,
+        "dz_def": -0.032,
+        "rush_def": -0.14,
+        "event_for": 55.8,
+        "event_against": 65.0,
+        "gsv_on": 0.9083,
+        "gsv_off": 0.9029,
+        "tk_gv": -2.0,
+        "ca": 65.0
       },
       {
         "pid": 8477479,
@@ -55336,22 +55336,6 @@
         "ca": 56.2
       },
       {
-        "pid": 8481533,
-        "player_name": "Trevor Zegras",
-        "position": "C",
-        "position_group": "F",
-        "team": "PHI",
-        "toi_min": 1162.0,
-        "dz_def": -0.042,
-        "rush_def": 0.023,
-        "event_for": 55.2,
-        "event_against": 56.2,
-        "gsv_on": 0.9002,
-        "gsv_off": 0.9076,
-        "tk_gv": -2.84,
-        "ca": 56.2
-      },
-      {
         "pid": 8481656,
         "player_name": "Aliaksei Protas",
         "position": "L",
@@ -55366,6 +55350,22 @@
         "gsv_off": 0.9193,
         "tk_gv": -3.24,
         "ca": 54.2
+      },
+      {
+        "pid": 8481533,
+        "player_name": "Trevor Zegras",
+        "position": "C",
+        "position_group": "F",
+        "team": "PHI",
+        "toi_min": 1162.0,
+        "dz_def": -0.042,
+        "rush_def": 0.023,
+        "event_for": 55.2,
+        "event_against": 56.2,
+        "gsv_on": 0.9002,
+        "gsv_off": 0.9076,
+        "tk_gv": -2.84,
+        "ca": 56.2
       },
       {
         "pid": 8478434,
@@ -55896,22 +55896,6 @@
         "ca": 55.5
       },
       {
-        "pid": 8480012,
-        "player_name": "Elias Pettersson",
-        "position": "C",
-        "position_group": "F",
-        "team": "VAN",
-        "toi_min": 986.0,
-        "dz_def": -0.084,
-        "rush_def": -0.003,
-        "event_for": 52.6,
-        "event_against": 65.5,
-        "gsv_on": 0.8984,
-        "gsv_off": 0.8895,
-        "tk_gv": -2.25,
-        "ca": 65.5
-      },
-      {
         "pid": 8480014,
         "player_name": "Gabriel Vilardi",
         "position": "C",
@@ -55926,6 +55910,22 @@
         "gsv_off": 0.9096,
         "tk_gv": -2.42,
         "ca": 57.3
+      },
+      {
+        "pid": 8480012,
+        "player_name": "Elias Pettersson",
+        "position": "C",
+        "position_group": "F",
+        "team": "VAN",
+        "toi_min": 986.0,
+        "dz_def": -0.084,
+        "rush_def": -0.003,
+        "event_for": 52.6,
+        "event_against": 65.5,
+        "gsv_on": 0.8984,
+        "gsv_off": 0.8895,
+        "tk_gv": -2.25,
+        "ca": 65.5
       },
       {
         "pid": 8482166,
@@ -56648,22 +56648,6 @@
         "ca": 47.0
       },
       {
-        "pid": 8478010,
-        "player_name": "Brayden Point",
-        "position": "C",
-        "position_group": "F",
-        "team": "TBL",
-        "toi_min": 847.0,
-        "dz_def": -0.156,
-        "rush_def": -0.031,
-        "event_for": 60.3,
-        "event_against": 55.6,
-        "gsv_on": 0.9037,
-        "gsv_off": 0.9096,
-        "tk_gv": -1.98,
-        "ca": 55.6
-      },
-      {
         "pid": 8476887,
         "player_name": "Filip Forsberg",
         "position": "L",
@@ -56680,20 +56664,20 @@
         "ca": 56.6
       },
       {
-        "pid": 8481559,
-        "player_name": "Jack Hughes",
+        "pid": 8478010,
+        "player_name": "Brayden Point",
         "position": "C",
         "position_group": "F",
-        "team": "NJD",
-        "toi_min": 992.0,
-        "dz_def": -0.158,
-        "rush_def": 0.025,
-        "event_for": 67.4,
-        "event_against": 53.1,
-        "gsv_on": 0.8831,
-        "gsv_off": 0.903,
-        "tk_gv": -5.38,
-        "ca": 53.1
+        "team": "TBL",
+        "toi_min": 847.0,
+        "dz_def": -0.156,
+        "rush_def": -0.031,
+        "event_for": 60.3,
+        "event_against": 55.6,
+        "gsv_on": 0.9037,
+        "gsv_off": 0.9096,
+        "tk_gv": -1.98,
+        "ca": 55.6
       },
       {
         "pid": 8470613,
@@ -56712,6 +56696,22 @@
         "ca": 57.2
       },
       {
+        "pid": 8481559,
+        "player_name": "Jack Hughes",
+        "position": "C",
+        "position_group": "F",
+        "team": "NJD",
+        "toi_min": 992.0,
+        "dz_def": -0.158,
+        "rush_def": 0.025,
+        "event_for": 67.4,
+        "event_against": 53.1,
+        "gsv_on": 0.8831,
+        "gsv_off": 0.903,
+        "tk_gv": -5.38,
+        "ca": 53.1
+      },
+      {
         "pid": 8482142,
         "player_name": "Jamie Drysdale",
         "position": "D",
@@ -56728,22 +56728,6 @@
         "ca": 56.5
       },
       {
-        "pid": 8482929,
-        "player_name": "Emil Lilleberg",
-        "position": "D",
-        "position_group": "D",
-        "team": "TBL",
-        "toi_min": 760.0,
-        "dz_def": -0.159,
-        "rush_def": 0.057,
-        "event_for": 54.8,
-        "event_against": 51.2,
-        "gsv_on": 0.9108,
-        "gsv_off": 0.9075,
-        "tk_gv": -2.84,
-        "ca": 51.2
-      },
-      {
         "pid": 8479365,
         "player_name": "Trent Frederic",
         "position": "C",
@@ -56758,6 +56742,22 @@
         "gsv_off": 0.888,
         "tk_gv": -1.95,
         "ca": 54.9
+      },
+      {
+        "pid": 8482929,
+        "player_name": "Emil Lilleberg",
+        "position": "D",
+        "position_group": "D",
+        "team": "TBL",
+        "toi_min": 760.0,
+        "dz_def": -0.159,
+        "rush_def": 0.057,
+        "event_for": 54.8,
+        "event_against": 51.2,
+        "gsv_on": 0.9108,
+        "gsv_off": 0.9075,
+        "tk_gv": -2.84,
+        "ca": 51.2
       },
       {
         "pid": 8480798,
@@ -57368,22 +57368,6 @@
         "ca": 54.1
       },
       {
-        "pid": 8477425,
-        "player_name": "Miles Wood",
-        "position": "L",
-        "position_group": "F",
-        "team": "CBJ",
-        "toi_min": 581.0,
-        "dz_def": -0.238,
-        "rush_def": -0.224,
-        "event_for": 55.9,
-        "event_against": 66.1,
-        "gsv_on": 0.8924,
-        "gsv_off": 0.9149,
-        "tk_gv": -3.0,
-        "ca": 66.1
-      },
-      {
         "pid": 8477070,
         "player_name": "Liam O'Brien",
         "position": "C",
@@ -57398,6 +57382,22 @@
         "gsv_off": 0.8982,
         "tk_gv": -1.75,
         "ca": 57.2
+      },
+      {
+        "pid": 8477425,
+        "player_name": "Miles Wood",
+        "position": "L",
+        "position_group": "F",
+        "team": "CBJ",
+        "toi_min": 581.0,
+        "dz_def": -0.238,
+        "rush_def": -0.224,
+        "event_for": 55.9,
+        "event_against": 66.1,
+        "gsv_on": 0.8924,
+        "gsv_off": 0.9149,
+        "tk_gv": -3.0,
+        "ca": 66.1
       },
       {
         "pid": 8476872,
@@ -57416,22 +57416,6 @@
         "ca": 63.5
       },
       {
-        "pid": 8479638,
-        "player_name": "Justin Brazeau",
-        "position": "R",
-        "position_group": "F",
-        "team": "PIT",
-        "toi_min": 721.0,
-        "dz_def": -0.24,
-        "rush_def": 0.083,
-        "event_for": 56.5,
-        "event_against": 59.0,
-        "gsv_on": 0.8985,
-        "gsv_off": 0.9004,
-        "tk_gv": -2.33,
-        "ca": 59.0
-      },
-      {
         "pid": 8482175,
         "player_name": "JJ Peterka",
         "position": "R",
@@ -57446,6 +57430,22 @@
         "gsv_off": 0.8922,
         "tk_gv": -3.65,
         "ca": 53.7
+      },
+      {
+        "pid": 8479638,
+        "player_name": "Justin Brazeau",
+        "position": "R",
+        "position_group": "F",
+        "team": "PIT",
+        "toi_min": 721.0,
+        "dz_def": -0.24,
+        "rush_def": 0.083,
+        "event_for": 56.5,
+        "event_against": 59.0,
+        "gsv_on": 0.8985,
+        "gsv_off": 0.9004,
+        "tk_gv": -2.33,
+        "ca": 59.0
       },
       {
         "pid": 8478444,
@@ -57464,22 +57464,6 @@
         "ca": 63.7
       },
       {
-        "pid": 8475170,
-        "player_name": "Brayden Schenn",
-        "position": "C",
-        "position_group": "F",
-        "team": "STL",
-        "toi_min": 1080.0,
-        "dz_def": -0.245,
-        "rush_def": -0.077,
-        "event_for": 53.2,
-        "event_against": 59.6,
-        "gsv_on": 0.8872,
-        "gsv_off": 0.9079,
-        "tk_gv": -1.78,
-        "ca": 59.6
-      },
-      {
         "pid": 8477938,
         "player_name": "Haydn Fleury",
         "position": "D",
@@ -57496,6 +57480,22 @@
         "ca": 63.1
       },
       {
+        "pid": 8475170,
+        "player_name": "Brayden Schenn",
+        "position": "C",
+        "position_group": "F",
+        "team": "STL",
+        "toi_min": 1080.0,
+        "dz_def": -0.245,
+        "rush_def": -0.077,
+        "event_for": 53.2,
+        "event_against": 59.6,
+        "gsv_on": 0.8872,
+        "gsv_off": 0.9079,
+        "tk_gv": -1.78,
+        "ca": 59.6
+      },
+      {
         "pid": 8483808,
         "player_name": "Andrei Kuzmenko",
         "position": "L",
@@ -57510,6 +57510,22 @@
         "gsv_off": 0.92,
         "tk_gv": -3.92,
         "ca": 53.7
+      },
+      {
+        "pid": 8475794,
+        "player_name": "Tyler Seguin",
+        "position": "C",
+        "position_group": "F",
+        "team": "DAL",
+        "toi_min": 359.0,
+        "dz_def": -0.248,
+        "rush_def": -0.142,
+        "event_for": 47.5,
+        "event_against": 59.3,
+        "gsv_on": 0.9437,
+        "gsv_off": 0.9124,
+        "tk_gv": -3.01,
+        "ca": 59.3
       },
       {
         "pid": 8481553,
@@ -57542,22 +57558,6 @@
         "gsv_off": 0.907,
         "tk_gv": -2.41,
         "ca": 67.2
-      },
-      {
-        "pid": 8475794,
-        "player_name": "Tyler Seguin",
-        "position": "C",
-        "position_group": "F",
-        "team": "DAL",
-        "toi_min": 359.0,
-        "dz_def": -0.248,
-        "rush_def": -0.142,
-        "event_for": 47.5,
-        "event_against": 59.3,
-        "gsv_on": 0.9437,
-        "gsv_off": 0.9124,
-        "tk_gv": -3.01,
-        "ca": 59.3
       },
       {
         "pid": 8478469,
@@ -57608,22 +57608,6 @@
         "ca": 60.6
       },
       {
-        "pid": 8479337,
-        "player_name": "Alex DeBrincat",
-        "position": "R",
-        "position_group": "F",
-        "team": "DET",
-        "toi_min": 1136.0,
-        "dz_def": -0.254,
-        "rush_def": -0.034,
-        "event_for": 62.6,
-        "event_against": 59.8,
-        "gsv_on": 0.9119,
-        "gsv_off": 0.9024,
-        "tk_gv": -2.32,
-        "ca": 59.8
-      },
-      {
         "pid": 8483490,
         "player_name": "Pavel Mintyukov",
         "position": "D",
@@ -57638,6 +57622,22 @@
         "gsv_off": 0.8887,
         "tk_gv": -2.65,
         "ca": 61.3
+      },
+      {
+        "pid": 8479337,
+        "player_name": "Alex DeBrincat",
+        "position": "R",
+        "position_group": "F",
+        "team": "DET",
+        "toi_min": 1136.0,
+        "dz_def": -0.254,
+        "rush_def": -0.034,
+        "event_for": 62.6,
+        "event_against": 59.8,
+        "gsv_on": 0.9119,
+        "gsv_off": 0.9024,
+        "tk_gv": -2.32,
+        "ca": 59.8
       },
       {
         "pid": 8478463,
@@ -57880,22 +57880,6 @@
         "ca": 60.9
       },
       {
-        "pid": 8482073,
-        "player_name": "Braden Schneider",
-        "position": "D",
-        "position_group": "D",
-        "team": "NYR",
-        "toi_min": 1404.0,
-        "dz_def": -0.283,
-        "rush_def": -0.069,
-        "event_for": 51.3,
-        "event_against": 60.8,
-        "gsv_on": 0.904,
-        "gsv_off": 0.9188,
-        "tk_gv": -3.16,
-        "ca": 60.8
-      },
-      {
         "pid": 8481580,
         "player_name": "Connor McMichael",
         "position": "L",
@@ -57910,6 +57894,22 @@
         "gsv_off": 0.9189,
         "tk_gv": -1.66,
         "ca": 63.2
+      },
+      {
+        "pid": 8482073,
+        "player_name": "Braden Schneider",
+        "position": "D",
+        "position_group": "D",
+        "team": "NYR",
+        "toi_min": 1404.0,
+        "dz_def": -0.283,
+        "rush_def": -0.069,
+        "event_for": 51.3,
+        "event_against": 60.8,
+        "gsv_on": 0.904,
+        "gsv_off": 0.9188,
+        "tk_gv": -3.16,
+        "ca": 60.8
       },
       {
         "pid": 8477939,
@@ -58152,22 +58152,6 @@
         "ca": 58.2
       },
       {
-        "pid": 8476455,
-        "player_name": "Gabriel Landeskog",
-        "position": "L",
-        "position_group": "F",
-        "team": "COL",
-        "toi_min": 788.0,
-        "dz_def": -0.334,
-        "rush_def": null,
-        "event_for": 70.9,
-        "event_against": 57.0,
-        "gsv_on": 0.9284,
-        "gsv_off": 0.9204,
-        "tk_gv": -1.98,
-        "ca": 57.0
-      },
-      {
         "pid": 8474564,
         "player_name": "Steven Stamkos",
         "position": "C",
@@ -58182,6 +58166,22 @@
         "gsv_off": 0.9044,
         "tk_gv": -2.26,
         "ca": 56.1
+      },
+      {
+        "pid": 8476455,
+        "player_name": "Gabriel Landeskog",
+        "position": "L",
+        "position_group": "F",
+        "team": "COL",
+        "toi_min": 788.0,
+        "dz_def": -0.334,
+        "rush_def": null,
+        "event_for": 70.9,
+        "event_against": 57.0,
+        "gsv_on": 0.9284,
+        "gsv_off": 0.9204,
+        "tk_gv": -1.98,
+        "ca": 57.0
       },
       {
         "pid": 8477451,
@@ -59000,6 +59000,166 @@
         "ca": 63.6
       },
       {
+        "pid": 8482768,
+        "player_name": "Fedor Svechkov",
+        "position": "C",
+        "position_group": "F",
+        "team": "NSH",
+        "toi_min": 773.0,
+        "dz_def": null,
+        "rush_def": 0.082,
+        "event_for": 55.9,
+        "event_against": 56.6,
+        "gsv_on": 0.9036,
+        "gsv_off": 0.9052,
+        "tk_gv": -2.33,
+        "ca": 56.6
+      },
+      {
+        "pid": 8482103,
+        "player_name": "Ozzy Wiesblatt",
+        "position": "C",
+        "position_group": "F",
+        "team": "NSH",
+        "toi_min": 378.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 49.7,
+        "event_against": 55.3,
+        "gsv_on": 0.8793,
+        "gsv_off": 0.9075,
+        "tk_gv": -1.27,
+        "ca": 55.3
+      },
+      {
+        "pid": 8481754,
+        "player_name": "Nikita Nesterenko",
+        "position": "C",
+        "position_group": "F",
+        "team": "ANA",
+        "toi_min": 320.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 57.9,
+        "event_against": 60.0,
+        "gsv_on": 0.9184,
+        "gsv_off": 0.8899,
+        "tk_gv": -2.44,
+        "ca": 60.0
+      },
+      {
+        "pid": 8475755,
+        "player_name": "Alexander Petrovic",
+        "position": "D",
+        "position_group": "D",
+        "team": "DAL",
+        "toi_min": 785.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 48.8,
+        "event_against": 61.1,
+        "gsv_on": 0.9076,
+        "gsv_off": 0.9177,
+        "tk_gv": -2.75,
+        "ca": 61.1
+      },
+      {
+        "pid": 8484829,
+        "player_name": "Justin Hryckowian",
+        "position": "C",
+        "position_group": "F",
+        "team": "DAL",
+        "toi_min": 885.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 47.1,
+        "event_against": 51.0,
+        "gsv_on": 0.9,
+        "gsv_off": 0.9192,
+        "tk_gv": 0.07,
+        "ca": 51.0
+      },
+      {
+        "pid": 8477454,
+        "player_name": "Adam Erne",
+        "position": "L",
+        "position_group": "F",
+        "team": "DAL",
+        "toi_min": 442.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 42.5,
+        "event_against": 51.8,
+        "gsv_on": 0.9198,
+        "gsv_off": 0.915,
+        "tk_gv": -1.09,
+        "ca": 51.8
+      },
+      {
+        "pid": 8484386,
+        "player_name": "Dmitri Simashev",
+        "position": "D",
+        "position_group": "D",
+        "team": "UTA",
+        "toi_min": 408.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 50.7,
+        "event_against": 56.7,
+        "gsv_on": 0.9076,
+        "gsv_off": 0.8992,
+        "tk_gv": -4.26,
+        "ca": 56.7
+      },
+      {
+        "pid": 8482470,
+        "player_name": "Ilya Solovyov",
+        "position": "D",
+        "position_group": "D",
+        "team": "PIT",
+        "toi_min": 371.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 67.0,
+        "event_against": 54.4,
+        "gsv_on": 0.8758,
+        "gsv_off": 0.9025,
+        "tk_gv": -2.26,
+        "ca": 54.4
+      },
+      {
+        "pid": 8484149,
+        "player_name": "Gavin Brindley",
+        "position": "C",
+        "position_group": "F",
+        "team": "COL",
+        "toi_min": 461.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 62.5,
+        "event_against": 54.3,
+        "gsv_on": 0.8994,
+        "gsv_off": 0.9249,
+        "tk_gv": -1.95,
+        "ca": 54.3
+      },
+      {
+        "pid": 8482947,
+        "player_name": "Zakhar Bardakov",
+        "position": "C",
+        "position_group": "F",
+        "team": "COL",
+        "toi_min": 418.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 62.3,
+        "event_against": 51.7,
+        "gsv_on": 0.9281,
+        "gsv_off": 0.9215,
+        "tk_gv": -2.87,
+        "ca": 51.7
+      },
+      {
         "pid": 8481721,
         "player_name": "Arseny Gritsyuk",
         "position": "R",
@@ -59160,20 +59320,52 @@
         "ca": 60.0
       },
       {
-        "pid": 8481754,
-        "player_name": "Nikita Nesterenko",
-        "position": "C",
-        "position_group": "F",
-        "team": "ANA",
-        "toi_min": 320.0,
+        "pid": 8482861,
+        "player_name": "Vincent Iorio",
+        "position": "D",
+        "position_group": "D",
+        "team": "SJS",
+        "toi_min": 383.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 57.9,
-        "event_against": 60.0,
-        "gsv_on": 0.9184,
-        "gsv_off": 0.8899,
-        "tk_gv": -2.44,
-        "ca": 60.0
+        "event_for": 49.8,
+        "event_against": 61.4,
+        "gsv_on": 0.8934,
+        "gsv_off": 0.8976,
+        "tk_gv": -2.98,
+        "ca": 61.4
+      },
+      {
+        "pid": 8482148,
+        "player_name": "Hendrix Lapierre",
+        "position": "C",
+        "position_group": "F",
+        "team": "WSH",
+        "toi_min": 637.0,
+        "dz_def": null,
+        "rush_def": -0.087,
+        "event_for": 60.9,
+        "event_against": 51.2,
+        "gsv_on": 0.9,
+        "gsv_off": 0.9181,
+        "tk_gv": -2.54,
+        "ca": 51.2
+      },
+      {
+        "pid": 8473604,
+        "player_name": "Jonathan Toews",
+        "position": "C",
+        "position_group": "F",
+        "team": "WPG",
+        "toi_min": 964.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 53.4,
+        "event_against": 58.2,
+        "gsv_on": 0.9169,
+        "gsv_off": 0.9017,
+        "tk_gv": -2.92,
+        "ca": 58.2
       },
       {
         "pid": 8479022,
@@ -59208,22 +59400,6 @@
         "ca": 53.6
       },
       {
-        "pid": 8482703,
-        "player_name": "Colton Dach",
-        "position": "C",
-        "position_group": "F",
-        "team": "CHI",
-        "toi_min": 642.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 47.8,
-        "event_against": 53.1,
-        "gsv_on": 0.9075,
-        "gsv_off": 0.8987,
-        "tk_gv": -1.59,
-        "ca": 53.1
-      },
-      {
         "pid": 8483506,
         "player_name": "Sam Rinzel",
         "position": "D",
@@ -59240,84 +59416,36 @@
         "ca": 64.5
       },
       {
-        "pid": 8480876,
-        "player_name": "Curtis Douglas",
+        "pid": 8482703,
+        "player_name": "Colton Dach",
         "position": "C",
         "position_group": "F",
-        "team": "TBL",
-        "toi_min": 289.0,
+        "team": "CHI",
+        "toi_min": 642.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 49.1,
-        "event_against": 46.8,
-        "gsv_on": 0.9048,
-        "gsv_off": 0.9084,
-        "tk_gv": -2.49,
-        "ca": 46.8
+        "event_for": 47.8,
+        "event_against": 53.1,
+        "gsv_on": 0.9075,
+        "gsv_off": 0.8987,
+        "tk_gv": -1.59,
+        "ca": 53.1
       },
       {
-        "pid": 8483752,
-        "player_name": "Dominic James",
-        "position": "C",
+        "pid": 8484241,
+        "player_name": "Matthew Wood",
+        "position": "R",
         "position_group": "F",
-        "team": "TBL",
-        "toi_min": 479.0,
+        "team": "NSH",
+        "toi_min": 739.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 56.8,
-        "event_against": 48.8,
-        "gsv_on": 0.9184,
-        "gsv_off": 0.9068,
-        "tk_gv": -3.38,
-        "ca": 48.8
-      },
-      {
-        "pid": 8482470,
-        "player_name": "Ilya Solovyov",
-        "position": "D",
-        "position_group": "D",
-        "team": "PIT",
-        "toi_min": 371.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 67.0,
-        "event_against": 54.4,
-        "gsv_on": 0.8758,
-        "gsv_off": 0.9025,
-        "tk_gv": -2.26,
-        "ca": 54.4
-      },
-      {
-        "pid": 8482947,
-        "player_name": "Zakhar Bardakov",
-        "position": "C",
-        "position_group": "F",
-        "team": "COL",
-        "toi_min": 418.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 62.3,
-        "event_against": 51.7,
-        "gsv_on": 0.9281,
-        "gsv_off": 0.9215,
-        "tk_gv": -2.87,
-        "ca": 51.7
-      },
-      {
-        "pid": 8484149,
-        "player_name": "Gavin Brindley",
-        "position": "C",
-        "position_group": "F",
-        "team": "COL",
-        "toi_min": 461.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 62.5,
-        "event_against": 54.3,
-        "gsv_on": 0.8994,
-        "gsv_off": 0.9249,
-        "tk_gv": -1.95,
-        "ca": 54.3
+        "event_for": 57.4,
+        "event_against": 59.6,
+        "gsv_on": 0.904,
+        "gsv_off": 0.9051,
+        "tk_gv": -2.52,
+        "ca": 59.6
       },
       {
         "pid": 8483690,
@@ -59560,116 +59688,36 @@
         "ca": 56.4
       },
       {
-        "pid": 8482103,
-        "player_name": "Ozzy Wiesblatt",
+        "pid": 8483752,
+        "player_name": "Dominic James",
         "position": "C",
         "position_group": "F",
-        "team": "NSH",
-        "toi_min": 378.0,
+        "team": "TBL",
+        "toi_min": 479.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 49.7,
-        "event_against": 55.3,
-        "gsv_on": 0.8793,
-        "gsv_off": 0.9075,
-        "tk_gv": -1.27,
-        "ca": 55.3
+        "event_for": 56.8,
+        "event_against": 48.8,
+        "gsv_on": 0.9184,
+        "gsv_off": 0.9068,
+        "tk_gv": -3.38,
+        "ca": 48.8
       },
       {
-        "pid": 8484241,
-        "player_name": "Matthew Wood",
-        "position": "R",
-        "position_group": "F",
-        "team": "NSH",
-        "toi_min": 739.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 57.4,
-        "event_against": 59.6,
-        "gsv_on": 0.904,
-        "gsv_off": 0.9051,
-        "tk_gv": -2.52,
-        "ca": 59.6
-      },
-      {
-        "pid": 8473604,
-        "player_name": "Jonathan Toews",
+        "pid": 8480876,
+        "player_name": "Curtis Douglas",
         "position": "C",
         "position_group": "F",
-        "team": "WPG",
-        "toi_min": 964.0,
+        "team": "TBL",
+        "toi_min": 289.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 53.4,
-        "event_against": 58.2,
-        "gsv_on": 0.9169,
-        "gsv_off": 0.9017,
-        "tk_gv": -2.92,
-        "ca": 58.2
-      },
-      {
-        "pid": 8477454,
-        "player_name": "Adam Erne",
-        "position": "L",
-        "position_group": "F",
-        "team": "DAL",
-        "toi_min": 442.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 42.5,
-        "event_against": 51.8,
-        "gsv_on": 0.9198,
-        "gsv_off": 0.915,
-        "tk_gv": -1.09,
-        "ca": 51.8
-      },
-      {
-        "pid": 8475755,
-        "player_name": "Alexander Petrovic",
-        "position": "D",
-        "position_group": "D",
-        "team": "DAL",
-        "toi_min": 785.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 48.8,
-        "event_against": 61.1,
-        "gsv_on": 0.9076,
-        "gsv_off": 0.9177,
-        "tk_gv": -2.75,
-        "ca": 61.1
-      },
-      {
-        "pid": 8484829,
-        "player_name": "Justin Hryckowian",
-        "position": "C",
-        "position_group": "F",
-        "team": "DAL",
-        "toi_min": 885.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 47.1,
-        "event_against": 51.0,
-        "gsv_on": 0.9,
-        "gsv_off": 0.9192,
-        "tk_gv": 0.07,
-        "ca": 51.0
-      },
-      {
-        "pid": 8482148,
-        "player_name": "Hendrix Lapierre",
-        "position": "C",
-        "position_group": "F",
-        "team": "WSH",
-        "toi_min": 637.0,
-        "dz_def": null,
-        "rush_def": -0.087,
-        "event_for": 60.9,
-        "event_against": 51.2,
-        "gsv_on": 0.9,
-        "gsv_off": 0.9181,
-        "tk_gv": -2.54,
-        "ca": 51.2
+        "event_for": 49.1,
+        "event_against": 46.8,
+        "gsv_on": 0.9048,
+        "gsv_off": 0.9084,
+        "tk_gv": -2.49,
+        "ca": 46.8
       },
       {
         "pid": 8478476,
@@ -59704,22 +59752,6 @@
         "ca": 65.0
       },
       {
-        "pid": 8484386,
-        "player_name": "Dmitri Simashev",
-        "position": "D",
-        "position_group": "D",
-        "team": "UTA",
-        "toi_min": 408.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 50.7,
-        "event_against": 56.7,
-        "gsv_on": 0.9076,
-        "gsv_off": 0.8992,
-        "tk_gv": -4.26,
-        "ca": 56.7
-      },
-      {
         "pid": 8480259,
         "player_name": "Ben Jones",
         "position": "C",
@@ -59752,22 +59784,6 @@
         "ca": 61.9
       },
       {
-        "pid": 8484800,
-        "player_name": "Berkly Catton",
-        "position": "C",
-        "position_group": "F",
-        "team": "SEA",
-        "toi_min": 776.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 53.9,
-        "event_against": 61.3,
-        "gsv_on": 0.9129,
-        "gsv_off": 0.9185,
-        "tk_gv": -1.85,
-        "ca": 61.3
-      },
-      {
         "pid": 8481523,
         "player_name": "Kirby Dach",
         "position": "C",
@@ -59784,6 +59800,22 @@
         "ca": 57.1
       },
       {
+        "pid": 8484800,
+        "player_name": "Berkly Catton",
+        "position": "C",
+        "position_group": "F",
+        "team": "SEA",
+        "toi_min": 776.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 53.9,
+        "event_against": 61.3,
+        "gsv_on": 0.9129,
+        "gsv_off": 0.9185,
+        "tk_gv": -1.85,
+        "ca": 61.3
+      },
+      {
         "pid": 8483497,
         "player_name": "Jani Nyman",
         "position": "R",
@@ -59798,22 +59830,6 @@
         "gsv_off": 0.9173,
         "tk_gv": -2.68,
         "ca": 61.9
-      },
-      {
-        "pid": 8482768,
-        "player_name": "Fedor Svechkov",
-        "position": "C",
-        "position_group": "F",
-        "team": "NSH",
-        "toi_min": 773.0,
-        "dz_def": null,
-        "rush_def": 0.082,
-        "event_for": 55.9,
-        "event_against": 56.6,
-        "gsv_on": 0.9036,
-        "gsv_off": 0.9052,
-        "tk_gv": -2.33,
-        "ca": 56.6
       },
       {
         "pid": 8485402,
@@ -59848,22 +59864,6 @@
         "ca": 65.1
       },
       {
-        "pid": 8482861,
-        "player_name": "Vincent Iorio",
-        "position": "D",
-        "position_group": "D",
-        "team": "SJS",
-        "toi_min": 383.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 49.8,
-        "event_against": 61.4,
-        "gsv_on": 0.8934,
-        "gsv_off": 0.8976,
-        "tk_gv": -2.98,
-        "ca": 61.4
-      },
-      {
         "pid": 8484164,
         "player_name": "Dalibor Dvorsky",
         "position": "R",
@@ -59878,6 +59878,54 @@
         "gsv_off": 0.901,
         "tk_gv": -2.54,
         "ca": 56.8
+      },
+      {
+        "pid": 8483471,
+        "player_name": "Brad Lambert",
+        "position": "C",
+        "position_group": "F",
+        "team": "WPG",
+        "toi_min": 232.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 51.7,
+        "event_against": 59.7,
+        "gsv_on": 0.8911,
+        "gsv_off": 0.9062,
+        "tk_gv": -3.62,
+        "ca": 59.7
+      },
+      {
+        "pid": 8484221,
+        "player_name": "Calum Ritchie",
+        "position": "C",
+        "position_group": "F",
+        "team": "NYI",
+        "toi_min": 691.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 51.4,
+        "event_against": 61.9,
+        "gsv_on": 0.9121,
+        "gsv_off": 0.9083,
+        "tk_gv": -3.91,
+        "ca": 61.9
+      },
+      {
+        "pid": 8477947,
+        "player_name": "Sonny Milano",
+        "position": "L",
+        "position_group": "F",
+        "team": "WSH",
+        "toi_min": 241.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 58.4,
+        "event_against": 53.2,
+        "gsv_on": 0.9038,
+        "gsv_off": 0.9164,
+        "tk_gv": -3.73,
+        "ca": 53.2
       },
       {
         "pid": 8482131,
@@ -59910,54 +59958,6 @@
         "gsv_off": 0.9048,
         "tk_gv": -2.23,
         "ca": 66.7
-      },
-      {
-        "pid": 8477947,
-        "player_name": "Sonny Milano",
-        "position": "L",
-        "position_group": "F",
-        "team": "WSH",
-        "toi_min": 241.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 58.4,
-        "event_against": 53.2,
-        "gsv_on": 0.9038,
-        "gsv_off": 0.9164,
-        "tk_gv": -3.73,
-        "ca": 53.2
-      },
-      {
-        "pid": 8484221,
-        "player_name": "Calum Ritchie",
-        "position": "C",
-        "position_group": "F",
-        "team": "NYI",
-        "toi_min": 691.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 51.4,
-        "event_against": 61.9,
-        "gsv_on": 0.9121,
-        "gsv_off": 0.9083,
-        "tk_gv": -3.91,
-        "ca": 61.9
-      },
-      {
-        "pid": 8483471,
-        "player_name": "Brad Lambert",
-        "position": "C",
-        "position_group": "F",
-        "team": "WPG",
-        "toi_min": 232.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 51.7,
-        "event_against": 59.7,
-        "gsv_on": 0.8911,
-        "gsv_off": 0.9062,
-        "tk_gv": -3.62,
-        "ca": 59.7
       },
       {
         "pid": 8484197,
@@ -60024,20 +60024,20 @@
         "ca": 48.2
       },
       {
-        "pid": 8482094,
-        "player_name": "Daemon Hunt",
-        "position": "D",
-        "position_group": "D",
-        "team": "MIN",
-        "toi_min": 353.0,
+        "pid": 8482090,
+        "player_name": "Jack Finley",
+        "position": "C",
+        "position_group": "F",
+        "team": "STL",
+        "toi_min": 380.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 43.7,
-        "event_against": 72.3,
-        "gsv_on": 0.9341,
-        "gsv_off": 0.9147,
-        "tk_gv": -2.04,
-        "ca": 72.3
+        "event_for": 46.9,
+        "event_against": 51.9,
+        "gsv_on": 0.9565,
+        "gsv_off": 0.8973,
+        "tk_gv": -1.74,
+        "ca": 51.9
       },
       {
         "pid": 8482877,
@@ -60054,6 +60054,22 @@
         "gsv_off": 0.9138,
         "tk_gv": 0.48,
         "ca": 57.6
+      },
+      {
+        "pid": 8482094,
+        "player_name": "Daemon Hunt",
+        "position": "D",
+        "position_group": "D",
+        "team": "MIN",
+        "toi_min": 353.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 43.7,
+        "event_against": 72.3,
+        "gsv_on": 0.9341,
+        "gsv_off": 0.9147,
+        "tk_gv": -2.04,
+        "ca": 72.3
       },
       {
         "pid": 8484160,
@@ -60104,22 +60120,6 @@
         "ca": 59.5
       },
       {
-        "pid": 8482090,
-        "player_name": "Jack Finley",
-        "position": "C",
-        "position_group": "F",
-        "team": "STL",
-        "toi_min": 380.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 46.9,
-        "event_against": 51.9,
-        "gsv_on": 0.9565,
-        "gsv_off": 0.8973,
-        "tk_gv": -1.74,
-        "ca": 51.9
-      },
-      {
         "pid": 8484210,
         "player_name": "Gabe Perreault",
         "position": "R",
@@ -60168,20 +60168,20 @@
         "ca": 56.9
       },
       {
-        "pid": 8482666,
-        "player_name": "Scott Morrow",
+        "pid": 8483398,
+        "player_name": "Declan Carlile",
         "position": "D",
         "position_group": "D",
-        "team": "NYR",
-        "toi_min": 402.0,
+        "team": "TBL",
+        "toi_min": 561.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 60.9,
-        "event_against": 60.1,
-        "gsv_on": 0.913,
-        "gsv_off": 0.9135,
-        "tk_gv": -2.39,
-        "ca": 60.1
+        "event_for": 51.9,
+        "event_against": 53.2,
+        "gsv_on": 0.917,
+        "gsv_off": 0.9066,
+        "tk_gv": -1.71,
+        "ca": 53.2
       },
       {
         "pid": 8485702,
@@ -60200,20 +60200,20 @@
         "ca": 66.5
       },
       {
-        "pid": 8483398,
-        "player_name": "Declan Carlile",
+        "pid": 8482666,
+        "player_name": "Scott Morrow",
         "position": "D",
         "position_group": "D",
-        "team": "TBL",
-        "toi_min": 561.0,
+        "team": "NYR",
+        "toi_min": 402.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 51.9,
-        "event_against": 53.2,
-        "gsv_on": 0.917,
-        "gsv_off": 0.9066,
-        "tk_gv": -1.71,
-        "ca": 53.2
+        "event_for": 60.9,
+        "event_against": 60.1,
+        "gsv_on": 0.913,
+        "gsv_off": 0.9135,
+        "tk_gv": -2.39,
+        "ca": 60.1
       },
       {
         "pid": 8476867,
@@ -60232,20 +60232,20 @@
         "ca": 57.1
       },
       {
-        "pid": 8482460,
-        "player_name": "Matt Rempe",
-        "position": "C",
-        "position_group": "F",
-        "team": "NYR",
-        "toi_min": 212.0,
+        "pid": 8483510,
+        "player_name": "Elias Salomonsson",
+        "position": "D",
+        "position_group": "D",
+        "team": "WPG",
+        "toi_min": 516.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 58.7,
-        "event_against": 56.7,
-        "gsv_on": 0.8913,
-        "gsv_off": 0.9146,
-        "tk_gv": -0.85,
-        "ca": 56.7
+        "event_for": 58.5,
+        "event_against": 53.7,
+        "gsv_on": 0.9247,
+        "gsv_off": 0.9024,
+        "tk_gv": -3.84,
+        "ca": 53.7
       },
       {
         "pid": 8482726,
@@ -60264,22 +60264,6 @@
         "ca": 67.0
       },
       {
-        "pid": 8483510,
-        "player_name": "Elias Salomonsson",
-        "position": "D",
-        "position_group": "D",
-        "team": "WPG",
-        "toi_min": 516.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 58.5,
-        "event_against": 53.7,
-        "gsv_on": 0.9247,
-        "gsv_off": 0.9024,
-        "tk_gv": -3.84,
-        "ca": 53.7
-      },
-      {
         "pid": 8483513,
         "player_name": "Reid Schaefer",
         "position": "L",
@@ -60294,6 +60278,22 @@
         "gsv_off": 0.9046,
         "tk_gv": -1.89,
         "ca": 64.9
+      },
+      {
+        "pid": 8482460,
+        "player_name": "Matt Rempe",
+        "position": "C",
+        "position_group": "F",
+        "team": "NYR",
+        "toi_min": 212.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 58.7,
+        "event_against": 56.7,
+        "gsv_on": 0.8913,
+        "gsv_off": 0.9146,
+        "tk_gv": -0.85,
+        "ca": 56.7
       },
       {
         "pid": 8483487,
@@ -60392,22 +60392,6 @@
         "ca": 56.0
       },
       {
-        "pid": 8479985,
-        "player_name": "Cale Fleury",
-        "position": "D",
-        "position_group": "D",
-        "team": "SEA",
-        "toi_min": 346.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 44.7,
-        "event_against": 64.3,
-        "gsv_on": 0.9268,
-        "gsv_off": 0.9166,
-        "tk_gv": -2.77,
-        "ca": 64.3
-      },
-      {
         "pid": 8482807,
         "player_name": "Ethan Del Mastro",
         "position": "D",
@@ -60424,22 +60408,6 @@
         "ca": 56.3
       },
       {
-        "pid": 8482874,
-        "player_name": "Jacob Melanson",
-        "position": "R",
-        "position_group": "F",
-        "team": "SEA",
-        "toi_min": 334.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 52.1,
-        "event_against": 54.9,
-        "gsv_on": 0.8639,
-        "gsv_off": 0.9218,
-        "tk_gv": -1.97,
-        "ca": 54.9
-      },
-      {
         "pid": 8481030,
         "player_name": "Jack St. Ivany",
         "position": "D",
@@ -60454,6 +60422,22 @@
         "gsv_off": 0.8984,
         "tk_gv": -3.64,
         "ca": 60.9
+      },
+      {
+        "pid": 8482874,
+        "player_name": "Jacob Melanson",
+        "position": "R",
+        "position_group": "F",
+        "team": "SEA",
+        "toi_min": 334.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 52.1,
+        "event_against": 54.9,
+        "gsv_on": 0.8639,
+        "gsv_off": 0.9218,
+        "tk_gv": -1.97,
+        "ca": 54.9
       },
       {
         "pid": 8484994,
@@ -60504,20 +60488,20 @@
         "ca": 52.1
       },
       {
-        "pid": 8483406,
-        "player_name": "Taylor Ward",
-        "position": "R",
-        "position_group": "F",
-        "team": "LAK",
-        "toi_min": 306.0,
+        "pid": 8479985,
+        "player_name": "Cale Fleury",
+        "position": "D",
+        "position_group": "D",
+        "team": "SEA",
+        "toi_min": 346.0,
         "dz_def": null,
         "rush_def": null,
-        "event_for": 72.4,
-        "event_against": 73.7,
-        "gsv_on": 0.9321,
-        "gsv_off": 0.9159,
-        "tk_gv": -3.53,
-        "ca": 73.7
+        "event_for": 44.7,
+        "event_against": 64.3,
+        "gsv_on": 0.9268,
+        "gsv_off": 0.9166,
+        "tk_gv": -2.77,
+        "ca": 64.3
       },
       {
         "pid": 8485512,
@@ -60534,6 +60518,22 @@
         "gsv_off": 0.8923,
         "tk_gv": 0.16,
         "ca": 56.6
+      },
+      {
+        "pid": 8483406,
+        "player_name": "Taylor Ward",
+        "position": "R",
+        "position_group": "F",
+        "team": "LAK",
+        "toi_min": 306.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 72.4,
+        "event_against": 73.7,
+        "gsv_on": 0.9321,
+        "gsv_off": 0.9159,
+        "tk_gv": -3.53,
+        "ca": 73.7
       },
       {
         "pid": 8481600,
@@ -60584,22 +60584,6 @@
         "ca": 58.7
       },
       {
-        "pid": 8483756,
-        "player_name": "Jared Wright",
-        "position": "R",
-        "position_group": "F",
-        "team": "LAK",
-        "toi_min": 259.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 59.4,
-        "event_against": 57.8,
-        "gsv_on": 0.93,
-        "gsv_off": 0.9166,
-        "tk_gv": -0.7,
-        "ca": 57.8
-      },
-      {
         "pid": 8484509,
         "player_name": "Josh Samanski",
         "position": "C",
@@ -60614,6 +60598,22 @@
         "gsv_off": 0.89,
         "tk_gv": -1.0,
         "ca": 48.0
+      },
+      {
+        "pid": 8483756,
+        "player_name": "Jared Wright",
+        "position": "R",
+        "position_group": "F",
+        "team": "LAK",
+        "toi_min": 259.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 59.4,
+        "event_against": 57.8,
+        "gsv_on": 0.93,
+        "gsv_off": 0.9166,
+        "tk_gv": -0.7,
+        "ca": 57.8
       },
       {
         "pid": 8482715,
@@ -60632,22 +60632,6 @@
         "ca": 65.8
       },
       {
-        "pid": 8482107,
-        "player_name": "Mike Benning",
-        "position": "D",
-        "position_group": "D",
-        "team": "FLA",
-        "toi_min": 273.0,
-        "dz_def": null,
-        "rush_def": null,
-        "event_for": 59.3,
-        "event_against": 57.8,
-        "gsv_on": 0.8837,
-        "gsv_off": 0.894,
-        "tk_gv": -2.85,
-        "ca": 57.8
-      },
-      {
         "pid": 8484188,
         "player_name": "Theo Lindstein",
         "position": "D",
@@ -60662,6 +60646,22 @@
         "gsv_off": 0.8989,
         "tk_gv": -1.92,
         "ca": 53.7
+      },
+      {
+        "pid": 8482107,
+        "player_name": "Mike Benning",
+        "position": "D",
+        "position_group": "D",
+        "team": "FLA",
+        "toi_min": 273.0,
+        "dz_def": null,
+        "rush_def": null,
+        "event_for": 59.3,
+        "event_against": 57.8,
+        "gsv_on": 0.8837,
+        "gsv_off": 0.894,
+        "tk_gv": -2.85,
+        "ca": 57.8
       },
       {
         "pid": 8484873,
