@@ -58,7 +58,7 @@
     return `${bottomAbbrev} leads ${bottomWins}-${topWins}`;
   }
 
-  function buildTeams(seriesByRound, standingsRows) {
+  function buildTeams(seriesByRound, standingsRows, bracketSlots) {
     const seriesFlat = Object.values(seriesByRound || {}).flat();
     const standingsMap = new Map();
     (standingsRows || []).forEach((row) => standingsMap.set(row.team, row));
@@ -101,6 +101,69 @@
       });
     });
 
+    if (Array.isArray(bracketSlots) && bracketSlots.length) {
+      const slotCards = [];
+      bracketSlots
+        .slice()
+        .sort((a, b) => {
+          const confA = CONF_TO_SIDE[a.conference] || a.conference || '';
+          const confB = CONF_TO_SIDE[b.conference] || b.conference || '';
+          return confA.localeCompare(confB)
+            || Number(a.conference_slot || 0) - Number(b.conference_slot || 0);
+        })
+        .forEach((slotDef) => {
+          const side = CONF_TO_SIDE[slotDef.conference] || 'West';
+          const slot = Number(slotDef.conference_slot || 0);
+          const seed = slotDef.label || seedLabelFor(slot, slotDef.division || '');
+          const candidates = (slotDef.candidates || [])
+            .filter((candidate) => Number(candidate.slot_pct || 0) > 0)
+            .sort((a, b) => Number(b.slot_pct || 0) - Number(a.slot_pct || 0));
+          const topCandidate = candidates[0] || {};
+          slotCards.push({
+            id: `${side.toLowerCase()}${slot}`,
+            conf: side,
+            seed,
+            slot,
+            abbrev: topCandidate.team || '',
+            name: topCandidate.full_name || topCandidate.team || `${side} ${seed}`,
+            logo: topCandidate.logo_url || '',
+            topPct: Number(topCandidate.slot_pct || 0) / 100,
+            candidateCount: candidates.length,
+            teamIds: candidates.map((candidate) => candidate.team || '').filter(Boolean),
+          });
+          candidates.forEach((candidate) => {
+            const abbrev = candidate.team || '';
+            const sRow = abbrev ? standingsMap.get(abbrev) || {} : {};
+            teams.push({
+              id: `${side.toLowerCase()}${slot}-${abbrev}`,
+              teamId: abbrev,
+              conf: side,
+              seed,
+              slot,
+              abbrev,
+              name: candidate.full_name || sRow.full_name || abbrev,
+              logo: candidate.logo_url || sRow.logo_url || '',
+              color: teamColor(abbrev),
+              probs: {
+                start: Number(candidate.slot_pct || 0) / 100,
+                r2: Number(candidate.win_round1_pct || 0) / 100,
+                cf: Number(candidate.win_round2_pct || 0) / 100,
+                final: Number(candidate.win_conf_pct || 0) / 100,
+                cup: Number(candidate.win_cup_pct || 0) / 100,
+              },
+              eliminated: false,
+            });
+          });
+        });
+      return {
+        teams,
+        r1Series,
+        allSeries,
+        slotCards,
+        probabilisticSlots: true,
+      };
+    }
+
     ['Western', 'Eastern'].forEach((conference) => {
       const side = CONF_TO_SIDE[conference];
       const r1 = seriesFlat
@@ -142,6 +205,7 @@
 
           teams.push({
             id: `${side.toLowerCase()}${slot}`,
+            teamId: abbrev,
             conf: side,
             seed: seedLabel,
             slot,
@@ -149,14 +213,26 @@
             name: name || `${side} ${seedLabel}`,
             logo,
             color: teamColor(abbrev),
-            probs: { r2, cf, final: finalProb, cup },
+            probs: { start: 1, r2, cf, final: finalProb, cup },
             eliminated: abbrev ? eliminated.has(abbrev) : false,
           });
         });
       }
     });
 
-    return { teams, r1Series, allSeries };
+    const slotCards = teams.map((team) => ({
+      ...team,
+      topPct: 1,
+      candidateCount: team.abbrev ? 1 : 0,
+      teamIds: team.abbrev ? [team.abbrev] : [],
+    }));
+    return {
+      teams,
+      r1Series,
+      allSeries,
+      slotCards,
+      probabilisticSlots: false,
+    };
   }
 
   /**
@@ -180,19 +256,23 @@
       svgEl,
       series,
       standings,
+      bracketSlots,
     } = opts;
     const esc = opts.esc || ((value) => String(value == null ? '' : value));
     const interactive = opts.interactive !== false;
     const inlineStyles = Boolean(opts.inlineStyles);
     const elements = opts.elements || {};
 
-    const built = buildTeams(series || {}, standings || []);
+    const built = buildTeams(series || {}, standings || [], bracketSlots || []);
     const teams = built.teams;
     const r1Series = built.r1Series;
     const allSeries = built.allSeries;
+    const slotCards = built.slotCards;
+    const probabilisticSlots = built.probabilisticSlots;
 
     const seriesFlat = Object.values(series || {}).flat();
-    const hasAnySeed = seriesFlat.some((s) => s && (s.top_seed || s.bottom_seed));
+    const hasAnySeed = seriesFlat.some((s) => s && (s.top_seed || s.bottom_seed))
+      || slotCards.some((slot) => slot && slot.abbrev);
     const hasAnyTeam = teams.some((t) => t.abbrev);
     if (!hasAnySeed || !hasAnyTeam) {
       return { rendered: false, teams, r1Series, allSeries };
@@ -209,7 +289,7 @@
     const yTop = 140;
     const intraGap = 74;
     const interGap = 84;
-    const gap = 2.0;
+    const gap = probabilisticSlots ? 0 : 2.0;
     const headerY = 92;
     const H = 820;
 
@@ -250,7 +330,7 @@
     };
 
     const prob = (t, s) => {
-      if (s === 'start') return 1;
+      if (s === 'start') return t.probs.start;
       if (s === 'r1') return t.probs.r2;
       if (s === 'r2') return t.probs.cf;
       if (s === 'cf') return t.probs.final;
@@ -465,7 +545,7 @@
     });
 
     const cards = nodes.selectAll('.team-card')
-      .data(teams, (d) => d.id)
+      .data(slotCards, (d) => d.id)
       .join('g')
       .attr('class', 'team-card')
       .attr('transform', (d) => `translate(${stageX(d, 'start')},${ySlot(d.slot) - cardH / 2})`)
@@ -483,6 +563,28 @@
     cards.append('path')
       .attr('class', 'card-bg')
       .attr('d', (d) => cardPath(cardW, cardH, 6, d.conf === 'West' ? 'right' : 'left'));
+
+    if (probabilisticSlots) {
+      cards.each(function appendSlotProbabilityBar(slotCard) {
+        const g = d3.select(this);
+        const candidates = teams.filter(
+          (team) => team.conf === slotCard.conf && team.slot === slotCard.slot,
+        );
+        const cardTop = ySlot(slotCard.slot) - cardH / 2;
+        g.selectAll('rect.slot-fill')
+          .data(candidates, (team) => team.id)
+          .join('rect')
+          .attr('class', 'slot-fill')
+          .attr('data-team', (team) => team.teamId)
+          .attr('data-stage', 'start')
+          .attr('x', slotCard.conf === 'West' ? cardW - nodeW : 0)
+          .attr('y', (team) => lane(team, 'start').top - cardTop)
+          .attr('width', nodeW)
+          .attr('height', (team) => lane(team, 'start').h)
+          .attr('fill', (team) => team.color)
+          .attr('opacity', 0.82);
+      });
+    }
 
     cards.each(function appendCardContent(d) {
       const g = d3.select(this);
@@ -504,13 +606,21 @@
         .attr('text-anchor', textAnchor)
         .attr('font-weight', 700)
         .attr('font-size', 17)
-        .text(`${d.seed} · ${d.abbrev || 'TBD'}`);
+        .text(
+          probabilisticSlots
+            ? `${d.seed} · ${d.abbrev || 'TBD'} ${fmtPct(d.topPct)}`
+            : `${d.seed} · ${d.abbrev || 'TBD'}`,
+        );
       g.append('text')
         .attr('class', 'small')
         .attr('x', textX)
         .attr('y', 44)
         .attr('text-anchor', textAnchor)
-        .text(`Cup ${fmtPct(d.probs.cup)}`);
+        .text(
+          probabilisticSlots
+            ? `${d.candidateCount} possible team${d.candidateCount === 1 ? '' : 's'}`
+            : `Cup ${fmtPct(d.probs.cup)}`,
+        );
     });
 
     if (!interactive) {
@@ -546,10 +656,10 @@
       .on('mouseleave', hideTip)
       .on('click', (e, d) => {
         e.stopPropagation();
-        selectTeam(d.team.id, true);
+        selectTeam(d.team.teamId, true);
       });
 
-    nodes.selectAll('.node-fill')
+    nodes.selectAll('.node-fill, .slot-fill')
       .style('cursor', 'pointer')
       .on('mouseenter', (event, d) => showTip(event,
         `<b>${esc(d.name)}</b><br>${stageLabel[d3.select(event.currentTarget).attr('data-stage')]}: ${fmtPct(prob(d, d3.select(event.currentTarget).attr('data-stage')))}`
@@ -558,28 +668,41 @@
       .on('mouseleave', hideTip)
       .on('click', (ev, d) => {
         ev.stopPropagation();
-        selectTeam(d.id, true);
+        selectTeam(d.teamId, true);
       });
 
     cards
       .style('cursor', 'pointer')
-      .on('mouseenter', (event, d) => showTip(event, `<b>${esc(d.name)}</b><br>Click to highlight`))
+      .on('mouseenter', (event, d) => showTip(
+        event,
+        probabilisticSlots
+          ? `<b>${esc(d.seed)}</b><br>${esc(d.name)} is most likely at ${fmtPct(d.topPct)}`
+            + `<br>${d.candidateCount} teams have a non-zero chance`
+          : `<b>${esc(d.name)}</b><br>Click to highlight`,
+      ))
       .on('mousemove', moveTip)
       .on('mouseleave', hideTip)
       .on('click', (e, d) => {
         e.stopPropagation();
-        selectTeam(d.id, true);
+        if (d.abbrev) selectTeam(d.abbrev, true);
       });
 
     if (select) {
+      const selectableTeams = Array.from(
+        new Map(
+          teams
+            .filter((team) => team.teamId)
+            .map((team) => [team.teamId, team]),
+        ).values(),
+      ).sort((a, b) => a.name.localeCompare(b.name));
       select.selectAll('option').remove();
       select.append('option').attr('value', '').text('None — show all teams');
       select.selectAll('option.team-option')
-        .data(teams)
+        .data(selectableTeams)
         .join('option')
         .attr('class', 'team-option')
-        .attr('value', (d) => d.id)
-        .text((d) => `${d.conf} ${d.seed} — ${d.name}`);
+        .attr('value', (d) => d.teamId)
+        .text((d) => `${d.conf} — ${d.name}`);
       select.on('change', (e) => (e.target.value ? selectTeam(e.target.value, false) : clearSelection()));
     }
 
@@ -588,7 +711,7 @@
       flows.selectAll('.flow-ribbon').transition().duration(110)
         .attr('opacity', (d) => (d.team.eliminated ? 0.08 : 0.68))
         .attr('filter', null);
-      nodes.selectAll('.node-fill').transition().duration(110)
+      nodes.selectAll('.node-fill, .slot-fill').transition().duration(110)
         .attr('opacity', (d) => (d.eliminated ? 0.08 : 0.76));
       cards.classed('selected', false).transition().duration(110)
         .attr('opacity', (d) => (d.eliminated ? 0.32 : 1));
@@ -599,7 +722,7 @@
       labels.selectAll('.annotation').remove();
       if (details) {
         details.html('<div class="team">NHL playoffs</div>'
-          + '<div class="metric-row"><span>Teams</span><b>16</b></div>'
+          + `<div class="metric-row"><span>Candidate teams</span><b>${new Set(teams.map((team) => team.teamId).filter(Boolean)).size}</b></div>`
           + '<div class="metric-row"><span>Click a team, ribbon, or round</span><b>for details</b></div>');
       }
     }
@@ -610,7 +733,7 @@
       flows.selectAll('.flow-ribbon').transition().duration(110)
         .attr('opacity', 0.06)
         .attr('filter', null);
-      nodes.selectAll('.node-fill').transition().duration(110)
+      nodes.selectAll('.node-fill, .slot-fill').transition().duration(110)
         .attr('opacity', function () {
           return this.getAttribute('data-stage') === stage ? 0.9 : 0.06;
         });
@@ -659,39 +782,49 @@
     }
 
     function selectTeam(id, update) {
-      const t = teams.find((x) => x.id === id);
+      const t = teams.find((x) => x.teamId === id);
       if (!t) return;
       if (update && select) select.property('value', id);
       flows.selectAll('.flow-ribbon')
         .transition().duration(110)
-        .attr('opacity', (d) => (d.team.id === id ? 0.95 : 0.08))
-        .attr('filter', (d) => (d.team.id === id ? 'drop-shadow(0 1px 4px rgba(6,121,159,.35))' : null));
-      nodes.selectAll('.node-fill').transition().duration(110)
-        .attr('opacity', (d) => (d.id === id ? 0.95 : 0.08));
-      cards.classed('selected', (d) => d.id === id)
+        .attr('opacity', (d) => (d.team.teamId === id ? 0.95 : 0.08))
+        .attr('filter', (d) => (d.team.teamId === id ? 'drop-shadow(0 1px 4px rgba(6,121,159,.35))' : null));
+      nodes.selectAll('.node-fill, .slot-fill').transition().duration(110)
+        .attr('opacity', (d) => (d.teamId === id ? 0.95 : 0.08));
+      cards.classed('selected', (d) => d.teamIds.includes(id))
         .transition().duration(110)
-        .attr('opacity', (d) => (d.id === id ? 1 : 0.32));
+        .attr('opacity', (d) => (d.teamIds.includes(id) ? 1 : 0.32));
       labels.selectAll('.series-score').transition().duration(110).attr('opacity', 1);
       labels.selectAll('.round-label').attr('font-weight', null).attr('opacity', 1);
       labels.selectAll('.annotation').remove();
-      for (const s of stages.slice(1)) {
-        const e = nodeExtent(t.conf, s, stageGroup(s, t.slot));
-        const x = stageX(t, s) + nodeW / 2;
-        labels.append('text')
-          .attr('class', 'annotation')
-          .attr('x', x)
-          .attr('y', e.top - 10)
-          .attr('text-anchor', 'middle')
-          .text(fmtPct(prob(t, s)));
+      const teamPaths = teams.filter((team) => team.teamId === id);
+      for (const path of teamPaths) {
+        for (const s of stages.slice(1)) {
+          if (prob(path, s) <= PROB_EPS) continue;
+          const e = nodeExtent(path.conf, s, stageGroup(s, path.slot));
+          const x = stageX(path, s) + nodeW / 2;
+          labels.append('text')
+            .attr('class', 'annotation')
+            .attr('x', x)
+            .attr('y', e.top - 10)
+            .attr('text-anchor', 'middle')
+            .text(fmtPct(prob(path, s)));
+        }
       }
       if (details) {
+        const sRow = standingsMap.get(id) || {};
+        const possibleSeeds = teamPaths.map((path) => path.seed).join(', ');
+        const totalR1 = Number(sRow.win_round1_pct ?? (t.probs.r2 * 100)) / 100;
+        const totalR2 = Number(sRow.win_round2_pct ?? (t.probs.cf * 100)) / 100;
+        const totalConf = Number(sRow.win_conf_pct ?? (t.probs.final * 100)) / 100;
+        const totalCup = Number(sRow.win_cup_pct ?? (t.probs.cup * 100)) / 100;
         details.html(
           `<div class="team" style="color:${t.color}">${esc(t.name)}</div>`
-          + `<div class="metric-row"><span>Conference / seed</span><b>${t.conf} ${t.seed}</b></div>`
-          + `<div class="metric-row"><span>Win Round 1</span><b>${fmtPct(t.probs.r2)}</b></div>`
-          + `<div class="metric-row"><span>Win Round 2</span><b>${fmtPct(t.probs.cf)}</b></div>`
-          + `<div class="metric-row"><span>Win Conference Final</span><b>${fmtPct(t.probs.final)}</b></div>`
-          + `<div class="metric-row"><span>Win Cup Final</span><b>${fmtPct(t.probs.cup)}</b></div>`,
+          + `<div class="metric-row"><span>Possible seeds</span><b>${esc(possibleSeeds)}</b></div>`
+          + `<div class="metric-row"><span>Win Round 1</span><b>${fmtPct(totalR1)}</b></div>`
+          + `<div class="metric-row"><span>Win Round 2</span><b>${fmtPct(totalR2)}</b></div>`
+          + `<div class="metric-row"><span>Win Conference Final</span><b>${fmtPct(totalConf)}</b></div>`
+          + `<div class="metric-row"><span>Win Cup Final</span><b>${fmtPct(totalCup)}</b></div>`,
         );
       }
     }

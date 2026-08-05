@@ -78,11 +78,13 @@
     }
     const series = (playoffsPayload && playoffsPayload.series) || {};
     const standings = (playoffsPayload && playoffsPayload.standings) || [];
+    const bracketSlots = (playoffsPayload && playoffsPayload.bracket_slots) || [];
     const result = bracketLib.renderBracket({
       d3: window.d3,
       svgEl,
       series,
       standings,
+      bracketSlots,
       esc,
       interactive: true,
       elements: {

@@ -69,7 +69,7 @@
     mount.hidden = false;
   }
 
-  function renderBracket(seriesByRound, standingsRows) {
+  function renderBracket(seriesByRound, standingsRows, bracketSlots) {
     const loading = document.getElementById('bracketLoading');
     const container = document.getElementById('bracketContainer');
     const svgEl = document.getElementById('bracketChart');
@@ -88,6 +88,7 @@
       svgEl,
       series: seriesByRound,
       standings: standingsRows,
+      bracketSlots,
       esc,
       interactive: true,
       elements: {
@@ -124,7 +125,11 @@
       waitForD3().catch(() => null),
     ]);
     const playoffs = payload && payload.playoffs ? payload.playoffs : {};
-    renderBracket(playoffs.series || {}, playoffs.standings || []);
+    renderBracket(
+      playoffs.series || {},
+      playoffs.standings || [],
+      playoffs.bracket_slots || [],
+    );
     renderStandings(playoffs.standings || []);
   }
 

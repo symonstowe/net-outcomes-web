@@ -43,41 +43,6 @@
     'fwd_def',
     'fwd_gf60',
     'fwd_ga60',
-    'fwd_process_xgf60',
-    'fwd_own_finishing',
-    'fwd_component_teammate_conversion',
-    'fwd_offense_residual',
-    'fwd_process_xga60',
-    'fwd_isolated_defense_effect',
-    'fwd_conditional_defense_environment_delta',
-    'fwd_own_shot_generation',
-    'fwd_teammate_xg_creation',
-    'fwd_assisted_xg',
-    'fwd_teammate_conversion',
-    'fwd_teammate_conversion_environment',
-    'fwd_pen_draw_value',
-    'fwd_pen_take_value',
-    'fwd_defending_penalties_taken',
-    'fwd_defending_penalty_take_value',
-    'fwd_draw_minor',
-    'fwd_take_minor',
-    'fwd_draw_double_minor',
-    'fwd_take_double_minor',
-    'fwd_draw_major',
-    'fwd_take_major',
-    'fwd_draw_penalty_shot',
-    'fwd_take_penalty_shot',
-    'fwd_standard_5v5_minutes82',
-    'fwd_total82_lo90',
-    'fwd_total82_hi90',
-    'off_oz',
-    'off_fly',
-    'dz_def_rapm',
-    'rush_def_rapm',
-    'rush_defence',
-    'fwd_pp',
-    'fwd_pk',
-    'fwd_pen',
     'season_gp',
     'season_toi_min',
   ];
@@ -433,7 +398,7 @@
     const tbody = document.querySelector('#rankingsTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(45, 'No skater rankings available.');
+      tbody.innerHTML = emptyRow(13, 'No skater rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
@@ -449,38 +414,6 @@
         <td class="${classForSigned(row.fwd_def)}">${signed(row.fwd_def)}</td>
         <td>${row.fwd_gf60 != null ? row.fwd_gf60.toFixed(2) : '—'}</td>
         <td>${row.fwd_ga60 != null ? row.fwd_ga60.toFixed(2) : '—'}</td>
-        <td>${row.fwd_process_xgf60 != null ? Number(row.fwd_process_xgf60).toFixed(2) : '—'}</td>
-        <td class="${classForSigned(row.fwd_own_finishing)}">${signed(row.fwd_own_finishing)}</td>
-        <td class="${classForSigned(row.fwd_component_teammate_conversion)}">${signed(row.fwd_component_teammate_conversion)}</td>
-        <td class="${classForSigned(row.fwd_offense_residual)}">${signed(row.fwd_offense_residual)}</td>
-        <td>${row.fwd_process_xga60 != null ? Number(row.fwd_process_xga60).toFixed(2) : '—'}</td>
-        <td class="${classForSigned(row.fwd_isolated_defense_effect)}">${signed(row.fwd_isolated_defense_effect)}</td>
-        <td class="${classForSigned(row.fwd_conditional_defense_environment_delta)}">${signed(row.fwd_conditional_defense_environment_delta)}</td>
-        <td class="${classForSigned(row.fwd_own_shot_generation)}">${signed(row.fwd_own_shot_generation)}</td>
-        <td class="${classForSigned(row.fwd_teammate_xg_creation)}">${signed(row.fwd_teammate_xg_creation)}</td>
-        <td class="${classForSigned(row.fwd_assisted_xg)}">${signed(row.fwd_assisted_xg)}</td>
-        <td class="${classForSigned(row.fwd_teammate_conversion)}">${signed(row.fwd_teammate_conversion)}</td>
-        <td class="${classForSigned(row.fwd_teammate_conversion_environment)}">${signed(row.fwd_teammate_conversion_environment)}</td>
-        <td class="${classForSigned(row.fwd_pen)}">${signed(row.fwd_pen)}</td>
-        <td class="${classForSigned(row.fwd_pen_draw_value)}">${signed(row.fwd_pen_draw_value)}</td>
-        <td class="${classForSigned(row.fwd_pen_take_value)}">${signed(row.fwd_pen_take_value)}</td>
-        <td>${row.fwd_defending_penalties_taken != null ? Number(row.fwd_defending_penalties_taken).toFixed(3) : '—'}</td>
-        <td class="${classForSigned(row.fwd_defending_penalty_take_value)}">${signed(row.fwd_defending_penalty_take_value, 3)}</td>
-        <td>${row.fwd_draw_minor != null ? Number(row.fwd_draw_minor).toFixed(3) : '—'}</td>
-        <td>${row.fwd_take_minor != null ? Number(row.fwd_take_minor).toFixed(3) : '—'}</td>
-        <td>${row.fwd_draw_double_minor != null ? Number(row.fwd_draw_double_minor).toFixed(4) : '—'}</td>
-        <td>${row.fwd_take_double_minor != null ? Number(row.fwd_take_double_minor).toFixed(4) : '—'}</td>
-        <td>${row.fwd_draw_major != null ? Number(row.fwd_draw_major).toFixed(4) : '—'}</td>
-        <td>${row.fwd_take_major != null ? Number(row.fwd_take_major).toFixed(4) : '—'}</td>
-        <td>${row.fwd_draw_penalty_shot != null ? Number(row.fwd_draw_penalty_shot).toFixed(4) : '—'}</td>
-        <td>${row.fwd_take_penalty_shot != null ? Number(row.fwd_take_penalty_shot).toFixed(4) : '—'}</td>
-        <td>${row.fwd_standard_5v5_minutes82 != null ? Number(row.fwd_standard_5v5_minutes82).toFixed(1) : '—'}</td>
-        <td class="${classForSigned(row.fwd_total82_lo90)}">${signed(row.fwd_total82_lo90)}</td>
-        <td class="${classForSigned(row.fwd_total82_hi90)}">${signed(row.fwd_total82_hi90)}</td>
-        <td class="${classForSigned(row.off_oz)}">${signed(row.off_oz)}</td>
-        <td class="${classForSigned(row.off_fly)}">${signed(row.off_fly)}</td>
-        <td class="${classForSigned(row.dz_def_rapm)}">${signed(row.dz_def_rapm)}</td>
-        <td class="${classForSigned(row.rush_def_rapm)}">${signed(row.rush_def_rapm)}</td>
         <td>${row.season_gp}</td>
         <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
       </tr>
@@ -672,6 +605,42 @@
     return value === null || value === undefined || value === '' || !Number.isFinite(Number(value));
   }
 
+  function withinOneEdit(left, right) {
+    const a = normalizeText(left);
+    const b = normalizeText(right);
+    if (a === b) return true;
+    if (Math.abs(a.length - b.length) > 1) return false;
+    const longer = a.length >= b.length ? a : b;
+    const shorter = a.length >= b.length ? b : a;
+    let i = 0;
+    let j = 0;
+    let edits = 0;
+    while (i < longer.length && j < shorter.length) {
+      if (longer[i] === shorter[j]) {
+        i += 1;
+        j += 1;
+        continue;
+      }
+      edits += 1;
+      if (edits > 1) return false;
+      if (longer.length === shorter.length) j += 1;
+      i += 1;
+    }
+    if (i < longer.length || j < shorter.length) edits += 1;
+    return edits <= 1;
+  }
+
+  function playerSearchMatches(playerName, query) {
+    const normalizedName = normalizeText(playerName);
+    const normalizedQuery = normalizeText(query);
+    if (!normalizedQuery || normalizedName.includes(normalizedQuery)) return true;
+    if (normalizedQuery.length < 5) return false;
+    return normalizedName
+      .split(/\s+/)
+      .filter(Boolean)
+      .some((token) => withinOneEdit(token, normalizedQuery));
+  }
+
   function rankSortedRows(rows) {
     return (rows || []).map((row, idx) => ({ ...row, display_rank: idx + 1 }));
   }
@@ -698,39 +667,6 @@
       fwd_def: { field: 'fwd_def', type: 'number' },
       fwd_gf60: { field: 'fwd_gf60', type: 'number' },
       fwd_ga60: { field: 'fwd_ga60', type: 'number' },
-      fwd_process_xgf60: { field: 'fwd_process_xgf60', type: 'number' },
-      fwd_own_finishing: { field: 'fwd_own_finishing', type: 'number' },
-      fwd_component_teammate_conversion: { field: 'fwd_component_teammate_conversion', type: 'number' },
-      fwd_offense_residual: { field: 'fwd_offense_residual', type: 'number' },
-      fwd_process_xga60: { field: 'fwd_process_xga60', type: 'number' },
-      fwd_isolated_defense_effect: { field: 'fwd_isolated_defense_effect', type: 'number' },
-      fwd_conditional_defense_environment_delta: { field: 'fwd_conditional_defense_environment_delta', type: 'number' },
-      fwd_own_shot_generation: { field: 'fwd_own_shot_generation', type: 'number' },
-      fwd_teammate_xg_creation: { field: 'fwd_teammate_xg_creation', type: 'number' },
-      fwd_assisted_xg: { field: 'fwd_assisted_xg', type: 'number' },
-      fwd_teammate_conversion: { field: 'fwd_teammate_conversion', type: 'number' },
-      fwd_teammate_conversion_environment: { field: 'fwd_teammate_conversion_environment', type: 'number' },
-      fwd_pen_draw_value: { field: 'fwd_pen_draw_value', type: 'number' },
-      fwd_pen_take_value: { field: 'fwd_pen_take_value', type: 'number' },
-      fwd_draw_minor: { field: 'fwd_draw_minor', type: 'number' },
-      fwd_take_minor: { field: 'fwd_take_minor', type: 'number' },
-      fwd_draw_double_minor: { field: 'fwd_draw_double_minor', type: 'number' },
-      fwd_take_double_minor: { field: 'fwd_take_double_minor', type: 'number' },
-      fwd_draw_major: { field: 'fwd_draw_major', type: 'number' },
-      fwd_take_major: { field: 'fwd_take_major', type: 'number' },
-      fwd_draw_penalty_shot: { field: 'fwd_draw_penalty_shot', type: 'number' },
-      fwd_take_penalty_shot: { field: 'fwd_take_penalty_shot', type: 'number' },
-      fwd_standard_5v5_minutes82: { field: 'fwd_standard_5v5_minutes82', type: 'number' },
-      fwd_total82_lo90: { field: 'fwd_total82_lo90', type: 'number' },
-      fwd_total82_hi90: { field: 'fwd_total82_hi90', type: 'number' },
-      off_oz: { field: 'off_oz', type: 'number' },
-      off_fly: { field: 'off_fly', type: 'number' },
-      dz_def_rapm: { field: 'dz_def_rapm', type: 'number' },
-      rush_def_rapm: { field: 'rush_def_rapm', type: 'number' },
-      rush_defence: { field: 'rush_defence', type: 'number' },
-      fwd_pp: { field: 'fwd_pp', type: 'number' },
-      fwd_pk: { field: 'fwd_pk', type: 'number' },
-      fwd_pen: { field: 'fwd_pen', type: 'number' },
       season_gp: { field: 'season_gp', type: 'number' },
       season_toi_min: { field: 'season_toi_min', type: 'number' },
     };
@@ -873,7 +809,7 @@
     const playerQuery = normalizeText(document.getElementById('playerSearch')?.value);
     const teamQuery = normalizeText(document.getElementById('rankingsTeamSearch')?.value);
     const filtered = positionScoped.filter((row) => {
-      const playerMatch = !playerQuery || normalizeText(row.player_name).includes(playerQuery);
+      const playerMatch = playerSearchMatches(row.player_name, playerQuery);
       const teamMatch = !teamQuery || normalizeText(row.team).includes(teamQuery);
       return playerMatch && teamMatch;
     });
@@ -902,7 +838,7 @@
     const playerQuery = normalizeText(document.getElementById('fantasyPlayerSearch')?.value);
     const teamQuery = normalizeText(document.getElementById('fantasyTeamSearch')?.value);
     const filtered = positionScoped.filter((row) => {
-      const playerMatch = !playerQuery || normalizeText(row.player_name).includes(playerQuery);
+      const playerMatch = playerSearchMatches(row.player_name, playerQuery);
       const teamMatch = !teamQuery || normalizeText(row.team).includes(teamQuery);
       return playerMatch && teamMatch;
     });
@@ -1070,7 +1006,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     init().catch((error) => {
       console.error(error);
-      emptyMessage('#rankingsTable tbody', 24, error.message);
+      emptyMessage('#rankingsTable tbody', 13, error.message);
       emptyMessage('#fantasyTable tbody', 13, error.message);
       emptyMessage('#goalieTable tbody', 13, error.message);
       emptyMessage('#teamRankingsTable tbody', 18, error.message);
