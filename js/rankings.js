@@ -13,6 +13,7 @@
   const DEFAULT_SECTION_ID = 'rankingsPanel';
   const VALID_SECTION_IDS = [
     'rankingsPanel',
+    'prospectivePanel',
     'fantasyPanel',
     'validationPanel',
     'goaliePanel',
@@ -23,6 +24,7 @@
   ];
   const SECTION_SLUG_BY_ID = {
     rankingsPanel: 'skaters',
+    prospectivePanel: 'prospective',
     fantasyPanel: 'fantasy',
     validationPanel: 'model-check',
     goaliePanel: 'goalies',
@@ -45,6 +47,29 @@
     'fwd_ga60',
     'season_gp',
     'season_toi_min',
+    // Ranked dimensions in their own right, kept out of the SOAI candidate
+    // total on purpose. Players below the power-play exposure floor carry null
+    // and sink to the bottom in both directions via missingNumber.
+    'soai_pp_generation',
+    'soai_pp_above_deployment',
+  ];
+  // Prospective board: validated dimensions only, no composite. Every metric
+  // may be null for a player the tournament could not measure, and
+  // missingNumber sinks those to the bottom in both directions so a dimension
+  // nobody measured never tops the sort.
+  const VALID_PROSPECTIVE_SORT_KEYS = [
+    'player_name',
+    'team',
+    'position',
+    'soai_shot_generation',
+    'soai_shot_quality',
+    'soai_puck_recovery',
+    'soai_defensive_suppression',
+    'soai_defensive_territory',
+    'soai_discipline_per100',
+    'soai_pp_generation',
+    'soai_pp_above_deployment',
+    'soai_support_coverage',
   ];
   const VALID_FANTASY_SORT_KEYS = [
     'player_name',
@@ -199,6 +224,31 @@
   function sanitizeFantasySortKey(value) {
     const key = String(value || '').trim();
     return VALID_FANTASY_SORT_KEYS.includes(key) ? key : '';
+  }
+
+  function sanitizeProspectiveSortKey(value) {
+    const key = String(value || '').trim();
+    return VALID_PROSPECTIVE_SORT_KEYS.includes(key) ? key : '';
+  }
+
+  function sortProspective(rows) {
+    const key = sanitizeProspectiveSortKey(state.prospectiveSort?.key) || 'soai_shot_generation';
+    const direction = String(state.prospectiveSort?.direction || 'desc');
+    const dir = direction === 'asc' ? 1 : -1;
+    const stringKeys = new Set(['player_name', 'team', 'position']);
+    return [...rows].sort((a, b) => {
+      if (stringKeys.has(key)) {
+        const primary = String(a?.[key] || '').localeCompare(String(b?.[key] || ''));
+        if (primary !== 0) return dir * primary;
+      } else {
+        const aMissing = missingNumber(a?.[key]);
+        const bMissing = missingNumber(b?.[key]);
+        if (aMissing !== bMissing) return aMissing ? 1 : -1;
+        const primary = aMissing ? 0 : Number(a?.[key]) - Number(b?.[key]);
+        if (Math.abs(primary) > 1e-12) return dir * primary;
+      }
+      return String(a?.player_name || '').localeCompare(String(b?.player_name || ''));
+    });
   }
 
   function sanitizeGoalieSortKey(value) {
@@ -669,6 +719,8 @@
       fwd_ga60: { field: 'fwd_ga60', type: 'number' },
       season_gp: { field: 'season_gp', type: 'number' },
       season_toi_min: { field: 'season_toi_min', type: 'number' },
+      soai_pp_generation: { field: 'soai_pp_generation', type: 'number' },
+      soai_pp_above_deployment: { field: 'soai_pp_above_deployment', type: 'number' },
     };
     const spec = fieldMap[key] || fieldMap.fwd_total82;
     return [...rows].sort((a, b) => {
