@@ -10,6 +10,22 @@
     normalizeText,
   } = window.NetOutcomesCommon;
 
+  // Mirrors the Python renderer's str.title() on the SOAI gate label.
+  const titleCase = (value) => String(value || '—').replace(
+    /\w\S*/g,
+    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+  );
+
+  // The opponent axis of the deployment ladder. Selecting a tier re-reads the
+  // "vs Opponent" column from that rung, so a player is judged against the
+  // competition he actually faced instead of an average over all of it.
+  const MATCHUP_FIELDS = {
+    bottom_six: 'soai_matchup_bottom_six',
+    second_line: 'soai_matchup_second_line',
+    first_line: 'soai_matchup_first_line',
+  };
+  const matchupField = () => MATCHUP_FIELDS[state.rankingsMatchup] || MATCHUP_FIELDS.bottom_six;
+
   const DEFAULT_SECTION_ID = 'rankingsPanel';
   const VALID_SECTION_IDS = [
     'rankingsPanel',
@@ -52,6 +68,8 @@
     // and sink to the bottom in both directions via missingNumber.
     'soai_pp_generation',
     'soai_pp_above_deployment',
+    'soai_matchup',
+    'soai_support_coverage',
   ];
   // Prospective board: validated dimensions only, no composite. Every metric
   // may be null for a player the tournament could not measure, and
@@ -164,6 +182,8 @@
     underrated: [],
     scoringAnomalies: {},
     rankingsSort: { key: 'fwd_total82', direction: 'desc' },
+    rankingsMatchup: 'bottom_six',
+    prospectiveSort: { key: 'soai_shot_generation', direction: 'desc' },
     fantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieSort: { key: 'rank', direction: 'asc' },
     teamSort: { key: 'total_team_score', direction: 'desc' },
@@ -447,8 +467,20 @@
   function renderRankings(rows) {
     const tbody = document.querySelector('#rankingsTable tbody');
     if (!tbody) return;
+    // Cell order and count must match the YAML header list exactly. The static
+    // HTML is rendered from that list in Python; this renderer replaces those
+    // rows on the first sort or filter, so a mismatch here silently shifts
+    // every value under the wrong heading the moment the user touches
+    // anything. The SOAI block is conditional in Python and must be here too.
+    const hasSoai = rows.some((row) => row.soai_candidate_per100 != null);
+    const soaiCells = (row) => (hasSoai ? `
+        <td>${row.soai_pp_generation != null ? signed(row.soai_pp_generation) : '—'}</td>
+        <td>${row.soai_pp_above_deployment != null ? signed(row.soai_pp_above_deployment) : '—'}</td>
+        <td class="sf-matchup-cell">${row[matchupField()] != null ? signed(row[matchupField()]) : '—'}</td>
+        <td>${row.soai_support_coverage != null ? `${Math.round(row.soai_support_coverage * 100)}%` : '—'}</td>
+        <td>${esc(titleCase(row.soai_status))}</td>` : '');
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(13, 'No skater rankings available.');
+      tbody.innerHTML = emptyRow(hasSoai ? 17 : 13, 'No skater rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
@@ -456,7 +488,7 @@
         <td>${row.display_rank ?? row.rank}</td>
         <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}${row.fwd_rookie ? ' <sup>Rk</sup>' : (row.fwd_returning ? ' <sup>R</sup>' : '')}</td>
         <td>${esc(row.team)}</td>
-        <td>${esc(row.position)}</td>
+        <td>${esc(row.position)}</td>${soaiCells(row)}
         <td class="${classForSigned(row.fwd_total82)}">${signed(row.fwd_total82)}</td>
         <td class="${classForSigned(row.fwd_total)}">${signed(row.fwd_total)}</td>
         <td>${row.fwd_pct != null ? `${Math.round(row.fwd_pct)}` : '—'}</td>
@@ -468,6 +500,51 @@
         <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
       </tr>
     `).join('');
+  }
+
+  // 13 cells, matching the prospective column list in rankings.yaml. Every
+  // metric may be null for a player the tournament could not measure; a dash
+  // says "not evaluable", which is a different claim from a zero.
+  function renderProspective(rows) {
+    const tbody = document.querySelector('#prospectiveTable tbody');
+    if (!tbody) return;
+    if (!rows.length) {
+      tbody.innerHTML = emptyRow(13, 'No prospective rankings available.');
+      return;
+    }
+    const cell = (value) => (value != null ? `<td class="${classForSigned(value)}">${signed(value)}</td>` : '<td>—</td>');
+    tbody.innerHTML = rows.map((row, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}</td>
+        <td>${esc(row.team)}</td>
+        <td>${esc(row.position)}</td>
+        ${cell(row.soai_shot_generation)}
+        ${cell(row.soai_shot_quality)}
+        ${cell(row.soai_puck_recovery)}
+        ${cell(row.soai_defensive_suppression)}
+        ${cell(row.soai_defensive_territory)}
+        ${cell(row.soai_discipline_per100)}
+        ${cell(row.soai_pp_generation)}
+        ${cell(row.soai_pp_above_deployment)}
+        <td>${row.soai_support_coverage != null ? `${Math.round(row.soai_support_coverage * 100)}%` : '—'}</td>
+      </tr>
+    `).join('');
+  }
+
+  function refreshProspective() {
+    const positions = selectedPositions('prospectivePos');
+    const scoped = filterRowsByPositions(
+      sortProspective(state.rankings), positions, (row) => row.position,
+    );
+    const playerQuery = normalizeText(document.getElementById('prospectivePlayerSearch')?.value);
+    const teamQuery = normalizeText(document.getElementById('prospectiveTeamSearch')?.value);
+    renderProspective(scoped.filter((row) => {
+      const playerMatch = playerSearchMatches(row.player_name, playerQuery);
+      const teamMatch = !teamQuery || normalizeText(row.team).includes(teamQuery);
+      return playerMatch && teamMatch;
+    }));
+    syncUrlState();
   }
 
   function renderFantasy(rows) {
@@ -721,6 +798,8 @@
       season_toi_min: { field: 'season_toi_min', type: 'number' },
       soai_pp_generation: { field: 'soai_pp_generation', type: 'number' },
       soai_pp_above_deployment: { field: 'soai_pp_above_deployment', type: 'number' },
+      soai_matchup: { field: matchupField(), type: 'number' },
+      soai_support_coverage: { field: 'soai_support_coverage', type: 'number' },
     };
     const spec = fieldMap[key] || fieldMap.fwd_total82;
     return [...rows].sort((a, b) => {
@@ -998,6 +1077,12 @@
       refreshRankings,
     );
     bindSortableHeaders(
+      'prospectiveTable',
+      () => state.prospectiveSort,
+      (next) => { state.prospectiveSort = next; },
+      refreshProspective,
+    );
+    bindSortableHeaders(
       'fantasyTable',
       () => state.fantasySort,
       (next) => { state.fantasySort = next; },
@@ -1028,6 +1113,18 @@
     document.querySelectorAll('input[name="rankingsPos"]').forEach((input) => {
       input.addEventListener('change', refreshRankings);
     });
+    document.querySelectorAll('input[name="rankingsMatchup"]').forEach((input) => {
+      input.addEventListener('change', (event) => {
+        state.rankingsMatchup = String(event.target.value || 'bottom_six');
+        refreshRankings();
+      });
+    });
+    ['prospectivePlayerSearch', 'prospectiveTeamSearch'].forEach((id) => {
+      document.getElementById(id)?.addEventListener('input', refreshProspective);
+    });
+    document.querySelectorAll('input[name="prospectivePos"]').forEach((input) => {
+      input.addEventListener('change', refreshProspective);
+    });
     ['fantasyPlayerSearch', 'fantasyTeamSearch'].forEach((id) => {
       document.getElementById(id)?.addEventListener('input', refreshFantasy);
     });
@@ -1046,6 +1143,7 @@
     });
 
     refreshRankings();
+    refreshProspective();
     refreshFantasy();
     refreshGoalies();
     refreshTeams();
