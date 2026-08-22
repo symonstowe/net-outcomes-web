@@ -31,7 +31,8 @@
   'soai_defensive_suppression': 3,
   'soai_defensive_territory': 1,
   'soai_pp_generation': 2,
-  'soai_pp_above_deployment': 2
+  'soai_pp_above_deployment': 2,
+  'soai_discipline_per100': 5
 };
   const signedAt = (value, key) => (value != null
     ? (value >= 0 ? '+' : '') + Number(value).toFixed(DECIMALS[key] ?? 2)
@@ -77,6 +78,7 @@
     'soai_defensive_territory',
     'soai_pp_generation',
     'soai_pp_above_deployment',
+    'soai_falloff',
     'season_gp',
     'season_toi_min',
   ];
@@ -90,13 +92,14 @@
     'team',
     'position',
     'fwd_total82',
-    'fwd_total',
-    'fwd_pct',
-    'fwd_off',
-    'fwd_def',
-    'fwd_gf60',
-    'fwd_ga60',
-    'season_gp',
+    'soai_shot_generation',
+    'soai_shot_quality',
+    'soai_puck_recovery',
+    'soai_defensive_suppression',
+    'soai_defensive_territory',
+    'soai_discipline_per100',
+    'soai_pp_generation',
+    'soai_support_coverage',
   ];
 
   const VALID_FANTASY_SORT_KEYS = [
@@ -436,19 +439,29 @@
   }
 
   function setupSectionNavigation(initialTarget) {
-    const buttons = Array.from(document.querySelectorAll('#sectionNav .sf-section-btn'));
+    const buttons = Array.from(document.querySelectorAll('.sf-dashboard-section-trigger'));
     const panels = Array.from(document.querySelectorAll('.sf-section-panel'));
     if (!buttons.length || !panels.length) return;
 
     const activate = (targetId, options = {}) => {
       const nextTarget = sanitizeSectionTarget(targetId) || DEFAULT_SECTION_ID;
+      const skaterActive = ['rankingsPanel', 'prospectivePanel'].includes(nextTarget);
       state.activeSection = nextTarget;
       buttons.forEach((btn) => {
-        btn.classList.toggle('is-active', btn.dataset.sectionTarget === nextTarget);
+        const isSidebarGroup = Boolean(btn.dataset.dashboardGroup);
+        const selected = isSidebarGroup
+          ? (btn.dataset.dashboardGroup === 'skaters'
+            ? skaterActive
+            : btn.dataset.sectionTarget === nextTarget)
+          : btn.dataset.sectionTarget === nextTarget;
+        btn.classList.toggle('is-active', selected);
+        btn.setAttribute('aria-current', selected ? 'page' : 'false');
       });
       panels.forEach((panel) => {
         panel.classList.toggle('is-active', panel.id === nextTarget);
       });
+      const skaterToggle = document.getElementById('skaterViewToggle');
+      if (skaterToggle) skaterToggle.hidden = !skaterActive;
       if (options.syncUrl !== false) {
         syncUrlState();
       }
@@ -466,6 +479,36 @@
     });
 
     activate(initialTarget, { syncUrl: false });
+  }
+
+  function setupMemberFeatureModal() {
+    const modal = document.getElementById('memberFeatureModal');
+    const featureName = document.getElementById('memberFeatureName');
+    const triggers = Array.from(document.querySelectorAll('[data-member-feature]'));
+    const closeButtons = Array.from(document.querySelectorAll('[data-member-close]'));
+    if (!modal || !featureName || !triggers.length) return;
+
+    let returnFocus = null;
+    const close = () => {
+      modal.hidden = true;
+      document.body.classList.remove('sf-member-modal-open');
+      if (returnFocus instanceof HTMLElement) returnFocus.focus();
+    };
+    const open = (trigger) => {
+      returnFocus = trigger;
+      featureName.textContent = trigger.dataset.memberFeature || 'This feature';
+      modal.hidden = false;
+      document.body.classList.add('sf-member-modal-open');
+      modal.querySelector('.sf-member-modal-close')?.focus();
+    };
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => open(trigger));
+    });
+    closeButtons.forEach((button) => button.addEventListener('click', close));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modal.hidden) close();
+    });
   }
 
   function emptyMessage(selector, colspan, message) {
@@ -499,10 +542,10 @@
       ? `<td class="${classForSigned(value)}">${signedAt(value, key)}</td>`
       : '<td>—</td>');
     const soaiCells = (row) => (hasSoai
-      ? SOAI_KEYS.map((key) => metric(row[key], key)).join('')
+      ? `${SOAI_KEYS.map((key) => metric(row[key], key)).join('')}<td class="${row.soai_falloff_score != null ? classForSigned(row.soai_falloff_score) : ''}" title="${esc(row.soai_deployment_summary || '')}">${row.soai_falloff_score != null ? `${esc(row.soai_falloff)} (${Number(row.soai_falloff_score) >= 0 ? '+' : ''}${Number(row.soai_falloff_score).toFixed(0)})` : '—'}</td>`
       : '');
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(hasSoai ? 20 : 6, 'No skater rankings available.');
+      tbody.innerHTML = emptyRow(hasSoai ? 19 : 6, 'No skater rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
@@ -517,15 +560,18 @@
     `).join('');
   }
 
-  // 12 cells, matching the prospective column list in rankings.yaml. Forecast
-  // columns only; observed performance lives on the retrospective board.
+  // One overall forecast plus the SOAI dimensions that passed their own
+  // rolling next-season and held-out-team rank checks.
   function renderProspective(rows) {
     const tbody = document.querySelector('#prospectiveTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(12, 'No prospective rankings available.');
+      tbody.innerHTML = emptyRow(13, 'No prospective rankings available.');
       return;
     }
+    const metric = (value, key) => (value != null
+      ? `<td class="${classForSigned(value)}">${signedAt(value, key)}</td>`
+      : '<td>—</td>');
     tbody.innerHTML = rows.map((row, index) => `
       <tr>
         <td>${index + 1}</td>
@@ -533,13 +579,14 @@
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
         <td class="${classForSigned(row.fwd_total82)}">${signed(row.fwd_total82)}</td>
-        <td class="${classForSigned(row.fwd_total)}">${signed(row.fwd_total)}</td>
-        <td>${row.fwd_pct != null ? `${Math.round(row.fwd_pct)}` : '—'}</td>
-        <td class="${classForSigned(row.fwd_off)}">${signed(row.fwd_off)}</td>
-        <td class="${classForSigned(row.fwd_def)}">${signed(row.fwd_def)}</td>
-        <td>${row.fwd_gf60 != null ? row.fwd_gf60.toFixed(2) : '—'}</td>
-        <td>${row.fwd_ga60 != null ? row.fwd_ga60.toFixed(2) : '—'}</td>
-        <td>${row.season_gp}</td>
+        ${metric(row.soai_shot_generation, 'soai_shot_generation')}
+        ${metric(row.soai_shot_quality, 'soai_shot_quality')}
+        ${metric(row.soai_puck_recovery, 'soai_puck_recovery')}
+        ${metric(row.soai_defensive_suppression, 'soai_defensive_suppression')}
+        ${metric(row.soai_defensive_territory, 'soai_defensive_territory')}
+        ${metric(row.soai_discipline_per100, 'soai_discipline_per100')}
+        ${metric(row.soai_pp_generation, 'soai_pp_generation')}
+        <td>${row.soai_support_coverage != null ? `${Math.round(100 * row.soai_support_coverage)}%` : '—'}</td>
       </tr>
     `).join('');
   }
@@ -811,6 +858,7 @@
       soai_defensive_territory: { field: 'soai_defensive_territory', type: 'number' },
       soai_pp_generation: { field: 'soai_pp_generation', type: 'number' },
       soai_pp_above_deployment: { field: 'soai_pp_above_deployment', type: 'number' },
+      soai_falloff: { field: 'soai_falloff_score', type: 'number' },
       season_gp: { field: 'season_gp', type: 'number' },
       season_toi_min: { field: 'season_toi_min', type: 'number' },
     };
@@ -1155,6 +1203,7 @@
     refreshGoalies();
     refreshTeams();
     refreshUnderrated();
+    setupMemberFeatureModal();
     setupSectionNavigation(state.initialUrlState.section);
     state.suppressUrlSync = false;
     syncUrlState();

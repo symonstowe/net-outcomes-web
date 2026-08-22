@@ -2212,3 +2212,686 @@ body.lato {
   font-family: "LatoWeb", sans-serif;
   margin-top: 2px;
 }
+
+/* Rankings analysis dashboard */
+.sf-rankings-dashboard {
+  --sf-dashboard-accent: #06799f;
+  --sf-dashboard-accent-soft: #e9f4f7;
+  --sf-dashboard-ink: #18201c;
+  --sf-dashboard-muted: #69736d;
+  --sf-dashboard-line: #e5e9e7;
+  display: grid;
+  grid-template-columns: 218px minmax(0, 1fr);
+  width: calc(100vw - 24px);
+  max-width: none;
+  min-height: 820px;
+  margin-left: calc(50% - 50vw + 12px);
+  overflow: hidden;
+  border: 1px solid #dfe5e2;
+  border-radius: 18px;
+  background: #f7f8f8;
+  box-shadow: 0 18px 46px rgba(29, 45, 37, 0.08);
+}
+
+.sf-dashboard-sidebar {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 28px 16px 22px;
+  border-right: 1px solid var(--sf-dashboard-line);
+  background: #ffffff;
+}
+
+.sf-dashboard-sidebar-heading {
+  margin: 0 12px 10px;
+  color: #909891;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sf-dashboard-sidebar-heading--tools {
+  margin-top: 28px;
+}
+
+.sf-dashboard-sidebar-nav {
+  display: grid;
+  gap: 5px;
+}
+
+.sf-dashboard-sidebar-link {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 12px;
+  color: #4f5b54;
+  background: transparent;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 0.86rem;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+}
+
+.sf-dashboard-sidebar-link:hover,
+.sf-dashboard-sidebar-link:focus-visible {
+  color: var(--sf-dashboard-accent);
+  background: #f0f7f9;
+}
+
+.sf-dashboard-sidebar-link.is-active {
+  color: #056887;
+  background: var(--sf-dashboard-accent-soft);
+}
+
+.sf-dashboard-sidebar-link--locked {
+  color: #818a84;
+}
+
+.sf-dashboard-nav-icon {
+  color: currentColor;
+  font-size: 1.15rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.sf-lock-icon {
+  position: relative;
+  display: inline-block;
+  width: 13px;
+  height: 11px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  color: #89918c;
+}
+
+.sf-lock-icon::before {
+  content: "";
+  position: absolute;
+  left: 2.5px;
+  top: -7px;
+  width: 5px;
+  height: 7px;
+  border: 1.5px solid currentColor;
+  border-bottom: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.sf-dashboard-sidebar-note {
+  margin-top: auto;
+  padding: 18px 12px 0;
+  color: #8a938d;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.sf-dashboard-workspace {
+  min-width: 0;
+  padding: 28px 30px 34px;
+}
+
+.sf-dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.sf-dashboard-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--sf-dashboard-line);
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.sf-dashboard-view-toggle[hidden] {
+  display: none;
+}
+
+.sf-dashboard-view-toggle-btn {
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 6px;
+  color: #65716a;
+  background: transparent;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.sf-dashboard-view-toggle-btn:hover,
+.sf-dashboard-view-toggle-btn:focus-visible {
+  color: var(--sf-dashboard-accent);
+  background: #f0f7f9;
+}
+
+.sf-dashboard-view-toggle-btn.is-active {
+  color: #056887;
+  background: var(--sf-dashboard-accent-soft);
+}
+
+.sf-dashboard-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sf-dashboard-updated {
+  max-width: 190px;
+  color: #818a84;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  text-align: right;
+}
+
+.sf-dashboard-export,
+.sf-member-modal-confirm {
+  border: 1px solid #056887;
+  border-radius: 7px;
+  padding: 10px 15px;
+  color: #ffffff;
+  background: var(--sf-dashboard-accent, #06799f);
+  box-shadow: 0 4px 10px rgba(6, 121, 159, 0.2);
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.sf-dashboard-export:hover,
+.sf-member-modal-confirm:hover {
+  background: #056887;
+}
+
+.sf-dashboard-snapshot {
+  margin-bottom: 22px;
+  overflow: hidden;
+  border: 1px solid var(--sf-dashboard-line);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.sf-dashboard-snapshot-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--sf-dashboard-line);
+  color: #3f4943;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 0.78rem;
+}
+
+.sf-dashboard-live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #78827c;
+  font-family: "LatoWeb", sans-serif;
+  font-size: 0.7rem;
+}
+
+.sf-dashboard-live-dot::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #63af87;
+  box-shadow: 0 0 0 3px rgba(99, 175, 135, 0.12);
+}
+
+.sf-dashboard-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.sf-dashboard-kpi {
+  position: relative;
+  min-width: 0;
+  padding: 20px 18px 18px;
+  border-right: 1px solid var(--sf-dashboard-line);
+}
+
+.sf-dashboard-kpi:last-child {
+  border-right: 0;
+}
+
+.sf-dashboard-kpi::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--sf-dashboard-accent);
+}
+
+.sf-dashboard-kpi--coral::before { background: #ef6f61; }
+.sf-dashboard-kpi--amber::before { background: #e9b949; }
+.sf-dashboard-kpi--green::before { background: #74ad8d; }
+
+.sf-dashboard-kpi-label {
+  display: block;
+  overflow: hidden;
+  color: #69736d;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sf-dashboard-kpi-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.sf-dashboard-kpi-value-row strong {
+  color: var(--sf-dashboard-ink);
+  font-family: "LatoWebLight", "LatoWeb", sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.sf-dashboard-kpi-value-row span {
+  color: #6e7872;
+  font-size: 0.7rem;
+}
+
+.sf-dashboard-kpi p {
+  min-height: 32px;
+  margin: 12px 0 0;
+  overflow: hidden;
+  color: #7c857f;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.sf-dashboard-kpi p a {
+  color: #59655e;
+  text-decoration: none;
+}
+
+.sf-dashboard-kpi p a:hover {
+  color: var(--sf-dashboard-accent);
+  text-decoration: underline;
+}
+
+.sf-dashboard-content-card {
+  overflow: hidden;
+  border: 1px solid var(--sf-dashboard-line);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.sf-rankings-dashboard .sf-section-panel {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.sf-rankings-dashboard .sf-section-panel > .sf-panel-header {
+  margin: 0;
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid #edf0ee;
+}
+
+.sf-rankings-dashboard .sf-panel-header h2 {
+  color: var(--sf-dashboard-ink);
+  font-size: 1.08rem;
+}
+
+.sf-rankings-dashboard .sf-rank-basis {
+  max-width: 1120px;
+  color: #77817b;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.sf-rankings-dashboard .sf-skater-filter-toolbar {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #edf0ee;
+}
+
+.sf-rankings-dashboard .sf-position-toggle-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--sf-dashboard-line);
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.sf-rankings-dashboard .sf-filter-check {
+  position: relative;
+  gap: 0;
+  color: #637069;
+}
+
+.sf-rankings-dashboard .sf-filter-check input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sf-rankings-dashboard .sf-filter-check span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #65716a;
+  background: transparent;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+}
+
+.sf-rankings-dashboard .sf-filter-check:hover span {
+  color: var(--sf-dashboard-accent);
+  background: #f0f7f9;
+}
+
+.sf-rankings-dashboard .sf-filter-check input:focus-visible + span {
+  outline: 2px solid var(--sf-dashboard-accent);
+  outline-offset: 2px;
+}
+
+.sf-rankings-dashboard .sf-filter-check input:checked + span {
+  border-color: #c7e0e7;
+  color: #056887;
+  background: var(--sf-dashboard-accent-soft);
+}
+
+.sf-rankings-dashboard .sf-panel-header input[type="search"] {
+  min-height: 38px;
+  border-color: #dfe5e2;
+  border-radius: 7px;
+  background: #fafbfb;
+}
+
+.sf-rankings-dashboard .sf-table-wrap {
+  max-height: 720px;
+  scrollbar-color: #c8d0cc transparent;
+}
+
+.sf-rankings-dashboard .sf-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #fafbfb;
+}
+
+.sf-rankings-dashboard .sf-table th {
+  height: 46px;
+  padding: 9px 12px;
+  border-bottom-color: #dfe5e2;
+  color: #747e78;
+  font-size: 0.69rem;
+  letter-spacing: 0.065em;
+}
+
+.sf-rankings-dashboard .sf-table td {
+  height: 46px;
+  padding: 9px 12px;
+  border-bottom-color: #edf0ee;
+  color: #3e4942;
+}
+
+.sf-rankings-dashboard .sf-table tbody tr {
+  transition: background 0.14s ease;
+}
+
+.sf-rankings-dashboard .sf-table tbody tr:hover {
+  background: #f2f8fa;
+}
+
+.sf-rankings-dashboard .sf-table tbody tr:nth-child(-n + 3) td:first-child {
+  color: var(--sf-dashboard-accent);
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+}
+
+.sf-rankings-dashboard .sf-player-link {
+  color: #28332d;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  text-decoration: none;
+}
+
+.sf-rankings-dashboard .sf-player-link:hover {
+  color: var(--sf-dashboard-accent);
+}
+
+.sf-rankings-dashboard .sf-home-grid {
+  padding: 20px;
+}
+
+.sf-rankings-dashboard .sf-home-grid > .sf-panel,
+.sf-rankings-dashboard .sf-anomaly-card {
+  border-color: var(--sf-dashboard-line);
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+.sf-member-modal[hidden] {
+  display: none;
+}
+
+.sf-member-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.sf-member-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 25, 21, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.sf-member-modal-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(440px, 100%);
+  padding: 34px;
+  border: 1px solid #e0e5e2;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 26px 70px rgba(22, 31, 26, 0.24);
+  text-align: center;
+}
+
+.sf-member-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  color: #7d8781;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.sf-member-modal-close:hover {
+  background: #f1f3f2;
+}
+
+.sf-member-modal-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  color: var(--sf-dashboard-accent, #06799f);
+  background: var(--sf-dashboard-accent-soft, #e9f4f7);
+}
+
+.sf-member-modal-icon .sf-lock-icon {
+  width: 17px;
+  height: 14px;
+  color: #06799f;
+}
+
+.sf-member-modal-icon .sf-lock-icon::before {
+  left: 3.5px;
+  top: -9px;
+  width: 7px;
+  height: 9px;
+}
+
+.sf-member-modal-dialog h2 {
+  margin: 0;
+  color: #18201c;
+  font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
+  font-size: 1.45rem;
+}
+
+.sf-member-modal-dialog p {
+  margin: 13px auto 24px;
+  max-width: 340px;
+  color: #68736d;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.sf-member-modal-confirm {
+  min-width: 110px;
+}
+
+body.sf-member-modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 1120px) {
+  .sf-rankings-dashboard {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+
+  .sf-dashboard-workspace {
+    padding: 24px 20px 28px;
+  }
+
+  .sf-dashboard-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sf-dashboard-kpi:nth-child(2) {
+    border-right: 0;
+  }
+
+  .sf-dashboard-kpi:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--sf-dashboard-line);
+  }
+}
+
+@media (max-width: 780px) {
+  .sf-container {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .sf-rankings-dashboard {
+    display: block;
+    border-radius: 12px;
+  }
+
+  .sf-dashboard-sidebar {
+    display: block;
+    padding: 12px;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--sf-dashboard-line);
+  }
+
+  .sf-dashboard-sidebar-heading,
+  .sf-dashboard-sidebar-note {
+    display: none;
+  }
+
+  .sf-dashboard-sidebar-nav {
+    display: flex;
+    min-width: max-content;
+  }
+
+  .sf-dashboard-sidebar-nav + .sf-dashboard-sidebar-nav {
+    margin-top: 6px;
+  }
+
+  .sf-dashboard-sidebar-link {
+    width: auto;
+    grid-template-columns: 20px auto auto;
+    min-height: 40px;
+  }
+
+  .sf-dashboard-workspace {
+    padding: 20px 14px 24px;
+  }
+
+  .sf-dashboard-toolbar {
+    flex-direction: column;
+  }
+
+  .sf-dashboard-toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sf-dashboard-updated {
+    text-align: left;
+  }
+
+  .sf-rankings-dashboard .sf-section-panel > .sf-panel-header {
+    padding: 18px 16px 14px;
+  }
+}
+
+@media (max-width: 520px) {
+  .sf-dashboard-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-dashboard-kpi,
+  .sf-dashboard-kpi:nth-child(2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--sf-dashboard-line);
+  }
+
+  .sf-dashboard-kpi:last-child {
+    border-bottom: 0;
+  }
+
+  .sf-dashboard-snapshot-heading {
+    align-items: flex-start;
+  }
+
+  .sf-member-modal-dialog {
+    padding: 30px 22px 24px;
+  }
+}
