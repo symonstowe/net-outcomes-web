@@ -20,9 +20,9 @@
   // dimensions span four orders of magnitude, so a single shared format
   // rendered the whole puck-recovery column as 0.00.
   const DECIMALS = {
-  'soai_delta_v_net': 2,
-  'soai_delta_v_off': 2,
-  'soai_delta_v_def': 2,
+  'soai_net_gar': 1,
+  'soai_offense_gar': 1,
+  'soai_defense_gar': 1,
   'soai_finishing_per60': 2,
   'soai_discipline_per60': 3,
   'soai_shot_generation': 3,
@@ -66,9 +66,9 @@
     'player_name',
     'team',
     'position',
-    'soai_delta_v_net',
-    'soai_delta_v_off',
-    'soai_delta_v_def',
+    'soai_net_gar',
+    'soai_offense_gar',
+    'soai_defense_gar',
     'soai_finishing_per60',
     'soai_discipline_per60',
     'soai_shot_generation',
@@ -194,7 +194,7 @@
     teamRankings: [],
     underrated: [],
     scoringAnomalies: {},
-    rankingsSort: { key: 'soai_delta_v_net', direction: 'desc' },
+    rankingsSort: { key: 'soai_net_gar', direction: 'desc' },
     prospectiveSort: { key: 'fwd_total82', direction: 'desc' },
     fantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieSort: { key: 'rank', direction: 'asc' },
@@ -525,9 +525,9 @@
     // and shift every column. Python decides the same way, from the payload.
     const hasSoai = state.rankings.some((row) => row.soai_candidate_per100 != null);
     const SOAI_KEYS = [
-      'soai_delta_v_net',
-      'soai_delta_v_off',
-      'soai_delta_v_def',
+      'soai_net_gar',
+      'soai_offense_gar',
+      'soai_defense_gar',
       'soai_finishing_per60',
       'soai_discipline_per60',
       'soai_shot_generation',
@@ -541,9 +541,14 @@
     const metric = (value, key) => (value != null
       ? `<td class="${classForSigned(value)}">${signedAt(value, key)}</td>`
       : '<td>—</td>');
-    const soaiCells = (row) => (hasSoai
-      ? `${SOAI_KEYS.map((key) => metric(row[key], key)).join('')}<td class="${row.soai_falloff_score != null ? classForSigned(row.soai_falloff_score) : ''}" title="${esc(row.soai_deployment_summary || '')}">${row.soai_falloff_score != null ? `${esc(row.soai_falloff)} (${Number(row.soai_falloff_score) >= 0 ? '+' : ''}${Number(row.soai_falloff_score).toFixed(0)})` : '—'}</td>`
-      : '');
+    const soaiCells = (row) => {
+      if (!hasSoai) return '';
+      const falloffLabel = row.soai_falloff || '—';
+      const falloffValue = row.soai_falloff_score != null
+        ? `${esc(falloffLabel)} (${Number(row.soai_falloff_score) >= 0 ? '+' : ''}${Number(row.soai_falloff_score).toFixed(0)})`
+        : esc(falloffLabel);
+      return `${SOAI_KEYS.map((key) => metric(row[key], key)).join('')}<td class="${row.soai_falloff_score != null ? classForSigned(row.soai_falloff_score) : ''}" title="${esc(row.soai_deployment_summary || '')}">${falloffValue}</td>`;
+    };
     if (!rows.length) {
       tbody.innerHTML = emptyRow(hasSoai ? 19 : 6, 'No skater rankings available.');
       return;
@@ -555,7 +560,7 @@
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>${soaiCells(row)}
         <td>${row.season_gp}</td>
-        <td>${Number(row.season_toi_min || 0).toFixed(1)}</td>
+        <td>${Number((hasSoai ? row.soai_ev_toi_min : row.season_toi_min) || 0).toFixed(1)}</td>
       </tr>
     `).join('');
   }
@@ -839,16 +844,16 @@
   }
 
   function sortRankings(rows) {
-    const key = String(state.rankingsSort?.key || 'soai_delta_v_net');
+    const key = String(state.rankingsSort?.key || 'soai_net_gar');
     const direction = String(state.rankingsSort?.direction || 'desc');
     const dir = direction === 'asc' ? 1 : -1;
     const fieldMap = {
       player_name: { field: 'player_name', type: 'string' },
       team: { field: 'team', type: 'string' },
       position: { field: 'position', type: 'string' },
-      soai_delta_v_net: { field: 'soai_delta_v_net', type: 'number' },
-      soai_delta_v_off: { field: 'soai_delta_v_off', type: 'number' },
-      soai_delta_v_def: { field: 'soai_delta_v_def', type: 'number' },
+      soai_net_gar: { field: 'soai_net_gar', type: 'number' },
+      soai_offense_gar: { field: 'soai_offense_gar', type: 'number' },
+      soai_defense_gar: { field: 'soai_defense_gar', type: 'number' },
       soai_finishing_per60: { field: 'soai_finishing_per60', type: 'number' },
       soai_discipline_per60: { field: 'soai_discipline_per60', type: 'number' },
       soai_shot_generation: { field: 'soai_shot_generation', type: 'number' },
@@ -860,9 +865,9 @@
       soai_pp_above_deployment: { field: 'soai_pp_above_deployment', type: 'number' },
       soai_falloff: { field: 'soai_falloff_score', type: 'number' },
       season_gp: { field: 'season_gp', type: 'number' },
-      season_toi_min: { field: 'season_toi_min', type: 'number' },
+      season_toi_min: { field: hasSoai ? 'soai_ev_toi_min' : 'season_toi_min', type: 'number' },
     };
-    const spec = fieldMap[key] || fieldMap.soai_delta_v_net;
+    const spec = fieldMap[key] || fieldMap.soai_net_gar;
     return [...rows].sort((a, b) => {
       if (spec.type === 'string') {
         const primary = String(a?.[spec.field] || '').localeCompare(String(b?.[spec.field] || ''));
