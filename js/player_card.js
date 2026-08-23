@@ -163,10 +163,90 @@
     return 'Steady';
   }
 
+  function decisionPanel(dc) {
+    if (!dc) return '';
+    const values = (dc.values || []).filter((item) => item.value_per60 != null);
+    const cp = dc.components || {};
+    const componentRows = ['direct_actor', 'enabling', 'suppression']
+      .map((key) => cp[key])
+      .filter(Boolean);
+    const fall = dc.falloff || {};
+    const rungs = fall.rungs || [];
+    const unc = dc.uncertainty || {};
+    const port = dc.portability || {};
+    const support = unc.support_coverage == null ? null : Math.round(unc.support_coverage * 100);
+    const fmtShare = (v) => v == null ? '—' : `${Math.round(v * 100)}% of minutes`;
+    return `
+  <section class="decision-shell" aria-label="SOAI player decision card">
+    <div class="decision-title">
+      <div><span class="eyebrow">SOAI player decision card</span><h2>Impact by decision context</h2></div>
+      <span class="decision-unit">Projected 5v5 goals above replacement /60</span>
+    </div>
+
+    <div class="decision-values">
+      ${values.map((item) => `<article class="decision-value decision-${esc(item.key)}">
+        <div class="decision-value-top"><b>${esc(item.label)}</b><span>${esc(item.status)}</span></div>
+        <strong>${sgn(item.value_per60)}</strong>
+        ${item.season_value != null ? `<small>${sgn(item.season_value, 1)} goals at projected/standard minutes</small>` : '<small>Per-60 scenario value</small>'}
+        ${item.low90 != null && item.high90 != null ? `<div class="decision-range">90% season range ${sgn(item.low90, 1)} to ${sgn(item.high90, 1)}</div>` : ''}
+        <p>${esc(item.description)}</p>
+      </article>`).join('')}
+    </div>
+
+    <div class="decision-grid">
+      <article class="decision-panel">
+        <div class="decision-panel-head"><div><span class="eyebrow">Attribution</span><h3>Actor and on-ice value</h3></div><span>${esc(cp.unit || '')}</span></div>
+        <div class="component-stack">
+          ${componentRows.map((item) => `<div class="component-row">
+            <div><b>${esc(item.label)}</b><small>${esc(item.description)}</small></div>
+            <div class="component-number ${Number(item.value) < 0 ? 'negative' : ''}">${sgn(item.value)}</div>
+            <span class="component-status">${esc(item.status)}</span>
+          </div>`).join('') || '<div class="note">Current additive attribution is unavailable.</div>'}
+        </div>
+        <div class="component-total"><span>Combined on-ice SOAI</span><strong>${sgn(cp.net_total)}</strong></div>
+        <div class="decision-note">${cp.reconciles ? 'Direct + enabling + suppression reconcile to the on-ice total.' : 'Component reconciliation is unavailable for this player.'}</div>
+      </article>
+
+      <article class="decision-panel">
+        <div class="decision-panel-head"><div><span class="eyebrow">Matchup response</span><h3>Top-line hold and fall-off</h3></div><span class="falloff-verdict">${esc(fall.verdict || 'Not measured')}${fall.score == null ? '' : ` · ${sgn(fall.score, 0)} pct`}</span></div>
+        <div class="falloff-curve">
+          ${rungs.map((rung) => `<div class="falloff-rung">
+            <div class="falloff-label"><b>${esc(rung.label)}</b><span>${fmtShare(rung.share_of_minutes)}</span></div>
+            <div class="falloff-track"><div style="width:${Math.max(2, Math.min(100, rung.percentile ?? 50))}%"></div></div>
+            <div class="falloff-reading"><strong>${ord(rung.percentile)} pct</strong><span>${rung.effect_above_role == null ? 'Not measured' : `${sgn(rung.effect_above_role)} above role`}</span></div>
+          </div>`).join('') || '<div class="note">No supported opponent-tier curve is available.</div>'}
+        </div>
+        ${fall.summary ? `<div class="decision-note">${esc(fall.summary)}</div>` : ''}
+      </article>
+
+      <article class="decision-panel">
+        <div class="decision-panel-head"><div><span class="eyebrow">Uncertainty</span><h3>Evidence behind the estimate</h3></div><span>${support == null ? 'Coverage unavailable' : `${support}% state support`}</span></div>
+        <div class="evidence-grid">
+          <div><b>${unc.additive_toi_minutes == null ? '—' : Math.round(unc.additive_toi_minutes)}</b><span>Additive TOI minutes</span></div>
+          <div><b>${unc.direct_actor_events == null ? '—' : Math.round(unc.direct_actor_events)}</b><span>Owned actions</span></div>
+          <div><b>${unc.effective_sample_size == null ? '—' : Math.round(unc.effective_sample_size)}</b><span>Effective episodes</span></div>
+          <div><b>${unc.neutral_sd_per60 == null ? '—' : `±${Number(unc.neutral_sd_per60).toFixed(2)}`}</b><span>Neutral uncertainty /60</span></div>
+        </div>
+        <div class="evidence-list">${(dc.evidence || []).map((item) => `<div><b>${esc(item.label)}</b><span>${esc(item.status)}</span></div>`).join('')}</div>
+      </article>
+
+      <article class="decision-panel portability-panel">
+        <div class="decision-panel-head"><div><span class="eyebrow">Role portability</span><h3>Transfer evidence</h3></div><span>${esc(port.status || 'Not rated')}</span></div>
+        <div class="portability-readings">
+          <div><b>${port.top_unit_retention_per60 == null ? '—' : sgn(port.top_unit_retention_per60)}</b><span>Projected top-unit retention /60</span></div>
+          <div><b>${port.matchup_hold_score == null ? '—' : sgn(port.matchup_hold_score, 0)}</b><span>Observed matchup-hold points</span></div>
+          <div><b>${port.conservative_support_pct == null ? '—' : `${port.conservative_support_pct}%`}</b><span>Conservative transport support</span></div>
+        </div>
+        <div class="decision-note">${esc(port.description || '')}</div>
+      </article>
+    </div>
+  </section>`;
+  }
+
   function render() {
     const d = DATA;
     const b = d.bio, bd = d.board, c = d.cells, sk = d.skills || {}, pr = d.production || {},
-      sh = d.shooting || {}, cx = d.context || {}, st = d.style || {}, us = d.usage || {};
+      sh = d.shooting || {}, cx = d.context || {}, st = d.style || {}, us = d.usage || {}, dc = d.decision || null;
     const comp = bd.components || {};
     const tr = us.trust || {};
     const wy = cx.wowy || {};
@@ -213,6 +293,8 @@
     <div class="rank"><b>Overused rank</b><span>${bd.over_rank && bd.over_rank <= 50 ? '#' + bd.over_rank : '—'}</span></div>
     <div class="rank${(bd.trend_rank ?? 0) >= 60 ? ' good' : ''}"><b>Last-10 trend</b><span>${ord(bd.trend_rank)} pct</span></div>
   </section>
+
+  ${decisionPanel(dc)}
 
   <section class="grid3">
     <article class="panel">
