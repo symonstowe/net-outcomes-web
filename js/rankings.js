@@ -21,8 +21,8 @@
   // rendered the whole puck-recovery column as 0.00.
   const DECIMALS = {
   'soai_net_gar': 1,
-  'soai_offense_gar': 1,
-  'soai_defense_gar': 1,
+  'soai_offense_gar': 2,
+  'soai_defense_gar': 2,
   'soai_finishing_per60': 2,
   'soai_discipline_per60': 3,
   'soai_shot_generation': 3,
@@ -109,8 +109,10 @@
     'fantasy_score',
     'fantasy_score_sd',
     'fantasy_goals',
+    'fantasy_goals_hi90',
     'fantasy_assists',
     'fantasy_points',
+    'fantasy_points_hi90',
     'fantasy_powerplay_points',
     'fantasy_shots',
     'fantasy_hits',
@@ -194,6 +196,8 @@
     teamRankings: [],
     underrated: [],
     scoringAnomalies: {},
+    // The stable URL key now carries current-season xGAR. Pooled additive SOAI
+    // failed its public retrospective gate and is context only.
     rankingsSort: { key: 'soai_net_gar', direction: 'desc' },
     prospectiveSort: { key: 'fwd_total82', direction: 'desc' },
     fantasySort: { key: 'fantasy_score', direction: 'desc' },
@@ -619,7 +623,8 @@
     const tbody = document.querySelector('#fantasyTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(34, 'No conditional season forecasts available.');
+      const columns = document.querySelectorAll('#fantasyTable thead th').length || 36;
+      tbody.innerHTML = emptyRow(columns, 'No conditional season forecasts available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
@@ -631,8 +636,10 @@
         <td>${row.fantasy_score != null ? Number(row.fantasy_score).toFixed(1) : '—'}</td>
         <td>${row.fantasy_score_sd != null ? Number(row.fantasy_score_sd).toFixed(1) : '—'}</td>
         <td>${row.fantasy_goals != null ? Number(row.fantasy_goals).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_goals_hi90 != null ? Number(row.fantasy_goals_hi90).toFixed(1) : '—'}</td>
         <td>${row.fantasy_assists != null ? Number(row.fantasy_assists).toFixed(1) : '—'}</td>
         <td>${row.fantasy_points != null ? Number(row.fantasy_points).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_points_hi90 != null ? Number(row.fantasy_points_hi90).toFixed(1) : '—'}</td>
         <td>${row.fantasy_powerplay_points != null ? Number(row.fantasy_powerplay_points).toFixed(1) : '—'}</td>
         <td>${row.fantasy_shots != null ? Number(row.fantasy_shots).toFixed(1) : '—'}</td>
         <td>${row.fantasy_hits != null ? Number(row.fantasy_hits).toFixed(1) : '—'}</td>
@@ -873,7 +880,14 @@
       season_toi_min: { field: hasSoai ? 'soai_ev_toi_min' : 'season_toi_min', type: 'number' },
     };
     const spec = fieldMap[key] || fieldMap.soai_net_gar;
-    return [...rows].sort((a, b) => {
+    // Retrospective means the completed season. Returning/injured players with
+    // no current 5v5 workload remain available to Predictive and Fantasy, but
+    // must not receive a numbered retrospective rank from historical context.
+    const eligibleRows = [...rows].filter((row) => {
+      const currentToi = hasSoai ? row?.soai_ev_toi_min : row?.season_toi_min;
+      return Number(row?.season_gp || 0) > 0 && Number(currentToi || 0) > 0;
+    });
+    return eligibleRows.sort((a, b) => {
       if (spec.type === 'string') {
         const primary = String(a?.[spec.field] || '').localeCompare(String(b?.[spec.field] || ''));
         if (primary !== 0) return dir * primary;
@@ -1223,7 +1237,11 @@
     init().catch((error) => {
       console.error(error);
       emptyMessage('#rankingsTable tbody', 13, error.message);
-      emptyMessage('#fantasyTable tbody', 13, error.message);
+      emptyMessage(
+        '#fantasyTable tbody',
+        document.querySelectorAll('#fantasyTable thead th').length || 36,
+        error.message,
+      );
       emptyMessage('#goalieTable tbody', 13, error.message);
       emptyMessage('#teamRankingsTable tbody', 18, error.message);
       emptyMessage('#underratedTable tbody', 12, error.message);
