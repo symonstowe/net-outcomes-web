@@ -516,6 +516,10 @@
     if (tbody) tbody.innerHTML = emptyRow(colspan, message);
   }
 
+  function boardHasSoai() {
+    return state.rankings.some((row) => row.soai_candidate_per100 != null);
+  }
+
   function renderRankings(rows) {
     const tbody = document.querySelector('#rankingsTable tbody');
     if (!tbody) return;
@@ -523,7 +527,7 @@
     // 1037 rows carry SOAI, so a name search landing outside that set would
     // otherwise flip this false, render the short row under the long header,
     // and shift every column. Python decides the same way, from the payload.
-    const hasSoai = state.rankings.some((row) => row.soai_candidate_per100 != null);
+    const hasSoai = boardHasSoai();
     const SOAI_KEYS = [
       'soai_net_gar',
       'soai_offense_gar',
@@ -844,6 +848,7 @@
   }
 
   function sortRankings(rows) {
+    const hasSoai = boardHasSoai();
     const key = String(state.rankingsSort?.key || 'soai_net_gar');
     const direction = String(state.rankingsSort?.direction || 'desc');
     const dir = direction === 'asc' ? 1 : -1;
