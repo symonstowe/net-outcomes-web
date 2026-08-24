@@ -2681,6 +2681,14 @@ body.lato {
   border-bottom: 1px solid #edf0ee;
 }
 
+.sf-rankings-dashboard .sf-dashboard-analysis-panel {
+  padding: 22px;
+}
+
+.sf-rankings-dashboard .sf-dashboard-analysis-panel > .sf-panel-header {
+  margin: -22px -22px 18px;
+}
+
 .sf-rankings-dashboard .sf-panel-header h2 {
   color: var(--sf-dashboard-ink);
   font-size: 1.08rem;
@@ -2999,6 +3007,14 @@ body.sf-member-modal-open {
 
   .sf-rankings-dashboard .sf-section-panel > .sf-panel-header {
     padding: 18px 16px 14px;
+  }
+
+  .sf-rankings-dashboard .sf-dashboard-analysis-panel {
+    padding: 16px;
+  }
+
+  .sf-rankings-dashboard .sf-dashboard-analysis-panel > .sf-panel-header {
+    margin: -16px -16px 16px;
   }
 }
 

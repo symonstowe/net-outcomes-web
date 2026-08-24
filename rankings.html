@@ -16,8 +16,8 @@
   <meta name="twitter:description" content="Net Outcomes publishes NHL skater, goalie, team, and underrated rankings with sortable tables and team profile metrics." />
   <link rel="canonical" href="https://netoutcomes.ca/rankings.html" />
   <link rel="icon" href="imgs/netoutcomes_favicon.svg" />
-  <link rel="stylesheet" href="latofonts.css?v=18cec23e9167bf16" />
-  <link rel="stylesheet" href="style.css?v=18cec23e9167bf16" />
+  <link rel="stylesheet" href="latofonts.css?v=18cec46c6aebd0e2" />
+  <link rel="stylesheet" href="style.css?v=18cec46c6aebd0e2" />
   <title>Net Outcomes | NHL Rankings</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/netoutcomes_favicon.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"WebPage","@id":"https://netoutcomes.ca/rankings.html#webpage","url":"https://netoutcomes.ca/rankings.html","name":"Net Outcomes | NHL Rankings","description":"Net Outcomes publishes NHL skater, goalie, team, and underrated rankings with sortable tables and team profile metrics.","inLanguage":"en-CA","isPartOf":{"@id":"https://netoutcomes.ca/#website"},"publisher":{"@id":"https://netoutcomes.ca/#organization"},"dateModified":"2026-08-24T12:02:05.522804+00:00"},{"@type":"BreadcrumbList","@id":"https://netoutcomes.ca/rankings.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://netoutcomes.ca/"},{"@type":"ListItem","position":2,"name":"Page","item":"https://netoutcomes.ca/rankings.html"}]}]}</script>
 </head>
@@ -29,7 +29,7 @@
           <img class="name_pic" src="imgs/netoutcomes_favicon.svg" alt="Net Outcomes logo" />
           <div class="name">Net Outcomes</div>
         </a>
-        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link is-active" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link" href="/playoffs.html">Playoffs</a><a class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
+        <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link is-active" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link" href="/playoffs.html">Playoffs</a><a class="sf-page-nav-link" href="/rankings.html#analysis-overview">Analysis</a></nav>
       </div>
 
     </header>
@@ -39,7 +39,7 @@
 
       <div class="sf-rankings-dashboard">
         <aside class="sf-dashboard-sidebar" aria-label="Analysis sections">
-          <div class="sf-dashboard-sidebar-heading">Analysis</div>
+          <div class="sf-dashboard-sidebar-heading">Rankings</div>
           <nav class="sf-dashboard-sidebar-nav" id="sectionNav">
 
             <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger
@@ -92,14 +92,57 @@
               <span>Trends</span>
             </button>
           </nav>
-          <div class="sf-dashboard-sidebar-heading sf-dashboard-sidebar-heading--tools">Tools</div>
-          <nav class="sf-dashboard-sidebar-nav" aria-label="Member analysis tools">
+          <div class="sf-dashboard-sidebar-heading sf-dashboard-sidebar-heading--tools">Analysis</div>
+          <nav class="sf-dashboard-sidebar-nav" aria-label="Analysis tools">
 
-            <a class="sf-dashboard-sidebar-link"
-               href="/analysis.html#fantasy-draft">
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="fantasy-draft"
+               data-section-target="fantasyDraftPanel">
               <span class="sf-dashboard-nav-icon" aria-hidden="true">◇</span>
               <span>Fantasy draft board</span>
-            </a>
+            </button>
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="analysis-overview"
+               data-section-target="overviewPanel">
+              <span class="sf-dashboard-nav-icon" aria-hidden="true">▦</span>
+              <span>Analysis overview</span>
+            </button>
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="line-analysis"
+               data-section-target="teamPanel">
+              <span class="sf-dashboard-nav-icon" aria-hidden="true">⌁</span>
+              <span>Line analysis</span>
+            </button>
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="penalties"
+               data-section-target="penaltyPanel">
+              <span class="sf-dashboard-nav-icon" aria-hidden="true">!</span>
+              <span>Penalty analysis</span>
+            </button>
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="pp-development"
+               data-section-target="powerplayPanel">
+              <span class="sf-dashboard-nav-icon" aria-hidden="true">+</span>
+              <span>PP development</span>
+            </button>
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="coach-defence"
+               data-section-target="coachDefensePanel">
+              <span class="sf-dashboard-nav-icon" aria-hidden="true">◫</span>
+              <span>Coach defence</span>
+            </button>
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="defensive-talent"
+               data-section-target="defensiveTalentPanel">
+              <span class="sf-dashboard-nav-icon" aria-hidden="true">◇</span>
+              <span>Defensive talent</span>
+            </button>
+            <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-section-trigger"
+               data-dashboard-group="team-xg"
+               data-section-target="xgPanel">
+              <span class="sf-dashboard-nav-icon" aria-hidden="true">◎</span>
+              <span>Team expected goals</span>
+            </button>
 
             <button type="button" class="sf-dashboard-sidebar-link sf-dashboard-sidebar-link--locked"
                     data-member-feature="Lineup analysis">
@@ -478,6 +521,368 @@
           </section>
         </div>
       </section>
+
+
+
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="overviewPanel">
+        <div class="sf-panel-header">
+          <h2>Analysis Workspace</h2>
+        </div>
+        <div class="sf-analysis-grid">
+          <article class="sf-analysis-card"><h3>Fantasy Draft Board</h3><p>Set your league's value for every skater and goalie category, then compare both positions on one scarcity-adjusted draft board.</p></article><article class="sf-analysis-card"><h3>Line Deployment Lab</h3><p>Compare current and suggested forward lines, defence pairs, power-play groups, and penalty-kill groups without stacking those cards on top of the main rankings tables.</p></article><article class="sf-analysis-card"><h3>Team xG Visualizer</h3><p>Inspect shot locations, expected goals, and goal overlays team by team with a threshold slider so heavier datasets stay usable.</p></article><article class="sf-analysis-card"><h3>Penalty Impact Lab</h3><p>Measure how often penalties turn into goals, compare four different definitions of when the power play really ends, and look at taken-vs-drawn profiles by player role.</p></article><article class="sf-analysis-card"><h3>PP Development Lab</h3><p>Track who is actually elite on the power play right now, compare them to their 5v5 profile, and follow how those same stars grew into their PP roles over career opportunity.</p></article>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="teamPanel">
+        <div class="sf-panel-header">
+          <h2>Line Analysis</h2>
+          <div class="sf-team-filter-group">
+            <input id="teamSearch" type="search" placeholder="Search team" />
+            <select id="compareTeamA">
+              <option value="">Compare team A</option>
+            </select>
+            <select id="compareTeamB">
+              <option value="">Compare team B</option>
+            </select>
+          </div>
+        </div>
+        <div id="teamCompareNote" class="sf-team-compare-note">Search teams normally or select up to two teams to compare side by side.</div>
+        <div id="teamGrid" class="sf-team-grid"></div>
+      </section>
+
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="fantasyDraftPanel">
+        <div class="sf-panel-header">
+          <div>
+            <h2>Fantasy Draft Board</h2>
+            <p class="sf-analysis-copy">Change the points your league awards for each category. Draft Value is projected points above the replacement player at the same roster group in a configurable league, so skaters and goalies can be compared on one board without altering the underlying forecasts.</p>
+          </div>
+          <button type="button" class="sf-dashboard-export sf-fantasy-draft-reset" id="fantasyDraftReset">Reset defaults</button>
+        </div>
+        <div class="sf-fantasy-draft-settings">
+          <fieldset class="sf-fantasy-draft-fieldset">
+            <legend>Skater scoring</legend>
+            <div class="sf-fantasy-draft-weight-grid">
+              <label>Goal <input type="number" step="0.05" value="3" data-draft-weight="goals" /></label>
+              <label>Assist <input type="number" step="0.05" value="2" data-draft-weight="assists" /></label>
+              <label>Shot <input type="number" step="0.05" value="0.25" data-draft-weight="shots" /></label>
+              <label>PP point <input type="number" step="0.05" value="0.5" data-draft-weight="powerplayPoints" /></label>
+              <label>Hit <input type="number" step="0.05" value="0.2" data-draft-weight="hits" /></label>
+              <label>Block <input type="number" step="0.05" value="0.3" data-draft-weight="blocks" /></label>
+              <label>PIM <input type="number" step="0.05" value="0" data-draft-weight="pim" /></label>
+            </div>
+          </fieldset>
+          <fieldset class="sf-fantasy-draft-fieldset">
+            <legend>Goalie scoring</legend>
+            <div class="sf-fantasy-draft-weight-grid">
+              <label>Win <input type="number" step="0.05" value="4" data-draft-weight="wins" /></label>
+              <label>Save <input type="number" step="0.05" value="0.2" data-draft-weight="saves" /></label>
+              <label>Shutout <input type="number" step="0.05" value="3" data-draft-weight="shutouts" /></label>
+              <label>Goal against <input type="number" step="0.05" value="-2" data-draft-weight="goalsAgainst" /></label>
+            </div>
+          </fieldset>
+          <fieldset class="sf-fantasy-draft-fieldset sf-fantasy-draft-fieldset--league">
+            <legend>League replacement level</legend>
+            <div class="sf-fantasy-draft-weight-grid">
+              <label>Teams <input type="number" min="2" max="32" step="1" value="12" data-draft-roster="teams" /></label>
+              <label>Forwards/team <input type="number" min="1" max="15" step="1" value="9" data-draft-roster="forwards" /></label>
+              <label>Defenders/team <input type="number" min="1" max="10" step="1" value="4" data-draft-roster="defenders" /></label>
+              <label>Goalies/team <input type="number" min="1" max="5" step="1" value="2" data-draft-roster="goalies" /></label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="sf-fantasy-draft-toolbar">
+          <div id="fantasyDraftSummary" class="sf-rank-basis">Loading projections…</div>
+          <div class="sf-search-group">
+            <input id="fantasyDraftSearch" type="search" placeholder="Search player or team" />
+            <select id="fantasyDraftPosition" aria-label="Filter draft board by position group">
+              <option value="ALL">All positions</option>
+              <option value="F">Forwards</option>
+              <option value="D">Defence</option>
+              <option value="G">Goalies</option>
+            </select>
+          </div>
+        </div>
+        <div class="sf-table-wrap">
+          <table id="fantasyDraftTable" class="sf-table sf-fantasy-draft-table">
+            <thead><tr>
+              <th>#</th><th>Player</th><th>Team</th><th>Pos</th><th>Draft Value</th><th>Projected Score</th><th>GP</th>
+              <th>G</th><th>A</th><th>PPP</th><th>SOG</th><th>HIT</th><th>BLK</th><th>PIM</th>
+              <th>Starts</th><th>W</th><th>Saves</th><th>SO</th><th>SV%</th><th>GAA</th>
+            </tr></thead>
+            <tbody><tr><td colspan="20">Loading fantasy projections…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="penaltyPanel">
+        <div class="sf-panel-header">
+          <h2>Penalty Analysis</h2>
+        </div>
+        <div id="penaltyIntro" class="sf-analysis-copy"></div>
+        <div id="penaltyImpactCards" class="sf-analysis-stat-grid"></div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Advantage Size Scoring Chance</h3>
+          </div>
+          <div id="penaltyAdvantageChanceGrid" class="sf-analysis-stat-grid"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>State Scoring Rate Context</h3>
+            <label class="sf-analysis-inline-control">Sort by
+              <select id="penaltyStateSortSelect">
+                <option value="chance">Scoring Chance</option><option value="minutes">Game Time</option><option value="goals">Total Goals</option>
+              </select>
+            </label>
+          </div>
+          <div id="penaltyStateShotGrid" class="sf-analysis-stat-grid"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Penalty Type Impact (Non-Offsetting Only)</h3>
+            <label class="sf-analysis-inline-control">Metric
+              <select id="penaltyTypeMetricSelect"></select>
+            </label>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="penaltyTypeImpactChart" viewBox="0 0 760 360" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+          <div id="penaltyTypeImpactLegend" class="sf-analysis-legend"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Taken vs Drawn (Non-Offsetting Only)</h3>
+            <div class="sf-analysis-subhead-tools">
+              <label class="sf-analysis-inline-control">Group
+                <select id="penaltyPlayerGroupSelect">
+                  <option value="F">Forwards</option><option value="D">Defense</option><option value="ALL">All Skaters</option>
+                </select>
+              </label>
+              <label class="sf-analysis-inline-control">Label player
+                <input id="penaltyPlayerSearch" type="search" placeholder="Search player" />
+              </label>
+              <label class="sf-analysis-inline-control">Label team
+                <input id="penaltyPlayerTeamSearch" type="search" placeholder="Search team" />
+              </label>
+            </div>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="penaltyPlayerScatterChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Team Penalty Differential (Non-Offsetting Only)</h3>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="penaltyTeamChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Officials</h3>
+          </div>
+          <div id="penaltyOfficialsCopy" class="sf-analysis-copy"></div>
+          <div id="penaltyOfficialsTable" class="sf-table-wrap"></div>
+        </div>
+      </section>
+
+
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="powerplayPanel">
+        <div class="sf-panel-header">
+          <h2>Power-Play Development</h2>
+        </div>
+        <div id="ppDevIntro" class="sf-analysis-copy"></div>
+        <div id="ppDevSummaryCards" class="sf-analysis-stat-grid"></div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Current Top Power-Play Finishers</h3>
+          </div>
+          <div id="ppDevTopPlayersTable" class="sf-table-wrap"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Which 5v5 Traits Travel To The Power Play?</h3>
+          </div>
+          <div id="ppDevTraitCorrelationGrid" class="sf-analysis-stat-grid"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Trait vs Current PP Output</h3>
+            <label class="sf-analysis-inline-control">5v5 trait
+              <select id="ppDevTraitSelect"></select>
+            </label>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="ppDevTraitScatterChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Opportunity vs Current PP Rate</h3>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="ppDevOpportunityChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Career PP Rate Curves</h3>
+            <label class="sf-analysis-inline-control">Comparison cohort
+              <select id="ppDevCareerCohortSelect"></select>
+            </label>
+            <label class="sf-analysis-inline-control">Highlight player
+              <select id="ppDevCareerPlayerSelect"></select>
+            </label>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="ppDevCareerChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Career PP Cumulative Points</h3>
+          </div>
+          <div class="sf-line-chart-wrap">
+            <svg id="ppDevCareerCumulativeChart" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Career PP Window Summary</h3>
+          </div>
+          <ul id="ppDevNotes" class="sf-analysis-copy sf-analysis-copy--list"></ul>
+          <div id="ppDevDevelopmentTable" class="sf-table-wrap"></div>
+        </div>
+        <div class="sf-analysis-subsection">
+          <div class="sf-analysis-subhead-row">
+            <h3>Current PP Pair Chemistry</h3>
+          </div>
+          <div id="ppDevPairChemistryCopy" class="sf-analysis-copy"></div>
+          <div id="ppDevPairChemistryTable" class="sf-table-wrap"></div>
+        </div>
+      </section>
+
+
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="coachDefensePanel"><div class="sf-panel-header"><h2>Coach Defensive-System Ranking</h2></div><div class="sf-analysis-copy">Head coaches ranked by their isolated effect on their team's defensive SYSTEM over the last ~10 years. Built from the xG-based team fixed effect (the chance quality a team concedes net of its players — goalie-independent), with a two-way (coach + team + season) fixed-effects model so the rating is separated from roster quality and era. Coaches who switch teams carry the identification. Positive = stronger defensive system.</div><p class="sf-analysis-copy sf-coach-defense-legend">def_eff = primary xG-system effect (goalie-independent). ΔVeff and HLDeff are secondary cross-checks (ΔV-against; high-danger goals-against). GAeff = raw goals-against, which is goalie-driven. "goalie-aided" = ranks much better on raw goals than on the chance-quality system (rode the goalie); "strong system" = the system suppresses chances better than the raw results (unlucky goaltending).</p><div class="sf-table-wrap"><table class="sf-table sf-coach-defense-table"><thead><tr><th>#</th><th>Coach</th><th>def_eff</th><th>ΔVeff</th><th>HLDeff</th><th>GAeff</th><th>Yrs</th><th>Tm</th><th>Team-seasons (recent→)</th></tr></thead><tbody><tr><td class="sf-num">1</td><td>Rod Brind&#x27;Amour</td><td class="sf-num is-pos">+0.718</td><td class="sf-num is-pos">+0.117</td><td class="sf-num is-pos">+0.380</td><td class="sf-num is-pos">+0.770</td><td class="sf-num">8</td><td class="sf-num">1</td><td class="sf-coach-seasons">CAR25, CAR24, CAR23, CAR22, CAR21, CAR20, CAR19, CAR18</td></tr><tr><td class="sf-num">2</td><td>Jared Bednar <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.410</td><td class="sf-num is-pos">+0.055</td><td class="sf-num is-neg">-0.057</td><td class="sf-num is-pos">+0.121</td><td class="sf-num">10</td><td class="sf-num">1</td><td class="sf-coach-seasons">COL25, COL24, COL23, COL22, COL21, COL20, COL19, COL18, COL17, COL16</td></tr><tr><td class="sf-num">3</td><td>Jim Hiller</td><td class="sf-num is-pos">+0.333</td><td class="sf-num is-pos">+0.030</td><td class="sf-num is-pos">+0.210</td><td class="sf-num is-pos">+0.486</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">LAK25, LAK24</td></tr><tr><td class="sf-num">4</td><td>Kris Knoblauch <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.294</td><td class="sf-num is-pos">+0.072</td><td class="sf-num is-pos">+0.081</td><td class="sf-num is-pos">+0.329</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">EDM25, EDM24, EDM23</td></tr><tr><td class="sf-num">5</td><td>Darryl Sutter</td><td class="sf-num is-pos">+0.284</td><td class="sf-num is-pos">+0.013</td><td class="sf-num is-pos">+0.203</td><td class="sf-num is-pos">+0.463</td><td class="sf-num">9</td><td class="sf-num">2</td><td class="sf-coach-seasons">CGY22, CGY21, CGY20, LAK16, LAK15, LAK14, LAK13, LAK12, LAK11</td></tr><tr><td class="sf-num">6</td><td>Bill Peters <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.271</td><td class="sf-num is-pos">+0.015</td><td class="sf-num is-pos">+0.195</td><td class="sf-num is-pos">+0.328</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">CGY18, CAR17, CAR16, CAR15, CAR14</td></tr><tr><td class="sf-num">7</td><td>Bruce Cassidy <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.265</td><td class="sf-num is-pos">+0.033</td><td class="sf-num is-pos">+0.087</td><td class="sf-num is-pos">+0.219</td><td class="sf-num">9</td><td class="sf-num">2</td><td class="sf-coach-seasons">VGK25, VGK24, VGK23, VGK22, BOS21, BOS20, BOS19, BOS18, BOS17</td></tr><tr><td class="sf-num">8</td><td>Glen Gulutzan <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.265</td><td class="sf-num is-pos">+0.011</td><td class="sf-num is-pos">+0.083</td><td class="sf-num is-pos">+0.157</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">DAL25, CGY17, CGY16, DAL12, DAL11</td></tr><tr><td class="sf-num">9</td><td>Terry Murray</td><td class="sf-num is-pos">+0.254</td><td class="sf-num is-neg">-0.001</td><td class="sf-num is-pos">+0.175</td><td class="sf-num is-pos">+0.358</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">LAK10, LAK09</td></tr><tr><td class="sf-num">10</td><td>Rick Tocchet</td><td class="sf-num is-pos">+0.248</td><td class="sf-num is-pos">+0.045</td><td class="sf-num is-pos">+0.220</td><td class="sf-num is-pos">+0.431</td><td class="sf-num">8</td><td class="sf-num">4</td><td class="sf-coach-seasons">PHI25, VAN24, VAN23, ARI20, ARI19, ARI18, ARI17, TBL09</td></tr><tr><td class="sf-num">11</td><td>Jon Cooper <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.243</td><td class="sf-num is-pos">+0.019</td><td class="sf-num is-pos">+0.465</td><td class="sf-num is-pos">+0.682</td><td class="sf-num">13</td><td class="sf-num">1</td><td class="sf-coach-seasons">TBL25, TBL24, TBL23, TBL22, TBL21, TBL20, TBL19, TBL18, TBL17, TBL16, TBL15, TBL14, TBL13</td></tr><tr><td class="sf-num">12</td><td>Mike Babcock <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.241</td><td class="sf-num is-pos">+0.044</td><td class="sf-num is-pos">+0.039</td><td class="sf-num is-pos">+0.231</td><td class="sf-num">10</td><td class="sf-num">2</td><td class="sf-coach-seasons">TOR18, TOR17, TOR16, TOR15, DET14, DET13, DET12, DET11, DET10, DET09</td></tr><tr><td class="sf-num">13</td><td>Gerard Gallant</td><td class="sf-num is-pos">+0.237</td><td class="sf-num is-pos">+0.020</td><td class="sf-num is-pos">+0.126</td><td class="sf-num is-pos">+0.302</td><td class="sf-num">7</td><td class="sf-num">3</td><td class="sf-coach-seasons">NYR22, NYR21, VGK19, VGK18, VGK17, FLA15, FLA14</td></tr><tr><td class="sf-num">14</td><td>Jacques Lemaire <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.236</td><td class="sf-num is-pos">+0.048</td><td class="sf-num is-pos">+0.348</td><td class="sf-num is-pos">+0.574</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">NJD10, NJD09</td></tr><tr><td class="sf-num">15</td><td>Brent Sutter <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.218</td><td class="sf-num is-pos">+0.012</td><td class="sf-num is-pos">+0.029</td><td class="sf-num is-pos">+0.137</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">CGY11, CGY10, CGY09</td></tr><tr><td class="sf-num">16</td><td>Rick Bowness <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.191</td><td class="sf-num is-pos">+0.088</td><td class="sf-num is-pos">+0.206</td><td class="sf-num is-pos">+0.414</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">WPG23, WPG22, DAL21, DAL20, DAL19</td></tr><tr><td class="sf-num">17</td><td>Peter Deboer</td><td class="sf-num is-pos">+0.169</td><td class="sf-num is-pos">+0.038</td><td class="sf-num is-pos">+0.074</td><td class="sf-num is-pos">+0.310</td><td class="sf-num">14</td><td class="sf-num">5</td><td class="sf-coach-seasons">DAL24, DAL23, DAL22, VGK21, VGK20, SJS18, SJS17, SJS16, SJS15, NJD13, NJD12, NJD11, FLA10, FLA09</td></tr><tr><td class="sf-num">18</td><td>Cory Clouston <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.157</td><td class="sf-num is-neg">-0.022</td><td class="sf-num is-pos">+0.003</td><td class="sf-num is-neg">-0.055</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">OTT10, OTT09</td></tr><tr><td class="sf-num">19</td><td>Sheldon Keefe <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.154</td><td class="sf-num is-pos">+0.039</td><td class="sf-num is-pos">+0.187</td><td class="sf-num is-pos">+0.404</td><td class="sf-num">7</td><td class="sf-num">2</td><td class="sf-coach-seasons">NJD25, NJD24, TOR23, TOR22, TOR21, TOR20, TOR19</td></tr><tr><td class="sf-num">20</td><td>Peter Laviolette</td><td class="sf-num is-pos">+0.147</td><td class="sf-num is-pos">+0.037</td><td class="sf-num is-pos">+0.109</td><td class="sf-num is-pos">+0.235</td><td class="sf-num">15</td><td class="sf-num">4</td><td class="sf-coach-seasons">NYR24, NYR23, WSH22, WSH21, WSH20, NSH19, NSH18, NSH17, NSH16, NSH15, NSH14, PHI12, PHI11, PHI10, PHI09</td></tr><tr><td class="sf-num">21</td><td>Claude Julien <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.134</td><td class="sf-num is-neg">-0.020</td><td class="sf-num is-neg">-0.062</td><td class="sf-num is-neg">-0.020</td><td class="sf-num">11</td><td class="sf-num">2</td><td class="sf-coach-seasons">MTL19, MTL18, MTL17, BOS16, BOS15, BOS14, BOS13, BOS12, BOS11, BOS10, BOS09</td></tr><tr><td class="sf-num">22</td><td>Dave Hakstol <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.132</td><td class="sf-num is-pos">+0.047</td><td class="sf-num is-pos">+0.046</td><td class="sf-num is-pos">+0.332</td><td class="sf-num">6</td><td class="sf-num">2</td><td class="sf-coach-seasons">SEA23, SEA22, SEA21, PHI17, PHI16, PHI15</td></tr><tr><td class="sf-num">23</td><td>Paul Maurice <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.128</td><td class="sf-num is-pos">+0.027</td><td class="sf-num is-pos">+0.107</td><td class="sf-num is-pos">+0.129</td><td class="sf-num">13</td><td class="sf-num">3</td><td class="sf-coach-seasons">FLA25, FLA24, FLA23, FLA22, WPG20, WPG19, WPG18, WPG17, WPG16, WPG15, WPG14, CAR10, CAR09</td></tr><tr><td class="sf-num">24</td><td>Dave Tippett <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.127</td><td class="sf-num is-pos">+0.028</td><td class="sf-num is-pos">+0.126</td><td class="sf-num is-pos">+0.139</td><td class="sf-num">11</td><td class="sf-num">3</td><td class="sf-coach-seasons">EDM21, EDM20, EDM19, ARI16, ARI15, ARI14, PHX13, PHX12, PHX11, PHX10, PHX09</td></tr><tr><td class="sf-num">25</td><td>Ken Hitchcock <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.123</td><td class="sf-num is-pos">+0.057</td><td class="sf-num is-pos">+0.210</td><td class="sf-num is-pos">+0.289</td><td class="sf-num">9</td><td class="sf-num">4</td><td class="sf-coach-seasons">EDM18, DAL17, STL16, STL15, STL14, STL13, STL12, STL11, CBJ09</td></tr><tr><td class="sf-num">26</td><td>Barry Trotz <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.117</td><td class="sf-num is-pos">+0.021</td><td class="sf-num is-pos">+0.057</td><td class="sf-num is-pos">+0.281</td><td class="sf-num">13</td><td class="sf-num">3</td><td class="sf-coach-seasons">NYI21, NYI20, NYI19, NYI18, WSH17, WSH16, WSH15, WSH14, NSH13, NSH12, NSH11, NSH10, NSH09</td></tr><tr><td class="sf-num">27</td><td>Todd Reirden <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.109</td><td class="sf-num is-pos">+0.008</td><td class="sf-num is-pos">+0.034</td><td class="sf-num is-pos">+0.011</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">WSH19, WSH18</td></tr><tr><td class="sf-num">28</td><td>Derek Lalonde <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.105</td><td class="sf-num is-neg">-0.023</td><td class="sf-num is-neg">-0.033</td><td class="sf-num is-neg">-0.045</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">DET23, DET22</td></tr><tr><td class="sf-num">29</td><td>Scott Arniel</td><td class="sf-num is-pos">+0.103</td><td class="sf-num is-pos">+0.040</td><td class="sf-num is-pos">+0.125</td><td class="sf-num is-pos">+0.179</td><td class="sf-num">3</td><td class="sf-num">2</td><td class="sf-coach-seasons">WPG25, WPG24, CBJ10</td></tr><tr><td class="sf-num">30</td><td>Jim Montgomery <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.101</td><td class="sf-num is-pos">+0.064</td><td class="sf-num is-pos">+0.199</td><td class="sf-num is-pos">+0.361</td><td class="sf-num">5</td><td class="sf-num">3</td><td class="sf-coach-seasons">STL25, STL24, BOS23, BOS22, DAL18</td></tr><tr><td class="sf-num">31</td><td>Alain Vigneault <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.092</td><td class="sf-num is-pos">+0.045</td><td class="sf-num is-pos">+0.058</td><td class="sf-num is-pos">+0.220</td><td class="sf-num">11</td><td class="sf-num">3</td><td class="sf-coach-seasons">PHI20, PHI19, NYR17, NYR16, NYR15, NYR14, NYR13, VAN12, VAN11, VAN10, VAN09</td></tr><tr><td class="sf-num">32</td><td>André Tourigny <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.091</td><td class="sf-num is-neg">-0.003</td><td class="sf-num is-pos">+0.233</td><td class="sf-num is-neg">-0.028</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">UTA25, UTA24, ARI23, ARI22, ARI21</td></tr><tr><td class="sf-num">33</td><td>Todd Mclellan <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.074</td><td class="sf-num is-pos">+0.040</td><td class="sf-num is-pos">+0.124</td><td class="sf-num is-pos">+0.248</td><td class="sf-num">16</td><td class="sf-num">4</td><td class="sf-coach-seasons">DET25, DET24, LAK23, LAK22, LAK21, LAK20, LAK19, EDM17, EDM16, EDM15, SJS14, SJS13, SJS12, SJS11, SJS10, SJS09</td></tr><tr><td class="sf-num">34</td><td>Dean Evason <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.069</td><td class="sf-num is-pos">+0.047</td><td class="sf-num is-pos">+0.109</td><td class="sf-num is-pos">+0.226</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">CBJ25, CBJ24, MIN22, MIN21, MIN20</td></tr><tr><td class="sf-num">35</td><td>Bruce Boudreau <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.066</td><td class="sf-num is-pos">+0.024</td><td class="sf-num is-pos">+0.108</td><td class="sf-num is-pos">+0.201</td><td class="sf-num">13</td><td class="sf-num">4</td><td class="sf-coach-seasons">VAN22, VAN21, MIN19, MIN18, MIN17, MIN16, ANA15, ANA14, ANA13, ANA12, ANA11, WSH10, WSH09</td></tr><tr><td class="sf-num">36</td><td>Marc Crawford <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.065</td><td class="sf-num is-pos">+0.039</td><td class="sf-num is-neg">-0.170</td><td class="sf-num is-neg">-0.111</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">DAL10, DAL09</td></tr><tr><td class="sf-num">37</td><td>Scott Gordon <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.063</td><td class="sf-num is-neg">-0.034</td><td class="sf-num is-neg">-0.208</td><td class="sf-num is-neg">-0.321</td><td class="sf-num">2</td><td class="sf-num">2</td><td class="sf-coach-seasons">PHI18, NYI09</td></tr><tr><td class="sf-num">38</td><td>Jack Capuano <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.057</td><td class="sf-num is-neg">-0.059</td><td class="sf-num is-neg">-0.211</td><td class="sf-num is-neg">-0.360</td><td class="sf-num">7</td><td class="sf-num">1</td><td class="sf-coach-seasons">NYI16, NYI15, NYI14, NYI13, NYI12, NYI11, NYI10</td></tr><tr><td class="sf-num">39</td><td>Phil Housley <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.056</td><td class="sf-num is-neg">-0.029</td><td class="sf-num is-neg">-0.258</td><td class="sf-num is-neg">-0.322</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">BUF18, BUF17</td></tr><tr><td class="sf-num">40</td><td>Lane Lambert <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.053</td><td class="sf-num is-pos">+0.058</td><td class="sf-num is-neg">-0.014</td><td class="sf-num is-pos">+0.199</td><td class="sf-num">3</td><td class="sf-num">2</td><td class="sf-coach-seasons">SEA25, NYI23, NYI22</td></tr><tr><td class="sf-num">41</td><td>Peter Horachek <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.052</td><td class="sf-num is-neg">-0.036</td><td class="sf-num is-neg">-0.067</td><td class="sf-num is-neg">-0.350</td><td class="sf-num">2</td><td class="sf-num">2</td><td class="sf-coach-seasons">TOR14, FLA13</td></tr><tr><td class="sf-num">42</td><td>Claude Noel <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.047</td><td class="sf-num is-neg">-0.026</td><td class="sf-num is-neg">-0.091</td><td class="sf-num is-neg">-0.293</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">WPG13, WPG12, WPG11</td></tr><tr><td class="sf-num">43</td><td>Joel Quenneville <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.044</td><td class="sf-num is-pos">+0.008</td><td class="sf-num is-pos">+0.035</td><td class="sf-num is-neg">-0.008</td><td class="sf-num">12</td><td class="sf-num">3</td><td class="sf-coach-seasons">ANA25, FLA20, FLA19, CHI17, CHI16, CHI15, CHI14, CHI13, CHI12, CHI11, CHI10, CHI09</td></tr><tr><td class="sf-num">44</td><td>Joe Sacco <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.039</td><td class="sf-num is-pos">+0.004</td><td class="sf-num is-neg">-0.247</td><td class="sf-num is-neg">-0.391</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">BOS24, COL12, COL11, COL10, COL09</td></tr><tr><td class="sf-num">45</td><td>John Tortorella <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.037</td><td class="sf-num is-pos">+0.028</td><td class="sf-num is-pos">+0.155</td><td class="sf-num is-pos">+0.261</td><td class="sf-num">14</td><td class="sf-num">4</td><td class="sf-coach-seasons">PHI24, PHI23, PHI22, CBJ20, CBJ19, CBJ18, CBJ17, CBJ16, CBJ15, VAN13, NYR12, NYR11, NYR10, NYR09</td></tr><tr><td class="sf-num">46</td><td>Dan Bylsma</td><td class="sf-num is-pos">+0.035</td><td class="sf-num is-neg">-0.008</td><td class="sf-num is-neg">-0.100</td><td class="sf-num is-pos">+0.058</td><td class="sf-num">8</td><td class="sf-num">3</td><td class="sf-coach-seasons">SEA24, BUF16, BUF15, PIT13, PIT12, PIT11, PIT10, PIT09</td></tr><tr><td class="sf-num">47</td><td>Michel Therrien <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.035</td><td class="sf-num is-pos">+0.004</td><td class="sf-num is-pos">+0.119</td><td class="sf-num is-pos">+0.158</td><td class="sf-num">5</td><td class="sf-num">1</td><td class="sf-coach-seasons">MTL16, MTL15, MTL14, MTL13, MTL12</td></tr><tr><td class="sf-num">48</td><td>Patrick Roy <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.031</td><td class="sf-num is-pos">+0.002</td><td class="sf-num is-neg">-0.072</td><td class="sf-num is-neg">-0.106</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">NYI25, NYI24, COL15, COL14, COL13</td></tr><tr><td class="sf-num">49</td><td>Davis Payne</td><td class="sf-num is-pos">+0.023</td><td class="sf-num is-pos">+0.027</td><td class="sf-num is-pos">+0.112</td><td class="sf-num is-pos">+0.006</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">STL10, STL09</td></tr><tr><td class="sf-num">50</td><td>Paul Maclean <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.021</td><td class="sf-num is-neg">-0.019</td><td class="sf-num is-neg">-0.009</td><td class="sf-num is-neg">-0.048</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">OTT13, OTT12, OTT11</td></tr><tr><td class="sf-num">51</td><td>Ron Wilson <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.017</td><td class="sf-num is-pos">+0.004</td><td class="sf-num is-neg">-0.083</td><td class="sf-num is-neg">-0.123</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">TOR11, TOR10, TOR09</td></tr><tr><td class="sf-num">52</td><td>John Hynes <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-pos">+0.014</td><td class="sf-num is-pos">+0.020</td><td class="sf-num is-pos">+0.126</td><td class="sf-num is-pos">+0.189</td><td class="sf-num">10</td><td class="sf-num">3</td><td class="sf-coach-seasons">MIN25, MIN24, MIN23, NSH22, NSH21, NSH20, NJD18, NJD17, NJD16, NJD15</td></tr><tr><td class="sf-num">53</td><td>Jeff Blashill <span class="sf-coach-note">strong system</span></td><td class="sf-num is-pos">+0.004</td><td class="sf-num is-neg">-0.028</td><td class="sf-num is-neg">-0.067</td><td class="sf-num is-neg">-0.152</td><td class="sf-num">8</td><td class="sf-num">2</td><td class="sf-coach-seasons">CHI25, DET21, DET20, DET19, DET18, DET17, DET16, DET15</td></tr><tr><td class="sf-num">54</td><td>Craig Berube <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.001</td><td class="sf-num is-pos">+0.005</td><td class="sf-num is-pos">+0.113</td><td class="sf-num is-pos">+0.120</td><td class="sf-num">9</td><td class="sf-num">3</td><td class="sf-coach-seasons">TOR25, TOR24, STL22, STL21, STL20, STL19, STL18, PHI14, PHI13</td></tr><tr><td class="sf-num">55</td><td>Adam Oates</td><td class="sf-num is-neg">-0.001</td><td class="sf-num is-pos">+0.001</td><td class="sf-num is-neg">-0.020</td><td class="sf-num is-pos">+0.005</td><td class="sf-num">3</td><td class="sf-num">2</td><td class="sf-coach-seasons">NJD14, WSH13, WSH12</td></tr><tr><td class="sf-num">56</td><td>Dominique Ducharme <span class="sf-coach-note">strong system</span></td><td class="sf-num is-neg">-0.020</td><td class="sf-num is-neg">-0.052</td><td class="sf-num is-neg">-0.243</td><td class="sf-num is-neg">-0.455</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">MTL21, MTL20</td></tr><tr><td class="sf-num">57</td><td>Travis Green <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.024</td><td class="sf-num is-neg">-0.016</td><td class="sf-num is-pos">+0.101</td><td class="sf-num is-pos">+0.094</td><td class="sf-num">6</td><td class="sf-num">2</td><td class="sf-coach-seasons">OTT25, OTT24, VAN20, VAN19, VAN18, VAN17</td></tr><tr><td class="sf-num">58</td><td>Kirk Muller <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.034</td><td class="sf-num is-pos">+0.004</td><td class="sf-num is-pos">+0.167</td><td class="sf-num is-pos">+0.080</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">CAR13, CAR12, CAR11</td></tr><tr><td class="sf-num">59</td><td>Willie Desjardins <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.040</td><td class="sf-num is-neg">-0.039</td><td class="sf-num is-pos">+0.005</td><td class="sf-num is-pos">+0.014</td><td class="sf-num">4</td><td class="sf-num">2</td><td class="sf-coach-seasons">LAK18, VAN16, VAN15, VAN14</td></tr><tr><td class="sf-num">60</td><td>Mike Sullivan <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.049</td><td class="sf-num is-neg">-0.003</td><td class="sf-num is-neg">-0.147</td><td class="sf-num is-neg">-0.012</td><td class="sf-num">11</td><td class="sf-num">2</td><td class="sf-coach-seasons">NYR25, PIT24, PIT23, PIT22, PIT21, PIT20, PIT19, PIT18, PIT17, PIT16, PIT15</td></tr><tr><td class="sf-num">61</td><td>Martin St. Louis <span class="sf-coach-note">strong system</span></td><td class="sf-num is-neg">-0.055</td><td class="sf-num is-neg">-0.025</td><td class="sf-num is-neg">-0.215</td><td class="sf-num is-neg">-0.302</td><td class="sf-num">4</td><td class="sf-num">1</td><td class="sf-coach-seasons">MTL25, MTL24, MTL23, MTL22</td></tr><tr><td class="sf-num">62</td><td>Bob Boughner</td><td class="sf-num is-neg">-0.061</td><td class="sf-num is-pos">+0.008</td><td class="sf-num is-neg">-0.153</td><td class="sf-num is-neg">-0.087</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">SJS21, SJS20, SJS19, FLA18, FLA17</td></tr><tr><td class="sf-num">63</td><td>Don Granato <span class="sf-coach-note">strong system</span></td><td class="sf-num is-neg">-0.061</td><td class="sf-num is-pos">+0.004</td><td class="sf-num is-neg">-0.106</td><td class="sf-num is-neg">-0.233</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">BUF23, BUF22, BUF21</td></tr><tr><td class="sf-num">64</td><td>Andrew Brunette <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.077</td><td class="sf-num is-neg">-0.031</td><td class="sf-num is-pos">+0.021</td><td class="sf-num is-pos">+0.058</td><td class="sf-num">4</td><td class="sf-num">2</td><td class="sf-coach-seasons">NSH25, NSH24, NSH23, FLA21</td></tr><tr><td class="sf-num">65</td><td>Randy Carlyle <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.078</td><td class="sf-num is-pos">+0.031</td><td class="sf-num is-pos">+0.086</td><td class="sf-num is-pos">+0.125</td><td class="sf-num">7</td><td class="sf-num">2</td><td class="sf-coach-seasons">ANA18, ANA17, ANA16, TOR13, TOR12, ANA10, ANA09</td></tr><tr><td class="sf-num">66</td><td>Ryan Warsofsky <span class="sf-coach-note">strong system</span></td><td class="sf-num is-neg">-0.083</td><td class="sf-num is-neg">-0.064</td><td class="sf-num is-neg">-0.122</td><td class="sf-num is-neg">-0.410</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">SJS25, SJS24</td></tr><tr><td class="sf-num">67</td><td>Ralph Krueger</td><td class="sf-num is-neg">-0.089</td><td class="sf-num is-pos">+0.015</td><td class="sf-num is-neg">-0.135</td><td class="sf-num is-neg">-0.127</td><td class="sf-num">3</td><td class="sf-num">2</td><td class="sf-coach-seasons">BUF20, BUF19, EDM12</td></tr><tr><td class="sf-num">68</td><td>Mike Yeo <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.093</td><td class="sf-num is-pos">+0.026</td><td class="sf-num is-pos">+0.005</td><td class="sf-num is-pos">+0.186</td><td class="sf-num">7</td><td class="sf-num">3</td><td class="sf-coach-seasons">PHI21, STL17, MIN15, MIN14, MIN13, MIN12, MIN11</td></tr><tr><td class="sf-num">69</td><td>Todd Richards <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.105</td><td class="sf-num is-pos">+0.007</td><td class="sf-num is-pos">+0.077</td><td class="sf-num is-pos">+0.051</td><td class="sf-num">6</td><td class="sf-num">2</td><td class="sf-coach-seasons">CBJ14, CBJ13, CBJ12, CBJ11, MIN10, MIN09</td></tr><tr><td class="sf-num">70</td><td>Jacques Martin <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.109</td><td class="sf-num is-neg">-0.033</td><td class="sf-num is-pos">+0.060</td><td class="sf-num is-pos">+0.052</td><td class="sf-num">3</td><td class="sf-num">2</td><td class="sf-coach-seasons">OTT23, MTL10, MTL09</td></tr><tr><td class="sf-num">71</td><td>Lindy Ruff <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.121</td><td class="sf-num is-pos">+0.005</td><td class="sf-num is-neg">-0.106</td><td class="sf-num is-neg">-0.072</td><td class="sf-num">13</td><td class="sf-num">3</td><td class="sf-coach-seasons">BUF25, BUF24, NJD23, NJD22, NJD21, NJD20, DAL16, DAL15, DAL14, DAL13, BUF11, BUF10, BUF09</td></tr><tr><td class="sf-num">72</td><td>Bob Hartley</td><td class="sf-num is-neg">-0.137</td><td class="sf-num is-neg">-0.034</td><td class="sf-num is-neg">-0.078</td><td class="sf-num is-neg">-0.148</td><td class="sf-num">4</td><td class="sf-num">1</td><td class="sf-coach-seasons">CGY15, CGY14, CGY13, CGY12</td></tr><tr><td class="sf-num">73</td><td>Guy Boucher <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.142</td><td class="sf-num is-neg">-0.030</td><td class="sf-num is-pos">+0.054</td><td class="sf-num is-neg">-0.076</td><td class="sf-num">6</td><td class="sf-num">2</td><td class="sf-coach-seasons">OTT18, OTT17, OTT16, TBL12, TBL11, TBL10</td></tr><tr><td class="sf-num">74</td><td>Ryan Huska <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.143</td><td class="sf-num is-neg">-0.018</td><td class="sf-num is-neg">-0.007</td><td class="sf-num is-pos">+0.105</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">CGY25, CGY24, CGY23</td></tr><tr><td class="sf-num">75</td><td>Tom Renney <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.153</td><td class="sf-num is-neg">-0.016</td><td class="sf-num is-neg">-0.200</td><td class="sf-num is-neg">-0.132</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">EDM11, EDM10</td></tr><tr><td class="sf-num">76</td><td>Dave Cameron <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.162</td><td class="sf-num is-neg">-0.008</td><td class="sf-num is-pos">+0.047</td><td class="sf-num is-pos">+0.008</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">OTT15, OTT14</td></tr><tr><td class="sf-num">77</td><td>D.J. Smith <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.174</td><td class="sf-num is-neg">-0.061</td><td class="sf-num is-pos">+0.030</td><td class="sf-num is-neg">-0.120</td><td class="sf-num">4</td><td class="sf-num">1</td><td class="sf-coach-seasons">OTT22, OTT21, OTT20, OTT19</td></tr><tr><td class="sf-num">78</td><td>Spencer Carbery <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.175</td><td class="sf-num is-pos">+0.019</td><td class="sf-num is-pos">+0.010</td><td class="sf-num is-pos">+0.190</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">WSH25, WSH24, WSH23</td></tr><tr><td class="sf-num">79</td><td>Kevin Dineen <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.209</td><td class="sf-num is-neg">-0.062</td><td class="sf-num is-neg">-0.046</td><td class="sf-num is-neg">-0.272</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">FLA12, FLA11</td></tr><tr><td class="sf-num">80</td><td>Dallas Eakins <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.257</td><td class="sf-num is-neg">-0.016</td><td class="sf-num is-neg">-0.149</td><td class="sf-num is-neg">-0.320</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">ANA22, ANA21, ANA20, ANA19, EDM13</td></tr><tr><td class="sf-num">81</td><td>David Quinn</td><td class="sf-num is-neg">-0.263</td><td class="sf-num is-neg">-0.072</td><td class="sf-num is-neg">-0.134</td><td class="sf-num is-neg">-0.384</td><td class="sf-num">5</td><td class="sf-num">2</td><td class="sf-coach-seasons">SJS23, SJS22, NYR20, NYR19, NYR18</td></tr><tr><td class="sf-num">82</td><td>Jeremy Colliton</td><td class="sf-num is-neg">-0.362</td><td class="sf-num is-neg">-0.014</td><td class="sf-num is-neg">-0.109</td><td class="sf-num is-neg">-0.444</td><td class="sf-num">3</td><td class="sf-num">1</td><td class="sf-coach-seasons">CHI20, CHI19, CHI18</td></tr><tr><td class="sf-num">83</td><td>Brad Larsen</td><td class="sf-num is-neg">-0.364</td><td class="sf-num is-neg">-0.081</td><td class="sf-num is-neg">-0.164</td><td class="sf-num is-neg">-0.430</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">CBJ22, CBJ21</td></tr><tr><td class="sf-num">84</td><td>Greg Cronin <span class="sf-coach-note">goalie-aided</span></td><td class="sf-num is-neg">-0.472</td><td class="sf-num is-neg">-0.034</td><td class="sf-num is-neg">-0.241</td><td class="sf-num is-neg">-0.224</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">ANA24, ANA23</td></tr><tr><td class="sf-num">85</td><td>Luke Richardson</td><td class="sf-num is-neg">-0.604</td><td class="sf-num is-neg">-0.080</td><td class="sf-num is-neg">-0.197</td><td class="sf-num is-neg">-0.566</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">CHI23, CHI22</td></tr><tr><td class="sf-num">86</td><td>Ted Nolan</td><td class="sf-num is-neg">-0.666</td><td class="sf-num is-neg">-0.083</td><td class="sf-num is-neg">-0.178</td><td class="sf-num is-neg">-0.482</td><td class="sf-num">2</td><td class="sf-num">1</td><td class="sf-coach-seasons">BUF14, BUF13</td></tr></tbody></table></div><p class="sf-analysis-copy sf-coach-defense-meta">524 team-seasons, 20092010–20252026. Residual SD 0.146.</p></section>
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="defensiveTalentPanel"><div class="sf-panel-header"><h2>Defensive Talent</h2></div><div class="sf-analysis-copy">Isolated and on-ice defensive profiles (current season, 5v5). The D-zone chart is the teammate- and opponent-isolated Set Def / Rush Def RAPMs; the others are on-ice descriptive rates. Higher Set/Rush Def = better; in the pace/chaos and tidbit charts a lower "against" axis is better. Filter by position and team; type to highlight a player.</div><div class="sf-analysis-subhead-tools"><label class="sf-analysis-inline-control">Position<select id="defTalentGroup"><option value="ALL">All</option><option value="F">Forwards</option><option value="D">Defense</option></select></label><label class="sf-analysis-inline-control">Team<select id="defTalentTeam"><option value="ALL">All teams</option></select></label><label class="sf-analysis-inline-control">Highlight<input id="defTalentSearch" type="search" placeholder="Search player" /></label></div><div class="sf-analysis-subsection"><div class="sf-analysis-subhead-row"><h3>Isolated D-zone defense — set-play vs rush (higher = better)</h3></div><div class="sf-line-chart-wrap"><svg id="defTalentDzScatter" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg></div></div><div class="sf-analysis-subsection"><div class="sf-analysis-subhead-row"><h3>Pace vs Chaos — on-ice events for vs against /60</h3></div><div class="sf-line-chart-wrap"><svg id="defTalentPaceChaos" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg></div></div><div class="sf-analysis-subsection"><div class="sf-analysis-subhead-row"><h3>Goalie SV% — on-ice vs off-ice (above the line = better with you on)</h3></div><div class="sf-line-chart-wrap"><svg id="defTalentGoalie" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg></div></div><div class="sf-analysis-subsection"><div class="sf-analysis-subhead-row"><h3>Puck management vs shots conceded — TK-GV/60 vs CA/60</h3></div><div class="sf-line-chart-wrap"><svg id="defTalentTidbits" viewBox="0 0 760 420" preserveAspectRatio="xMidYMid meet"></svg></div></div></section>
+
+      <section class="sf-panel sf-section-panel sf-dashboard-analysis-panel" id="xgPanel">
+        <div class="sf-panel-header">
+          <h2>Team xG Visualizer</h2>
+        </div>
+        <div class="sf-xg-controls">
+          <label class="sf-xg-control">Team
+            <select id="xgTeamSelect"></select>
+          </label>
+          <label class="sf-xg-control">Min xG
+            <div class="sf-slider-row">
+              <input id="xgMinProb" type="range" min="0" max="0.50" step="0.005" value="0.015" />
+              <span id="xgMinProbValue">0.015</span>
+            </div>
+          </label>
+          <label class="sf-xg-control sf-toggle-row">
+            <input id="xgShowGoals" type="checkbox" checked />
+            <span>Show goals overlay</span>
+          </label>
+        </div>
+        <div class="sf-xg-stats">
+          <div class="sf-stat"><span class="sf-stat-label">Shots</span><span id="xgTotalShots" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Expected Goals</span><span id="xgExpectedGoals" class="sf-stat-value">0.0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Actual Goals</span><span id="xgActualGoals" class="sf-stat-value">0</span></div>
+          <div class="sf-stat"><span class="sf-stat-label">Diff</span><span id="xgDiff" class="sf-stat-value">0.0%</span></div>
+        </div>
+        <p id="xgDataNote" class="sf-xg-note"></p>
+        <div class="sf-rink-wrap">
+          <svg id="xgRink" viewBox="-103 -45.5 206 91" preserveAspectRatio="xMidYMid meet"><rect x="-100" y="-42.5" width="200" height="85" rx="28" ry="28" fill="#ffffff" stroke="#111111" stroke-width="0.599"></rect>
+  <line x1="-89.000" y1="11.000" x2="-100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="-89.000" y1="-11.000" x2="-100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="89.000" y1="11.000" x2="100.000" y2="14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="89.000" y1="-11.000" x2="100.000" y2="-14.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <line x1="0.000" y1="-42.500" x2="0.000" y2="42.500" stroke="#C60C30" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="-25.000" y1="-42.500" x2="-25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="25.000" y1="-42.500" x2="25.000" y2="42.500" stroke="#0033A0" stroke-width="0.998" stroke-opacity="0.700"></line>
+  <line x1="-89.000" y1="-37.000" x2="-89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="89.000" y1="-37.000" x2="89.000" y2="37.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <circle cx="0.000" cy="0.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.599" stroke-opacity="0.700"></circle>
+  <circle cx="0.000" cy="0.000" r="0.500" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="22.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="22.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="69.000" cy="22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="69.000" cy="-22.000" r="1.000" fill="#C60C30" fill-opacity="1.000" stroke="#ffffff" stroke-width="0.200" stroke-opacity="1.000"></circle>
+  <circle cx="-69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="-69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="69.000" cy="22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <circle cx="69.000" cy="-22.000" r="15.000" fill="none" fill-opacity="1.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></circle>
+  <line x1="-71.000" y1="24.000" x2="-73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="24.000" x2="-71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="20.000" x2="-73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="20.000" x2="-71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="24.000" x2="-65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="24.000" x2="-67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="20.000" x2="-65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="20.000" x2="-67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="36.866" x2="-71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="7.134" x2="-71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="36.866" x2="-67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="7.134" x2="-67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-20.000" x2="-73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-20.000" x2="-71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-24.000" x2="-73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-24.000" x2="-71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-20.000" x2="-65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-20.000" x2="-67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-24.000" x2="-65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-24.000" x2="-67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-36.866" x2="-71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-71.000" y1="-7.134" x2="-71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-36.866" x2="-67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="-67.000" y1="-7.134" x2="-67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="24.000" x2="65.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="24.000" x2="67.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="20.000" x2="65.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="20.000" x2="67.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="24.000" x2="73.000" y2="24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="24.000" x2="71.000" y2="26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="20.000" x2="73.000" y2="20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="20.000" x2="71.000" y2="18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="36.866" x2="67.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="7.134" x2="67.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="36.866" x2="71.000" y2="38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="7.134" x2="71.000" y2="5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-20.000" x2="65.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-20.000" x2="67.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-24.000" x2="65.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-24.000" x2="67.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-20.000" x2="73.000" y2="-20.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-20.000" x2="71.000" y2="-18.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-24.000" x2="73.000" y2="-24.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-24.000" x2="71.000" y2="-26.000" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-36.866" x2="67.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="67.000" y1="-7.134" x2="67.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-36.866" x2="71.000" y2="-38.866" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <line x1="71.000" y1="-7.134" x2="71.000" y2="-5.134" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></line>
+  <path d="M -89.000 -4.000 L -89.000 4.000 L -84.500 4.000 A 6.000 6.000 0 0 0 -84.500 -4.000 L -89.000 -4.000 Z" fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
+  <path d="M 89.000 -4.000 L 89.000 4.000 L 84.500 4.000 A 6.000 6.000 0 0 1 84.500 -4.000 L 89.000 -4.000 Z" fill="#ADD8E6" fill-opacity="0.300" stroke="#C60C30" stroke-width="0.399" stroke-opacity="0.700"></path>
+  <path d="M -89.000 -3.000 C -89.900 -3.670, -92.330 -3.600, -92.330 -2.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <line x1="-92.330" y1="-2.000" x2="-92.330" y2="2.000" stroke="#111111" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <path d="M -92.330 2.000 C -92.330 3.600, -89.900 3.670, -89.000 3.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <path d="M 89.000 -3.000 C 89.900 -3.670, 92.330 -3.600, 92.330 -2.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path>
+  <line x1="92.330" y1="-2.000" x2="92.330" y2="2.000" stroke="#111111" stroke-width="0.399" stroke-opacity="0.500"></line>
+  <path d="M 92.330 2.000 C 92.330 3.600, 89.900 3.670, 89.000 3.000" fill="none" stroke="#111111" stroke-width="0.399" stroke-opacity="0.5"></path></svg>
+        </div>
+        <div class="sf-rink-legend">
+          <span><i class="sf-legend-dot expected" id="xgLegendShot"></i> Team shot</span>
+          <span><i class="sf-legend-dot actual" id="xgLegendGoal"></i> Goal</span>
+          <span class="sf-rink-legend-note">Dot size ∝ xG</span>
+        </div>
+      </section>
+
+
           </div>
         </div>
       </div>
@@ -500,7 +905,9 @@
     </main>
     <footer class="sf-site-footer"><div class="sf-site-footer-inner"><p class="sf-site-footer-copy">&copy; <!--NETOUTCOMES_COPYRIGHT_YEAR-->2026<!--/NETOUTCOMES_COPYRIGHT_YEAR--> Net Outcomes. All rights reserved.</p><p class="sf-site-footer-legal">Net Outcomes is an independent, unofficial hockey analytics site and is not affiliated with, endorsed by, or sponsored by the National Hockey League or any NHL club. Team names, team logos, and other marks shown here are the property of the National Hockey League and the respective clubs and are displayed only to identify the teams discussed on this site. All other trademarks and copyrights are the property of their respective owners.</p><p class="sf-site-footer-note">Team logos displayed on this site are loaded from official NHL-hosted club logo assets for identification and informational display only.</p></div></footer>
   </div>
-  <script src="js/common.js?v=18cec23e9167bf16" defer></script>
-  <script src="js/rankings.js?v=18cec23e9167bf16" defer></script>
+  <script src="js/common.js?v=18cec46c6aebd0e2" defer></script>
+  <script src="js/fantasy-draft.js?v=18cec46c6aebd0e2" defer></script>
+  <script src="js/analysis.js?v=18cec46c6aebd0e2" defer></script>
+  <script src="js/rankings.js?v=18cec46c6aebd0e2" defer></script>
 </body>
 </html>

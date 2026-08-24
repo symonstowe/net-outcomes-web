@@ -55,6 +55,14 @@
     'underratedPanel',
     'anomaliesPanel',
     'trendsPanel',
+    'overviewPanel',
+    'teamPanel',
+    'fantasyDraftPanel',
+    'penaltyPanel',
+    'powerplayPanel',
+    'coachDefensePanel',
+    'defensiveTalentPanel',
+    'xgPanel',
   ];
   const SECTION_SLUG_BY_ID = {
     rankingsPanel: 'skaters',
@@ -66,6 +74,14 @@
     underratedPanel: 'underrated',
     anomaliesPanel: 'scoring-anomalies',
     trendsPanel: 'trends',
+    overviewPanel: 'analysis-overview',
+    teamPanel: 'line-analysis',
+    fantasyDraftPanel: 'fantasy-draft',
+    penaltyPanel: 'penalties',
+    powerplayPanel: 'pp-development',
+    coachDefensePanel: 'coach-defence',
+    defensiveTalentPanel: 'defensive-talent',
+    xgPanel: 'team-xg',
   };
   const VALID_POSITION_FILTERS = ['L', 'C', 'R', 'LD', 'RD'];
   const VALID_SKATER_SORT_KEYS = [

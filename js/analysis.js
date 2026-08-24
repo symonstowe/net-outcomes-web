@@ -2175,9 +2175,12 @@
   }
 
   async function init() {
+    const ownsPageNavigation = Boolean(document.getElementById('analysisSectionNav'));
     state.suppressUrlSync = true;
     state.initialUrlState = readShareStateFromUrl();
-    setupSectionNavigation(state.initialUrlState.section);
+    if (ownsPageNavigation) {
+      setupSectionNavigation(state.initialUrlState.section);
+    }
     const draftPayloadPromise = fetchJson('data/rankings.json').catch((error) => ({ draft_error: error.message }));
     const payload = readInlineAnalysisPayload() || await fetchJson('data/analysis.json');
     state.fantasyDraftPayload = await draftPayloadPromise;
@@ -2211,8 +2214,10 @@
     }
     setupFantasyDraft();
     initializeXgPanel();
-    state.suppressUrlSync = false;
-    syncUrlState();
+    if (ownsPageNavigation) {
+      state.suppressUrlSync = false;
+      syncUrlState();
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {

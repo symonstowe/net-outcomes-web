@@ -648,16 +648,24 @@
       const textAnchor = d.conf === 'West' ? 'start' : 'end';
       const textX = d.conf === 'West' ? 10 + logoSize + 10 : cardW - 10 - logoSize - 10;
       g.append('text')
-        .attr('class', 'team-card-primary')
+        .attr('class', 'team-card-seed')
         .attr('x', textX)
-        .attr('y', 36)
+        .attr('y', 23)
         .attr('text-anchor', textAnchor)
         .attr('font-weight', 700)
-        .attr('font-size', 17)
+        .attr('font-size', 12)
+        .text(d.seed);
+      g.append('text')
+        .attr('class', 'team-card-primary')
+        .attr('x', textX)
+        .attr('y', 44)
+        .attr('text-anchor', textAnchor)
+        .attr('font-weight', 700)
+        .attr('font-size', 15)
         .text(
           probabilisticSlots
-            ? `${d.seed} · ${d.abbrev || 'TBD'} ${fmtPct(d.topPct)}`
-            : `${d.seed} · ${d.abbrev || 'TBD'}`,
+            ? `${d.abbrev || 'TBD'} ${fmtPct(d.topPct)}`
+            : `${d.abbrev || 'TBD'}`,
         );
     });
 
@@ -672,8 +680,8 @@
           .attr('display', display.logo ? null : 'none');
         g.select('.team-card-primary').text(
           probabilisticSlots
-            ? `${d.seed} · ${display.abbrev || 'TBD'} ${fmtPct(display.topPct)}`
-            : `${d.seed} · ${display.abbrev || 'TBD'}`,
+            ? `${display.abbrev || 'TBD'} ${fmtPct(display.topPct)}`
+            : `${display.abbrev || 'TBD'}`,
         );
       });
     }
@@ -861,12 +869,18 @@
       const totals = aggregateTeamProbabilities(teams, id);
       for (const s of stages.slice(1)) {
         if (totals[s] <= PROB_EPS) continue;
-        const x = stageX(t, s) + nodeW / 2;
+        const eligiblePaths = teamPaths.filter((path) => prob(path, s) > PROB_EPS);
+        if (!eligiblePaths.length) continue;
+        const anchor = eligiblePaths.reduce(
+          (best, path) => (prob(path, s) > prob(best, s) ? path : best),
+        );
+        const x = stageX(anchor, s) + nodeW / 2;
+        const y = lane(anchor, s).top - 10;
         labels.append('text')
           .attr('class', 'annotation annotation--team-total')
           .attr('data-stage', s)
           .attr('x', x)
-          .attr('y', headerY + 34)
+          .attr('y', y)
           .attr('text-anchor', 'middle')
           .text(`${id} ${fmtPct(totals[s])}`);
       }
