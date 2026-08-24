@@ -79,6 +79,38 @@ body.lato {
   padding: 12px 0;
 }
 
+.sf-header--compact {
+  padding-top: 0;
+  margin-bottom: 0;
+}
+
+.sf-header--compact .sf-header-top {
+  padding: 6px 0;
+}
+
+.sf-header--compact .name_pic {
+  width: 30px;
+  height: 30px;
+}
+
+.sf-header--compact .name {
+  font-size: 1.05rem;
+}
+
+.sf-header--compact .sf-page-nav-link {
+  min-height: 28px;
+  padding-top: 3px;
+  padding-bottom: 2px;
+}
+
+.sf-page-intro {
+  padding-top: 14px;
+}
+
+.sf-page-intro .sf-page-title {
+  margin-top: 8px;
+}
+
 .sf-page-nav {
   display: flex;
   flex-wrap: wrap;

@@ -8,7 +8,19 @@
 (() => {
   const common = window.NetOutcomesCommon || {};
   const esc = common.esc || ((value) => String(value ?? ''));
+  const bindSortableHeaders = common.bindSortableHeaders || (() => {});
   const bracketLib = window.NetOutcomesBracket;
+  let standingsRows = [];
+  let standingsSort = { key: 'points', direction: 'desc' };
+
+  const STANDINGS_SORT_FIELDS = {
+    team: { type: 'text' },
+    points: { type: 'number' },
+    win_cup_pct: { type: 'number' },
+    win_conf_pct: { type: 'number' },
+    win_division_pct: { type: 'number' },
+    make_playoffs_pct: { type: 'number' },
+  };
 
   async function fetchJson(url) {
     if (typeof common.fetchJson === 'function') {
@@ -55,16 +67,40 @@
     </tr>`;
   }
 
+  function sortedStandings(rows) {
+    const field = STANDINGS_SORT_FIELDS[standingsSort.key] || STANDINGS_SORT_FIELDS.points;
+    const direction = standingsSort.direction === 'asc' ? 1 : -1;
+    return rows.map((row, index) => ({ row, index })).sort((left, right) => {
+      const leftValue = left.row[standingsSort.key];
+      const rightValue = right.row[standingsSort.key];
+      const leftMissing = leftValue === null || leftValue === undefined || leftValue === '';
+      const rightMissing = rightValue === null || rightValue === undefined || rightValue === '';
+      if (leftMissing !== rightMissing) return leftMissing ? 1 : -1;
+      let comparison = 0;
+      if (!leftMissing) {
+        comparison = field.type === 'text'
+          ? String(leftValue).localeCompare(String(rightValue), undefined, { sensitivity: 'base' })
+          : Number(leftValue) - Number(rightValue);
+      }
+      if (comparison !== 0 && Number.isFinite(comparison)) return comparison * direction;
+      const teamComparison = String(left.row.team || '').localeCompare(String(right.row.team || ''));
+      return teamComparison || left.index - right.index;
+    }).map(({ row }) => row);
+  }
+
   function renderStandings(rows) {
     const tbody = document.getElementById('standingsBody');
     const mount = document.getElementById('standingsTableMount');
     const loading = document.getElementById('standingsLoading');
     if (!tbody || !mount) return;
-    if (!Array.isArray(rows) || !rows.length) {
+    if (Array.isArray(rows)) standingsRows = [...rows];
+    if (!standingsRows.length) {
       if (loading) loading.textContent = 'No standings data available.';
       return;
     }
-    tbody.innerHTML = rows.map((row, idx) => renderStandingsRow(row, idx + 1)).join('');
+    tbody.innerHTML = sortedStandings(standingsRows)
+      .map((row, idx) => renderStandingsRow(row, idx + 1))
+      .join('');
     if (loading) loading.hidden = true;
     mount.hidden = false;
   }
@@ -134,6 +170,12 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    bindSortableHeaders(
+      'standingsTable',
+      () => standingsSort,
+      (next) => { standingsSort = next; },
+      () => renderStandings(),
+    );
     init().catch((error) => {
       console.error('playoffs.js:', error);
       const bracketLoading = document.getElementById('bracketLoading');

@@ -23,14 +23,14 @@
   <meta name="twitter:description" content="NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams." />
   <link rel="canonical" href="https://netoutcomes.ca/playoffs.html" />
   <link rel="icon" href="imgs/netoutcomes_favicon.svg" />
-  <link rel="stylesheet" href="latofonts.css?v=18ce98b94b13c45e" />
-  <link rel="stylesheet" href="style.css?v=18ce98b94b13c45e" />
+  <link rel="stylesheet" href="latofonts.css?v=18ceb4a8b618eeba" />
+  <link rel="stylesheet" href="style.css?v=18ceb4a8b618eeba" />
   <title>Net Outcomes | NHL Playoff Bracket &amp; Probabilities</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/netoutcomes_favicon.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"WebPage","@id":"https://netoutcomes.ca/playoffs.html#webpage","url":"https://netoutcomes.ca/playoffs.html","name":"Net Outcomes | NHL Playoff Bracket & Probabilities","description":"NHL playoff bracket with live series scores and model-simulated win probabilities. Includes Stanley Cup odds, conference odds, and season outcome probabilities for all 32 teams.","inLanguage":"en-CA","isPartOf":{"@id":"https://netoutcomes.ca/#website"},"publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"BreadcrumbList","@id":"https://netoutcomes.ca/playoffs.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://netoutcomes.ca/"},{"@type":"ListItem","position":2,"name":"Playoffs","item":"https://netoutcomes.ca/playoffs.html"}]}]}</script>
 </head>
 <body class="lato sf-background">
   <div id="container" class="sf-container">
-    <header class="sf-header sf-header--page">
+    <header class="sf-header sf-header--page sf-header--compact">
       <div class="sf-header-top">
         <a class="brand_name brand_name--link" href="/" aria-label="Net Outcomes home">
           <img class="name_pic" src="imgs/netoutcomes_favicon.svg" alt="Net Outcomes logo" />
@@ -38,11 +38,9 @@
         </a>
         <nav class="sf-page-nav"><a class="sf-page-nav-link" href="/">Home</a><a class="sf-page-nav-link" href="/rankings.html">Rankings</a><a class="sf-page-nav-link" href="/predictions.html">Predictions</a><a class="sf-page-nav-link is-active" href="/playoffs.html">Playoffs</a><a class="sf-page-nav-link" href="/analysis.html">Analysis</a></nav>
       </div>
-      <p class="sf-subtitle">NHL static analytics for season 2026-27</p>
-      <h1 class="sf-page-title">Playoffs</h1>
-      <p class="sf-page-lede">Probability flow from Round 1 to the Stanley Cup. Ribbon widths show each team&#x27;s odds of reaching every round.</p>
-      <p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p>
+
     </header>
+    <section class="sf-page-intro"><p class="sf-subtitle">NHL static analytics for season 2026-27</p><h1 class="sf-page-title">Playoffs</h1><p class="sf-page-lede">Probability flow from Round 1 to the Stanley Cup. Ribbon widths show each team&#x27;s odds of reaching every round.</p><p class="sf-global-analysis-note">Unless otherwise specified empty net goals are excluded from all analysis.</p></section>
     <main class="sf-main">
       
       
@@ -210,12 +208,12 @@
             <thead>
               <tr>
                 <th class="sf-col-rank">#</th>
-                <th class="sf-col-team">Team</th>
-                <th class="sf-col-pts" title="Regular-season points">PTS</th>
-                <th class="sf-col-pct" title="Probability to win the Stanley Cup">Win Cup</th>
-                <th class="sf-col-pct" title="Probability to win the Conference">Win Conf.</th>
-                <th class="sf-col-pct" title="Probability to win the Division">Win Div.</th>
-                <th class="sf-col-pct" title="Probability to qualify for the playoffs">Make Playoffs</th>
+                <th class="sf-col-team sf-sortable" data-sort-key="team" data-sort-default="asc" aria-sort="none"><span class="sf-sort-head">Team<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-col-pts sf-sortable" data-sort-key="points" data-sort-default="desc" aria-sort="descending" title="Regular-season points"><span class="sf-sort-head">PTS<span class="sf-sort-arrow">↓</span></span></th>
+                <th class="sf-col-pct sf-sortable" data-sort-key="win_cup_pct" data-sort-default="desc" aria-sort="none" title="Probability to win the Stanley Cup"><span class="sf-sort-head">Win Cup<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-col-pct sf-sortable" data-sort-key="win_conf_pct" data-sort-default="desc" aria-sort="none" title="Probability to win the Conference"><span class="sf-sort-head">Win Conf.<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-col-pct sf-sortable" data-sort-key="win_division_pct" data-sort-default="desc" aria-sort="none" title="Probability to win the Division"><span class="sf-sort-head">Win Div.<span class="sf-sort-arrow"></span></span></th>
+                <th class="sf-col-pct sf-sortable" data-sort-key="make_playoffs_pct" data-sort-default="desc" aria-sort="none" title="Probability to qualify for the playoffs"><span class="sf-sort-head">Make Playoffs<span class="sf-sort-arrow"></span></span></th>
               </tr>
             </thead>
             <tbody id="standingsBody"></tbody>
@@ -226,8 +224,8 @@
     </main>
     <footer class="sf-site-footer"><div class="sf-site-footer-inner"><p class="sf-site-footer-copy">&copy; <!--NETOUTCOMES_COPYRIGHT_YEAR-->2026<!--/NETOUTCOMES_COPYRIGHT_YEAR--> Net Outcomes. All rights reserved.</p><p class="sf-site-footer-legal">Net Outcomes is an independent, unofficial hockey analytics site and is not affiliated with, endorsed by, or sponsored by the National Hockey League or any NHL club. Team names, team logos, and other marks shown here are the property of the National Hockey League and the respective clubs and are displayed only to identify the teams discussed on this site. All other trademarks and copyrights are the property of their respective owners.</p><p class="sf-site-footer-note">Team logos displayed on this site are loaded from official NHL-hosted club logo assets for identification and informational display only.</p></div></footer>
   </div>
-  <script src="js/common.js?v=18ce98b94b13c45e" defer></script>
-  <script src="js/playoffs-bracket.js?v=18ce98b94b13c45e" defer></script>
-  <script src="js/playoffs.js?v=18ce98b94b13c45e" defer></script>
+  <script src="js/common.js?v=18ceb4a8b618eeba" defer></script>
+  <script src="js/playoffs-bracket.js?v=18ceb4a8b618eeba" defer></script>
+  <script src="js/playoffs.js?v=18ceb4a8b618eeba" defer></script>
 </body>
 </html>

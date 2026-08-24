@@ -16,6 +16,12 @@
     (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
   );
 
+  const numberAt = (value, decimals = 1) => {
+    if (value === null || value === undefined || value === '') return '—';
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed.toFixed(decimals) : '—';
+  };
+
   // Per-column precision, mirroring `decimals` in rankings.yaml. These
   // dimensions span four orders of magnitude, so a single shared format
   // rendered the whole puck-recovery column as 0.00.
@@ -705,7 +711,7 @@
       <tr>
         <td>${row.display_rank ?? row.rank}</td>
         <td>${esc(row.team)}</td>
-        <td>${num(row.projected_points, 1)}</td>
+        <td>${numberAt(row.projected_points, 1)}</td>
         <td class="${classForSigned(row.projected_soai_net)}">${signed(row.projected_soai_net)}</td>
         <td class="${classForSigned(row.projected_soai_offence)}">${signed(row.projected_soai_offence)}</td>
         <td class="${classForSigned(row.projected_soai_defence)}">${signed(row.projected_soai_defence)}</td>
