@@ -8,10 +8,11 @@
   } = window.NetOutcomesCommon;
 
   const DEFAULT_SECTION_ID = 'overviewPanel';
-  const FALLBACK_SECTION_IDS = ['overviewPanel', 'teamPanel', 'penaltyPanel', 'powerplayPanel', 'coachDefensePanel', 'defensiveTalentPanel', 'xgPanel'];
+  const FALLBACK_SECTION_IDS = ['overviewPanel', 'teamPanel', 'fantasyDraftPanel', 'penaltyPanel', 'powerplayPanel', 'coachDefensePanel', 'defensiveTalentPanel', 'xgPanel'];
   const SECTION_SLUG_BY_ID = {
     overviewPanel: 'overview',
     teamPanel: 'line-analysis',
+    fantasyDraftPanel: 'fantasy-draft',
     penaltyPanel: 'penalties',
     powerplayPanel: 'pp-development',
     coachDefensePanel: 'coach-defense',
@@ -83,6 +84,7 @@
     initialUrlState: null,
     suppressUrlSync: false,
     analysisPayload: null,
+    fantasyDraftPayload: null,
   };
 
   function getAvailableSectionIds() {
@@ -2080,11 +2082,105 @@
     renderDefensiveTalent();
   }
 
+  function readFantasyDraftInputs(selector, defaults) {
+    const values = { ...defaults };
+    document.querySelectorAll(selector).forEach((input) => {
+      const key = input.dataset.draftWeight || input.dataset.draftRoster;
+      const value = Number(input.value);
+      if (key && Number.isFinite(value)) values[key] = value;
+    });
+    return values;
+  }
+
+  function fantasyDraftCell(value, digits = 1) {
+    return value == null || !Number.isFinite(Number(value))
+      ? '—'
+      : Number(value).toFixed(digits);
+  }
+
+  function renderFantasyDraft() {
+    const tbody = document.querySelector('#fantasyDraftTable tbody');
+    const summary = document.getElementById('fantasyDraftSummary');
+    const engine = window.NetOutcomesFantasyDraft;
+    if (!tbody || !engine) return;
+    const payload = state.fantasyDraftPayload || {};
+    const skaters = Array.isArray(payload.fantasy_rankings) ? payload.fantasy_rankings : [];
+    const goalies = Array.isArray(payload.goalie_fantasy_rankings) ? payload.goalie_fantasy_rankings : [];
+    if (!skaters.length && !goalies.length) {
+      tbody.innerHTML = '<tr><td colspan="20">Fantasy projections are unavailable for this build.</td></tr>';
+      if (summary) summary.textContent = 'No draft-board projections are available.';
+      return;
+    }
+    const weights = readFantasyDraftInputs('[data-draft-weight]', engine.DEFAULT_WEIGHTS);
+    const roster = readFantasyDraftInputs('[data-draft-roster]', engine.DEFAULT_ROSTER);
+    const board = engine.buildDraftBoard(skaters, goalies, weights, roster);
+    const query = normalizeText(document.getElementById('fantasyDraftSearch')?.value || '');
+    const group = String(document.getElementById('fantasyDraftPosition')?.value || 'ALL');
+    const visible = board.rows.filter((row) => {
+      if (group !== 'ALL' && row.position_group !== group) return false;
+      return !query || normalizeText(`${row.player_name} ${row.team}`).includes(query);
+    });
+    tbody.innerHTML = visible.length ? visible.map((row) => {
+      const goalie = row.player_type === 'goalie';
+      const player = row.player_url
+        ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>`
+        : esc(row.player_name);
+      return `<tr class="${goalie ? 'sf-fantasy-draft-goalie' : ''}">
+        <td>${row.draft_rank}</td><td>${player}</td><td>${esc(row.team || '')}</td><td>${esc(row.position)}</td>
+        <td class="${classForSigned(row.draft_value)}">${row.draft_value >= 0 ? '+' : ''}${fantasyDraftCell(row.draft_value)}</td>
+        <td>${fantasyDraftCell(row.projected_score)}</td><td>${fantasyDraftCell(row.fantasy_games)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_goals)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_assists)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_powerplay_points)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_shots)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_hits)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_blocks)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_pim)}</td>
+        <td>${goalie ? fantasyDraftCell(row.fantasy_starts) : '—'}</td>
+        <td>${goalie ? fantasyDraftCell(row.fantasy_wins) : '—'}</td>
+        <td>${goalie ? fantasyDraftCell(row.fantasy_saves) : '—'}</td>
+        <td>${goalie ? fantasyDraftCell(row.fantasy_shutouts) : '—'}</td>
+        <td>${goalie && row.fantasy_save_pct != null ? fantasyDraftCell(100 * Number(row.fantasy_save_pct), 2) + '%' : '—'}</td>
+        <td>${goalie ? fantasyDraftCell(row.fantasy_gaa, 2) : '—'}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="20">No players match this filter.</td></tr>';
+    if (summary) {
+      const topGoalie = board.rows.find((row) => row.position_group === 'G');
+      const cutoffs = `F${engine.replacementCount('F', board.roster)} / D${engine.replacementCount('D', board.roster)} / G${engine.replacementCount('G', board.roster)}`;
+      summary.textContent = `${board.roster.teams}-team replacement cutoffs: ${cutoffs}. `
+        + `Top goalie: ${topGoalie ? `${topGoalie.player_name} (#${topGoalie.draft_rank})` : 'unavailable'}. `
+        + 'Draft Value is projected scoring above the replacement player in the same roster group.';
+    }
+  }
+
+  function setupFantasyDraft() {
+    const engine = window.NetOutcomesFantasyDraft;
+    if (!document.getElementById('fantasyDraftPanel') || !engine) return;
+    document.querySelectorAll('[data-draft-weight], [data-draft-roster]').forEach((input) => {
+      input.addEventListener('input', renderFantasyDraft);
+      input.addEventListener('change', renderFantasyDraft);
+    });
+    document.getElementById('fantasyDraftSearch')?.addEventListener('input', renderFantasyDraft);
+    document.getElementById('fantasyDraftPosition')?.addEventListener('change', renderFantasyDraft);
+    document.getElementById('fantasyDraftReset')?.addEventListener('click', () => {
+      document.querySelectorAll('[data-draft-weight]').forEach((input) => {
+        input.value = engine.DEFAULT_WEIGHTS[input.dataset.draftWeight];
+      });
+      document.querySelectorAll('[data-draft-roster]').forEach((input) => {
+        input.value = engine.DEFAULT_ROSTER[input.dataset.draftRoster];
+      });
+      renderFantasyDraft();
+    });
+    renderFantasyDraft();
+  }
+
   async function init() {
     state.suppressUrlSync = true;
     state.initialUrlState = readShareStateFromUrl();
     setupSectionNavigation(state.initialUrlState.section);
+    const draftPayloadPromise = fetchJson('data/rankings.json').catch((error) => ({ draft_error: error.message }));
     const payload = readInlineAnalysisPayload() || await fetchJson('data/analysis.json');
+    state.fantasyDraftPayload = await draftPayloadPromise;
     state.analysisPayload = payload || {};
     state.teams = Array.isArray(payload?.teams) ? payload.teams : [];
     state.baseRinkMarkup = document.getElementById('xgRink')?.innerHTML || '';
@@ -2113,6 +2209,7 @@
     if (document.getElementById('defensiveTalentPanel')) {
       setupDefensiveTalent();
     }
+    setupFantasyDraft();
     initializeXgPanel();
     state.suppressUrlSync = false;
     syncUrlState();

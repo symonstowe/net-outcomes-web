@@ -114,7 +114,9 @@
         .forEach((slotDef) => {
           const side = CONF_TO_SIDE[slotDef.conference] || 'West';
           const slot = Number(slotDef.conference_slot || 0);
-          const seed = slotDef.label || seedLabelFor(slot, slotDef.division || '');
+          const seed = slotDef.role === 'wildcard'
+            ? seedLabelFor(slot, slotDef.division || '')
+            : (slotDef.label || seedLabelFor(slot, slotDef.division || ''));
           const candidates = (slotDef.candidates || [])
             .filter((candidate) => Number(candidate.slot_pct || 0) > 0)
             .sort((a, b) => Number(b.slot_pct || 0) - Number(a.slot_pct || 0));
@@ -130,6 +132,13 @@
             topPct: Number(topCandidate.slot_pct || 0) / 100,
             candidateCount: candidates.length,
             teamIds: candidates.map((candidate) => candidate.team || '').filter(Boolean),
+            candidates: candidates.map((candidate) => ({
+              teamId: candidate.team || '',
+              abbrev: candidate.team || '',
+              name: candidate.full_name || candidate.team || '',
+              logo: candidate.logo_url || '',
+              topPct: Number(candidate.slot_pct || 0) / 100,
+            })),
           });
           candidates.forEach((candidate) => {
             const abbrev = candidate.team || '';
@@ -225,6 +234,13 @@
       topPct: 1,
       candidateCount: team.abbrev ? 1 : 0,
       teamIds: team.abbrev ? [team.abbrev] : [],
+      candidates: team.abbrev ? [{
+        teamId: team.teamId,
+        abbrev: team.abbrev,
+        name: team.name,
+        logo: team.logo,
+        topPct: 1,
+      }] : [],
     }));
     return {
       teams,
@@ -232,6 +248,34 @@
       allSeries,
       slotCards,
       probabilisticSlots: false,
+    };
+  }
+
+  function aggregateTeamProbabilities(teams, teamId) {
+    const totals = { start: 0, r1: 0, r2: 0, cf: 0, cup: 0 };
+    (teams || []).filter((team) => team.teamId === teamId).forEach((team) => {
+      totals.start += Number(team.probs?.start || 0);
+      totals.r1 += Number(team.probs?.r2 || 0);
+      totals.r2 += Number(team.probs?.cf || 0);
+      totals.cf += Number(team.probs?.final || 0);
+      totals.cup += Number(team.probs?.cup || 0);
+    });
+    Object.keys(totals).forEach((stage) => {
+      totals[stage] = Math.min(1, Math.max(0, totals[stage]));
+    });
+    return totals;
+  }
+
+  function slotDisplayForTeam(slotCard, teamId) {
+    const selected = teamId
+      ? (slotCard.candidates || []).find((candidate) => candidate.teamId === teamId)
+      : null;
+    return selected || {
+      teamId: slotCard.abbrev || '',
+      abbrev: slotCard.abbrev || '',
+      name: slotCard.name || '',
+      logo: slotCard.logo || '',
+      topPct: Number(slotCard.topPct || 0),
     };
   }
 
@@ -269,6 +313,9 @@
     const allSeries = built.allSeries;
     const slotCards = built.slotCards;
     const probabilisticSlots = built.probabilisticSlots;
+    const standingsMap = new Map(
+      (standings || []).map((row) => [row.team, row]),
+    );
 
     const seriesFlat = Object.values(series || {}).flat();
     const hasAnySeed = seriesFlat.some((s) => s && (s.top_seed || s.bottom_seed))
@@ -590,19 +637,20 @@
       const g = d3.select(this);
       const logoSize = 36;
       const logoX = d.conf === 'West' ? 10 : cardW - 10 - logoSize;
-      if (d.logo) {
-        g.append('image')
-          .attr('href', d.logo)
-          .attr('x', logoX)
-          .attr('y', (cardH - logoSize) / 2)
-          .attr('width', logoSize)
-          .attr('height', logoSize);
-      }
+      g.append('image')
+        .attr('class', 'team-card-logo')
+        .attr('href', d.logo || null)
+        .attr('x', logoX)
+        .attr('y', (cardH - logoSize) / 2)
+        .attr('width', logoSize)
+        .attr('height', logoSize)
+        .attr('display', d.logo ? null : 'none');
       const textAnchor = d.conf === 'West' ? 'start' : 'end';
       const textX = d.conf === 'West' ? 10 + logoSize + 10 : cardW - 10 - logoSize - 10;
       g.append('text')
+        .attr('class', 'team-card-primary')
         .attr('x', textX)
-        .attr('y', 24)
+        .attr('y', 36)
         .attr('text-anchor', textAnchor)
         .attr('font-weight', 700)
         .attr('font-size', 17)
@@ -611,17 +659,24 @@
             ? `${d.seed} · ${d.abbrev || 'TBD'} ${fmtPct(d.topPct)}`
             : `${d.seed} · ${d.abbrev || 'TBD'}`,
         );
-      g.append('text')
-        .attr('class', 'small')
-        .attr('x', textX)
-        .attr('y', 44)
-        .attr('text-anchor', textAnchor)
-        .text(
-          probabilisticSlots
-            ? `${d.candidateCount} possible team${d.candidateCount === 1 ? '' : 's'}`
-            : `Cup ${fmtPct(d.probs.cup)}`,
-        );
     });
+
+    function updateSlotCards(teamId) {
+      cards.each(function updateCard(d) {
+        const display = slotDisplayForTeam(d, teamId);
+        const selected = Boolean(teamId && d.teamIds.includes(teamId));
+        d.selectedTeamId = selected ? teamId : '';
+        const g = d3.select(this);
+        g.select('.team-card-logo')
+          .attr('href', display.logo || null)
+          .attr('display', display.logo ? null : 'none');
+        g.select('.team-card-primary').text(
+          probabilisticSlots
+            ? `${d.seed} · ${display.abbrev || 'TBD'} ${fmtPct(display.topPct)}`
+            : `${d.seed} · ${display.abbrev || 'TBD'}`,
+        );
+      });
+    }
 
     if (!interactive) {
       return {
@@ -673,18 +728,21 @@
 
     cards
       .style('cursor', 'pointer')
-      .on('mouseenter', (event, d) => showTip(
-        event,
-        probabilisticSlots
-          ? `<b>${esc(d.seed)}</b><br>${esc(d.name)} is most likely at ${fmtPct(d.topPct)}`
-            + `<br>${d.candidateCount} teams have a non-zero chance`
-          : `<b>${esc(d.name)}</b><br>Click to highlight`,
-      ))
+      .on('mouseenter', (event, d) => {
+        const display = slotDisplayForTeam(d, d.selectedTeamId);
+        showTip(
+          event,
+          probabilisticSlots
+            ? `<b>${esc(d.seed)}</b><br>${esc(display.name)}: ${fmtPct(display.topPct)}`
+            : `<b>${esc(display.name)}</b><br>Click to highlight`,
+        );
+      })
       .on('mousemove', moveTip)
       .on('mouseleave', hideTip)
       .on('click', (e, d) => {
         e.stopPropagation();
-        if (d.abbrev) selectTeam(d.abbrev, true);
+        const teamId = d.selectedTeamId || d.abbrev;
+        if (teamId) selectTeam(teamId, true);
       });
 
     if (select) {
@@ -715,6 +773,7 @@
         .attr('opacity', (d) => (d.eliminated ? 0.08 : 0.76));
       cards.classed('selected', false).transition().duration(110)
         .attr('opacity', (d) => (d.eliminated ? 0.32 : 1));
+      updateSlotCards('');
       labels.selectAll('.series-score').transition().duration(110).attr('opacity', 1);
       labels.selectAll('.round-label')
         .attr('font-weight', null)
@@ -794,26 +853,26 @@
       cards.classed('selected', (d) => d.teamIds.includes(id))
         .transition().duration(110)
         .attr('opacity', (d) => (d.teamIds.includes(id) ? 1 : 0.32));
+      updateSlotCards(id);
       labels.selectAll('.series-score').transition().duration(110).attr('opacity', 1);
       labels.selectAll('.round-label').attr('font-weight', null).attr('opacity', 1);
       labels.selectAll('.annotation').remove();
       const teamPaths = teams.filter((team) => team.teamId === id);
-      for (const path of teamPaths) {
-        for (const s of stages.slice(1)) {
-          if (prob(path, s) <= PROB_EPS) continue;
-          const e = nodeExtent(path.conf, s, stageGroup(s, path.slot));
-          const x = stageX(path, s) + nodeW / 2;
-          labels.append('text')
-            .attr('class', 'annotation')
-            .attr('x', x)
-            .attr('y', e.top - 10)
-            .attr('text-anchor', 'middle')
-            .text(fmtPct(prob(path, s)));
-        }
+      const totals = aggregateTeamProbabilities(teams, id);
+      for (const s of stages.slice(1)) {
+        if (totals[s] <= PROB_EPS) continue;
+        const x = stageX(t, s) + nodeW / 2;
+        labels.append('text')
+          .attr('class', 'annotation annotation--team-total')
+          .attr('data-stage', s)
+          .attr('x', x)
+          .attr('y', headerY + 34)
+          .attr('text-anchor', 'middle')
+          .text(`${id} ${fmtPct(totals[s])}`);
       }
       if (details) {
         const sRow = standingsMap.get(id) || {};
-        const possibleSeeds = teamPaths.map((path) => path.seed).join(', ');
+        const possibleSeeds = Array.from(new Set(teamPaths.map((path) => path.seed))).join(', ');
         const totalR1 = Number(sRow.win_round1_pct ?? (t.probs.r2 * 100)) / 100;
         const totalR2 = Number(sRow.win_round2_pct ?? (t.probs.cf * 100)) / 100;
         const totalConf = Number(sRow.win_conf_pct ?? (t.probs.final * 100)) / 100;
@@ -878,6 +937,8 @@
     seriesScoreLabel,
     fmtPct,
     seedLabelFor,
+    aggregateTeamProbabilities,
+    slotDisplayForTeam,
     teamColor,
     TEAM_COLOR,
   };

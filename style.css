@@ -966,6 +966,88 @@ body.lato {
   margin-top: 18px;
 }
 
+.sf-fantasy-draft-settings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 18px;
+}
+
+.sf-fantasy-draft-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid #d8e5eb;
+  border-radius: 12px;
+  background: #f8fbfd;
+}
+
+.sf-fantasy-draft-fieldset legend {
+  padding: 0 6px;
+  color: #153b55;
+  font-size: 0.82rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+}
+
+.sf-fantasy-draft-weight-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 12px;
+}
+
+.sf-fantasy-draft-weight-grid label {
+  display: grid;
+  grid-template-columns: minmax(72px, 1fr) 74px;
+  align-items: center;
+  gap: 8px;
+  color: #506873;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.sf-fantasy-draft-weight-grid input {
+  width: 100%;
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid #c8d9e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #173447;
+  font: inherit;
+  text-align: right;
+}
+
+.sf-fantasy-draft-weight-grid input:focus {
+  border-color: #147ea8;
+  outline: 2px solid rgba(20, 126, 168, 0.16);
+  outline-offset: 1px;
+}
+
+.sf-fantasy-draft-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 12px;
+}
+
+.sf-fantasy-draft-toolbar .sf-rank-basis {
+  max-width: 800px;
+  margin: 0;
+}
+
+.sf-fantasy-draft-reset {
+  flex: 0 0 auto;
+}
+
+.sf-fantasy-draft-table .sf-fantasy-draft-goalie td:first-child,
+.sf-fantasy-draft-table .sf-fantasy-draft-goalie td:nth-child(2),
+.sf-fantasy-draft-table .sf-fantasy-draft-goalie td:nth-child(4) {
+  color: #0f6f98;
+  font-weight: 700;
+}
+
 .sf-analysis-subhead-row {
   display: flex;
   flex-wrap: wrap;
@@ -1742,6 +1824,15 @@ body.lato {
     grid-template-columns: 1fr;
   }
 
+  .sf-fantasy-draft-settings {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-fantasy-draft-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .sf-prediction-card-grid--home {
     grid-template-columns: 1fr;
   }
@@ -1824,6 +1915,12 @@ body.lato {
 
   .lineup-grid {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .sf-fantasy-draft-weight-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -2307,6 +2404,7 @@ body.lato {
   font-family: "LatoWebSemibold", "LatoWeb", sans-serif;
   font-size: 0.86rem;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition: color 0.16s ease, background 0.16s ease, transform 0.16s ease;
 }

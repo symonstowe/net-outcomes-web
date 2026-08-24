@@ -113,7 +113,6 @@
     'team',
     'position',
     'fantasy_score',
-    'fantasy_score_sd',
     'fantasy_goals',
     'fantasy_goals_hi90',
     'fantasy_assists',
@@ -657,7 +656,6 @@
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
         <td>${row.fantasy_score != null ? Number(row.fantasy_score).toFixed(1) : '—'}</td>
-        <td>${row.fantasy_score_sd != null ? Number(row.fantasy_score_sd).toFixed(1) : '—'}</td>
         <td>${row.fantasy_goals != null ? Number(row.fantasy_goals).toFixed(1) : '—'}</td>
         <td>${row.fantasy_goals_hi90 != null ? Number(row.fantasy_goals_hi90).toFixed(1) : '—'}</td>
         <td>${row.fantasy_assists != null ? Number(row.fantasy_assists).toFixed(1) : '—'}</td>
