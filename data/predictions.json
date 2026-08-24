@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-08-23 16:14 UTC",
-  "last_updated_utc": "2026-08-23 16:14 UTC",
-  "last_updated_iso": "2026-08-23T16:14:27.565871+00:00",
+  "generated_at": "2026-08-24 05:53 UTC",
+  "last_updated_utc": "2026-08-24 05:53 UTC",
+  "last_updated_iso": "2026-08-24T05:53:22.678660+00:00",
   "season_label": "2025-2026",
   "predictions": {
     "basis": "Upcoming-game predictions use the current ratings, projected lineups, goalie uncertainty, rest, travel burden, and team-context signals, then calibrate the final published win probability on recent regular-season results.",
     "window_hours": 48,
-    "window_start_utc": "2026-08-23T16:00:00+00:00",
-    "window_end_utc": "2026-08-25T16:00:00+00:00",
+    "window_start_utc": "2026-08-24T05:00:00+00:00",
+    "window_end_utc": "2026-08-26T05:00:00+00:00",
     "games": [],
     "model_summary": {
       "training_seasons": [
@@ -24,7 +24,7 @@
       "calibration_logloss": 0.6589,
       "calibration_n_simulations": 400,
       "playoff_calibration_games": 5336,
-      "playoff_calibration_logloss": 0.6541,
+      "playoff_calibration_logloss": 0.6556,
       "playoff_side_training_rows": 5533,
       "playoff_ot_training_rows": 6992,
       "playoff_side_augmented_regular": 5101,

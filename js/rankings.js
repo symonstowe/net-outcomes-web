@@ -143,20 +143,18 @@
   const VALID_TEAM_SORT_KEYS = [
     'team',
     'games_played',
-    'total_team_score',
-    'shooting_talent',
-    'playmaking_talent',
+    'projected_points',
+    'projected_soai_net',
+    'projected_soai_offence',
+    'projected_soai_defence',
+    'projected_fantasy_goals',
+    'projected_fantasy_assists',
+    'projected_powerplay_points',
     'goaltending_talent',
+    'retrospective_rank',
+    'retrospective_team_score',
     'chance_generation',
     'chance_suppression',
-    'offensive_depth',
-    'defensive_depth',
-    'physicality_depth',
-    'oz_non_offsetting_penalties_pg',
-    'leverage_xg_net',
-    'rush_defence',
-    'high_danger_for',
-    'high_danger_against',
     'special_teams',
   ];
   const VALID_GOALIE_SORT_KEYS = [
@@ -202,7 +200,7 @@
     prospectiveSort: { key: 'fwd_total82', direction: 'desc' },
     fantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieSort: { key: 'rank', direction: 'asc' },
-    teamSort: { key: 'total_team_score', direction: 'desc' },
+    teamSort: { key: 'projected_points', direction: 'desc' },
     underratedSort: { key: 'rank', direction: 'asc' },
     activeSection: DEFAULT_SECTION_ID,
     initialUrlState: null,
@@ -413,7 +411,7 @@
       const teamSort = sanitizeTeamSortKey(state.teamSort?.key);
       const teamDir = sanitizeSortDirection(state.teamSort?.direction, 'desc');
       if (teamRank) params.set('teamRank', teamRank);
-      if (teamSort && (teamSort !== 'total_team_score' || teamDir !== 'desc')) {
+      if (teamSort && (teamSort !== 'projected_points' || teamDir !== 'desc')) {
         params.set('teamSort', teamSort);
         params.set('teamDir', teamDir);
       }
@@ -700,29 +698,27 @@
     const tbody = document.querySelector('#teamRankingsTable tbody');
     if (!tbody) return;
     if (!rows.length) {
-      tbody.innerHTML = emptyRow(18, 'No team rankings available.');
+      tbody.innerHTML = emptyRow(16, 'No team rankings available.');
       return;
     }
     tbody.innerHTML = rows.map((row) => `
       <tr>
         <td>${row.display_rank ?? row.rank}</td>
         <td>${esc(row.team)}</td>
-        <td>${row.games_played}</td>
-        <td class="${classForSigned(row.total_team_score)}">${signed(row.total_team_score)}</td>
-        <td class="${classForSigned(row.shooting_talent)}">${signed(row.shooting_talent)}</td>
-        <td class="${classForSigned(row.playmaking_talent)}">${signed(row.playmaking_talent)}</td>
+        <td>${num(row.projected_points, 1)}</td>
+        <td class="${classForSigned(row.projected_soai_net)}">${signed(row.projected_soai_net)}</td>
+        <td class="${classForSigned(row.projected_soai_offence)}">${signed(row.projected_soai_offence)}</td>
+        <td class="${classForSigned(row.projected_soai_defence)}">${signed(row.projected_soai_defence)}</td>
+        <td>${Number(row.projected_fantasy_goals || 0).toFixed(1)}</td>
+        <td>${Number(row.projected_fantasy_assists || 0).toFixed(1)}</td>
+        <td>${Number(row.projected_powerplay_points || 0).toFixed(1)}</td>
         <td class="${classForSigned(row.goaltending_talent)}">${signed(row.goaltending_talent)}</td>
+        <td>${Number(row.retrospective_rank || 0)}</td>
+        <td class="${classForSigned(row.retrospective_team_score)}">${signed(row.retrospective_team_score)}</td>
         <td class="${classForSigned(row.chance_generation)}">${signed(row.chance_generation)}</td>
         <td class="${classForSigned(row.chance_suppression)}">${signed(row.chance_suppression)}</td>
-        <td>${Number(row.offensive_depth || 0).toFixed(2)}</td>
-        <td>${Number(row.defensive_depth || 0).toFixed(2)}</td>
-        <td>${Number(row.physicality_depth || 0).toFixed(2)}</td>
-        <td>${Number(row.oz_non_offsetting_penalties_pg || 0).toFixed(2)}</td>
-        <td class="${classForSigned(row.leverage_xg_net)}">${signed(row.leverage_xg_net)}</td>
-        <td class="${classForSigned(row.rush_defence)}">${signed(row.rush_defence)}</td>
-        <td>${Number(row.high_danger_for || 0).toFixed(2)}</td>
-        <td>${Number(row.high_danger_against || 0).toFixed(2)}</td>
         <td class="${classForSigned(row.special_teams)}">${signed(row.special_teams)}</td>
+        <td>${row.games_played}</td>
       </tr>
     `).join('');
   }
@@ -927,7 +923,7 @@
   }
 
   function sortTeams(rows) {
-    const key = String(state.teamSort?.key || 'total_team_score');
+    const key = String(state.teamSort?.key || 'projected_points');
     const direction = String(state.teamSort?.direction || 'desc');
     const dir = direction === 'asc' ? 1 : -1;
     return [...rows].sort((a, b) => {
