@@ -146,6 +146,23 @@
     'fantasy_pk_minutes',
     'fantasy_conditional_net82',
   ];
+  const VALID_GOALIE_FANTASY_SORT_KEYS = [
+    'rank',
+    'goalie_name',
+    'team',
+    'fantasy_score',
+    'fantasy_games',
+    'fantasy_starts',
+    'fantasy_wins',
+    'fantasy_saves',
+    'fantasy_shutouts',
+    'fantasy_save_pct',
+    'fantasy_gaa',
+    'fantasy_goals_against',
+    'fantasy_prior_starts',
+    'fantasy_prior_save_pct',
+    'evidence_season',
+  ];
   const VALID_TEAM_SORT_KEYS = [
     'team',
     'games_played',
@@ -196,6 +213,7 @@
   const state = {
     rankings: [],
     fantasyRankings: [],
+    goalieFantasyRankings: [],
     goalieRankings: [],
     teamRankings: [],
     underrated: [],
@@ -205,6 +223,7 @@
     rankingsSort: { key: 'soai_net_gar', direction: 'desc' },
     prospectiveSort: { key: 'fwd_total82', direction: 'desc' },
     fantasySort: { key: 'fantasy_score', direction: 'desc' },
+    goalieFantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieSort: { key: 'rank', direction: 'asc' },
     teamSort: { key: 'projected_points', direction: 'desc' },
     underratedSort: { key: 'rank', direction: 'asc' },
@@ -674,6 +693,35 @@
     `).join('');
   }
 
+  function renderGoalieFantasy(rows) {
+    const tbody = document.querySelector('#goalieFantasyTable tbody');
+    if (!tbody) return;
+    if (!rows.length) {
+      const columns = document.querySelectorAll('#goalieFantasyTable thead th').length || 15;
+      tbody.innerHTML = emptyRow(columns, 'No validated goalie fantasy forecasts available.');
+      return;
+    }
+    tbody.innerHTML = rows.map((row) => `
+      <tr>
+        <td>${row.display_rank ?? row.rank}</td>
+        <td>${esc(row.goalie_name)}</td>
+        <td>${esc(row.team)}</td>
+        <td>${numberAt(row.fantasy_score, 1)}</td>
+        <td>${numberAt(row.fantasy_games, 1)}</td>
+        <td>${numberAt(row.fantasy_starts, 1)}</td>
+        <td>${numberAt(row.fantasy_wins, 1)}</td>
+        <td>${numberAt(row.fantasy_saves, 1)}</td>
+        <td>${numberAt(row.fantasy_shutouts, 1)}</td>
+        <td>${row.fantasy_save_pct != null ? pct(100 * Number(row.fantasy_save_pct), 2) : '—'}</td>
+        <td>${numberAt(row.fantasy_gaa, 2)}</td>
+        <td>${numberAt(row.fantasy_goals_against, 1)}</td>
+        <td>${row.fantasy_prior_starts ?? '—'}</td>
+        <td>${row.fantasy_prior_save_pct != null ? pct(100 * Number(row.fantasy_prior_save_pct), 2) : '—'}</td>
+        <td>${esc(row.evidence_season_label || row.evidence_season || '—')}</td>
+      </tr>
+    `).join('');
+  }
+
   function renderGoalies(rows) {
     const tbody = document.querySelector('#goalieTable tbody');
     if (!tbody) return;
@@ -928,6 +976,28 @@
     });
   }
 
+  function sortGoalieFantasy(rows) {
+    const requested = String(state.goalieFantasySort?.key || 'fantasy_score');
+    const key = VALID_GOALIE_FANTASY_SORT_KEYS.includes(requested)
+      ? requested : 'fantasy_score';
+    const direction = String(state.goalieFantasySort?.direction || 'desc');
+    const dir = direction === 'asc' ? 1 : -1;
+    const stringKeys = new Set(['goalie_name', 'team']);
+    return [...rows].sort((a, b) => {
+      if (stringKeys.has(key)) {
+        const primary = String(a?.[key] || '').localeCompare(String(b?.[key] || ''));
+        if (primary !== 0) return dir * primary;
+      } else {
+        const aMissing = missingNumber(a?.[key]);
+        const bMissing = missingNumber(b?.[key]);
+        if (aMissing !== bMissing) return aMissing ? 1 : -1;
+        const primary = aMissing ? 0 : Number(a?.[key]) - Number(b?.[key]);
+        if (Math.abs(primary) > 1e-12) return dir * primary;
+      }
+      return Number(a?.rank || 0) - Number(b?.rank || 0);
+    });
+  }
+
   function sortTeams(rows) {
     const key = String(state.teamSort?.key || 'projected_points');
     const direction = String(state.teamSort?.direction || 'desc');
@@ -1064,6 +1134,42 @@
     syncUrlState();
   }
 
+  function refreshGoalieFantasy() {
+    const sorted = rankSortedRows(sortGoalieFantasy(state.goalieFantasyRankings));
+    const goalieQuery = normalizeText(document.getElementById('goalieFantasySearch')?.value);
+    const teamQuery = normalizeText(document.getElementById('goalieFantasyTeamSearch')?.value);
+    renderGoalieFantasy(sorted.filter((row) => {
+      const goalieMatch = !goalieQuery || normalizeText(row.goalie_name).includes(goalieQuery);
+      const teamMatch = !teamQuery || normalizeText(row.team).includes(teamQuery);
+      return goalieMatch && teamMatch;
+    }));
+  }
+
+  function setupFantasyViewToggle() {
+    const buttons = Array.from(document.querySelectorAll('[data-fantasy-view]'));
+    const skaterView = document.getElementById('fantasySkaterView');
+    const goalieView = document.getElementById('fantasyGoalieView');
+    const skaterControls = document.getElementById('fantasySkaterControls');
+    const goalieControls = document.getElementById('fantasyGoalieControls');
+    if (!buttons.length || !skaterView || !goalieView) return;
+    const activate = (view) => {
+      const goaliesActive = view === 'goalies';
+      skaterView.hidden = goaliesActive;
+      goalieView.hidden = !goaliesActive;
+      if (skaterControls) skaterControls.hidden = goaliesActive;
+      if (goalieControls) goalieControls.hidden = !goaliesActive;
+      buttons.forEach((button) => {
+        const selected = button.dataset.fantasyView === (goaliesActive ? 'goalies' : 'skaters');
+        button.classList.toggle('is-active', selected);
+        button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+      });
+    };
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => activate(button.dataset.fantasyView));
+    });
+    activate('skaters');
+  }
+
   function refreshTeams() {
     const sorted = rankSortedRows(sortTeams(state.teamRankings));
     const teamQuery = normalizeText(document.getElementById('teamRankingsSearch')?.value);
@@ -1094,6 +1200,8 @@
     state.initialUrlState = readShareStateFromUrl();
     state.rankings = Array.isArray(payload?.rankings) ? payload.rankings : [];
     state.fantasyRankings = Array.isArray(payload?.fantasy_rankings) ? payload.fantasy_rankings : [];
+    state.goalieFantasyRankings = Array.isArray(payload?.goalie_fantasy_rankings)
+      ? payload.goalie_fantasy_rankings : [];
     state.goalieRankings = Array.isArray(payload?.goalie_rankings) ? payload.goalie_rankings : [];
     state.teamRankings = Array.isArray(payload?.team_rankings) ? payload.team_rankings : [];
     state.underrated = Array.isArray(payload?.underrated_rankings) ? payload.underrated_rankings : [];
@@ -1133,6 +1241,7 @@
     const basisIds = {
       skaterRankBasis: payload?.skater_rank_basis || '',
       fantasyRankBasis: payload?.fantasy_rank_basis || '',
+      goalieFantasyRankBasis: payload?.goalie_fantasy_rank_basis || '',
       goalieRankBasis: payload?.goalie_rank_basis || '',
       teamRankBasis: payload?.team_rank_basis || '',
       underratedRankBasis: payload?.underrated_rank_basis || '',
@@ -1176,6 +1285,12 @@
       refreshFantasy,
     );
     bindSortableHeaders(
+      'goalieFantasyTable',
+      () => state.goalieFantasySort,
+      (next) => { state.goalieFantasySort = next; },
+      refreshGoalieFantasy,
+    );
+    bindSortableHeaders(
       'goalieTable',
       () => state.goalieSort,
       (next) => { state.goalieSort = next; },
@@ -1212,6 +1327,9 @@
     document.querySelectorAll('input[name="fantasyPos"]').forEach((input) => {
       input.addEventListener('change', refreshFantasy);
     });
+    ['goalieFantasySearch', 'goalieFantasyTeamSearch'].forEach((id) => {
+      document.getElementById(id)?.addEventListener('input', refreshGoalieFantasy);
+    });
     document.querySelectorAll('input[name="underratedPos"]').forEach((input) => {
       input.addEventListener('change', refreshUnderrated);
     });
@@ -1226,10 +1344,12 @@
     refreshRankings();
     refreshProspective();
     refreshFantasy();
+    refreshGoalieFantasy();
     refreshGoalies();
     refreshTeams();
     refreshUnderrated();
     setupMemberFeatureModal();
+    setupFantasyViewToggle();
     setupSectionNavigation(state.initialUrlState.section);
     state.suppressUrlSync = false;
     syncUrlState();
@@ -1242,6 +1362,11 @@
       emptyMessage(
         '#fantasyTable tbody',
         document.querySelectorAll('#fantasyTable thead th').length || 36,
+        error.message,
+      );
+      emptyMessage(
+        '#goalieFantasyTable tbody',
+        document.querySelectorAll('#goalieFantasyTable thead th').length || 15,
         error.message,
       );
       emptyMessage('#goalieTable tbody', 13, error.message);
