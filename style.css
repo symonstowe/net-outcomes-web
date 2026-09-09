@@ -1290,6 +1290,43 @@ body.lato {
   min-width: 320px;
 }
 
+/* Probability cells in the playoff standings table. The JS emits the track and
+   an inline-styled fill; without an explicit height the fill collapses to zero
+   and only the numeric label is visible. */
+.sf-prob-bar-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 118px;
+}
+
+.sf-prob-bar-track {
+  flex: 1 1 auto;
+  height: 8px;
+  min-width: 54px;
+  border-radius: 999px;
+  background: #eaf1f4;
+  overflow: hidden;
+}
+
+.sf-prob-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.sf-prob-bar-label {
+  flex: 0 0 auto;
+  min-width: 44px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--sf-dark);
+}
+
+.sf-prob-bar-missing {
+  display: inline-block;
+  color: #9db0b7;
+}
+
 .sf-table th {
   text-align: left;
   color: #4d5f53;
@@ -3040,4 +3077,73 @@ body.sf-member-modal-open {
   .sf-member-modal-dialog {
     padding: 30px 22px 24px;
   }
+}
+
+/* Projection spread, shown inline with the value rather than as its own column.
+   A narrow interval is a confident projection, so it is always printed. */
+.sf-spread {
+  color: var(--sf-muted, #7a8899);
+  font-size: 0.85em;
+  white-space: nowrap;
+  margin-left: 0.15em;
+}
+
+/* Three sort bases on one column: floor, most likely, ceiling. */
+.sf-basis-group {
+  display: inline-flex;
+  gap: 1px;
+  margin-left: 0.35em;
+  vertical-align: middle;
+}
+.sf-basis {
+  background: transparent;
+  border: 1px solid var(--sf-border, #35485f);
+  color: var(--sf-muted, #7a8899);
+  border-radius: 3px;
+  font: inherit;
+  font-size: 0.72em;
+  line-height: 1.1;
+  padding: 0 0.25em;
+  cursor: pointer;
+}
+.sf-basis:hover { color: var(--sf-text, #e8eef6); }
+.sf-basis[data-basis-active="true"] {
+  color: var(--sf-text, #e8eef6);
+  border-color: currentColor;
+  font-weight: 600;
+}
+
+/* Column detail level. The board carries analyst diagnostics that a drafter
+   ranking a pool does not need; these switch between eight columns and all. */
+.sf-collevel-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  flex-wrap: wrap;
+  margin: 0.5rem 0 0.35rem;
+}
+.sf-collevel-label {
+  color: var(--sf-muted, #7a8899);
+  font-size: 0.8rem;
+  margin-right: 0.15em;
+}
+.sf-collevel {
+  background: transparent;
+  border: 1px solid var(--sf-border, #35485f);
+  color: var(--sf-muted, #7a8899);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.15em 0.55em;
+  cursor: pointer;
+}
+.sf-collevel:hover { color: var(--sf-text, #e8eef6); }
+.sf-collevel[data-collevel-active="true"] {
+  color: var(--sf-text, #e8eef6);
+  border-color: currentColor;
+  font-weight: 600;
+}
+@media (max-width: 720px) {
+  .sf-collevel { padding: 0.25em 0.6em; }
+  .sf-table th, .sf-table td { white-space: nowrap; }
 }

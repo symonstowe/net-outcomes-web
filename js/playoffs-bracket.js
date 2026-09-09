@@ -137,6 +137,7 @@
               abbrev: candidate.team || '',
               name: candidate.full_name || candidate.team || '',
               logo: candidate.logo_url || '',
+              color: teamColor(candidate.team || ''),
               topPct: Number(candidate.slot_pct || 0) / 100,
             })),
           });
@@ -275,6 +276,7 @@
       abbrev: slotCard.abbrev || '',
       name: slotCard.name || '',
       logo: slotCard.logo || '',
+      color: teamColor(slotCard.abbrev || ''),
       topPct: Number(slotCard.topPct || 0),
     };
   }
@@ -545,7 +547,11 @@
     function drawRoundNode(conf, stage, slot) {
       const x = stageX({ conf }, stage);
       const e = nodeExtent(conf, stage, slot);
-      const g = nodes.append('g').attr('class', 'round-node');
+      const g = nodes.append('g')
+        .attr('class', 'round-node')
+        .attr('data-conf', conf)
+        .attr('data-stage', stage)
+        .attr('data-group', slot);
       const arr = sortTeamsAt(stage, conf, slot);
       g.selectAll('rect.node-fill')
         .data(arr, (d) => d.id)
@@ -611,6 +617,35 @@
       .attr('class', 'card-bg')
       .attr('d', (d) => cardPath(cardW, cardH, 6, d.conf === 'West' ? 'right' : 'left'));
 
+    // The probability strip is part of the flow plot, not the selectable
+    // team-information enclosure.  Give the white region its own outline so a
+    // selected card never draws a border over the ribbon strip.
+    cards.append('path')
+      .attr('class', 'selection-outline')
+      .attr('d', (d) => cardPath(
+        cardW - nodeW,
+        cardH,
+        6,
+        d.conf === 'West' ? 'right' : 'left',
+      ))
+      .attr('transform', (d) => (d.conf === 'East' ? `translate(${nodeW},0)` : null))
+      .attr('fill', 'none')
+      .attr('stroke', 'transparent')
+      .attr('stroke-width', 0)
+      .attr('vector-effect', 'non-scaling-stroke')
+      .attr('pointer-events', 'none');
+
+    function fitCardText(selection, label, maxWidth, fontSize) {
+      const textLabel = String(label || '');
+      const estimatedWidth = textLabel.length * fontSize * 0.64;
+      const fittedWidth = Math.max(1, Math.min(maxWidth - 4, estimatedWidth));
+      selection
+        .text(textLabel)
+        .attr('data-max-width', maxWidth)
+        .attr('textLength', fittedWidth)
+        .attr('lengthAdjust', 'spacingAndGlyphs');
+    }
+
     if (probabilisticSlots) {
       cards.each(function appendSlotProbabilityBar(slotCard) {
         const g = d3.select(this);
@@ -633,9 +668,9 @@
       });
     }
 
-    cards.each(function appendCardContent(d) {
+    cards.each(function appendCardContent(d, cardIndex) {
       const g = d3.select(this);
-      const logoSize = 36;
+      const logoSize = 32;
       const logoX = d.conf === 'West' ? 10 : cardW - 10 - logoSize;
       g.append('image')
         .attr('class', 'team-card-logo')
@@ -646,8 +681,22 @@
         .attr('height', logoSize)
         .attr('display', d.logo ? null : 'none');
       const textAnchor = d.conf === 'West' ? 'start' : 'end';
-      const textX = d.conf === 'West' ? 10 + logoSize + 10 : cardW - 10 - logoSize - 10;
-      g.append('text')
+      const textX = d.conf === 'West' ? logoX + logoSize + 8 : logoX - 8;
+      const textSafeStart = d.conf === 'West' ? textX : nodeW + 8;
+      const textSafeEnd = d.conf === 'West' ? cardW - nodeW - 8 : textX;
+      const textSafeWidth = Math.max(1, textSafeEnd - textSafeStart);
+      const clipId = `team-card-copy-${cardIndex}`;
+      g.append('clipPath')
+        .attr('id', clipId)
+        .append('rect')
+        .attr('x', textSafeStart - 2)
+        .attr('y', 4)
+        .attr('width', textSafeWidth + 4)
+        .attr('height', cardH - 8);
+      const copy = g.append('g')
+        .attr('class', 'team-card-copy')
+        .attr('clip-path', `url(#${clipId})`);
+      copy.append('text')
         .attr('class', 'team-card-seed')
         .attr('x', textX)
         .attr('y', 23)
@@ -655,18 +704,21 @@
         .attr('font-weight', 700)
         .attr('font-size', 12)
         .text(d.seed);
-      g.append('text')
+      const primary = copy.append('text')
         .attr('class', 'team-card-primary')
         .attr('x', textX)
         .attr('y', 44)
         .attr('text-anchor', textAnchor)
         .attr('font-weight', 700)
-        .attr('font-size', 15)
-        .text(
-          probabilisticSlots
-            ? `${d.abbrev || 'TBD'} ${fmtPct(d.topPct)}`
-            : `${d.abbrev || 'TBD'}`,
-        );
+        .attr('font-size', 14);
+      fitCardText(
+        primary,
+        probabilisticSlots
+          ? `${d.abbrev || 'TBD'} ${fmtPct(d.topPct)}`
+          : `${d.abbrev || 'TBD'}`,
+        textSafeWidth,
+        14,
+      );
     });
 
     function updateSlotCards(teamId) {
@@ -678,11 +730,18 @@
         g.select('.team-card-logo')
           .attr('href', display.logo || null)
           .attr('display', display.logo ? null : 'none');
-        g.select('.team-card-primary').text(
+        const primary = g.select('.team-card-primary');
+        fitCardText(
+          primary,
           probabilisticSlots
             ? `${display.abbrev || 'TBD'} ${fmtPct(display.topPct)}`
             : `${display.abbrev || 'TBD'}`,
+          Number(primary.attr('data-max-width') || 1),
+          14,
         );
+        g.select('.selection-outline')
+          .attr('stroke', selected ? display.color : 'transparent')
+          .attr('stroke-width', selected ? 2.5 : 0);
       });
     }
 
@@ -806,6 +865,7 @@
         });
       cards.classed('selected', false).transition().duration(110)
         .attr('opacity', 0.32);
+      updateSlotCards('');
       labels.selectAll('.series-score').transition().duration(110)
         .attr('opacity', function () {
           return this.getAttribute('data-stage') === stage ? 1 : 0.12;
@@ -855,7 +915,7 @@
       flows.selectAll('.flow-ribbon')
         .transition().duration(110)
         .attr('opacity', (d) => (d.team.teamId === id ? 0.95 : 0.08))
-        .attr('filter', (d) => (d.team.teamId === id ? 'drop-shadow(0 1px 4px rgba(6,121,159,.35))' : null));
+        .attr('filter', null);
       nodes.selectAll('.node-fill, .slot-fill').transition().duration(110)
         .attr('opacity', (d) => (d.teamId === id ? 0.95 : 0.08));
       cards.classed('selected', (d) => d.teamIds.includes(id))
@@ -875,10 +935,15 @@
           (best, path) => (prob(path, s) > prob(best, s) ? path : best),
         );
         const x = stageX(anchor, s) + nodeW / 2;
-        const y = lane(anchor, s).top - 10;
+        const group = stageGroup(s, anchor.slot);
+        const boxConf = s === 'cup' ? 'West' : anchor.conf;
+        const roundBox = nodeExtent(boxConf, s, group);
+        const y = roundBox.top - 10;
         labels.append('text')
           .attr('class', 'annotation annotation--team-total')
           .attr('data-stage', s)
+          .attr('data-conf', boxConf)
+          .attr('data-group', group)
           .attr('x', x)
           .attr('y', y)
           .attr('text-anchor', 'middle')

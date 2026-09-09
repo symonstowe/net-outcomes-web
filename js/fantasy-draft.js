@@ -8,6 +8,14 @@
 }(typeof self !== 'undefined' ? self : (typeof globalThis !== 'undefined' ? globalThis : this), function () {
   'use strict';
 
+  // Starting points only. Every one of these is overridable per league, which
+  // is the whole point of the tool: the weights are the USER's, not ours.
+  // A weight of zero here means "not scored by default", never "not supported".
+  //
+  // Every category the board publishes must appear, or a league that scores it
+  // is silently told the category does not exist. Faceoff wins were missing
+  // until this was written, so a faceoff league was ranking on six of its seven
+  // categories with no indication anything had been dropped.
   const DEFAULT_WEIGHTS = Object.freeze({
     goals: 3,
     assists: 2,
@@ -16,10 +24,12 @@
     hits: 0.2,
     blocks: 0.3,
     pim: 0,
+    faceoffWins: 0,
     wins: 4,
     saves: 0.2,
     shutouts: 3,
     goalsAgainst: -2,
+    goalieStarts: 0,
   });
 
   const DEFAULT_ROSTER = Object.freeze({
@@ -48,14 +58,16 @@
       + finite(row.fantasy_powerplay_points) * finite(weights.powerplayPoints)
       + finite(row.fantasy_hits) * finite(weights.hits)
       + finite(row.fantasy_blocks) * finite(weights.blocks)
-      + finite(row.fantasy_pim) * finite(weights.pim);
+      + finite(row.fantasy_pim) * finite(weights.pim)
+      + finite(row.fantasy_faceoff_wins) * finite(weights.faceoffWins);
   }
 
   function goalieScore(row, weights) {
     return finite(row.fantasy_wins) * finite(weights.wins)
       + finite(row.fantasy_saves) * finite(weights.saves)
       + finite(row.fantasy_shutouts) * finite(weights.shutouts)
-      + finite(row.fantasy_goals_against) * finite(weights.goalsAgainst);
+      + finite(row.fantasy_goals_against) * finite(weights.goalsAgainst)
+      + finite(row.fantasy_starts) * finite(weights.goalieStarts);
   }
 
   function replacementCount(group, roster) {

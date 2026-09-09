@@ -208,10 +208,10 @@
       </article>
 
       <article class="decision-panel">
-        <div class="decision-panel-head"><div><span class="eyebrow">Matchup response</span><h3>Top-line hold and fall-off</h3></div><span class="falloff-verdict">${esc(fall.verdict || 'Not measured')}${fall.score == null ? '' : ` · ${sgn(fall.score, 0)} pct`}</span></div>
+        <div class="decision-panel-head"><div><span class="eyebrow">Matchup response</span><h3>Higher-skill hold and fall-off</h3></div><span class="falloff-verdict">${esc(fall.verdict || 'Not measured')}${fall.score == null ? '' : ` · ${sgn(fall.score, 0)} pct`}</span></div>
         <div class="falloff-curve">
           ${rungs.map((rung) => `<div class="falloff-rung">
-            <div class="falloff-label"><b>${esc(rung.label)}</b><span>${fmtShare(rung.share_of_minutes)}</span></div>
+            <div class="falloff-label"><b>${esc(rung.label)}</b><span>${fmtShare(rung.share_of_minutes)} of 5v5 minutes</span></div>
             <div class="falloff-track"><div style="width:${Math.max(2, Math.min(100, rung.percentile ?? 50))}%"></div></div>
             <div class="falloff-reading"><strong>${ord(rung.percentile)} pct</strong><span>${rung.effect_above_role == null ? 'Not measured' : `${sgn(rung.effect_above_role)} above role`}</span></div>
           </div>`).join('') || '<div class="note">No supported opponent-tier curve is available.</div>'}

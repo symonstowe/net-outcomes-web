@@ -20,6 +20,7 @@
     win_conf_pct: { type: 'number' },
     win_division_pct: { type: 'number' },
     make_playoffs_pct: { type: 'number' },
+    decision_make_playoffs_pct: { type: 'number' },
   };
 
   async function fetchJson(url) {
@@ -49,6 +50,17 @@
     </div>`;
   }
 
+  // The qualification model is only populated in preseason builds, and only
+  // when the team-projection artifact covered every team. A blank cell is the
+  // honest rendering of "this estimate does not exist for this build"; a zero
+  // bar would read as a confident 0%.
+  function renderOptionalProbBar(pct) {
+    if (pct === null || pct === undefined || pct === '' || !Number.isFinite(Number(pct))) {
+      return '<span class="sf-prob-bar-label sf-prob-bar-missing">—</span>';
+    }
+    return renderProbBar(pct);
+  }
+
   function renderStandingsRow(row, rank) {
     return `<tr class="${row.in_playoffs ? 'sf-standings-playoff-team' : 'sf-standings-out-team'}">
       <td class="sf-col-rank">${rank}</td>
@@ -64,6 +76,7 @@
       <td class="sf-col-pct">${renderProbBar(row.win_conf_pct)}</td>
       <td class="sf-col-pct">${renderProbBar(row.win_division_pct)}</td>
       <td class="sf-col-pct">${renderProbBar(row.make_playoffs_pct)}</td>
+      <td class="sf-col-pct">${renderOptionalProbBar(row.decision_make_playoffs_pct)}</td>
     </tr>`;
   }
 

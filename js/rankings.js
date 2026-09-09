@@ -38,11 +38,32 @@
   'soai_defensive_territory': 1,
   'soai_pp_generation': 2,
   'soai_pp_above_deployment': 2,
-  'soai_discipline_per100': 5
+  'soai_discipline_per100': 5,
+  'fwd_net60_reliable': 3
 };
   const signedAt = (value, key) => (value != null
     ? (value >= 0 ? '+' : '') + Number(value).toFixed(DECIMALS[key] ?? 2)
     : '—');
+
+  // A projection with its 80% spread, in ONE cell. Separate p10/p90 columns
+  // were tried and removed: the ceiling reorders nobody (spearman 0.988 against
+  // the median, max 6 places inside the top 50), so it was three columns of
+  // width for no decision. The FLOOR does reorder -- 0.922 and up to 22 places
+  // -- so it keeps its own sortable column and the rest collapses to a +/-.
+  //
+  // The spread is ALWAYS shown when it exists. A narrow interval is not a
+  // missing one -- it is a confident projection, which is exactly what a
+  // drafter spending an early pick wants to know. Hiding it because it is small
+  // throws away the most useful thing the number says.
+  function withSpread(value, low, high) {
+    if (value == null) return '—';
+    const central = Number(value);
+    if (low == null || high == null) return central.toFixed(1);
+    const half = (Number(high) - Number(low)) / 2;
+    if (!Number.isFinite(half)) return central.toFixed(1);
+    const digits = half < 1 ? 1 : 0;
+    return `${central.toFixed(1)} <span class="sf-spread">±${half.toFixed(digits)}</span>`;
+  }
 
   const DEFAULT_SECTION_ID = 'rankingsPanel';
   const VALID_SECTION_IDS = [
@@ -113,7 +134,7 @@
     'player_name',
     'team',
     'position',
-    'fwd_total82',
+    'fwd_net60_reliable',
     'soai_shot_generation',
     'soai_shot_quality',
     'soai_puck_recovery',
@@ -129,17 +150,28 @@
     'team',
     'position',
     'fantasy_score',
+    'fantasy_breakout_probability',
+    'fantasy_role_expansion_probability',
+    'fantasy_noninjury_regression_probability',
+    'fantasy_healthy_value_delta82_p50',
+    'fantasy_healthy_value_delta82_p90',
     'fantasy_goals',
-    'fantasy_goals_hi90',
     'fantasy_assists',
     'fantasy_points',
-    'fantasy_points_hi90',
+    'fantasy_points_p10',
+    'fantasy_points_p90',
     'fantasy_powerplay_points',
     'fantasy_shots',
     'fantasy_hits',
     'fantasy_blocks',
     'fantasy_pim',
+    'fantasy_faceoffs',
+    'fantasy_faceoffs_won',
+    'fantasy_faceoff_win_pct',
     'fantasy_games',
+    'fantasy_games_p10',
+    'fantasy_games_p90',
+    'fantasy_expected_games',
     'fantasy_appearance_probability',
     'fantasy_games_if_appears',
     'fantasy_process_xgf60',
@@ -236,7 +268,7 @@
     // The stable URL key now carries current-season xGAR. Pooled additive SOAI
     // failed its public retrospective gate and is context only.
     rankingsSort: { key: 'soai_net_gar', direction: 'desc' },
-    prospectiveSort: { key: 'fwd_total82', direction: 'desc' },
+    prospectiveSort: { key: 'fwd_net60_reliable', direction: 'desc' },
     fantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieFantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieSort: { key: 'rank', direction: 'asc' },
@@ -306,7 +338,7 @@
   }
 
   function sortProspective(rows) {
-    const key = sanitizeProspectiveSortKey(state.prospectiveSort?.key) || 'fwd_total82';
+    const key = sanitizeProspectiveSortKey(state.prospectiveSort?.key) || 'fwd_net60_reliable';
     const direction = String(state.prospectiveSort?.direction || 'desc');
     const dir = direction === 'asc' ? 1 : -1;
     const stringKeys = new Set(['player_name', 'team', 'position']);
@@ -629,7 +661,7 @@
         <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}</td>
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
-        <td class="${classForSigned(row.fwd_total82)}">${signed(row.fwd_total82)}</td>
+        ${metric(row.fwd_net60_reliable, 'fwd_net60_reliable')}
         ${metric(row.soai_shot_generation, 'soai_shot_generation')}
         ${metric(row.soai_shot_quality, 'soai_shot_quality')}
         ${metric(row.soai_puck_recovery, 'soai_puck_recovery')}
@@ -672,17 +704,25 @@
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
         <td>${row.fantasy_score != null ? Number(row.fantasy_score).toFixed(1) : '—'}</td>
-        <td>${row.fantasy_goals != null ? Number(row.fantasy_goals).toFixed(1) : '—'}</td>
-        <td>${row.fantasy_goals_hi90 != null ? Number(row.fantasy_goals_hi90).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_breakout_probability != null ? `${(100 * Number(row.fantasy_breakout_probability)).toFixed(1)}%` : '—'}</td>
+        <td>${row.fantasy_role_expansion_probability != null ? `${(100 * Number(row.fantasy_role_expansion_probability)).toFixed(1)}%` : '—'}</td>
+        <td>${row.fantasy_noninjury_regression_probability != null ? `${(100 * Number(row.fantasy_noninjury_regression_probability)).toFixed(1)}%` : '—'}</td>
+        <td class="${classForSigned(row.fantasy_healthy_value_delta82_p50)}">${signed(row.fantasy_healthy_value_delta82_p50, 1)}</td>
+        <td class="${classForSigned(row.fantasy_healthy_value_delta82_p90)}">${signed(row.fantasy_healthy_value_delta82_p90, 1)}</td>
+        <td>${withSpread(row.fantasy_goals, row.fantasy_goals_p10, row.fantasy_goals_p90)}</td>
         <td>${row.fantasy_assists != null ? Number(row.fantasy_assists).toFixed(1) : '—'}</td>
-        <td>${row.fantasy_points != null ? Number(row.fantasy_points).toFixed(1) : '—'}</td>
-        <td>${row.fantasy_points_hi90 != null ? Number(row.fantasy_points_hi90).toFixed(1) : '—'}</td>
+        <td>${withSpread(row.fantasy_points, row.fantasy_points_p10, row.fantasy_points_p90)}</td>
+        <td>${row.fantasy_points_p10 != null ? Number(row.fantasy_points_p10).toFixed(1) : '—'}</td>
         <td>${row.fantasy_powerplay_points != null ? Number(row.fantasy_powerplay_points).toFixed(1) : '—'}</td>
         <td>${row.fantasy_shots != null ? Number(row.fantasy_shots).toFixed(1) : '—'}</td>
         <td>${row.fantasy_hits != null ? Number(row.fantasy_hits).toFixed(1) : '—'}</td>
         <td>${row.fantasy_blocks != null ? Number(row.fantasy_blocks).toFixed(1) : '—'}</td>
         <td>${row.fantasy_pim != null ? Number(row.fantasy_pim).toFixed(1) : '—'}</td>
-        <td>${row.fantasy_games != null ? Number(row.fantasy_games).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_faceoffs != null ? Number(row.fantasy_faceoffs).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_faceoffs_won != null ? Number(row.fantasy_faceoffs_won).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_faceoff_win_pct != null ? `${Number(row.fantasy_faceoff_win_pct).toFixed(1)}%` : '—'}</td>
+        <td>${withSpread(row.fantasy_games, row.fantasy_games_p10, row.fantasy_games_p90)}</td>
+        <td>${row.fantasy_expected_games != null ? Number(row.fantasy_expected_games).toFixed(1) : '—'}</td>
         <td>${row.fantasy_appearance_probability != null ? `${(100 * Number(row.fantasy_appearance_probability)).toFixed(1)}%` : '—'}</td>
         <td>${row.fantasy_games_if_appears != null ? Number(row.fantasy_games_if_appears).toFixed(1) : '—'}</td>
         <td>${row.fantasy_process_xgf60 != null ? Number(row.fantasy_process_xgf60).toFixed(3) : '—'}</td>
@@ -967,6 +1007,86 @@
       const toiTie = Number(b?.season_toi_min || 0) - Number(a?.season_toi_min || 0);
       if (Math.abs(toiTie) > 1e-12) return toiTie;
       return String(a?.player_name || '').localeCompare(String(b?.player_name || ''));
+    });
+  }
+
+
+  // One column, three orders. The projection cell shows a single number with
+  // its spread; these let a drafter rank on the floor, the most likely value or
+  // the ceiling without three columns of table width. Measured, the floor and
+  // the median disagree by up to 22 places inside the top fifty, so this is a
+  // real choice rather than a decoration.
+
+  // Column detail level. Forty-three columns is an analyst's table; a drafter
+  // on a phone needs eight. The levels are pure CSS (nth-child rules generated
+  // from the column list), so the row renderer and the header stay in lockstep
+  // and the alignment guard still means what it says.
+  const COLUMN_LEVELS = ['core', 'draft', 'risk', 'all'];
+  function applyColumnLevel(tableId, level) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    COLUMN_LEVELS.forEach((name) => table.classList.remove(`cols-${name}`));
+    table.classList.add(`cols-${level}`);
+    document.querySelectorAll(`.sf-collevel[data-col-table="${tableId}"]`).forEach((button) => {
+      if (button.dataset.colLevel === level) button.dataset.collevelActive = 'true';
+      else delete button.dataset.collevelActive;
+    });
+    try { window.localStorage.setItem(`colLevel:${tableId}`, level); } catch (err) { /* private mode */ }
+  }
+
+  function bindColumnLevels() {
+    const buttons = Array.from(document.querySelectorAll('.sf-collevel'));
+    if (!buttons.length) return;
+    const tableId = buttons[0].dataset.colTable || 'fantasyTable';
+    let initial = null;
+    try { initial = window.localStorage.getItem(`colLevel:${tableId}`); } catch (err) { initial = null; }
+    if (!COLUMN_LEVELS.includes(initial)) {
+      // A narrow screen starts at the eight-column view; a desktop starts at
+      // the scoring categories. Neither starts on the process diagnostics.
+      // matchMedia is absent in JSDOM and in some embedded webviews, and an
+      // unguarded call there throws before any column level is applied, which
+      // leaves the table rendering every column on a phone.
+      let narrow = false;
+      try {
+        narrow = typeof window.matchMedia === 'function'
+          && window.matchMedia('(max-width: 720px)').matches;
+      } catch (err) {
+        narrow = false;
+      }
+      initial = narrow ? 'core' : 'draft';
+    }
+    applyColumnLevel(tableId, initial);
+    buttons.forEach((button) => {
+      if (button.dataset.levelBound === 'true') return;
+      button.dataset.levelBound = 'true';
+      button.addEventListener('click', () => {
+        applyColumnLevel(button.dataset.colTable || tableId, button.dataset.colLevel);
+      });
+    });
+  }
+
+  function bindSortBases(tableId, getSortState, setSortState, refreshFn) {
+    const buttons = Array.from(document.querySelectorAll(`#${tableId} .sf-basis`));
+    buttons.forEach((button) => {
+      if (button.dataset.basisBound === 'true') return;
+      button.dataset.basisBound = 'true';
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const header = button.closest('th');
+        const key = String(button.dataset.basisKey || '').trim();
+        if (!header || !key) return;
+        header.dataset.sortKey = key;
+        Array.from(header.querySelectorAll('.sf-basis')).forEach((sibling) => {
+          if (sibling === button) sibling.dataset.basisActive = 'true';
+          else delete sibling.dataset.basisActive;
+        });
+        const current = getSortState() || {};
+        setSortState({
+          key,
+          direction: String(current.direction || header.dataset.sortDefault || 'desc'),
+        });
+        refreshFn();
+      });
     });
   }
 
@@ -1293,6 +1413,13 @@
       refreshProspective,
     );
     bindSortableHeaders(
+      'fantasyTable',
+      () => state.fantasySort,
+      (next) => { state.fantasySort = next; },
+      refreshFantasy,
+    );
+    bindColumnLevels();
+    bindSortBases(
       'fantasyTable',
       () => state.fantasySort,
       (next) => { state.fantasySort = next; },
