@@ -6,6 +6,7 @@
     pct,
     fetchJson,
     bindSortableHeaders,
+    updateSortableHeaders,
     emptyRow,
     normalizeText,
   } = window.NetOutcomesCommon;
@@ -712,7 +713,6 @@
         <td>${withSpread(row.fantasy_goals, row.fantasy_goals_p10, row.fantasy_goals_p90)}</td>
         <td>${row.fantasy_assists != null ? Number(row.fantasy_assists).toFixed(1) : '—'}</td>
         <td>${withSpread(row.fantasy_points, row.fantasy_points_p10, row.fantasy_points_p90)}</td>
-        <td>${row.fantasy_points_p10 != null ? Number(row.fantasy_points_p10).toFixed(1) : '—'}</td>
         <td>${row.fantasy_powerplay_points != null ? Number(row.fantasy_powerplay_points).toFixed(1) : '—'}</td>
         <td>${row.fantasy_shots != null ? Number(row.fantasy_shots).toFixed(1) : '—'}</td>
         <td>${row.fantasy_hits != null ? Number(row.fantasy_hits).toFixed(1) : '—'}</td>
@@ -1065,29 +1065,50 @@
     });
   }
 
-  function bindSortBases(tableId, getSortState, setSortState, refreshFn) {
-    const buttons = Array.from(document.querySelectorAll(`#${tableId} .sf-basis`));
-    buttons.forEach((button) => {
-      if (button.dataset.basisBound === 'true') return;
-      button.dataset.basisBound = 'true';
-      button.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const header = button.closest('th');
-        const key = String(button.dataset.basisKey || '').trim();
-        if (!header || !key) return;
-        header.dataset.sortKey = key;
-        Array.from(header.querySelectorAll('.sf-basis')).forEach((sibling) => {
-          if (sibling === button) sibling.dataset.basisActive = 'true';
-          else delete sibling.dataset.basisActive;
-        });
-        const current = getSortState() || {};
-        setSortState({
-          key,
-          direction: String(current.direction || header.dataset.sortDefault || 'desc'),
-        });
+  // One selector above the table, in place of a cluster of small buttons inside
+  // each interval heading. The buttons rewrote that heading's data-sort-key;
+  // this rewrites every interval heading's at once, so "sort by the ceiling"
+  // is stated once for the whole board instead of per column.
+  function basisAttr(basis) {
+    return `basis${basis.charAt(0).toUpperCase()}${basis.slice(1)}`;
+  }
+
+  function applySortBasis(tableId, basis, getSortState, setSortState) {
+    const headers = Array.from(document.querySelectorAll(`#${tableId} th.sf-sortable`));
+    const current = getSortState() || {};
+    let nextKey = String(current.key || '');
+    headers.forEach((header) => {
+      if (!header.dataset.sortKeyBase) {
+        header.dataset.sortKeyBase = String(header.dataset.sortKey || '');
+      }
+      const base = header.dataset.sortKeyBase;
+      const resolved = header.dataset[basisAttr(basis)] || base;
+      // Follow the column that is currently sorted, whichever basis it is on,
+      // so changing the basis re-sorts in place instead of silently reverting
+      // the table to its default order.
+      const owned = [base, header.dataset.basisLo, header.dataset.basisMid, header.dataset.basisHi]
+        .filter(Boolean);
+      if (owned.indexOf(String(current.key || '')) !== -1) nextKey = resolved;
+      header.dataset.sortKey = resolved;
+    });
+    if (nextKey && nextKey !== String(current.key || '')) {
+      setSortState({ key: nextKey, direction: String(current.direction || 'desc') });
+    }
+  }
+
+  function bindSortBasis(tableId, selectId, getSortState, setSortState, refreshFn) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    const basis = () => String(select.value || 'mid');
+    if (select.dataset.basisBound !== 'true') {
+      select.dataset.basisBound = 'true';
+      select.addEventListener('change', () => {
+        applySortBasis(tableId, basis(), getSortState, setSortState);
+        updateSortableHeaders(tableId, getSortState());
         refreshFn();
       });
-    });
+    }
+    applySortBasis(tableId, basis(), getSortState, setSortState);
   }
 
   function sortFantasy(rows) {
@@ -1419,8 +1440,9 @@
       refreshFantasy,
     );
     bindColumnLevels();
-    bindSortBases(
+    bindSortBasis(
       'fantasyTable',
+      'fantasySortBasis',
       () => state.fantasySort,
       (next) => { state.fantasySort = next; },
       refreshFantasy,

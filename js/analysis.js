@@ -2128,7 +2128,7 @@
       return `<tr class="${goalie ? 'sf-fantasy-draft-goalie' : ''}">
         <td>${row.draft_rank}</td><td>${player}</td><td>${esc(row.team || '')}</td><td>${esc(row.position)}</td>
         <td class="${classForSigned(row.draft_value)}">${row.draft_value >= 0 ? '+' : ''}${fantasyDraftCell(row.draft_value)}</td>
-        <td>${fantasyDraftCell(row.projected_score)}</td><td>${fantasyDraftCell(row.fantasy_games)}</td>
+        <td>${fantasyDraftCell(row.fantasy_games)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_goals)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_assists)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_powerplay_points)}</td>
@@ -2136,6 +2136,8 @@
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_hits)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_blocks)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_pim)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_faceoffs_won)}</td>
+
         <td>${goalie ? fantasyDraftCell(row.fantasy_starts) : '—'}</td>
         <td>${goalie ? fantasyDraftCell(row.fantasy_wins) : '—'}</td>
         <td>${goalie ? fantasyDraftCell(row.fantasy_saves) : '—'}</td>

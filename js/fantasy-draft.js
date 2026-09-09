@@ -59,7 +59,7 @@
       + finite(row.fantasy_hits) * finite(weights.hits)
       + finite(row.fantasy_blocks) * finite(weights.blocks)
       + finite(row.fantasy_pim) * finite(weights.pim)
-      + finite(row.fantasy_faceoff_wins) * finite(weights.faceoffWins);
+      + finite(row.fantasy_faceoffs_won ?? row.fantasy_faceoff_wins) * finite(weights.faceoffWins);
   }
 
   function goalieScore(row, weights) {
