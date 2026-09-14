@@ -252,7 +252,7 @@
     };
   }
 
-  function aggregateTeamProbabilities(teams, teamId) {
+  function aggregateTeamProbabilities(teams, teamId, standingsRows) {
     const totals = { start: 0, r1: 0, r2: 0, cf: 0, cup: 0 };
     (teams || []).filter((team) => team.teamId === teamId).forEach((team) => {
       totals.start += Number(team.probs?.start || 0);
@@ -264,6 +264,24 @@
     Object.keys(totals).forEach((stage) => {
       totals[stage] = Math.min(1, Math.max(0, totals[stage]));
     });
+    // Slot candidates are rounded independently for the JSON payload. Their
+    // sum is useful as a fallback, but it can land on the other side of a
+    // displayed rounding boundary from the exact team-level Monte Carlo
+    // result. Selected-team totals must use the same source as the table.
+    const row = (standingsRows || []).find((item) => item.team === teamId);
+    if (row) {
+      const exact = {
+        start: row.make_playoffs_pct,
+        r1: row.win_round1_pct,
+        r2: row.win_round2_pct,
+        cf: row.win_conf_pct,
+        cup: row.win_cup_pct,
+      };
+      Object.entries(exact).forEach(([stage, pct]) => {
+        const value = Number(pct);
+        if (Number.isFinite(value)) totals[stage] = Math.min(1, Math.max(0, value / 100));
+      });
+    }
     return totals;
   }
 
@@ -308,15 +326,16 @@
     const interactive = opts.interactive !== false;
     const inlineStyles = Boolean(opts.inlineStyles);
     const elements = opts.elements || {};
+    const standingsRows = standings || [];
 
-    const built = buildTeams(series || {}, standings || [], bracketSlots || []);
+    const built = buildTeams(series || {}, standingsRows, bracketSlots || []);
     const teams = built.teams;
     const r1Series = built.r1Series;
     const allSeries = built.allSeries;
     const slotCards = built.slotCards;
     const probabilisticSlots = built.probabilisticSlots;
     const standingsMap = new Map(
-      (standings || []).map((row) => [row.team, row]),
+      standingsRows.map((row) => [row.team, row]),
     );
 
     const seriesFlat = Object.values(series || {}).flat();
@@ -887,7 +906,20 @@
         seen.add(key);
         const arr = sortTeamsAt(stage, t.conf, grp).filter((x) => x.abbrev);
         if (!arr.length) continue;
-        const top = arr.reduce((a, b) => (prob(b, stage) > prob(a, stage) ? b : a));
+        let top = arr.reduce((a, b) => (prob(b, stage) > prob(a, stage) ? b : a));
+        let annotationProbability = prob(top, stage);
+        if (stage === 'cup') {
+          const uniqueTeams = Array.from(
+            new Map(arr.map((path) => [path.teamId, path])).values(),
+          );
+          const cupTotal = (path) => aggregateTeamProbabilities(
+            teams,
+            path.teamId,
+            standingsRows,
+          ).cup;
+          top = uniqueTeams.reduce((a, b) => (cupTotal(b) > cupTotal(a) ? b : a));
+          annotationProbability = cupTotal(top);
+        }
         const e = nodeExtent(t.conf, stage, grp);
         const x = stageX(t, stage) + nodeW / 2;
         labels.append('text')
@@ -895,7 +927,7 @@
           .attr('x', x)
           .attr('y', e.top - 10)
           .attr('text-anchor', 'middle')
-          .text(`${top.abbrev} ${fmtPct(prob(top, stage))}`);
+          .text(`${top.abbrev} ${fmtPct(annotationProbability)}`);
       }
 
       if (details) {
@@ -926,7 +958,7 @@
       labels.selectAll('.round-label').attr('font-weight', null).attr('opacity', 1);
       labels.selectAll('.annotation').remove();
       const teamPaths = teams.filter((team) => team.teamId === id);
-      const totals = aggregateTeamProbabilities(teams, id);
+      const totals = aggregateTeamProbabilities(teams, id, standingsRows);
       for (const s of stages.slice(1)) {
         if (totals[s] <= PROB_EPS) continue;
         const eligiblePaths = teamPaths.filter((path) => prob(path, s) > PROB_EPS);
