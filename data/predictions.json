@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-01 18:43 UTC",
-  "last_updated_utc": "2026-10-01 18:43 UTC",
-  "last_updated_iso": "2026-10-01T18:43:52.363822+00:00",
+  "generated_at": "2026-10-01 20:57 UTC",
+  "last_updated_utc": "2026-10-01 20:57 UTC",
+  "last_updated_iso": "2026-10-01T20:57:12.547699+00:00",
   "season_label": "2025-2026",
   "predictions": {
     "basis": "Win probabilities come from the team model's game forecast: each club's projected roster strength and recent record, updated through the season as results come in. It is fitted only on information that was available before each game, and tested on over 7,000 held-out games. Goalie, lineup and rest details are shown for context.",
     "window_hours": 48,
-    "window_start_utc": "2026-10-01T17:00:00+00:00",
-    "window_end_utc": "2026-10-03T17:00:00+00:00",
+    "window_start_utc": "2026-10-01T19:00:00+00:00",
+    "window_end_utc": "2026-10-03T19:00:00+00:00",
     "games": [
       {
         "game_id": 2026020009,
