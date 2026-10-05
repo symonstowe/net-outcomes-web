@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-04 20:26 UTC",
-  "last_updated_utc": "2026-10-04 20:26 UTC",
-  "last_updated_iso": "2026-10-04T20:26:50.075314+00:00",
+  "generated_at": "2026-10-05 00:57 UTC",
+  "last_updated_utc": "2026-10-05 00:57 UTC",
+  "last_updated_iso": "2026-10-05T00:57:33.682944+00:00",
   "season_label": "2025-2026",
   "projection_season": 20262027,
   "projection_season_label": "2026-2027",
@@ -507113,15 +507113,15 @@
           },
           "new": {
             "net_rmse_per60": 0.2006718529546572,
-            "net_mae_per60": 0.1552059920950285,
-            "net_bias_per60": -0.037857291322764205,
+            "net_mae_per60": 0.15520599209502847,
+            "net_bias_per60": -0.0378572913227642,
             "net_spearman": 0.3204054922474503
           },
           "change": {
             "rmse_improvement_per60": 0.08081555624062356,
             "rmse_improvement_pct": 28.71018510975675,
             "spearman_increase": -0.10558662544964847,
-            "absolute_bias_improvement": 0.010254985774545915
+            "absolute_bias_improvement": 0.010254985774545922
           }
         },
         "development": {
@@ -507135,14 +507135,14 @@
           "new": {
             "net_rmse_per60": 0.16456478846983794,
             "net_mae_per60": 0.129663774774897,
-            "net_bias_per60": 0.022679177277859522,
+            "net_bias_per60": 0.022679177277859532,
             "net_spearman": 0.4270651260262156
           },
           "change": {
             "rmse_improvement_per60": 0.10125774205359692,
             "rmse_improvement_pct": 38.09223464023493,
             "spearman_increase": 0.01235904233476992,
-            "absolute_bias_improvement": 0.021359248833743516
+            "absolute_bias_improvement": 0.021359248833743506
           }
         },
         "holdout": {
@@ -507154,16 +507154,16 @@
             "net_spearman": 0.4509685835797138
           },
           "new": {
-            "net_rmse_per60": 0.26843358669835404,
-            "net_mae_per60": 0.21677285880015104,
-            "net_bias_per60": -0.18377417263423587,
+            "net_rmse_per60": 0.2684335866983541,
+            "net_mae_per60": 0.21677285880015107,
+            "net_bias_per60": -0.18377417263423584,
             "net_spearman": 0.4728171882420771
           },
           "change": {
-            "rmse_improvement_per60": 0.047637291410276006,
-            "rmse_improvement_pct": 15.07171166649007,
+            "rmse_improvement_per60": 0.04763729141027595,
+            "rmse_improvement_pct": 15.071711666490051,
             "spearman_increase": 0.02184860466236327,
-            "absolute_bias_improvement": -0.12584230010125946
+            "absolute_bias_improvement": -0.12584230010125944
           }
         },
         "forwards": {
@@ -507197,22 +507197,22 @@
           },
           "new": {
             "net_rmse_per60": 0.1938968829727751,
-            "net_mae_per60": 0.14375444969141693,
-            "net_bias_per60": -0.018052402586714995,
+            "net_mae_per60": 0.1437544496914169,
+            "net_bias_per60": -0.01805240258671497,
             "net_spearman": 0.24149617979485427
           },
           "change": {
             "rmse_improvement_per60": 0.014909560262588134,
             "rmse_improvement_pct": 7.140373654936654,
             "spearman_increase": -0.12582539206251359,
-            "absolute_bias_improvement": 0.0656111074032313
+            "absolute_bias_improvement": 0.06561110740323131
           }
         }
       },
       "development_rmse_improvement_bootstrap": {
         "samples": 1000,
         "lo95": 0.09174382315514305,
-        "median": 0.10083950100844369,
+        "median": 0.1008395010084437,
         "hi95": 0.11012845526352288
       },
       "diagnostic_holdout_rmse_improvement_bootstrap": {
@@ -507240,7 +507240,7 @@
           "split": "development",
           "model": "selected_context_neutral",
           "rows": 6609,
-          "rmse": 0.2344408894676169,
+          "rmse": 0.2344408894676168,
           "mae": 0.176753840676853,
           "spearman": 0.6764556966813496
         },
@@ -507249,8 +507249,8 @@
           "split": "development",
           "model": "last_season_eb",
           "rows": 6609,
-          "rmse": 0.2512247115174391,
-          "mae": 0.1920254668757748,
+          "rmse": 0.251224711517439,
+          "mae": 0.1920254668757747,
           "spearman": 0.63722982408756
         },
         {
@@ -507294,7 +507294,7 @@
           "split": "all",
           "model": "selected_context_neutral",
           "rows": 7875,
-          "rmse": 0.2608452607638739,
+          "rmse": 0.2608452607638738,
           "mae": 0.1909407245253214,
           "spearman": 0.6524924535363027
         },
@@ -507618,7 +507618,7 @@
           "split": "all",
           "model": "selected_context_neutral",
           "rows": 7875,
-          "rmse": 0.2684933528342067,
+          "rmse": 0.2684933528342068,
           "mae": 0.2010710998289905,
           "spearman": 0.5169748903438742
         },
@@ -507745,7 +507745,7 @@
           "model": "multiseason_rate",
           "rows": 6609,
           "rmse": 0.0619107808747561,
-          "mae": 0.0244339261180794,
+          "mae": 0.0244339261180795,
           "spearman": 0.4410513778936102
         },
         {
@@ -508212,7 +508212,7 @@
           "split": "development",
           "model": "selected_context_neutral",
           "rows": 6609,
-          "rmse": 0.0664594064066216,
+          "rmse": 0.0664594064066215,
           "mae": 0.0481545395097476,
           "spearman": 0.54366697670175
         },
@@ -528605,7 +528605,7 @@
         "legacy_name": "John Klingberg",
         "new_rank": 928,
         "player_name": "John Klingberg",
-        "neutral_net_gar_season": 0.020735618772832233,
+        "neutral_net_gar_season": 0.02073561877283219,
         "rank_change": -642,
         "absolute_rank_change": 642
       },
@@ -528635,7 +528635,7 @@
         "legacy_name": "Egor Zamula",
         "new_rank": 832,
         "player_name": "Egor Zamula",
-        "neutral_net_gar_season": 0.2790251775565604,
+        "neutral_net_gar_season": 0.2790251775565608,
         "rank_change": -478,
         "absolute_rank_change": 478
       },
@@ -528675,7 +528675,7 @@
         "legacy_name": "Adam Boqvist",
         "new_rank": 766,
         "player_name": "Adam Boqvist",
-        "neutral_net_gar_season": 0.5438919395852763,
+        "neutral_net_gar_season": 0.5438919395852742,
         "rank_change": -391,
         "absolute_rank_change": 391
       },
@@ -528695,7 +528695,7 @@
         "legacy_name": "Tyler Seguin",
         "new_rank": 930,
         "player_name": "Tyler Seguin",
-        "neutral_net_gar_season": 0.0192343988933711,
+        "neutral_net_gar_season": 0.019234398893371103,
         "rank_change": -359,
         "absolute_rank_change": 359
       },
@@ -528725,7 +528725,7 @@
         "legacy_name": "Brett Kulak",
         "new_rank": 326,
         "player_name": "Brett Kulak",
-        "neutral_net_gar_season": 4.058880190957966,
+        "neutral_net_gar_season": 4.058880190957958,
         "rank_change": 345,
         "absolute_rank_change": 345
       },
@@ -528735,7 +528735,7 @@
         "legacy_name": "Sam Steel",
         "new_rank": 278,
         "player_name": "Sam Steel",
-        "neutral_net_gar_season": 4.506689283984927,
+        "neutral_net_gar_season": 4.506689283984926,
         "rank_change": 336,
         "absolute_rank_change": 336
       },
@@ -528755,7 +528755,7 @@
         "legacy_name": "Nils Hoglander",
         "new_rank": 464,
         "player_name": "Nils Hoglander",
-        "neutral_net_gar_season": 2.931537641400368,
+        "neutral_net_gar_season": 2.9315376414003675,
         "rank_change": -315,
         "absolute_rank_change": 315
       },
@@ -528805,7 +528805,7 @@
         "legacy_name": "Brian Dumoulin",
         "new_rank": 375,
         "player_name": "Brian Dumoulin",
-        "neutral_net_gar_season": 3.6358732592461425,
+        "neutral_net_gar_season": 3.6358732592461496,
         "rank_change": 299,
         "absolute_rank_change": 299
       },
