@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-23 22:29 UTC",
-  "last_updated_utc": "2026-10-23 22:29 UTC",
-  "last_updated_iso": "2026-10-23T22:29:00.272182+00:00",
+  "generated_at": "2026-10-23 23:09 UTC",
+  "last_updated_utc": "2026-10-23 23:09 UTC",
+  "last_updated_iso": "2026-10-23T23:09:36.086549+00:00",
   "season_label": "2026-2027",
   "predictions": {
     "basis": "Win probabilities come from the team model's game forecast: each club's projected roster strength and recent record, updated through the season as results come in. It is fitted only on information that was available before each game, and tested on over 7,000 held-out games. Goalie, lineup and rest details are shown for context.",
     "window_hours": 48,
-    "window_start_utc": "2026-10-23T21:00:00+00:00",
-    "window_end_utc": "2026-10-25T21:00:00+00:00",
+    "window_start_utc": "2026-10-23T22:00:00+00:00",
+    "window_end_utc": "2026-10-25T22:00:00+00:00",
     "games": [
       {
         "game_id": 2026020166,
@@ -608,11 +608,51 @@
         "favorite_team": "FLA",
         "favorite_win_prob": 61.4,
         "confidence_edge": 22.8
+      },
+      {
+        "game_id": 2026020181,
+        "game_date": "2026-10-25",
+        "start_time_utc": "2026-10-25T22:00:00+00:00",
+        "away_team": "NYI",
+        "home_team": "DAL",
+        "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/NYI_light.svg",
+        "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/DAL_light.svg",
+        "home_win_prob": 54.2,
+        "away_win_prob": 45.8,
+        "ot_prob": 20.8,
+        "home_expected_goals": 2.99,
+        "away_expected_goals": 2.88,
+        "home_pp_minutes": 5.18,
+        "away_pp_minutes": 5.0,
+        "simulated_home_pp_minutes": 5.68,
+        "simulated_away_pp_minutes": 5.7,
+        "penalty_model": "pregame-penalty-hazard-blend-v1",
+        "home_rest_days": 2,
+        "away_rest_days": 2,
+        "home_rest_hours": 70.0,
+        "away_rest_hours": 70.5,
+        "home_travel_48h_km": 0.0,
+        "away_travel_48h_km": 2240.0,
+        "home_goalie_mix": "Oettinger 75% (adj 1.018), DeSmith 25% (adj 0.944)",
+        "away_goalie_mix": "Sorokin 95% (adj 0.850), Varlamov 5% (adj 0.880)",
+        "home_goalie_mix_html": "<strong>Oettinger 75% (adj 1.018)</strong>, DeSmith 25% (adj 0.944)",
+        "away_goalie_mix_html": "<strong>Sorokin 95% (adj 0.850)</strong>, Varlamov 5% (adj 0.880)",
+        "top_deciding_factors": "",
+        "home_factor_pushes": "",
+        "away_factor_pushes": "",
+        "top_deciding_factor_items": [],
+        "top_deciding_factors_html": "",
+        "venue_timezone": "US/Central",
+        "venue_utc_offset": "-05:00",
+        "start_time_label": "Oct 25, 2026 5:00 PM CDT",
+        "favorite_team": "DAL",
+        "favorite_win_prob": 54.2,
+        "confidence_edge": 8.3
       }
     ],
     "model_summary": {
       "probability_model": "game-model-v6/20262027",
-      "games_served": 15,
+      "games_served": 16,
       "games_unavailable": 0
     }
   }
