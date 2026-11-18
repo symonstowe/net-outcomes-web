@@ -16,6 +16,7 @@
   const STANDINGS_SORT_FIELDS = {
     team: { type: 'text' },
     points: { type: 'number' },
+    projected_points: { type: 'number' },
     win_cup_pct: { type: 'number' },
     win_conf_pct: { type: 'number' },
     win_division_pct: { type: 'number' },
@@ -34,6 +35,7 @@
   }
 
   function renderProbBar(pct) {
+    if (pct === null || pct === undefined) return '<span class="sf-prob-bar-label">—</span>';
     const clamped = Math.max(0, Math.min(100, Number(pct) || 0));
     const t = clamped / 100;
     const r = Math.round(199 + (255 - 199) * t);
@@ -60,6 +62,7 @@
         </span>
       </span></td>
       <td class="sf-col-pts"><strong>${row.points}</strong></td>
+      <td class="sf-col-pts">${row.projected_points ?? '—'}</td>
       <td class="sf-col-pct">${renderProbBar(row.win_cup_pct)}</td>
       <td class="sf-col-pct">${renderProbBar(row.win_conf_pct)}</td>
       <td class="sf-col-pct">${renderProbBar(row.win_division_pct)}</td>
@@ -166,6 +169,11 @@
       playoffs.standings || [],
       playoffs.bracket_slots || [],
     );
+    const notice = document.getElementById('standingsNotice');
+    if (notice && playoffs.odds_unavailable_reason) {
+      notice.textContent = `${playoffs.odds_unavailable_reason} ${playoffs.projection_basis || ''}`.trim();
+      notice.hidden = false;
+    }
     renderStandings(playoffs.standings || []);
   }
 

@@ -31,9 +31,13 @@
     `;
   }
 
-  function renderPredictionCards(rows) {
+  function renderPredictionCards(rows, unavailableReason) {
     const el = document.getElementById('homeTodayGames');
     if (!el) return;
+    if (unavailableReason) {
+      el.innerHTML = `<div class="sf-empty-state">${esc(unavailableReason)}</div>`;
+      return;
+    }
     if (!rows.length) {
       el.innerHTML = '<div class="sf-empty-state">No games are scheduled today in the current prediction window.</div>';
       return;
@@ -106,7 +110,10 @@
       fetchJson('data/home.json'),
       waitForD3().catch(() => null),
     ]);
-    renderPredictionCards(Array.isArray(payload?.today_games) ? payload.today_games : []);
+    renderPredictionCards(
+      Array.isArray(payload?.today_games) ? payload.today_games : [],
+      payload?.predictions_unavailable_reason || '',
+    );
     let playoffs = (payload && payload.playoff_bracket && payload.playoff_bracket.playoffs) || null;
     if (!playoffs || !playoffs.series) {
       try {

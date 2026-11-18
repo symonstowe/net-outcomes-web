@@ -107,6 +107,11 @@
       Number(modelSummary?.calibration_logloss || 0).toFixed(4),
     );
 
+    if (predictions?.unavailable) {
+      const el = document.getElementById('predictionsCards');
+      if (el) el.innerHTML = `<div class="sf-empty-state">${esc(predictions.unavailable_reason || '')}</div>`;
+      return;
+    }
     renderPredictionCards(rows);
   }
 
