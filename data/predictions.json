@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-23 15:47 UTC",
-  "last_updated_utc": "2026-11-23 15:47 UTC",
-  "last_updated_iso": "2026-11-23T15:47:36.726484+00:00",
+  "generated_at": "2026-11-23 16:23 UTC",
+  "last_updated_utc": "2026-11-23 16:23 UTC",
+  "last_updated_iso": "2026-11-23T16:23:38.789405+00:00",
   "season_label": "2026-2027",
   "predictions": {
     "basis": "Win probabilities come from the team model's game forecast: each club's projected roster strength and recent record, updated through the season as results come in. It is fitted only on information that was available before each game, and tested on over 7,000 held-out games. Goalie, lineup and rest details are shown for context.",
     "window_hours": 48,
-    "window_start_utc": "2026-11-23T15:00:00+00:00",
-    "window_end_utc": "2026-11-25T15:00:00+00:00",
+    "window_start_utc": "2026-11-23T16:00:00+00:00",
+    "window_end_utc": "2026-11-25T16:00:00+00:00",
     "games": [
       {
         "game_id": 2026020378,
