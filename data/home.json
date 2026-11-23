@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-23 17:34 UTC",
-  "last_updated_utc": "2026-11-23 17:34 UTC",
-  "last_updated_iso": "2026-11-23T17:34:38.776967+00:00",
+  "generated_at": "2026-11-23 18:35 UTC",
+  "last_updated_utc": "2026-11-23 18:35 UTC",
+  "last_updated_iso": "2026-11-23T18:35:53.833837+00:00",
   "season_label": "2026-2027",
   "model_performance": {},
   "team_rankings_top": [
@@ -248,7 +248,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-11-23T17:34:38.372480+00:00",
+      "built_at": "2026-11-23T18:35:53.174082+00:00",
       "season": 20262027,
       "season_year": 2027,
       "n_sims": 0,
@@ -1889,7 +1889,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-11-23T17:00:00+00:00",
-    "end_utc": "2026-11-25T17:00:00+00:00"
+    "start_utc": "2026-11-23T18:00:00+00:00",
+    "end_utc": "2026-11-25T18:00:00+00:00"
   }
 }
