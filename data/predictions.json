@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-23 19:37 UTC",
-  "last_updated_utc": "2026-11-23 19:37 UTC",
-  "last_updated_iso": "2026-11-23T19:37:09.098516+00:00",
+  "generated_at": "2026-11-23 22:00 UTC",
+  "last_updated_utc": "2026-11-23 22:00 UTC",
+  "last_updated_iso": "2026-11-23T22:00:21.894542+00:00",
   "season_label": "2026-2027",
   "predictions": {
     "basis": "Win probabilities come from the team model's game forecast: each club's projected roster strength and recent record, updated through the season as results come in. It is fitted only on information that was available before each game, and tested on over 7,000 held-out games. Goalie, lineup and rest details are shown for context.",
     "window_hours": 48,
-    "window_start_utc": "2026-11-23T19:00:00+00:00",
-    "window_end_utc": "2026-11-25T19:00:00+00:00",
+    "window_start_utc": "2026-11-23T21:00:00+00:00",
+    "window_end_utc": "2026-11-25T21:00:00+00:00",
     "games": [
       {
         "game_id": 2026020378,
@@ -217,15 +217,15 @@
         "home_team": "SEA",
         "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
         "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg",
-        "home_win_prob": 49.4,
-        "away_win_prob": 50.6,
-        "ot_prob": 22.6,
+        "home_win_prob": 49.5,
+        "away_win_prob": 50.5,
+        "ot_prob": 21.7,
         "home_expected_goals": 3.08,
         "away_expected_goals": 2.92,
         "home_pp_minutes": 5.0,
         "away_pp_minutes": 4.72,
-        "simulated_home_pp_minutes": 5.59,
-        "simulated_away_pp_minutes": 5.4,
+        "simulated_home_pp_minutes": 5.72,
+        "simulated_away_pp_minutes": 5.43,
         "penalty_model": "pregame-penalty-hazard-blend-v1",
         "home_rest_days": 1,
         "away_rest_days": 1,
@@ -246,8 +246,8 @@
         "venue_utc_offset": "-08:00",
         "start_time_label": "Nov 23, 2026 6:40 PM PST",
         "favorite_team": "ANA",
-        "favorite_win_prob": 50.6,
-        "confidence_edge": 1.2
+        "favorite_win_prob": 50.5,
+        "confidence_edge": 0.9
       },
       {
         "game_id": 2026020384,
@@ -297,15 +297,15 @@
         "home_team": "EDM",
         "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
         "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
-        "home_win_prob": 51.5,
-        "away_win_prob": 48.5,
-        "ot_prob": 20.6,
+        "home_win_prob": 50.8,
+        "away_win_prob": 49.2,
+        "ot_prob": 22.3,
         "home_expected_goals": 2.95,
         "away_expected_goals": 2.96,
         "home_pp_minutes": 4.96,
         "away_pp_minutes": 4.83,
-        "simulated_home_pp_minutes": 5.49,
-        "simulated_away_pp_minutes": 5.5,
+        "simulated_home_pp_minutes": 5.56,
+        "simulated_away_pp_minutes": 5.59,
         "penalty_model": "pregame-penalty-hazard-blend-v1",
         "home_rest_days": 1,
         "away_rest_days": 2,
@@ -326,8 +326,8 @@
         "venue_utc_offset": "-07:00",
         "start_time_label": "Nov 24, 2026 7:00 PM CST",
         "favorite_team": "EDM",
-        "favorite_win_prob": 51.5,
-        "confidence_edge": 3.0
+        "favorite_win_prob": 50.8,
+        "confidence_edge": 1.6
       }
     ],
     "model_summary": {

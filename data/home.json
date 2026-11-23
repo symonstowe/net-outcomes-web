@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-23 19:37 UTC",
-  "last_updated_utc": "2026-11-23 19:37 UTC",
-  "last_updated_iso": "2026-11-23T19:37:09.098516+00:00",
+  "generated_at": "2026-11-23 22:00 UTC",
+  "last_updated_utc": "2026-11-23 22:00 UTC",
+  "last_updated_iso": "2026-11-23T22:00:21.894542+00:00",
   "season_label": "2026-2027",
   "model_performance": {},
   "team_rankings_top": [
@@ -47,7 +47,7 @@
       "leverage_xg_net": 0.151,
       "high_danger_for": 2.25,
       "high_danger_against": 1.38,
-      "special_teams": 0.82,
+      "special_teams": 0.821,
       "team_off_system_per_60": 0.379,
       "team_def_system_per_60": 0.137,
       "team_system_net_per_60": 0.516,
@@ -248,7 +248,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-11-23T19:37:08.532469+00:00",
+      "built_at": "2026-11-23T22:00:21.419065+00:00",
       "season": 20262027,
       "season_year": 2027,
       "n_sims": 0,
@@ -1505,15 +1505,15 @@
       "home_team": "SEA",
       "away_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
       "home_team_logo_url": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg",
-      "home_win_prob": 49.4,
-      "away_win_prob": 50.6,
-      "ot_prob": 22.6,
+      "home_win_prob": 49.5,
+      "away_win_prob": 50.5,
+      "ot_prob": 21.7,
       "home_expected_goals": 3.08,
       "away_expected_goals": 2.92,
       "home_pp_minutes": 5.0,
       "away_pp_minutes": 4.72,
-      "simulated_home_pp_minutes": 5.59,
-      "simulated_away_pp_minutes": 5.4,
+      "simulated_home_pp_minutes": 5.72,
+      "simulated_away_pp_minutes": 5.43,
       "penalty_model": "pregame-penalty-hazard-blend-v1",
       "home_rest_days": 1,
       "away_rest_days": 1,
@@ -1534,8 +1534,8 @@
       "venue_utc_offset": "-08:00",
       "start_time_label": "Nov 23, 2026 6:40 PM PST",
       "favorite_team": "ANA",
-      "favorite_win_prob": 50.6,
-      "confidence_edge": 1.2,
+      "favorite_win_prob": 50.5,
+      "confidence_edge": 0.9,
       "top_factors": [],
       "top_factor_items": []
     },
@@ -1601,10 +1601,10 @@
       "player_name": "Shane Wright",
       "team": "NSH",
       "position": "C",
-      "current_overall_talent_score": 0.423,
+      "current_overall_talent_score": 0.422,
       "prior_overall_talent_score": -0.137,
       "talent_score_delta": 0.56,
-      "offence_score_delta": 0.838,
+      "offence_score_delta": 0.837,
       "defence_score_delta": 0.176,
       "player_url": "/players/shane-wright-8483524.html"
     },
@@ -1613,10 +1613,10 @@
       "player_name": "Yan Kuznetsov",
       "team": "CGY",
       "position": "LD",
-      "current_overall_talent_score": -0.551,
+      "current_overall_talent_score": -0.552,
       "prior_overall_talent_score": -1.099,
-      "talent_score_delta": 0.548,
-      "offence_score_delta": 0.539,
+      "talent_score_delta": 0.547,
+      "offence_score_delta": 0.538,
       "defence_score_delta": 0.554,
       "player_url": "/players/yan-kuznetsov-8482165.html"
     },
@@ -1627,8 +1627,8 @@
       "position": "R",
       "current_overall_talent_score": -0.377,
       "prior_overall_talent_score": -0.86,
-      "talent_score_delta": 0.484,
-      "offence_score_delta": 0.329,
+      "talent_score_delta": 0.483,
+      "offence_score_delta": 0.328,
       "defence_score_delta": 0.697,
       "player_url": "/players/braeden-bowman-8483890.html"
     },
@@ -1637,11 +1637,11 @@
       "player_name": "Jake Evans",
       "team": "MTL",
       "position": "C",
-      "current_overall_talent_score": 0.434,
+      "current_overall_talent_score": 0.433,
       "prior_overall_talent_score": -0.036,
       "talent_score_delta": 0.47,
-      "offence_score_delta": 0.345,
-      "defence_score_delta": 0.643,
+      "offence_score_delta": 0.344,
+      "defence_score_delta": 0.644,
       "player_url": "/players/jake-evans-8478133.html"
     }
   ],
@@ -1656,8 +1656,8 @@
       "toi_delta": 5.053,
       "recent_count": 10,
       "prior_count": 10,
-      "current_overall_talent_score": -0.046,
-      "talent_score_delta": 0.292,
+      "current_overall_talent_score": -0.045,
+      "talent_score_delta": 0.293,
       "player_url": "/players/sam-rinzel-8483506.html"
     },
     {
@@ -1698,8 +1698,8 @@
       "toi_delta": 4.063,
       "recent_count": 10,
       "prior_count": 10,
-      "current_overall_talent_score": 0.608,
-      "talent_score_delta": 0.098,
+      "current_overall_talent_score": 0.61,
+      "talent_score_delta": 0.1,
       "player_url": "/players/vincent-trocheck-8476389.html"
     },
     {
@@ -1712,7 +1712,7 @@
       "toi_delta": 4.042,
       "recent_count": 10,
       "prior_count": 10,
-      "current_overall_talent_score": -0.035,
+      "current_overall_talent_score": -0.036,
       "talent_score_delta": -0.101,
       "player_url": "/players/victor-hedman-8475167.html"
     }
@@ -1721,77 +1721,87 @@
     {
       "team": "CAR",
       "current_total_team_score": 1.887,
-      "prior_total_team_score": 0.424,
-      "total_team_score_delta": 1.463,
-      "chance_generation_delta": 0.099,
-      "chance_suppression_delta": 0.01,
-      "goaltending_talent_delta": 0.0
+      "prior_total_team_score": 0.52,
+      "total_team_score_delta": 1.367,
+      "chance_generation_delta": 0.106,
+      "chance_suppression_delta": 0.003,
+      "goaltending_talent_delta": -0.103
     },
     {
       "team": "OTT",
       "current_total_team_score": 0.995,
-      "prior_total_team_score": -0.238,
-      "total_team_score_delta": 1.233,
-      "chance_generation_delta": 0.032,
-      "chance_suppression_delta": 0.312,
-      "goaltending_talent_delta": 0.0
-    },
-    {
-      "team": "MIN",
-      "current_total_team_score": 1.643,
-      "prior_total_team_score": 0.472,
-      "total_team_score_delta": 1.171,
-      "chance_generation_delta": -0.205,
-      "chance_suppression_delta": -0.08,
-      "goaltending_talent_delta": 0.0
+      "prior_total_team_score": -0.15,
+      "total_team_score_delta": 1.145,
+      "chance_generation_delta": 0.038,
+      "chance_suppression_delta": 0.305,
+      "goaltending_talent_delta": -0.093
     },
     {
       "team": "DAL",
       "current_total_team_score": 1.203,
-      "prior_total_team_score": 0.119,
-      "total_team_score_delta": 1.084,
-      "chance_generation_delta": 0.011,
-      "chance_suppression_delta": -0.146,
-      "goaltending_talent_delta": 0.0
+      "prior_total_team_score": 0.104,
+      "total_team_score_delta": 1.099,
+      "chance_generation_delta": 0.017,
+      "chance_suppression_delta": -0.153,
+      "goaltending_talent_delta": 0.035
     },
     {
       "team": "EDM",
       "current_total_team_score": 1.376,
-      "prior_total_team_score": 0.486,
+      "prior_total_team_score": 0.446,
+      "total_team_score_delta": 0.93,
+      "chance_generation_delta": -0.194,
+      "chance_suppression_delta": -0.097,
+      "goaltending_talent_delta": 0.069
+    },
+    {
+      "team": "TBL",
+      "current_total_team_score": 1.326,
+      "prior_total_team_score": 0.436,
       "total_team_score_delta": 0.89,
-      "chance_generation_delta": -0.201,
-      "chance_suppression_delta": -0.09,
-      "goaltending_talent_delta": 0.0
+      "chance_generation_delta": -0.124,
+      "chance_suppression_delta": -0.155,
+      "goaltending_talent_delta": 0.203
     }
   ],
   "trending_goalies": [
+    {
+      "goalie_id": 8475683,
+      "goalie_name": "Sergei Bobrovsky",
+      "team": "TOR",
+      "current_goalie_score": 0.0,
+      "prior_goalie_score": -0.465,
+      "goalie_score_delta": 0.465,
+      "hld_goalie_talent_gsax_5v5_per60": 0.0,
+      "gsax_current_per60": 0.0
+    },
     {
       "goalie_id": 8476883,
       "goalie_name": "Andrei Vasilevskiy",
       "team": "TBL",
       "current_goalie_score": 0.0,
-      "prior_goalie_score": 0.0,
-      "goalie_score_delta": 0.0,
+      "prior_goalie_score": -0.331,
+      "goalie_score_delta": 0.331,
       "hld_goalie_talent_gsax_5v5_per60": 0.0,
       "gsax_current_per60": 0.0
     },
     {
-      "goalie_id": 8481668,
-      "goalie_name": "Arturs Silovs",
-      "team": "PIT",
+      "goalie_id": 8476434,
+      "goalie_name": "John Gibson",
+      "team": "DET",
       "current_goalie_score": 0.0,
-      "prior_goalie_score": 0.0,
-      "goalie_score_delta": 0.0,
+      "prior_goalie_score": -0.085,
+      "goalie_score_delta": 0.085,
       "hld_goalie_talent_gsax_5v5_per60": 0.0,
       "gsax_current_per60": 0.0
     },
     {
-      "goalie_id": 8478009,
-      "goalie_name": "Ilya Sorokin",
-      "team": "NYI",
+      "goalie_id": 8478872,
+      "goalie_name": "Karel Vejmelka",
+      "team": "UTA",
       "current_goalie_score": 0.0,
-      "prior_goalie_score": 0.0,
-      "goalie_score_delta": 0.0,
+      "prior_goalie_score": -0.049,
+      "goalie_score_delta": 0.049,
       "hld_goalie_talent_gsax_5v5_per60": 0.0,
       "gsax_current_per60": 0.0
     },
@@ -1800,18 +1810,8 @@
       "goalie_name": "Jake Oettinger",
       "team": "DAL",
       "current_goalie_score": 0.0,
-      "prior_goalie_score": 0.0,
-      "goalie_score_delta": 0.0,
-      "hld_goalie_talent_gsax_5v5_per60": 0.0,
-      "gsax_current_per60": 0.0
-    },
-    {
-      "goalie_id": 8480280,
-      "goalie_name": "Jeremy Swayman",
-      "team": "BOS",
-      "current_goalie_score": 0.0,
-      "prior_goalie_score": 0.0,
-      "goalie_score_delta": 0.0,
+      "prior_goalie_score": 0.06,
+      "goalie_score_delta": -0.06,
       "hld_goalie_talent_gsax_5v5_per60": 0.0,
       "gsax_current_per60": 0.0
     }
@@ -1889,7 +1889,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-11-23T19:00:00+00:00",
-    "end_utc": "2026-11-25T19:00:00+00:00"
+    "start_utc": "2026-11-23T21:00:00+00:00",
+    "end_utc": "2026-11-25T21:00:00+00:00"
   }
 }
