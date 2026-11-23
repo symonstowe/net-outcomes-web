@@ -286,9 +286,12 @@
     `<button data-group="${g}" class="${g === GROUP ? 'active' : ''}">${esc(groupLabels[g])}</button>`).join('')}</section>
 
   <section class="rankstrip">
-    <div class="rank good"><b>Overall rank</b><span>#${bd.rank} / ${bd.n}</span></div>
-    <div class="rank good"><b>Team rank</b><span>#${bd.team_rank} ${esc(b.team)}</span></div>
-    <div class="rank good"><b>Position rank</b><span>#${bd.pos_rank} / ${bd.pos_n}</span></div>
+    <div class="rank good" title="${esc(bd.proj_rank_basis)}"><b>Projected rank</b><span>${bd.proj_rank ? '#' + bd.proj_rank + ' / ' + bd.proj_n : 'Not projected'}</span></div>
+    <div class="rank good" title="${esc(bd.proj_rank_basis)}"><b>Projected team</b><span>${bd.proj_team_rank ? '#' + bd.proj_team_rank + ' ' + esc(b.team) : '—'}</span></div>
+    <div class="rank good" title="${esc(bd.proj_rank_basis)}"><b>Projected position</b><span>${bd.proj_pos_rank ? '#' + bd.proj_pos_rank + ' / ' + bd.proj_pos_n : '—'}</span></div>
+    <div class="rank good" title="${esc(bd.rank_basis)}"><b>Observed rank</b><span>${bd.rank ? '#' + bd.rank + ' / ' + bd.n : 'No minutes this season'}</span></div>
+    <div class="rank good" title="${esc(bd.rank_basis)}"><b>Observed team</b><span>${bd.team_rank ? '#' + bd.team_rank + ' ' + esc(b.team) : '—'}</span></div>
+    <div class="rank good" title="${esc(bd.rank_basis)}"><b>Observed position</b><span>${bd.pos_rank ? '#' + bd.pos_rank + ' / ' + bd.pos_n : '—'}</span></div>
     <div class="rank${bd.under_rank && bd.under_rank <= 50 ? ' good' : ''}"><b>Underused rank</b><span>${bd.under_rank ? '#' + bd.under_rank : '—'}</span></div>
     <div class="rank"><b>Overused rank</b><span>${bd.over_rank && bd.over_rank <= 50 ? '#' + bd.over_rank : '—'}</span></div>
     <div class="rank${(bd.trend_rank ?? 0) >= 60 ? ' good' : ''}"><b>Last-10 trend</b><span>${ord(bd.trend_rank)} pct</span></div>

@@ -27,6 +27,7 @@
   // dimensions span four orders of magnitude, so a single shared format
   // rendered the whole puck-recovery column as 0.00.
   const DECIMALS = {
+  'soai_overall_per100': 3,
   'soai_net_gar': 1,
   'soai_offense_gar': 2,
   'soai_defense_gar': 2,
@@ -66,7 +67,7 @@
     return `${central.toFixed(1)} <span class="sf-spread">±${half.toFixed(digits)}</span>`;
   }
 
-  const DEFAULT_SECTION_ID = 'rankingsPanel';
+  const DEFAULT_SECTION_ID = 'prospectivePanel';
   const VALID_SECTION_IDS = [
     'rankingsPanel',
     'prospectivePanel',
@@ -110,6 +111,7 @@
     'player_name',
     'team',
     'position',
+    'soai_overall_per100',
     'soai_net_gar',
     'soai_offense_gar',
     'soai_defense_gar',
@@ -266,9 +268,9 @@
     teamRankings: [],
     underrated: [],
     scoringAnomalies: {},
-    // The stable URL key now carries current-season xGAR. Pooled additive SOAI
-    // failed its public retrospective gate and is context only.
-    rankingsSort: { key: 'soai_net_gar', direction: 'desc' },
+    // Ranked on overall SOAI, the validated distilled skill rating; the
+    // player cards use the same ranks (rankings_inputs._attach_skill_ranks).
+    rankingsSort: { key: 'soai_overall_per100', direction: 'desc' },
     prospectiveSort: { key: 'fwd_net60_reliable', direction: 'desc' },
     fantasySort: { key: 'fantasy_score', direction: 'desc' },
     goalieFantasySort: { key: 'fantasy_score', direction: 'desc' },
@@ -604,7 +606,8 @@
     // and shift every column. Python decides the same way, from the payload.
     const hasSoai = boardHasSoai();
     const SOAI_KEYS = [
-      'soai_net_gar',
+      'soai_overall_per100',
+    'soai_net_gar',
       'soai_offense_gar',
       'soai_defense_gar',
       'soai_finishing_per60',
@@ -960,13 +963,14 @@
 
   function sortRankings(rows) {
     const hasSoai = boardHasSoai();
-    const key = String(state.rankingsSort?.key || 'soai_net_gar');
+    const key = String(state.rankingsSort?.key || 'soai_overall_per100');
     const direction = String(state.rankingsSort?.direction || 'desc');
     const dir = direction === 'asc' ? 1 : -1;
     const fieldMap = {
       player_name: { field: 'player_name', type: 'string' },
       team: { field: 'team', type: 'string' },
       position: { field: 'position', type: 'string' },
+      soai_overall_per100: { field: 'soai_overall_per100', type: 'number' },
       soai_net_gar: { field: 'soai_net_gar', type: 'number' },
       soai_offense_gar: { field: 'soai_offense_gar', type: 'number' },
       soai_defense_gar: { field: 'soai_defense_gar', type: 'number' },
@@ -983,7 +987,8 @@
       season_gp: { field: 'season_gp', type: 'number' },
       season_toi_min: { field: hasSoai ? 'soai_ev_toi_min' : 'season_toi_min', type: 'number' },
     };
-    const spec = fieldMap[key] || fieldMap.soai_net_gar;
+    const spec = fieldMap[key];
+    if (!spec) throw new Error(`unknown skater sort key ${key}`);
     // Retrospective means the completed season. Returning/injured players with
     // no current 5v5 workload remain available to Predictive and Fantasy, but
     // must not receive a numbered retrospective rank from historical context.
