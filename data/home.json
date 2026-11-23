@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-23 16:23 UTC",
-  "last_updated_utc": "2026-11-23 16:23 UTC",
-  "last_updated_iso": "2026-11-23T16:23:38.789405+00:00",
+  "generated_at": "2026-11-23 17:34 UTC",
+  "last_updated_utc": "2026-11-23 17:34 UTC",
+  "last_updated_iso": "2026-11-23T17:34:38.776967+00:00",
   "season_label": "2026-2027",
   "model_performance": {},
   "team_rankings_top": [
@@ -17,7 +17,7 @@
       "projected_points": 124.3,
       "projected_playoff_probability": null,
       "projected_fantasy_offence_score": 0.0,
-      "retrospective_team_score": 0.899,
+      "retrospective_team_score": 0.897,
       "projected_roster_players": 18.0,
       "projected_roster_minutes": 21605.791,
       "projected_appearance_mean": 0.975,
@@ -65,7 +65,7 @@
       "projected_points": 120.3,
       "projected_playoff_probability": null,
       "projected_fantasy_offence_score": 0.0,
-      "retrospective_team_score": 0.631,
+      "retrospective_team_score": 0.628,
       "projected_roster_players": 18.0,
       "projected_roster_minutes": 20366.727,
       "projected_appearance_mean": 0.97,
@@ -95,7 +95,7 @@
       "leverage_xg_net": -0.037,
       "high_danger_for": 1.52,
       "high_danger_against": 1.16,
-      "special_teams": 0.245,
+      "special_teams": 0.246,
       "team_off_system_per_60": -0.007,
       "team_def_system_per_60": 0.16,
       "team_system_net_per_60": 0.154,
@@ -113,7 +113,7 @@
       "projected_points": 115.9,
       "projected_playoff_probability": null,
       "projected_fantasy_offence_score": 0.0,
-      "retrospective_team_score": 0.185,
+      "retrospective_team_score": 0.188,
       "projected_roster_players": 18.0,
       "projected_roster_minutes": 19931.427,
       "projected_appearance_mean": 0.97,
@@ -161,7 +161,7 @@
       "projected_points": 115.1,
       "projected_playoff_probability": null,
       "projected_fantasy_offence_score": 0.0,
-      "retrospective_team_score": 0.548,
+      "retrospective_team_score": 0.56,
       "projected_roster_players": 18.0,
       "projected_roster_minutes": 22870.346,
       "projected_appearance_mean": 0.982,
@@ -191,7 +191,7 @@
       "leverage_xg_net": 0.031,
       "high_danger_for": 2.0,
       "high_danger_against": 1.43,
-      "special_teams": 0.212,
+      "special_teams": 0.213,
       "team_off_system_per_60": 0.01,
       "team_def_system_per_60": 0.059,
       "team_system_net_per_60": 0.07,
@@ -239,7 +239,7 @@
       "leverage_xg_net": 0.075,
       "high_danger_for": 2.04,
       "high_danger_against": 1.65,
-      "special_teams": 1.082,
+      "special_teams": 1.083,
       "team_off_system_per_60": -0.502,
       "team_def_system_per_60": 0.236,
       "team_system_net_per_60": -0.266,
@@ -248,7 +248,7 @@
   ],
   "playoff_bracket": {
     "playoffs": {
-      "built_at": "2026-11-23T16:23:38.100204+00:00",
+      "built_at": "2026-11-23T17:34:38.372480+00:00",
       "season": 20262027,
       "season_year": 2027,
       "n_sims": 0,
@@ -1589,10 +1589,10 @@
       "player_name": "Jake Guentzel",
       "team": "TBL",
       "position": "C",
-      "current_overall_talent_score": 1.095,
+      "current_overall_talent_score": 1.094,
       "prior_overall_talent_score": 0.519,
-      "talent_score_delta": 0.576,
-      "offence_score_delta": 0.446,
+      "talent_score_delta": 0.575,
+      "offence_score_delta": 0.444,
       "defence_score_delta": 0.757,
       "player_url": "/players/jake-guentzel-8477404.html"
     },
@@ -1601,10 +1601,10 @@
       "player_name": "Shane Wright",
       "team": "NSH",
       "position": "C",
-      "current_overall_talent_score": 0.422,
+      "current_overall_talent_score": 0.423,
       "prior_overall_talent_score": -0.137,
       "talent_score_delta": 0.56,
-      "offence_score_delta": 0.837,
+      "offence_score_delta": 0.838,
       "defence_score_delta": 0.176,
       "player_url": "/players/shane-wright-8483524.html"
     },
@@ -1613,10 +1613,10 @@
       "player_name": "Yan Kuznetsov",
       "team": "CGY",
       "position": "LD",
-      "current_overall_talent_score": -0.552,
+      "current_overall_talent_score": -0.551,
       "prior_overall_talent_score": -1.099,
-      "talent_score_delta": 0.547,
-      "offence_score_delta": 0.537,
+      "talent_score_delta": 0.548,
+      "offence_score_delta": 0.539,
       "defence_score_delta": 0.554,
       "player_url": "/players/yan-kuznetsov-8482165.html"
     },
@@ -1625,10 +1625,10 @@
       "player_name": "Braeden Bowman",
       "team": "VGK",
       "position": "R",
-      "current_overall_talent_score": -0.378,
+      "current_overall_talent_score": -0.377,
       "prior_overall_talent_score": -0.86,
-      "talent_score_delta": 0.483,
-      "offence_score_delta": 0.327,
+      "talent_score_delta": 0.484,
+      "offence_score_delta": 0.329,
       "defence_score_delta": 0.697,
       "player_url": "/players/braeden-bowman-8483890.html"
     },
@@ -1637,11 +1637,11 @@
       "player_name": "Jake Evans",
       "team": "MTL",
       "position": "C",
-      "current_overall_talent_score": 0.431,
+      "current_overall_talent_score": 0.434,
       "prior_overall_talent_score": -0.036,
-      "talent_score_delta": 0.468,
-      "offence_score_delta": 0.341,
-      "defence_score_delta": 0.642,
+      "talent_score_delta": 0.47,
+      "offence_score_delta": 0.345,
+      "defence_score_delta": 0.643,
       "player_url": "/players/jake-evans-8478133.html"
     }
   ],
@@ -1685,7 +1685,7 @@
       "recent_count": 10,
       "prior_count": 10,
       "current_overall_talent_score": -0.702,
-      "talent_score_delta": 0.21,
+      "talent_score_delta": 0.211,
       "player_url": "/players/zeev-buium-8484798.html"
     },
     {
@@ -1721,10 +1721,10 @@
     {
       "team": "CAR",
       "current_total_team_score": 1.887,
-      "prior_total_team_score": 0.421,
-      "total_team_score_delta": 1.466,
-      "chance_generation_delta": 0.106,
-      "chance_suppression_delta": 0.003,
+      "prior_total_team_score": 0.424,
+      "total_team_score_delta": 1.463,
+      "chance_generation_delta": 0.099,
+      "chance_suppression_delta": 0.01,
       "goaltending_talent_delta": 0.0
     },
     {
@@ -1732,26 +1732,26 @@
       "current_total_team_score": 0.995,
       "prior_total_team_score": -0.238,
       "total_team_score_delta": 1.233,
-      "chance_generation_delta": 0.038,
-      "chance_suppression_delta": 0.305,
+      "chance_generation_delta": 0.032,
+      "chance_suppression_delta": 0.312,
       "goaltending_talent_delta": 0.0
     },
     {
       "team": "MIN",
       "current_total_team_score": 1.643,
-      "prior_total_team_score": 0.47,
-      "total_team_score_delta": 1.173,
-      "chance_generation_delta": -0.199,
-      "chance_suppression_delta": -0.087,
+      "prior_total_team_score": 0.472,
+      "total_team_score_delta": 1.171,
+      "chance_generation_delta": -0.205,
+      "chance_suppression_delta": -0.08,
       "goaltending_talent_delta": 0.0
     },
     {
       "team": "DAL",
       "current_total_team_score": 1.203,
-      "prior_total_team_score": 0.118,
-      "total_team_score_delta": 1.085,
-      "chance_generation_delta": 0.017,
-      "chance_suppression_delta": -0.153,
+      "prior_total_team_score": 0.119,
+      "total_team_score_delta": 1.084,
+      "chance_generation_delta": 0.011,
+      "chance_suppression_delta": -0.146,
       "goaltending_talent_delta": 0.0
     },
     {
@@ -1759,8 +1759,8 @@
       "current_total_team_score": 1.376,
       "prior_total_team_score": 0.486,
       "total_team_score_delta": 0.89,
-      "chance_generation_delta": -0.194,
-      "chance_suppression_delta": -0.097,
+      "chance_generation_delta": -0.201,
+      "chance_suppression_delta": -0.09,
       "goaltending_talent_delta": 0.0
     }
   ],
@@ -1889,7 +1889,7 @@
     }
   ],
   "prediction_window": {
-    "start_utc": "2026-11-23T16:00:00+00:00",
-    "end_utc": "2026-11-25T16:00:00+00:00"
+    "start_utc": "2026-11-23T17:00:00+00:00",
+    "end_utc": "2026-11-25T17:00:00+00:00"
   }
 }
