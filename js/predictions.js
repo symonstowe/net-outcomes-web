@@ -65,8 +65,8 @@
           <div class="sf-prediction-card-goalie"><span class="sf-prediction-card-goalie-team">${esc(awayTeam)}</span><span class="sf-prediction-card-goalie-value">${awayGoalieMixHtml}</span></div>
           <div class="sf-prediction-card-goalie"><span class="sf-prediction-card-goalie-team">${esc(homeTeam)}</span><span class="sf-prediction-card-goalie-value">${homeGoalieMixHtml}</span></div>
         </div>
-        <div class="sf-prediction-card-section-label">Top Factors</div>
-        <div class="sf-prediction-card-factors">${factorHtml}</div>
+        ${String(factorHtml || '').trim() ? `<div class="sf-prediction-card-section-label">Top Factors</div>
+        <div class="sf-prediction-card-factors">${factorHtml}</div>` : ''}
       </article>
     `;
   }

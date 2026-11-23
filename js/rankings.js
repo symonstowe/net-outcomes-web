@@ -68,6 +68,26 @@
   }
 
   const DEFAULT_SECTION_ID = 'prospectivePanel';
+
+  // Percentile (0-100) of a value among every ranked skater with that metric.
+  const PERCENTILE_CACHE = {};
+  function percentileOf(key, value) {
+    if (!PERCENTILE_CACHE[key]) {
+      PERCENTILE_CACHE[key] = (state.rankings || [])
+        .map((row) => Number(row[key]))
+        .filter((v) => Number.isFinite(v))
+        .sort((a, b) => a - b);
+    }
+    const sorted = PERCENTILE_CACHE[key];
+    if (!sorted.length) return null;
+    let lo = 0;
+    let hi = sorted.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (sorted[mid] < Number(value)) lo = mid + 1; else hi = mid;
+    }
+    return Math.min(99, Math.max(1, Math.round((100 * lo) / sorted.length)));
+  }
   const VALID_SECTION_IDS = [
     'rankingsPanel',
     'prospectivePanel',
@@ -659,6 +679,14 @@
     const metric = (value, key) => (value != null
       ? `<td class="${classForSigned(value)}">${signedAt(value, key)}</td>`
       : '<td>—</td>');
+    // The dimensions span four orders of magnitude in different units, so each
+    // is shown as a percentile among every ranked skater with a value; the
+    // per-100 value is in the cell's tooltip (and the export).
+    const dimension = (value, key) => {
+      if (value == null) return '<td>—</td>';
+      const pct = percentileOf(key, value);
+      return `<td class="${pct >= 50 ? 'pos' : 'neg'}" title="${signedAt(value, key)} per 100">${pct}</td>`;
+    };
     tbody.innerHTML = rows.map((row, index) => `
       <tr>
         <td>${index + 1}</td>
@@ -666,13 +694,13 @@
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
         ${metric(row.fwd_net60_reliable, 'fwd_net60_reliable')}
-        ${metric(row.soai_shot_generation, 'soai_shot_generation')}
-        ${metric(row.soai_shot_quality, 'soai_shot_quality')}
-        ${metric(row.soai_puck_recovery, 'soai_puck_recovery')}
-        ${metric(row.soai_defensive_suppression, 'soai_defensive_suppression')}
-        ${metric(row.soai_defensive_territory, 'soai_defensive_territory')}
-        ${metric(row.soai_discipline_per100, 'soai_discipline_per100')}
-        ${metric(row.soai_pp_generation, 'soai_pp_generation')}
+        ${dimension(row.soai_shot_generation, 'soai_shot_generation')}
+        ${dimension(row.soai_shot_quality, 'soai_shot_quality')}
+        ${dimension(row.soai_puck_recovery, 'soai_puck_recovery')}
+        ${dimension(row.soai_defensive_suppression, 'soai_defensive_suppression')}
+        ${dimension(row.soai_defensive_territory, 'soai_defensive_territory')}
+        ${dimension(row.soai_discipline_per100, 'soai_discipline_per100')}
+        ${dimension(row.soai_pp_generation, 'soai_pp_generation')}
         <td>${row.soai_support_coverage != null ? `${Math.round(100 * row.soai_support_coverage)}%` : '—'}</td>
       </tr>
     `).join('');

@@ -236,3 +236,6 @@ h2{color:#202a24;font-size:18px;letter-spacing:-.01em}
   .falloff-rung{grid-template-columns:100px 1fr}.falloff-reading{grid-column:1/3;text-align:left}
   .evidence-grid,.portability-readings{grid-template-columns:1fr 1fr}
 }
+
+/* a negative combined on-ice total reads red like its components */
+.component-total strong.negative{color:var(--red)}

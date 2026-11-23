@@ -62,7 +62,7 @@
         </span>
       </span></td>
       <td class="sf-col-pts"><strong>${row.points}</strong></td>
-      <td class="sf-col-pts">${row.projected_points ?? '—'}</td>
+      <td class="sf-col-pts">${row.projected_points != null ? `${Math.round(row.projected_points)} <span class="sf-spread">${Math.round(row.points_p10)}–${Math.round(row.points_p90)}</span>` : '—'}</td>
       <td class="sf-col-pct">${renderProbBar(row.win_cup_pct)}</td>
       <td class="sf-col-pct">${renderProbBar(row.win_conf_pct)}</td>
       <td class="sf-col-pct">${renderProbBar(row.win_division_pct)}</td>

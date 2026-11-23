@@ -3147,3 +3147,15 @@ body.sf-member-modal-open {
   .sf-collevel { padding: 0.25em 0.6em; }
   .sf-table th, .sf-table td { white-space: nowrap; }
 }
+
+/* The position pills overflowed their shrunken flex item and ran under the
+   "Sort table by" control (fantasy board, 2026-11-23): keep the group at its
+   content width so the toolbar wraps instead of overlapping. */
+.sf-skater-filter-toolbar .sf-filter-inline--positions {
+  flex: 0 0 auto;
+}
+
+.sf-filter-inline--sortbasis {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}

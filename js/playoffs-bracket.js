@@ -103,6 +103,29 @@
 
     if (Array.isArray(bracketSlots) && bracketSlots.length) {
       const slotCards = [];
+      // Each slot is labelled with a distinct team: (slot, team) pairs are taken
+      // in order of probability within a conference, so a club that is the
+      // likeliest occupant of two wildcard slots is shown once (UTA twice in the
+      // West, 2026-11-23); the full breakdown stays on the slot's candidates.
+      const labelBySlot = {};
+      ['Eastern', 'Western'].forEach((conference) => {
+        const pairs = [];
+        bracketSlots.filter((def) => def.conference === conference).forEach((def) => {
+          (def.candidates || []).forEach((candidate) => {
+            if (Number(candidate.slot_pct || 0) > 0) {
+              pairs.push({ slot: Number(def.conference_slot || 0), candidate });
+            }
+          });
+        });
+        pairs.sort((a, b) => Number(b.candidate.slot_pct || 0) - Number(a.candidate.slot_pct || 0));
+        const usedTeams = new Set();
+        pairs.forEach(({ slot, candidate }) => {
+          const key = `${conference}:${slot}`;
+          if (labelBySlot[key] || usedTeams.has(candidate.team)) return;
+          labelBySlot[key] = candidate;
+          usedTeams.add(candidate.team);
+        });
+      });
       bracketSlots
         .slice()
         .sort((a, b) => {
@@ -120,7 +143,7 @@
           const candidates = (slotDef.candidates || [])
             .filter((candidate) => Number(candidate.slot_pct || 0) > 0)
             .sort((a, b) => Number(b.slot_pct || 0) - Number(a.slot_pct || 0));
-          const topCandidate = candidates[0] || {};
+          const topCandidate = labelBySlot[`${slotDef.conference}:${slot}`] || candidates[0] || {};
           slotCards.push({
             id: `${side.toLowerCase()}${slot}`,
             conf: side,

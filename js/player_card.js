@@ -11,7 +11,13 @@
   if (!pid || !root) return;
 
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const ord = (p) => (p == null ? '—' : `${p}${['th', 'st', 'nd', 'rd'][((p % 100) - 20) % 10] || 'th'}`);
+  // Percentile as an ordinal, 1st..99th ('100th' and '1th'/'2th'/'3th' were shown).
+  const ord = (p) => {
+    if (p == null || Number.isNaN(Number(p))) return '—';
+    const n = Math.min(99, Math.max(1, Math.round(Number(p))));
+    const teen = n % 100 >= 11 && n % 100 <= 13;
+    return `${n}${teen ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th')}`;
+  };
   const sgn = (v, d = 3) => (v == null ? '—' : `${v >= 0 ? '+' : ''}${Number(v).toFixed(d)}`);
   let GROUP = 'pg'; // pg | all | tm | xp
   let DATA = null;
@@ -19,16 +25,23 @@
 
   const mp = (m) => (m && m.p ? m.p[GROUP] : null);
 
-  function bar(label, m, digits = 3) {
+  // fmt formats the value (default: signed impact); a value without a peer
+  // percentile is shown without a fill, never as a 50% bar.
+  function bar(label, m, digits = 3, fmt = null) {
     const pct = mp(m);
     const v = m ? m.v : null;
+    const shown = v == null ? '—' : (fmt ? fmt(v) : sgn(v, digits));
     if (pct == null && v == null) {
       return `<div class="metric"><div class="mtop"><b>${esc(label)}</b><span>Not qualified</span></div><div class="bar"><div class="bt" style="color:var(--muted);justify-content:center"><span>NQ</span></div></div></div>`;
     }
-    const w = Math.max(2, Math.min(100, pct ?? 50));
-    const red = (pct ?? 50) < 50 ? ' red' : '';
+    if (pct == null) {
+      return `<div class="metric"><div class="mtop"><b>${esc(label)}</b><span>No peer percentile</span></div>` +
+        `<div class="bar"><div class="bt"><span>${shown}</span><span></span></div></div></div>`;
+    }
+    const w = Math.max(2, Math.min(100, pct));
+    const red = pct < 50 ? ' red' : '';
     return `<div class="metric"><div class="mtop"><b>${esc(label)}</b><span>${ord(pct)} pct</span></div>` +
-      `<div class="bar"><div class="fill${red}" style="width:${w}%"></div><div class="bt"><span>${sgn(v, digits)}</span><span>${ord(pct)} pct</span></div></div></div>`;
+      `<div class="bar"><div class="fill${red}" style="width:${w}%"></div><div class="bt"><span>${shown}</span><span>${ord(pct)} pct</span></div></div></div>`;
   }
 
   function spider(sp) {
@@ -173,6 +186,12 @@
     const fall = dc.falloff || {};
     const rungs = fall.rungs || [];
     const unc = dc.uncertainty || {};
+    // Attribution from a handful of shifts is noise presented as precision
+    // (Demidov, 23 minutes: -0.455): below this much additive 5v5 time the
+    // panel states the sample instead of the values.
+    const ATTRIBUTION_MIN_MINUTES = 100;
+    const thinSample = unc.additive_toi_minutes != null
+      && Number(unc.additive_toi_minutes) < ATTRIBUTION_MIN_MINUTES;
     const port = dc.portability || {};
     const support = unc.support_coverage == null ? null : Math.round(unc.support_coverage * 100);
     const fmtShare = (v) => v == null ? '—' : `${Math.round(v * 100)}% of minutes`;
@@ -196,15 +215,17 @@
     <div class="decision-grid">
       <article class="decision-panel">
         <div class="decision-panel-head"><div><span class="eyebrow">Attribution</span><h3>Actor and on-ice value</h3></div><span>${esc(cp.unit || '')}</span></div>
-        <div class="component-stack">
+        ${thinSample
+          ? `<div class="note">Not enough 5v5 ice time yet for a stable attribution (${Math.round(Number(unc.additive_toi_minutes))} of ${ATTRIBUTION_MIN_MINUTES} minutes).</div>`
+          : `<div class="component-stack">
           ${componentRows.map((item) => `<div class="component-row">
             <div><b>${esc(item.label)}</b><small>${esc(item.description)}</small></div>
             <div class="component-number ${Number(item.value) < 0 ? 'negative' : ''}">${sgn(item.value)}</div>
             <span class="component-status">${esc(item.status)}</span>
           </div>`).join('') || '<div class="note">Current additive attribution is unavailable.</div>'}
         </div>
-        <div class="component-total"><span>Combined on-ice SOAI</span><strong>${sgn(cp.net_total)}</strong></div>
-        <div class="decision-note">${cp.reconciles ? 'Direct + enabling + suppression reconcile to the on-ice total.' : 'Component reconciliation is unavailable for this player.'}</div>
+        <div class="component-total"><span>Combined on-ice SOAI</span><strong class="${Number(cp.net_total) < 0 ? 'negative' : ''}">${sgn(cp.net_total)}</strong></div>
+        <div class="decision-note">${cp.reconciles ? 'Direct + enabling + suppression reconcile to the on-ice total.' : 'Component reconciliation is unavailable for this player.'}</div>`}
       </article>
 
       <article class="decision-panel">
@@ -340,7 +361,7 @@
         <thead><tr><th>State</th><th>G</th><th>iXG</th><th>G-iXG</th><th>A1</th><th>A2</th><th>P/60</th><th>Pctl</th></tr></thead>
         <tbody>${(pr.states || []).map((s) => `<tr><td>${esc(s.state)}</td><td>${s.g ?? '—'}</td><td>${s.ixg ?? '—'}</td><td>${s.g != null && s.ixg != null ? sgn(s.g - s.ixg, 1) : '—'}</td><td>${s.a1 ?? '—'}</td><td>${s.a2 ?? '—'}</td><td>${s.p60 ?? '—'}</td><td>${ord(s.p60_pct)}</td></tr>`).join('')}</tbody>
       </table>
-      ${d.faceoffs && d.faceoffs.n >= 100 ? bar(`Faceoffs (${d.faceoffs.n} taken)`, d.faceoffs.m, 1) : ''}
+      ${d.faceoffs && d.faceoffs.n >= 100 ? bar(`Faceoffs (${d.faceoffs.n} taken)`, d.faceoffs.m, 1, (v) => `${Number(v).toFixed(1)}% won`) : ''}
       <div class="head" style="margin-top:18px;margin-bottom:10px"><h2 style="font-size:18px">Shooting</h2><span>Finishing sustainability</span></div>
       <div class="shooting-grid">
         <div class="shooting-card"><b>Goals vs iXG</b><span>${sgn(pr.g_minus_ixg, 1)}</span><small>${pr.g_minus_ixg > 1 ? 'Finishing above expected' : pr.g_minus_ixg < -1 ? 'Finishing below expected' : 'Near expected'}</small></div>
@@ -386,7 +407,9 @@
     <article class="panel">
       <div class="head"><h2>Style</h2><span>Role tendencies</span></div>
       <b style="font-size:13px">Event Style</b>
-      <div class="split"><div class="l" style="width:${st.pace_pct ?? 50}%">${st.pace_pct ?? 50}% pace</div><div class="r" style="width:${100 - (st.pace_pct ?? 50)}%">${100 - (st.pace_pct ?? 50)}% control</div></div>
+      ${st.pace_pct != null
+        ? `<div class="split"><div class="l" style="width:${st.pace_pct}%">${st.pace_pct}% pace</div><div class="r" style="width:${100 - st.pace_pct}%">${100 - st.pace_pct}% control</div></div>`
+        : '<div class="note" style="margin:2px 0 12px">Not measured this season</div>'}
       <b style="font-size:13px">Zone Entry Style (proxy)</b>
       ${carryShare != null
         ? `<div class="split"><div class="l" style="width:${100 - carryShare}%">${100 - carryShare}% dump</div><div class="r" style="width:${carryShare}%">${carryShare}% carry</div></div>
