@@ -25,6 +25,10 @@
     blocks: 0.3,
     pim: 0,
     faceoffWins: 0,
+    faceoffLosses: 0,
+    gameWinningGoals: 0,
+    shorthandedGoals: 0,
+    shorthandedPoints: 0,
     wins: 4,
     saves: 0.2,
     shutouts: 3,
@@ -59,7 +63,11 @@
       + finite(row.fantasy_hits) * finite(weights.hits)
       + finite(row.fantasy_blocks) * finite(weights.blocks)
       + finite(row.fantasy_pim) * finite(weights.pim)
-      + finite(row.fantasy_faceoffs_won ?? row.fantasy_faceoff_wins) * finite(weights.faceoffWins);
+      + finite(row.fantasy_faceoffs_won ?? row.fantasy_faceoff_wins) * finite(weights.faceoffWins)
+      + finite(row.fantasy_faceoffs_lost) * finite(weights.faceoffLosses)
+      + finite(row.fantasy_game_winning_goals) * finite(weights.gameWinningGoals)
+      + finite(row.fantasy_shorthanded_goals) * finite(weights.shorthandedGoals)
+      + finite(row.fantasy_shorthanded_points) * finite(weights.shorthandedPoints);
   }
 
   function goalieScore(row, weights) {

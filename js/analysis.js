@@ -2107,7 +2107,7 @@
     const skaters = Array.isArray(payload.fantasy_rankings) ? payload.fantasy_rankings : [];
     const goalies = Array.isArray(payload.goalie_fantasy_rankings) ? payload.goalie_fantasy_rankings : [];
     if (!skaters.length && !goalies.length) {
-      tbody.innerHTML = '<tr><td colspan="20">Fantasy projections are unavailable for this build.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="24">Fantasy projections are unavailable for this build.</td></tr>';
       if (summary) summary.textContent = 'No draft-board projections are available.';
       return;
     }
@@ -2137,6 +2137,10 @@
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_blocks)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_pim)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_faceoffs_won)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_faceoffs_lost)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_game_winning_goals)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_shorthanded_goals)}</td>
+        <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_shorthanded_points)}</td>
 
         <td>${goalie ? fantasyDraftCell(row.fantasy_starts) : '—'}</td>
         <td>${goalie ? fantasyDraftCell(row.fantasy_wins) : '—'}</td>
@@ -2145,7 +2149,7 @@
         <td>${goalie && row.fantasy_save_pct != null ? fantasyDraftCell(100 * Number(row.fantasy_save_pct), 2) + '%' : '—'}</td>
         <td>${goalie ? fantasyDraftCell(row.fantasy_gaa, 2) : '—'}</td>
       </tr>`;
-    }).join('') : '<tr><td colspan="20">No players match this filter.</td></tr>';
+    }).join('') : '<tr><td colspan="24">No players match this filter.</td></tr>';
     if (summary) {
       const topGoalie = board.rows.find((row) => row.position_group === 'G');
       const cutoffs = `F${engine.replacementCount('F', board.roster)} / D${engine.replacementCount('D', board.roster)} / G${engine.replacementCount('G', board.roster)}`;
