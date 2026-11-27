@@ -67,7 +67,9 @@
     return `${central.toFixed(1)} <span class="sf-spread">±${half.toFixed(digits)}</span>`;
   }
 
-  const DEFAULT_SECTION_ID = 'prospectivePanel';
+  // The page names its default (retrospective while a season is played).
+  const DEFAULT_SECTION_ID = document.querySelector('.sf-rankings-dashboard')
+    ?.dataset.defaultSection || 'prospectivePanel';
 
   // Percentile (0-100) of a value among every ranked skater with that metric.
   const PERCENTILE_CACHE = {};
@@ -184,12 +186,16 @@
     'fantasy_points_p10',
     'fantasy_points_p90',
     'fantasy_powerplay_points',
+    'fantasy_shorthanded_points',
+    'fantasy_shorthanded_goals',
+    'fantasy_game_winning_goals',
     'fantasy_shots',
     'fantasy_hits',
     'fantasy_blocks',
     'fantasy_pim',
     'fantasy_faceoffs',
     'fantasy_faceoffs_won',
+    'fantasy_faceoffs_lost',
     'fantasy_faceoff_win_pct',
     'fantasy_games',
     'fantasy_games_p10',
@@ -687,9 +693,9 @@
       const pct = percentileOf(key, value);
       return `<td class="${pct >= 50 ? 'pos' : 'neg'}" title="${signedAt(value, key)} per 100">${pct}</td>`;
     };
-    tbody.innerHTML = rows.map((row, index) => `
+    tbody.innerHTML = rows.map((row) => `
       <tr>
-        <td>${index + 1}</td>
+        <td>${row.display_rank}</td>
         <td>${row.player_url ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>` : esc(row.player_name)}</td>
         <td>${esc(row.team)}</td>
         <td>${esc(row.position)}</td>
@@ -708,9 +714,11 @@
 
   function refreshProspective() {
     const positions = selectedPositions('prospectivePos');
-    const scoped = filterRowsByPositions(
+    // Numbered within the position filter BEFORE the team filter, like every
+    // other panel: a team's players keep their league (or position) rank.
+    const scoped = rankSortedRows(filterRowsByPositions(
       sortProspective(state.rankings), positions, (row) => row.position,
-    );
+    ));
     const playerQuery = normalizeText(document.getElementById('prospectivePlayerSearch')?.value);
     const teamQuery = normalizeText(document.getElementById('prospectiveTeamSearch')?.value);
     renderProspective(scoped.filter((row) => {
@@ -745,12 +753,16 @@
         <td>${row.fantasy_assists != null ? Number(row.fantasy_assists).toFixed(1) : '—'}</td>
         <td>${withSpread(row.fantasy_points, row.fantasy_points_p10, row.fantasy_points_p90)}</td>
         <td>${row.fantasy_powerplay_points != null ? Number(row.fantasy_powerplay_points).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_shorthanded_points != null ? Number(row.fantasy_shorthanded_points).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_shorthanded_goals != null ? Number(row.fantasy_shorthanded_goals).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_game_winning_goals != null ? Number(row.fantasy_game_winning_goals).toFixed(1) : '—'}</td>
         <td>${row.fantasy_shots != null ? Number(row.fantasy_shots).toFixed(1) : '—'}</td>
         <td>${row.fantasy_hits != null ? Number(row.fantasy_hits).toFixed(1) : '—'}</td>
         <td>${row.fantasy_blocks != null ? Number(row.fantasy_blocks).toFixed(1) : '—'}</td>
         <td>${row.fantasy_pim != null ? Number(row.fantasy_pim).toFixed(1) : '—'}</td>
         <td>${row.fantasy_faceoffs != null ? Number(row.fantasy_faceoffs).toFixed(1) : '—'}</td>
         <td>${row.fantasy_faceoffs_won != null ? Number(row.fantasy_faceoffs_won).toFixed(1) : '—'}</td>
+        <td>${row.fantasy_faceoffs_lost != null ? Number(row.fantasy_faceoffs_lost).toFixed(1) : '—'}</td>
         <td>${row.fantasy_faceoff_win_pct != null ? `${Number(row.fantasy_faceoff_win_pct).toFixed(1)}%` : '—'}</td>
         <td>${withSpread(row.fantasy_games, row.fantasy_games_p10, row.fantasy_games_p90)}</td>
         <td>${row.fantasy_expected_games != null ? Number(row.fantasy_expected_games).toFixed(1) : '—'}</td>
