@@ -2137,7 +2137,7 @@
         <td class="${classForSigned(row.draft_value)}">${row.draft_value >= 0 ? '+' : ''}${fantasyDraftCell(row.draft_value)}</td>
         <td>${row.market_pct_owned == null ? '—' : `${Number(row.market_pct_owned).toFixed(1)}%`}</td>
         <td>${fantasyDraftCell(row.market_adp)}</td>
-        <td>${row.market_rank == null ? '—' : row.market_rank}</td>
+        <td>${row.market_rank == null ? '—' : row.market_rank}${row.market_injury_status && !['ACTIVE', 'DAY_TO_DAY'].includes(row.market_injury_status) ? ` <span title="ESPN lists him ${esc(String(row.market_injury_status).replace('_', ' ').toLowerCase())}">(${esc(String(row.market_injury_status) === 'INJURY_RESERVE' ? 'IR' : row.market_injury_status)})</span>` : ''}</td>
         <td>${row.espn_default_rank == null ? '—' : row.espn_default_rank}</td>
         <td class="${row.market_gap == null ? '' : classForSigned(row.market_gap)}">${gap}</td>
         <td>${fantasyDraftCell(row.fantasy_games)}</td>
@@ -2181,7 +2181,7 @@
           + `${market.underrated} flagged underrated. Market # orders ESPN players by roster share, then ADP. `
           + `ESPN-default # is our projection valued as ESPN's default league scores it (${market.teams}-team rotisserie: ${cats}; `
           + `${(market.not_compared || []).join(', ')} is not projected and is left out). Gap = Market # − ESPN-default #. `
-          + `${market.goalies || ''} This is a disagreement with the market, not yet a backtested edge.`;
+          + `${market.goalies || ''} ${market.backtest || 'This is a disagreement with the market, not yet a backtested edge.'}`;
         if (rho != null && rho < engine.MARKET_AGREEMENT_WARN) {
           text = `Your scoring orders skaters differently from ESPN's default (rank agreement ρ = ${rho.toFixed(2)}): `
             + 'the Gap compares at ESPN default scoring, not yours. ' + text;
