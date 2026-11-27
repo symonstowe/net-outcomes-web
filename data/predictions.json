@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-27 11:15 UTC",
-  "last_updated_utc": "2026-11-27 11:15 UTC",
-  "last_updated_iso": "2026-11-27T11:15:35.171927+00:00",
+  "generated_at": "2026-11-27 11:52 UTC",
+  "last_updated_utc": "2026-11-27 11:52 UTC",
+  "last_updated_iso": "2026-11-27T11:52:37.274175+00:00",
   "season_label": "2026-2027",
   "predictions": {
     "basis": "Win probabilities come from the Net Outcomes game model: gradient-boosted and logistic models on pregame information only (player and team ratings, current lineups and roster moves, probable goalies, rest and travel), combined and calibrated. Each season's model is trained on earlier seasons only, so it never sees the games it predicts; on 7,428 held-out games it scored a log loss of 0.666 against 0.668 for an Elo baseline. Goalie, lineup and rest details are shown for context.",
