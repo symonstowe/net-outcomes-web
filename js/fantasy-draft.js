@@ -139,7 +139,33 @@
     return { rows, replacement, weights: resolvedWeights, roster: resolvedRoster };
   }
 
+  // How closely the user's scoring orders players like ESPN's default league:
+  // Spearman rho between this board's order and our ESPN-default rank, over
+  // the skaters a 10-team ESPN league starts. The Gap column compares at ESPN
+  // default scoring, so a low rho means the gap is not about THIS league.
+  const MARKET_POOL = 170;
+  const MARKET_AGREEMENT_WARN = 0.8;
+
+  function scoringAgreement(rows) {
+    const pool = (rows || [])
+      .filter((row) => row.player_type === 'skater'
+        && Number.isFinite(Number(row.espn_default_rank))
+        && Number(row.espn_default_rank) <= MARKET_POOL)
+      .slice()
+      .sort((a, b) => a.draft_rank - b.draft_rank);
+    const n = pool.length;
+    if (n < 10) return null;
+    const byEspn = pool.slice().sort((a, b) => a.espn_default_rank - b.espn_default_rank);
+    const espnPos = new Map(byEspn.map((row, i) => [row, i]));
+    let d2 = 0;
+    pool.forEach((row, i) => { d2 += (i - espnPos.get(row)) ** 2; });
+    return 1 - (6 * d2) / (n * (n * n - 1));
+  }
+
   return {
+    MARKET_AGREEMENT_WARN,
+    MARKET_POOL,
+    scoringAgreement,
     DEFAULT_WEIGHTS,
     DEFAULT_ROSTER,
     buildDraftBoard,

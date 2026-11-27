@@ -16,8 +16,8 @@
   <meta name="twitter:description" content="Net Outcomes publishes NHL skater, goalie, team, and underrated rankings with sortable tables and team profile metrics." />
   <link rel="canonical" href="https://netoutcomes.ca/rankings.html" />
   <link rel="icon" href="imgs/netoutcomes_favicon.svg" />
-  <link rel="stylesheet" href="latofonts.css?v=18ebf3ab5d046d0f" />
-  <link rel="stylesheet" href="style.css?v=18ebf3ab5d046d0f" />
+  <link rel="stylesheet" href="latofonts.css?v=18ebf7ee77983535" />
+  <link rel="stylesheet" href="style.css?v=18ebf7ee77983535" />
   <title>Net Outcomes | NHL Rankings</title>
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://netoutcomes.ca/#organization","name":"Net Outcomes","url":"https://netoutcomes.ca/","logo":{"@type":"ImageObject","url":"https://netoutcomes.ca/imgs/netoutcomes_favicon.svg"}},{"@type":"WebSite","@id":"https://netoutcomes.ca/#website","url":"https://netoutcomes.ca/","name":"Net Outcomes","description":"Net Outcomes delivers NHL player rankings, goalie rankings, line analysis, and team expected goals visualizations.","inLanguage":"en-CA","publisher":{"@id":"https://netoutcomes.ca/#organization"}},{"@type":"WebPage","@id":"https://netoutcomes.ca/rankings.html#webpage","url":"https://netoutcomes.ca/rankings.html","name":"Net Outcomes | NHL Rankings","description":"Net Outcomes publishes NHL skater, goalie, team, and underrated rankings with sortable tables and team profile metrics.","inLanguage":"en-CA","isPartOf":{"@id":"https://netoutcomes.ca/#website"},"publisher":{"@id":"https://netoutcomes.ca/#organization"},"dateModified":"2026-11-27T11:52:37.274175+00:00"},{"@type":"BreadcrumbList","@id":"https://netoutcomes.ca/rankings.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://netoutcomes.ca/"},{"@type":"ListItem","position":2,"name":"Page","item":"https://netoutcomes.ca/rankings.html"}]}]}</script>
 </head>
@@ -561,6 +561,7 @@
         </div>
         <div class="sf-fantasy-draft-toolbar">
           <div id="fantasyDraftSummary" class="sf-rank-basis">Loading projections…</div>
+          <div id="fantasyDraftMarketNote" class="sf-rank-basis"></div>
           <div class="sf-search-group">
             <input id="fantasyDraftSearch" type="search" placeholder="Search player or team" />
             <select id="fantasyDraftPosition" aria-label="Filter draft board by position group">
@@ -569,18 +570,22 @@
               <option value="D">Defence</option>
               <option value="G">Goalies</option>
             </select>
+            <label class="sf-analysis-inline-control"><input type="checkbox" id="fantasyDraftUnderrated" /> Underrated vs ESPN only</label>
           </div>
         </div>
         <div class="sf-table-wrap">
           <table id="fantasyDraftTable" class="sf-table sf-fantasy-draft-table">
             <thead><tr>
-              <th>#</th><th>Player</th><th>Team</th><th>Pos</th><th>Draft Value</th><th>GP</th>
+              <th>#</th><th>Player</th><th>Team</th><th>Pos</th><th>Draft Value</th>
+              <th title="Share of ESPN leagues rostering him">Roster %</th><th title="ESPN average draft position (preseason)">ADP</th>
+              <th title="ESPN market rank: roster share, then ADP">Market #</th><th title="Our projection valued at ESPN's default scoring">ESPN-default #</th>
+              <th title="Market # minus ESPN-default #: positive = we rate him higher than the market">Gap</th><th>GP</th>
               <th>G</th><th>A</th><th>PPP</th><th>SOG</th><th>HIT</th><th>BLK</th><th>PIM</th>
               <th title="Faceoffs won">FOW</th><th title="Faceoffs lost">FOL</th>
               <th title="Game-winning goals">GWG</th><th title="Shorthanded goals">SHG</th><th title="Shorthanded points">SHP</th>
               <th>Starts</th><th>W</th><th>Saves</th><th>SO</th><th>SV%</th><th>GAA</th>
             </tr></thead>
-            <tbody><tr><td colspan="24">Loading fantasy projections…</td></tr></tbody>
+            <tbody><tr><td colspan="29">Loading fantasy projections…</td></tr></tbody>
           </table>
         </div>
       </section>
@@ -876,9 +881,9 @@
     </main>
     <footer class="sf-site-footer"><div class="sf-site-footer-inner"><p class="sf-site-footer-copy">&copy; <!--NETOUTCOMES_COPYRIGHT_YEAR-->2026<!--/NETOUTCOMES_COPYRIGHT_YEAR--> Net Outcomes. All rights reserved.</p><p class="sf-site-footer-legal">Net Outcomes is an independent, unofficial hockey analytics site and is not affiliated with, endorsed by, or sponsored by the National Hockey League or any NHL club. Team names, team logos, and other marks shown here are the property of the National Hockey League and the respective clubs and are displayed only to identify the teams discussed on this site. All other trademarks and copyrights are the property of their respective owners.</p><p class="sf-site-footer-note">Team logos displayed on this site are loaded from official NHL-hosted club logo assets for identification and informational display only.</p></div></footer>
   </div>
-  <script src="js/common.js?v=18ebf3ab5d046d0f" defer></script>
-  <script src="js/fantasy-draft.js?v=18ebf3ab5d046d0f" defer></script>
-  <script src="js/analysis.js?v=18ebf3ab5d046d0f" defer></script>
-  <script src="js/rankings.js?v=18ebf3ab5d046d0f" defer></script>
+  <script src="js/common.js?v=18ebf7ee77983535" defer></script>
+  <script src="js/fantasy-draft.js?v=18ebf7ee77983535" defer></script>
+  <script src="js/analysis.js?v=18ebf7ee77983535" defer></script>
+  <script src="js/rankings.js?v=18ebf7ee77983535" defer></script>
 </body>
 </html>

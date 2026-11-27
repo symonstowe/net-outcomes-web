@@ -2107,7 +2107,7 @@
     const skaters = Array.isArray(payload.fantasy_rankings) ? payload.fantasy_rankings : [];
     const goalies = Array.isArray(payload.goalie_fantasy_rankings) ? payload.goalie_fantasy_rankings : [];
     if (!skaters.length && !goalies.length) {
-      tbody.innerHTML = '<tr><td colspan="24">Fantasy projections are unavailable for this build.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="29">Fantasy projections are unavailable for this build.</td></tr>';
       if (summary) summary.textContent = 'No draft-board projections are available.';
       return;
     }
@@ -2116,8 +2116,10 @@
     const board = engine.buildDraftBoard(skaters, goalies, weights, roster);
     const query = normalizeText(document.getElementById('fantasyDraftSearch')?.value || '');
     const group = String(document.getElementById('fantasyDraftPosition')?.value || 'ALL');
+    const onlyUnderrated = Boolean(document.getElementById('fantasyDraftUnderrated')?.checked);
     const visible = board.rows.filter((row) => {
       if (group !== 'ALL' && row.position_group !== group) return false;
+      if (onlyUnderrated && !row.market_underrated) return false;
       return !query || normalizeText(`${row.player_name} ${row.team}`).includes(query);
     });
     tbody.innerHTML = visible.length ? visible.map((row) => {
@@ -2125,9 +2127,19 @@
       const player = row.player_url
         ? `<a class="sf-player-link" href="${esc(row.player_url)}">${esc(row.player_name)}</a>`
         : esc(row.player_name);
+      const flag = row.market_underrated
+        ? ` <span class="sf-badge sf-badge--good" title="${esc(row.market_reason || '')}">Underrated vs ESPN</span>`
+          + (row.market_reason ? `<div class="sf-fantasy-draft-reason">${esc(row.market_reason)}</div>` : '')
+        : '';
+      const gap = row.market_gap == null ? '—' : `${row.market_gap > 0 ? '+' : ''}${row.market_gap}`;
       return `<tr class="${goalie ? 'sf-fantasy-draft-goalie' : ''}">
-        <td>${row.draft_rank}</td><td>${player}</td><td>${esc(row.team || '')}</td><td>${esc(row.position)}</td>
+        <td>${row.draft_rank}</td><td>${player}${flag}</td><td>${esc(row.team || '')}</td><td>${esc(row.position)}</td>
         <td class="${classForSigned(row.draft_value)}">${row.draft_value >= 0 ? '+' : ''}${fantasyDraftCell(row.draft_value)}</td>
+        <td>${row.market_pct_owned == null ? '—' : `${Number(row.market_pct_owned).toFixed(1)}%`}</td>
+        <td>${fantasyDraftCell(row.market_adp)}</td>
+        <td>${row.market_rank == null ? '—' : row.market_rank}</td>
+        <td>${row.espn_default_rank == null ? '—' : row.espn_default_rank}</td>
+        <td class="${row.market_gap == null ? '' : classForSigned(row.market_gap)}">${gap}</td>
         <td>${fantasyDraftCell(row.fantasy_games)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_goals)}</td>
         <td>${goalie ? '—' : fantasyDraftCell(row.fantasy_assists)}</td>
@@ -2149,13 +2161,33 @@
         <td>${goalie && row.fantasy_save_pct != null ? fantasyDraftCell(100 * Number(row.fantasy_save_pct), 2) + '%' : '—'}</td>
         <td>${goalie ? fantasyDraftCell(row.fantasy_gaa, 2) : '—'}</td>
       </tr>`;
-    }).join('') : '<tr><td colspan="24">No players match this filter.</td></tr>';
+    }).join('') : '<tr><td colspan="29">No players match this filter.</td></tr>';
     if (summary) {
       const topGoalie = board.rows.find((row) => row.position_group === 'G');
       const cutoffs = `F${engine.replacementCount('F', board.roster)} / D${engine.replacementCount('D', board.roster)} / G${engine.replacementCount('G', board.roster)}`;
       summary.textContent = `${board.roster.teams}-team replacement cutoffs: ${cutoffs}. `
         + `Top goalie: ${topGoalie ? `${topGoalie.player_name} (#${topGoalie.draft_rank})` : 'unavailable'}. `
         + 'Draft Value is projected scoring above the replacement player in the same roster group.';
+    }
+    const marketNote = document.getElementById('fantasyDraftMarketNote');
+    const market = payload.fantasy_market || {};
+    if (marketNote) {
+      if (!market.as_of) {
+        marketNote.textContent = 'No ESPN market snapshot in this build.';
+      } else {
+        const rho = engine.scoringAgreement(board.rows);
+        const cats = (market.skater_categories || []).join(', ');
+        let text = `ESPN market as of ${market.as_of}: ${market.matched} of ${market.market_players} ESPN players matched, `
+          + `${market.underrated} flagged underrated. Market # orders ESPN players by roster share, then ADP. `
+          + `ESPN-default # is our projection valued as ESPN's default league scores it (${market.teams}-team rotisserie: ${cats}; `
+          + `${(market.not_compared || []).join(', ')} is not projected and is left out). Gap = Market # − ESPN-default #. `
+          + `${market.goalies || ''} This is a disagreement with the market, not yet a backtested edge.`;
+        if (rho != null && rho < engine.MARKET_AGREEMENT_WARN) {
+          text = `Your scoring orders skaters differently from ESPN's default (rank agreement ρ = ${rho.toFixed(2)}): `
+            + 'the Gap compares at ESPN default scoring, not yours. ' + text;
+        }
+        marketNote.textContent = text;
+      }
     }
   }
 
@@ -2168,6 +2200,7 @@
     });
     document.getElementById('fantasyDraftSearch')?.addEventListener('input', renderFantasyDraft);
     document.getElementById('fantasyDraftPosition')?.addEventListener('change', renderFantasyDraft);
+    document.getElementById('fantasyDraftUnderrated')?.addEventListener('change', renderFantasyDraft);
     document.getElementById('fantasyDraftReset')?.addEventListener('click', () => {
       document.querySelectorAll('[data-draft-weight]').forEach((input) => {
         input.value = engine.DEFAULT_WEIGHTS[input.dataset.draftWeight];

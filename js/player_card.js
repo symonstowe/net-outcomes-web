@@ -307,7 +307,7 @@
     `<button data-group="${g}" class="${g === GROUP ? 'active' : ''}">${esc(groupLabels[g])}</button>`).join('')}</section>
 
   <section class="rankstrip">
-    <div class="rank good" title="${esc(bd.proj_rank_basis)}"><b>Projected rank</b><span>${bd.proj_rank ? '#' + bd.proj_rank + ' / ' + bd.proj_n : 'Not projected'}</span></div>
+    <div class="rank good" title="${esc(bd.proj_rank_basis)}"><b>Projected rank</b><span>${bd.proj_rank ? '#' + bd.proj_rank + ' / ' + bd.proj_n : (bd.no_nhl_sample ? 'No recent NHL sample' : 'Not projected')}</span></div>
     <div class="rank good" title="${esc(bd.proj_rank_basis)}"><b>Projected team</b><span>${bd.proj_team_rank ? '#' + bd.proj_team_rank + ' ' + esc(b.team) : '—'}</span></div>
     <div class="rank good" title="${esc(bd.proj_rank_basis)}"><b>Projected position</b><span>${bd.proj_pos_rank ? '#' + bd.proj_pos_rank + ' / ' + bd.proj_pos_n : '—'}</span></div>
     <div class="rank good" title="${esc(bd.rank_basis)}"><b>Observed rank</b><span>${bd.rank ? '#' + bd.rank + ' / ' + bd.n : 'No minutes this season'}</span></div>

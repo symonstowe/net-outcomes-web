@@ -1041,6 +1041,26 @@ body.lato {
   flex: 0 0 auto;
 }
 
+.sf-fantasy-draft-table .sf-badge--good {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--sf-light);
+  color: var(--sf-pos);
+  font-size: 0.75em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sf-fantasy-draft-reason {
+  margin-top: 2px;
+  color: #69736d;
+  font-size: 0.78em;
+  line-height: 1.3;
+  max-width: 340px;
+}
+
 .sf-fantasy-draft-table .sf-fantasy-draft-goalie td:first-child,
 .sf-fantasy-draft-table .sf-fantasy-draft-goalie td:nth-child(2),
 .sf-fantasy-draft-table .sf-fantasy-draft-goalie td:nth-child(4) {
